@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="styleweb.css">
+    <link rel="stylesheet" href="../View/Css/styleweb.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
@@ -51,7 +51,7 @@ $(document).ready(function () {
 <body>
     <header>
         <div class="logo-title">
-            <img src="./images/polinema_logo 2.png" alt="Logo IsFor" class="logo">
+            <img src="../View/Images/polinema_logo%202.png" alt="Logo IsFor" class="logo">
             <h3 class="title">IsFor Pusat Riset Informatika</h3>
         </div>
         <nav>
