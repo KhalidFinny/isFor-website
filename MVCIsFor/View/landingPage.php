@@ -1,4 +1,4 @@
-<?php include 'navbar.php'; ?>
+<?php include '../Template/navbar.php'; ?>
 <main>
     <section class="utama">
         <div class="deskripsi">
@@ -9,12 +9,12 @@
                 <a href="#" class="btn-secondary">Contact us!</a>
             </div>
             <div class="leader">
-                <img src="./images/THeVLo6.jpeg" alt="Pak Erfan">
+                <img src="Images/THeVLo6.jpeg" alt="Pak Erfan">
                 <p>Pak Erfan<br><span>Leading Informatics Researcher</span></p>
             </div>
         </div>
         <div class="image-utama">
-            <img id="main-image" src="./images/2020-08-22.jpg" alt="Gedung Riset"> 
+            <img id="main-image" src="Images/2020-08-22.jpg" alt="Gedung Riset">
         </div>
     </section>
 
