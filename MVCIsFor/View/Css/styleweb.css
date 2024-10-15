@@ -1,11 +1,10 @@
-/* Reset untuk margin, padding, dan box-sizing */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Pengaturan dasar untuk body */
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: #2c2c2c;

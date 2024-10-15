@@ -1,0 +1,174 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    transition: background-color 0.3s ease;
+}
+.login-container {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 340px;
+    transform: translateY(0);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.login-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+}
+.logo:hover {
+    transform: scale(1.05);
+}
+.organization-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.2;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+.organization-name:hover {
+    opacity: 1;
+}
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: #333;
+    transition: color 0.3s ease;
+}
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    transition: color 0.3s ease;
+}
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+.form-input:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+.form-input::placeholder {
+    color: #aaa;
+    transition: opacity 0.3s ease;
+}
+.form-input:focus::placeholder {
+    opacity: 0.7;
+}
+.forgot-password {
+    text-align: right;
+    font-size: 0.85em;
+    margin-top: 8px;
+}
+.forgot-password a {
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.forgot-password a:hover {
+    color: #003d7a;
+}
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.submit-btn:hover {
+    background-color: #004494;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.submit-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+.submit-btn:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 1;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #666;
+    transition: opacity 0.3s ease;
+}
+.register-link:hover {
+    opacity: 0.8;
+}
+.register-link a {
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+.register-link a:hover {
+    color: #003d7a;
+}

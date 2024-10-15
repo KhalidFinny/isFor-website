@@ -5,48 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="../View/Css/styleweb.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function(){
-            var images = [
-                "./images/2020-08-22.jpg", 
-                "./images/Polinema-Malang.png", 
-                "./images/DSC_0746-scaled.jpg"  
-            ];
-            var currentImage = 0;
+        document.addEventListener("DOMContentLoaded", function() {
+    var images = [
+        "./images/2020-08-22.jpg", 
+        "./images/Polinema-Malang.png", 
+        "./images/DSC_0746-scaled.jpg"
+    ];
+    var currentImage = 0;
+    var mainImage = document.getElementById("main-image");
 
-            setInterval(function() {
-                $("#main-image").fadeOut(1000, function() {
-                    currentImage = (currentImage + 1) % images.length; 
-                    $(this).attr("src", images[currentImage]);
-                    $(this).fadeIn(1000); 
-                });
-            }, 10000); 
-        });
-    </script>
-<script>
-$(document).ready(function () {
-    const $tentangKamiSection = $('.tentangkami');
+    setInterval(function() {
+        mainImage.style.opacity = 0; 
+        setTimeout(function() {
+            currentImage = (currentImage + 1) % images.length;
+            mainImage.src = images[currentImage];
+            mainImage.style.opacity = 1;
+        }, 1000);
+    }, 10000);
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    var tentangKamiSection = document.querySelector('.tentangkami');
+    var showAboutUsButton = document.getElementById('showAboutUs');
 
     function showTentangKami() {
-        $tentangKamiSection.addClass('show');
+        tentangKamiSection.classList.add('show');
     }
 
-    $('#showAboutUs').click(function (event) {
-        event.preventDefault(); 
+    showAboutUsButton.addEventListener('click', function(event) {
+        event.preventDefault();
         showTentangKami();
     });
 
-    $(window).scroll(function () {
-        const sectionPosition = $tentangKamiSection.offset().top;
-        const screenPosition = $(window).height() * 0.8;
+    window.addEventListener('scroll', function() {
+        var sectionPosition = tentangKamiSection.getBoundingClientRect().top;
+        var screenPosition = window.innerHeight * 0.8;
 
         if (sectionPosition < screenPosition) {
             showTentangKami();
         }
     });
 });
-</script>
+    </script>
 </head>
 <body>
     <header>
