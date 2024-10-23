@@ -1,0 +1,159 @@
+---
+
+---
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IsFor Pusat Riset Informatika</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-slide-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .animate-slide-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+
+        .swiss-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .swiss-grid {
+                gap: 2rem;
+            }
+        }
+
+        .typography-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .typography-body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .illustration-wrapper {
+            position: relative;
+        }
+
+        .illustration-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 70%;
+            height: 70%;
+            background: #3B82F6;
+            opacity: 0.1;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            z-index: -1;
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes blob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -20px) scale(1.1); }
+            50% { transform: translate(-20px, 20px) scale(0.9); }
+            75% { transform: translate(20px, 20px) scale(1.1); }
+        }
+
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+    </style>
+<section id="pengelola"
+class="py-16 md:py-24 bg-white">
+    <div class="container mx-auto px-4 md:px-6 lg:px-12">
+      <!-- Header -->
+      <div class="text-center mb-12 md:mb-16 animate-fade-in-up">
+        <h1 class="text-4xl font-bold text-blue-800 mb-6">Pengelola</h1>
+        <div class="w-12 md:w-16 h-1 bg-blue-600 mx-auto mb-8"></div>
+      </div>
+      <!-- Team Grid -->
+      <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <!-- Management Cards -->
+        {[
+          { name: "Erfan Rohadi, ST., M.Eng., Ph.D", role: "Ketua", nip: "197201232008011006", img: "/images/PakErfan.png" },
+          { name: "Dr. Rakhmat Arianto, S.ST., M.Kom", role: "Sekretaris Umum", nip: "198701082019031004", img: "/images/rakhmatarianto.png" },
+          { name: "Usman Nurhasan, S.Kom., MT", role: "Bendahara", nip: "198609232015041001", img: "/images/usmannurhasan.png" },
+          { name: "Indrazno Siradjuddin, ST., MT., Ph.D", role: "Kadiv Penelitian dan Inovasi", nip: "197406242000121001", img: "/images/Indrazno.png" },
+          { name: "Imam Fahrur Rozi, S.T., M.T", role: "Kadiv. Pengabdian Masyarakat", nip: "198406102008121004", img: "/images/imam.png" },
+          { name: "Rudy Ariyanto, ST., M.Cs", role: "Kadiv. Kerjasama", nip: "197111101999031002", img: "/images/rudy.png" },
+          { name: "Ahmadi Yuli Ananta, ST., M.M.", role: "Kadiv. Publikasi dan Sistem Informasi", nip: "198107052005011002", img: "/images/ahmadi.png" },
+        ].map(({ name, role, nip, img }, index) => (
+          <div key={index} class="group relative rounded-xl overflow-hidden shadow-lg">
+            <img
+              class="mx-auto h-80 w-full grayscale object-cover transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
+              src={img}
+              alt={name}
+              loading="lazy"
+            />
+            <div class="absolute bottom-0 inset-x-0 bg-gray-800 dark:bg-white p-6 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 translate-y-24 opacity-0">
+              <h4 class="text-lg font-semibold text-white dark:text-gray-800 text-center">
+                {name}
+              </h4>
+              <span class="block text-sm text-gray-400 text-center">{role}</span>
+              <p class="mt-2 text-sm text-gray-300 dark:text-gray-600 text-center">
+                NIP: {nip}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
