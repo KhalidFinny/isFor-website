@@ -1,0 +1,150 @@
+---
+// Import necessary components and React
+import React, { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+---
+
+const ResearchRoadmap = () => {
+  // Initial roadmap data structure
+  const [roadmapData] = useState({
+    categories: [
+      {
+        title: "Smart ICT",
+        periods: {
+          "2018-2022": [
+            "Network management System",
+            "Network Topology", 
+            "Concept Electronics and IT Embedded System"
+          ],
+          "2022-2025": [
+            "LORA Systems",
+            "LORA mesh for IT Systems",
+            "LORA for Smart Systems"
+          ],
+          "2026-2028": [
+            "ICT for Industrial Automation",
+            "Integrated Data Transaction"
+          ]
+        }
+      },
+      {
+        title: "IoT Applications",
+        periods: {
+          "2018-2022": [
+            "IoT systems",
+            "Sensors for IoT Systems"
+          ],
+          "2022-2025": [
+            "IoT for urban farming",
+            "IoT for freshwater fish",
+            "Smart Home",
+            "IoT for Power Electric Distribution"
+          ],
+          "2026-2028": [
+            "Smart City",
+            "Smart Ecosystem",
+            "Smart monitoring Systems"
+          ]
+        }
+      },
+      {
+        title: "Data Science & Analytics",
+        periods: {
+          "2018-2022": [
+            "Decision Support System",
+            "Classification System",
+            "Prediction System",
+            "Cluster Analysis"
+          ],
+          "2022-2025": [
+            "Big Data Analysis",
+            "Natural Language Processing",
+            "Image Processing"
+          ],
+          "2026-2028": [
+            "Voice Command Technology",
+            "Land & Building Mapping",
+            "Intelligence System",
+            "Integrated Information System: Trends & Predictiction"
+          ]
+        }
+      },
+      {
+        title: "Business Management",
+        periods: {
+          "2018-2022": [
+            "Digital Marketing",
+            "Micro Commerce Management",
+            "Digital Tax Management"
+          ],
+          "2022-2025": [
+            "Governance Fiscal Independency",
+            "Comercial Port Management System",
+            "Document Archiving Management"
+          ],
+          "2026-2028": [
+            "Customer Relation Management System",
+            "Supply Chain Management",
+            "Analytic of Documents Archiving"
+          ]
+        }
+      }
+    ]
+  });
+
+  return (
+    <section className="py-16 md:py-24 bg-white">
+      <div className="container mx-auto px-4 md:px-6 lg:px-12">
+        <div className="text-center mb-12 md:mb-16">
+          <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-4">Research Roadmap</h1>
+          <div className="w-12 md:w-16 h-1 bg-blue-600 mx-auto mb-8"></div>
+        </div>
+
+        <div className="relative">
+          {/* Main Roadmap Grid */}
+          <div className="grid grid-cols-1 gap-6">
+            {roadmapData.categories.map((category, index) => (
+              <Card key={index} className="overflow-hidden">
+                <CardHeader className="bg-blue-50">
+                  <CardTitle className="text-xl md:text-2xl text-blue-800">{category.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="grid grid-cols-3 divide-x divide-gray-200">
+                    {Object.entries(category.periods).map(([period, items], periodIndex) => (
+                      <div key={periodIndex} className="p-4">
+                        <h3 className="text-sm font-semibold text-gray-600 mb-3">{period}</h3>
+                        <ul className="space-y-2">
+                          {items.map((item, itemIndex) => (
+                            <li 
+                              key={itemIndex}
+                              className="text-sm text-gray-700 bg-white rounded-lg p-2 border border-gray-100 hover:shadow-md transition-shadow duration-200"
+                            >
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Smart Technology System Arrow */}
+          <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 transform">
+            <div className="relative">
+              <div className="w-24 h-1 bg-green-600"></div>
+              <div className="absolute right-0 -top-4 text-green-600 font-semibold whitespace-nowrap rotate-90 origin-bottom-right">
+                Smart Technology System
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Export the component
+export default ResearchRoadmap;
