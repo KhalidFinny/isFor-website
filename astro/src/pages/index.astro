@@ -1,0 +1,46 @@
+---
+import Navbar from "../components/navbar.astro";
+import Footer from "../components/footer.astro";
+import Hero from "../components/hero.astro";
+import Sejarah from "../components/sejarah.astro";
+import Visimisi from "../components/visimisi.astro";
+import Pengelola from "../components/pengelola.astro";
+import Peneliti from "../components/peneliti.astro";
+import Roadmap from "../components/roadmap.astro";
+---
+
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IsFor Pusat Riset Informatika</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-white">
+    <Navbar />
+
+    <div id="home">
+      <Hero />
+    </div>
+    <div id="sejarah">
+      <Sejarah />
+    </div>
+    <div id="visi-misi">
+      <Visimisi />
+    </div>
+    <div id="roadmap">
+      <Roadmap />
+    </div>
+    <div id="pengelola">
+      <Pengelola />
+    </div>
+    <div id="list-peneliti">
+      <Peneliti />
+    </div>
+    <Footer />
+  </body>
+</html>
