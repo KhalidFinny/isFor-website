@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="/Css/register.css">
+</head>
+<body>
+<div class="login-container">
+    <div class="header">
+        <img src="Images/polinema_logo 2.png" alt="logo" class="logo">
+        <div class="organization-name">Pusat Riset<br>Informatika</div>
+    </div>
+    <h2>User Register</h2>
+
+    <form action="../../public/index.php?page=register" method="POST">
+        <div class="form-row">
+            <div class="form-group form-group-half">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-input" required placeholder="Username">
+            </div>
+            <div class="form-group form-group-half">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" id="email" class="form-input" required placeholder="Email">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" id="password" class="form-input" required placeholder="Password">
+        </div>
+
+        <div class="form-group">
+            <label for="role" class="form-label">Peran</label>
+            <select name="role_id" id="role" class="form-input" required>
+                <option value="2" selected>Pengguna</option>
+                <?php if ($_SESSION['role_id'] == 1): ?>
+                    <option value="1">Admin</option>
+                <?php endif; ?>
+            </select>
+        </div>
+
+
+        <button type="submit" class="submit-btn">Register</button>
+    </form>
+
+</div>
+</body>
+</html>
