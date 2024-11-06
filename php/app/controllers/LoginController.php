@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\services\LoginService;
 
 require_once __DIR__ . '/../services/LoginService.php';
-require_once __DIR__ . '/../configurations/Connection.php';
+require_once __DIR__ . '/../configs/Connection.php';
 
 class LoginController
 {
@@ -14,10 +14,12 @@ class LoginController
 
     public function __construct()
     {
-        $database = new \app\configurations\Connection();
+        $database = new \app\configs\Connection();
         $this->db = $database->getConnection();
         $this->loginService = new \app\services\LoginService($this->db);
     }
+
+    // app/controllers/LoginController.php
 
     public function login(): void
     {
@@ -27,11 +29,24 @@ class LoginController
 
             $user = $this->loginService->login($username, $password);
             if ($user) {
-                session_start();
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+
                 session_regenerate_id(true);
                 $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['role_id'] = $user['role_id'];
                 $_SESSION['username'] = $user['username'];
-                header('Location: ../views/dashboard.php');
+
+                // Redirect based on role
+                if ($user['role_id'] == 1) {
+                    header('Location: /isFor-website/php/public/index.php?page=admin_dashboard');
+                    exit(); // Tambahkan exit() di sini
+                } elseif ($user['role_id'] == 2) {
+                    header('Location: /isFor-website/php/public/index.php?page=user_dashboard');
+                    exit();
+                }
+
             } else {
                 require_once __DIR__ . '/../views/error.php';
             }
