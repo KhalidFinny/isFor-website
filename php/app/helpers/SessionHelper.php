@@ -2,8 +2,6 @@
 
 namespace app\helpers;
 
-use JetBrains\PhpStorm\NoReturn;
-
 class SessionHelper
 {
     private const BASE_URL = '/isFor-website/php/public/index.php';
@@ -56,7 +54,7 @@ class SessionHelper
         $_SESSION['LAST_ACTIVITY'] = time();
     }
 
-    #[NoReturn] public static function logout(): void
+    public static function logout(): void
     {
         self::initSession();
         session_unset();
