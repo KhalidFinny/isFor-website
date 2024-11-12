@@ -1,6 +1,14 @@
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet">
-<link rel="stylesheet" href="/Css/logincss.css">
+<?php 
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
 <body>
 <div class="login-container">
     <div class="header">
@@ -8,7 +16,8 @@
         <div class="organization-name">Pusat Riset<br>Informatika</div>
     </div>
     <h2>User Login</h2>
-    <form action="../../public/index.php?page=login" method="POST" class="login-form">
+    <a href="<?= BASEURL ?>">klik disini untuk kembali ke halaman home</a><br><br>
+    <form action="<?= BASEURL; ?>/login/authentication" method="POST" class="login-form">
         <div class="form-group">
             <label for="username" class="form-label">Username</label>
             <input type="text" name="username" id="username" class="form-input" required
@@ -26,4 +35,4 @@
     </form>
 </div>
 </body>
-
+</html>
