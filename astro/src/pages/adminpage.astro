@@ -7,6 +7,10 @@ import Visimisi from "../components/visimisi.astro";
 import Pengelola from "../components/pengelola.astro";
 import Peneliti from "../components/peneliti.astro";
 import Roadmap from "../components/roadmap.astro";
+export const prerender = false; // Jangan prerender karena halaman bersifat dinamis
+// Ambil query parameters dari URL
+const currentUrl = new URL(Astro.request.url);
+const username = currentUrl.searchParams.get('username') || 'Guest';
 ---
 
 <html lang="id">
@@ -23,7 +27,7 @@ import Roadmap from "../components/roadmap.astro";
   <body class="bg-white">
     <Navbar />
 
-    <div id="home">
+    <div id="homeadmin">
       <Heroadmin />
     </div>
     <div id="sejarah">

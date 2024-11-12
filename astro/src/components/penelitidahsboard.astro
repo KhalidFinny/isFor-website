@@ -1,0 +1,129 @@
+---
+// Import any necessary Astro components here
+const username = "Khalid Atthoriq";
+const userRole = "Peneliti";
+const userAvatar = "/images/coding-image.png";
+
+// Sidebar menu items
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>`,
+    active: true
+  },
+  {
+    title: "Ajukan Surat",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>`,
+    active: false
+  },
+  {
+    title: "Upload Gambar",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>`,
+    active: false
+  }
+];
+
+// Quick stats data
+const quickStats = [
+  { title: "Total Surat", value: "28", change: "+2.5%", up: true },
+  { title: "Surat Pending", value: "4", change: "-1.5%", up: false },
+  { title: "Gambar Diupload", value: "156", change: "+5.2%", up: true },
+  { title: "Storage Used", value: "45%", change: "+0.8%", up: true }
+];
+---
+
+<style>
+  .sidebar-item-active {
+    @apply bg-purple-100 text-purple-700;
+  }
+  
+  .sidebar-item:hover:not(.sidebar-item-active) {
+    @apply bg-gray-100;
+  }
+
+  .stats-card {
+    @apply transform transition-transform hover:scale-105 duration-300;
+  }
+</style>
+
+<div class="min-h-screen bg-gray-50/50">
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 z-40 h-screen w-64 transition-transform bg-white border-r border-gray-200 shadow-sm">
+    <!-- Logo -->
+    <div class="flex items-center justify-center h-16 border-b border-gray-200">
+      <h1 class="text-2xl font-bold text-purple-700">DASHBOARD</h1>
+    </div>
+    
+    <!-- User Profile -->
+    <div class="p-4 border-b border-gray-200">
+      <div class="flex items-center space-x-3">
+        <img src={userAvatar} alt="User avatar" class="w-8 h-8 rounded-full">
+        <div>
+          <p class="text-sm font-medium text-gray-700">{username}</p>
+          <p class="text-xs text-gray-500">{userRole}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu Items -->
+    <nav class="p-4 space-y-2">
+      {menuItems.map(item => (
+        <a 
+          href="#" 
+          class={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 sidebar-item ${
+            item.active ? 'sidebar-item-active' : 'text-gray-700'
+          }`}
+        >
+          <span set:html={item.icon} />
+          <span class="text-sm font-medium">{item.title}</span>
+        </a>
+      ))}
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="ml-64 p-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-gray-800">Selamat Datang, {username}!</h2>
+    </div>
+    <!-- Features Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Ajukan Surat Card -->
+      <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">Ajukan Surat</h3>
+          <span class="p-2 bg-purple-100 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </span>
+        </div>
+        <button class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-300">
+          Buat Surat Baru
+        </button>
+      </div>
+
+      <!-- Upload Gambar Card -->
+      <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">Upload Gambar</h3>
+          <span class="p-2 bg-purple-100 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </span>
+        </div>
+        <button class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-300">
+          Upload Gambar
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
