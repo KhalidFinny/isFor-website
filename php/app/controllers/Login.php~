@@ -24,6 +24,7 @@ class Login extends Controller
 
                     if ($user['role_id'] == 1) {
                         $_SESSION['role_id'] = $user['role_id'];
+                        echo "Redirecting to admin";
                         header('Location: http://localhost:4321/adminpage');
                         die();
                     } else {
