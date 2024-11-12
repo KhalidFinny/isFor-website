@@ -26,7 +26,6 @@
                         <p class="text-gray-500 mt-2">Welcome back! Please login to your account.</p>
                     </div>
                 </div>
-
             </div>
 
             <!-- Login Form -->
@@ -34,6 +33,11 @@
                 <div class="space-y-5">
                     <!-- Username Field -->
                     <div class="space-y-2 animate-slideRight" style="--delay: 100ms">
+                <!-- Login Form -->
+                <form action="http://localhost/isFor-website/php/public/login/authentication" method="POST" class="space-y-6">
+                    <div class="space-y-5">
+                        <!-- Username Field -->
+                        <div class="space-y-2 animate-slideRight" style="--delay: 100ms">
                             <label
                                 for="username"
                                 class="block text-sm font-medium text-gray-700"
@@ -112,7 +116,7 @@
     }
 
     @keyframes slideUp {
-        from { 
+        from {
             opacity: 0;
             transform: translateY(20px);
         }
