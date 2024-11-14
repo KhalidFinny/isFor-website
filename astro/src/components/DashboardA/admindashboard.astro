@@ -1,0 +1,30 @@
+---
+const { username = "Pak Erfan", userRole = "Pengelola", userAvatar = "/images/coding-image.png" } = Astro.props;
+---
+
+<div class="flex min-h-screen bg-white pt-16">
+  <!-- Sidebar -->
+  <nav class="fixed w-20 h-screen bg-white border-r border-gray-200 flex flex-col items-center py-8">
+    <div class="space-y-4 overflow-y-auto flex-1 w-full px-2">
+      <slot name="sidebar" />
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="ml-20 flex-1 p-8">
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+        <div class="flex items-center space-x-4">
+          <div class="text-right">
+            <p class="font-medium text-gray-800">{username}</p>
+            <p class="text-sm text-gray-500">{userRole}</p>
+          </div>
+          <img src={userAvatar} alt="User avatar" class="w-10 h-10 rounded-full">
+        </div>
+      </div>
+    </header>
+    <slot />
+  </main>
+</div>

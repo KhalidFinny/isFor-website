@@ -1,185 +1,126 @@
----
----
-
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body class="bg-gradient-to-br from-blue-50 to-white h-screen flex items-center justify-center">
-    <div class="container mx-auto px-4">
-        <main class="w-full max-w-md mx-auto animate-fadeIn">
-            <!-- Card Container -->
-            <div class="bg-white rounded-3xl shadow-xl p-8 space-y-8 animate-slideUp">
-                <!-- Header -->
-                <div class="flex flex-col items-center space-y-6 animate-slideDown">
-                    <img
-                        src="/Images/polinema_logo 2.png"
-                        alt="Polinema Logo"
-                        class="h-20 w-auto animate-pulse"
-                    />
-                    <div class="text-center">
-                        <h1 class="text-3xl font-bold text-gray-800">
-                            Pusat Riset Informatika
-                        </h1>
-                        <p class="text-gray-500 mt-2">Welcome back! Please login to your account.</p>
-                    </div>
-                </div>
-            </div>
+    <title>Pusat Riset Informatika</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
 
-            <!-- Login Form -->
-            <form action="http://localhost/isFor-website/php/public/login/authentication" method="POST" class="space-y-6">
-                <div class="space-y-5">
-                    <!-- Username Field -->
-                    <div class="space-y-2 animate-slideRight" style="--delay: 100ms">
-                <!-- Login Form -->
-                <form action="http://localhost/isFor-website/php/public/login/authentication" method="POST" class="space-y-6">
-                    <div class="space-y-5">
-                        <!-- Username Field -->
-                        <div class="space-y-2 animate-slideRight" style="--delay: 100ms">
-                            <label
-                                for="username"
-                                class="block text-sm font-medium text-gray-700"
-                            >
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .input-focus-effect:focus {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .shiny-border {
+            background: linear-gradient(
+                90deg,
+                #f0f9ff 0%,
+                #3b82f6 50%,
+                #f0f9ff 100%
+            );
+            background-size: 200% auto;
+            animation: shine 3s linear infinite;
+        }
+    </style>
+</head>
+<body class="h-full bg-blue-50">
+    <div class="min-h-screen flex items-center justify-center p-6">
+        <div class="w-full max-w-md animate-slide-up">
+            <!-- Main Card -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <!-- Shiny top border -->
+                <div class="h-1 shiny-border"></div>
+
+                <!-- Header Section -->
+                <div class="px-8 pt-8 pb-4 text-center">
+                    <div class="flex justify-center mb-6">
+                        <div class="bg-gradient-to-r from-blue-400 to-blue-600">
+                            <img
+                                src="/images/Logo1.png"
+                                alt="Polinema Logo"
+                                class="bg-white p-1"
+                                style="max-width: 200px; height: auto;"
+                            />
+                        </div>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800 tracking-tight animate-fade-in">
+                        Pusat Riset Informatika
+                    </h1>
+                    <p class="mt-2 text-sm text-gray-600 animate-fade-in" style="animation-delay: 0.2s">
+                        Welcome back! Please sign in to continue
+                    </p>
+                </div>
+
+                <!-- Form Section -->
+                <div class="p-8 pt-6">
+                    <form method="POST" action="http://localhost/Login.php" class="space-y-5">
+                        <!-- Username Input -->
+                        <div class="animate-fade-in" style="animation-delay: 0.3s">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
                                 Username
                             </label>
-                            <div class="relative">
-                                <input
-                                    type="text"
-                                    id="username"
-                                    name="username"
-                                    required
-                                    class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 bg-gray-50 hover:bg-gray-100 outline-none"
-                                    placeholder="Enter your username"
-                                />
-                            </div>
+                            <input 
+                                type="text"
+                                name="username"
+                                placeholder="Enter your username"
+                                class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 outline-none input-focus-effect"
+                            />
                         </div>
 
-                        <!-- Password Field -->
-                        <div class="space-y-2 animate-slideRight" style="--delay: 200ms">
-                            <label
-                                for="password"
-                                class="block text-sm font-medium text-gray-700"
-                            >
+                        <!-- Password Input -->
+                        <div class="animate-fade-in" style="animation-delay: 0.4s">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
                                 Password
                             </label>
-                            <div class="relative">
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    required
-                                    class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 bg-gray-50 hover:bg-gray-100 outline-none"
-                                    placeholder="Enter your password"
-                                />
-                            </div>
+                            <input 
+                                type="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 outline-none input-focus-effect"
+                            />
                         </div>
-                    </div>
 
-                    <!-- Forgot Password Link -->
-                    <div class="flex justify-end animate-slideRight" style="--delay: 300ms">
-                        <a
-                            href="#"
-                            class="text-sm text-blue-500 hover:text-blue-700 transition-colors duration-200 hover:underline"
+                        <!-- Forgot Password Link -->
+                        <div class="flex justify-end animate-fade-in" style="animation-delay: 0.5s">
+                            <a href="#" class="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+                                Forgot password?
+                            </a>
+                        </div>
+
+                        <!-- Sign In Button -->
+                        <button 
+                            type="submit"
+                            class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-300 shadow hover:shadow-lg hover:-translate-y-0.5 transform"
                         >
-                            Forgot Password?
-                        </a>
-                    </div>
-
-                    <!-- Login Button -->
-                    <button
-                        type="submit"
-                        class="w-full bg-blue-500 text-white py-4 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-200 font-medium transform hover:scale-[1.02] active:scale-[0.98] animate-slideUp"
-                    >
-                        Login
-                    </button>
-                </form>
+                            Sign In
+                        </button>
+                    </form>
+                </div>
             </div>
-        </main>
+        </div>
     </div>
 </body>
 </html>
-
-<style>
-    /* Custom styles and animations */
-    body {
-        font-family: 'Space Grotesk', sans-serif;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes slideRight {
-        from {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    .animate-fadeIn {
-        animation: fadeIn 0.5s ease-out;
-    }
-
-    .animate-slideUp {
-        animation: slideUp 0.5s ease-out forwards;
-    }
-
-    .animate-slideDown {
-        animation: slideDown 0.5s ease-out forwards;
-    }
-
-    .animate-slideRight {
-        animation: slideRight 0.5s ease-out forwards;
-        animation-delay: var(--delay, 0ms);
-    }
-
-    /* Improve input field aesthetics */
-    input::placeholder {
-        color: #94a3b8;
-    }
-
-    /* Smooth transitions */
-    .transition-all {
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Ensure the container is centered */
-    .container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-    }
-</style>

@@ -7,10 +7,20 @@ import Visimisi from "../components/visimisi.astro";
 import Pengelola from "../components/pengelola.astro";
 import Peneliti from "../components/peneliti.astro";
 import Roadmap from "../components/roadmap.astro";
-export const prerender = false; // Jangan prerender karena halaman bersifat dinamis
-// Ambil query parameters dari URL
-const currentUrl = new URL(Astro.request.url);
-const username = currentUrl.searchParams.get('username') || 'Guest';
+
+// Get cookies to determine user session
+const cookies = Astro.cookies;
+const user_id = cookies.get("user_id");
+const role_id = cookies.get("role_id");
+const username = cookies.get("username") || "Guest";
+
+// Redirect if the user is not an admin (or not logged in)
+if (role_id !== "1") {
+  // Redirect to the login page or home page if not an admin
+  Astro.redirect("/login"); // Update this if you have a specific page
+}
+
+export const prerender = false; // Disable prerendering for this page
 ---
 
 <html lang="id">
