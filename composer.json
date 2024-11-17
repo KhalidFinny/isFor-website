@@ -1,0 +1,31 @@
+{
+    "name": "user/pusat-riset-informatika",
+    "description": "Pusat Riset Informatika",
+    "type": "project",
+    "require": {
+        "php": "^8.0",
+        "vlucas/phpdotenv": "^5.5",
+        "symfony/var-dumper": "^6.0",
+        "twig/twig": "^3.5"
+    },
+    "autoload": {
+    "psr-4": {
+        "App\\": "App/",
+        "Core\\": "core/",
+        "Middleware\\": "middleware/",
+        "Helpers\\": "helpers/"
+    }
+},
+    "scripts": {
+        "start": [
+            "php -S localhost:8000 -t public"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

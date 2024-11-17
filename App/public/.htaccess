@@ -1,0 +1,8 @@
+# Ensure this is in /public/.htaccess
+RewriteEngine On
+RewriteBase /
+
+# Redirect to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
