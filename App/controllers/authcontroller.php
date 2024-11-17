@@ -1,22 +1,21 @@
 <?php
 session_start();
 require_once __DIR__ . '/../core/database.php';
+require_once __DIR__ . '/../models/UserModel.php';
 use Core\Database;
 
 class AuthController {
     private $db;
+    private $userModel;
 
     public function __construct() {
         $this->db = new Database();
+        $this->userModel = new UserModel($this->db);
     }
 
     public function login($username, $password) {
         try {
-            $query = "SELECT * FROM users WHERE username = :username";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':username', $username);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user = $this->userModel->getUserByUsername($username);
 
             if ($user && password_verify($password, $user['password'])) {
                 // Set session variables
