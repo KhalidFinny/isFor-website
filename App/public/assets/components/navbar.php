@@ -41,7 +41,7 @@
                     <div class="hidden lg:flex lg:items-center">
                         <div class="flex items-center space-x-6" id="nav-items"></div>
                         <div class="ml-8">
-                            <a href="/isfor-web/App/views/auth/loginpage.php"
+                            <a href="/IsFor-Website/App/views/auth/loginpage.php"
                               class="text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-4 py-2 rounded-md transition-all duration-300">
                                 Masuk
                             </a>
@@ -66,7 +66,7 @@
             <div id="mobile-menu" class="hidden lg:hidden">
                 <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t" id="mobile-nav-items"></div>
                 <div class="p-3">
-                    <a href="/isfor-web/App/views/auth/loginpage.php"
+                    <a href="/IsFor-Website/App/views/auth/loginpage.php"
                       class="block text-center text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-4 py-2 rounded-md transition-all duration-300">
                         Masuk
                     </a>

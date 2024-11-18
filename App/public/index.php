@@ -9,9 +9,6 @@ $router->add('login', function () {
     require_once '../../App/views/auth/loginpage.php';
 });
 
-$router->add('admin/dashboard', function () {
-    require_once '../../App/views/admin/admindashboard.php';
-});
 
 // Dispatch the route
 $router->dispatch($_SERVER['REQUEST_URI']);

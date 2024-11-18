@@ -1,31 +1,62 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IsFor Pusat Riset Informatika</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/isfor-web/App/public/assets/css/animations.css">
-</head>
-
-    <!-- Roadmap Section -->
-    <section class="min-h-screen py-20 relative overflow-hidden">
-        <div class="container mx-auto px-6">
-            <div class="swiss-grid">
-                <div class="col-span-12 text-center mb-16">
-                    <span class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
-                        Perjalanan Kami
-                    </span>
-                    <h2 class="display-font text-4xl lg:text-5xl font-bold mb-4 text-blue-900">
-                        Roadmap
-                    </h2>
-                    <div class="w-24 h-1 mx-auto bg-gradient-to-r from-blue-600 to-blue-800 rounded-full"></div>
-                </div>
-
-                <div id="timeline" class="col-span-12 space-y-20">
-                    <!-- Timeline items will be inserted here -->
-                </div>
-            </div>
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-blue-900 mb-4">Roadmap Penelitian</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Rencana pengembangan penelitian kami untuk mencapai visi dan misi Pusat Riset Informatika
+            </p>
         </div>
-    </section>
+        
+        <div id="mainRoadmap" class="space-y-20">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="/isFor-website/App/public/assets/js/roadmap.js"></script>
+    <script>
+        function initializeRoadmap() {
+            const roadmapDiv = document.getElementById('mainRoadmap');
+            const data = loadTimelineData();
+            
+            let html = '';
+            data.forEach(period => {
+                html += `
+                    <div class="fade-in">
+                        <div class="flex items-center mb-8">
+                            <div class="p-4 bg-blue-50 rounded-2xl">
+                                <h3 class="text-2xl font-bold text-blue-700">${period.period}</h3>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            ${Object.entries(period.items).map(([category, items]) => {
+                                const cat = categories.find(c => c.name === category);
+                                return `
+                                    <div class="bg-white p-6 rounded-2xl border-2 border-blue-100">
+                                        <div class="flex items-center mb-4">
+                                            <div class="text-${cat.color}-600">
+                                                ${cat.symbol}
+                                            </div>
+                                            <h4 class="text-lg font-semibold ml-3">${category}</h4>
+                                        </div>
+                                        <ul class="space-y-2">
+                                            ${items.map(item => `
+                                                <li class="text-gray-600">${item}</li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            roadmapDiv.innerHTML = html;
+        }
+
+        // Initialize roadmap on load
+        document.addEventListener('DOMContentLoaded', initializeRoadmap);
+        // Update when changes are made in admin panel
+        window.addEventListener('roadmapUpdate', initializeRoadmap);
+    </script>
+</section>
