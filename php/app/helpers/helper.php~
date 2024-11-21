@@ -1,0 +1,10 @@
+<?php
+function includeComponent($component): void
+{
+    $path = __DIR__ . '/../../../public/assets/components/' . $component . '.php';
+    if (file_exists($path)) {
+        include_once $path;
+    } else {
+        echo "Component '$component' tidak ditemukan.";
+    }
+}

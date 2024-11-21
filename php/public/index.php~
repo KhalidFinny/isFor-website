@@ -1,0 +1,6 @@
+<?php
+// index.php di folder public
+require_once '../app/init.php';  // Memastikan file konfigurasi dan inisialisasi aplikasi di-load
+
+$url = $_GET['url'] ?? '';  // Ambil URL yang diminta, misalnya /test.php
+$app = new App($url);  // Panggil App untuk menangani routing
