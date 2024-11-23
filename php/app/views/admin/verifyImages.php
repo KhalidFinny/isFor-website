@@ -50,11 +50,7 @@
                     <span class="text-blue-600 font-medium">Verifikasi</span>
                 </div>
                 <h1 class="text-4xl font-bold text-blue-900">
-                    Verifikasi
-                    <span class="relative inline-block">
-                            <span class="absolute -bottom-2 left-0 w-full h-4 bg-blue-100 -z-10"></span>
-                            <span>Gambar</span>
-                        </span>
+                    Verifikasi Gambar
                 </h1>
             </div>
 
@@ -63,8 +59,6 @@
                 <?php if (empty($images)): ?>
                     <!-- Empty State -->
                     <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-blue-100">
-                        <img src="<?= ASSETS; ?>s/images/empty-images.png" alt="No Images"
-                             class="mx-auto h-40 animate-bounce">
                         <p class="mt-4 text-lg text-blue-900">Belum ada gambar yang perlu diverifikasi</p>
                         <p class="text-sm text-gray-500">Gambar yang membutuhkan verifikasi akan muncul di sini</p>
                     </div>

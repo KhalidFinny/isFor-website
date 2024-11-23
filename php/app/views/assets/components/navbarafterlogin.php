@@ -101,7 +101,7 @@
             },
             { name: "Agenda", href: "<?= BASEURL; ?>/#agenda" },
             { name: "Arsip", dropdownItems: [{ name: "Dokumen", href: "<?= BASEURL; ?>/#" }] },
-            { name: "Galeri", href: "<?= BASEURL; ?>/galeri" }
+            { name: "Galeri", href: "<?= BASEURL; ?>/galeriweb" }
         ];
 
         const userMenuItems = [

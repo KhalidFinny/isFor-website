@@ -164,8 +164,8 @@
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Pending Letters</p>
-                                <p class="text-xl font-semibold text-blue-700">12</p>
+                                <p class="text-sm font-medium text-gray-500">Surat Masih Pending</p>
+                                <p class="text-xl font-semibold text-blue-700">0</p>
                             </div>
                         </div>
                     </div>
@@ -178,8 +178,8 @@
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Verified Letters</p>
-                                <p class="text-lg font-semibold text-gray-900">45</p>
+                                <p class="text-sm font-medium text-gray-600">Surat Terverifikasi</p>
+                                <p class="text-lg font-semibold text-gray-900">0</p>
                             </div>
                         </div>
                     </div>
@@ -193,8 +193,8 @@
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Pending Images</p>
-                                <p class="text-lg font-semibold text-gray-900">8</p>
+                                <p class="text-sm font-medium text-gray-600">Gambar Masih Pending</p>
+                                <p class="text-lg font-semibold text-gray-900">0</p>
                             </div>
                         </div>
                     </div>
@@ -207,8 +207,8 @@
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Rejected Items</p>
-                                <p class="text-lg font-semibold text-gray-900">3</p>
+                                <p class="text-sm font-medium text-gray-600">Dokumen Ditolak</p>
+                                <p class="text-lg font-semibold text-gray-900">0</p>
                             </div>
                         </div>
                     </div>
@@ -233,7 +233,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <?php foreach ($data['allUser'] as $allUser) :?>                
+                                    <?php foreach ($data['allUser'] as $allUser) :?>
                                     <tr class="table-row">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
@@ -249,9 +249,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">
                                                 <?php if ($allUser['role_id'] == 1) { ?>
-                                                    <p>Admin</p>
+                                                    <p>Pengelola</p>
                                                 <?php } elseif ($allUser['role_id'] == 2) { ?>
-                                                    <p>Researcher</p>
+                                                    <p>Peneliti</p>
                                                 <?php } else { ?>
                                                     <p>Role tidak ada</p>
                                                 <?php } ?>

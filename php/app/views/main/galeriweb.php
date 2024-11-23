@@ -27,6 +27,11 @@
   </style>
 </head>
 <body class="bg-gray-50/50">
+<?php if (!isset($_SESSION['user_id'])) : ?>
+    <?php include_once '../app/views/assets/components/navbar.php'; ?>
+<?php else : ?>
+    <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
+<?php endif; ?>
 
 <section class="pt-24 md:pt-32 pb-16 min-h-screen">
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

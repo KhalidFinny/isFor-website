@@ -104,9 +104,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">
                                                 <?php if ($allUser['role_id'] == 1) { ?>
-                                                    <p>Admin</p>
+                                                    <p>Pengelola</p>
                                                 <?php } elseif ($allUser['role_id'] == 2) { ?>
-                                                    <p>Researcher</p>
+                                                    <p>Peneliti</p>
                                                 <?php } else { ?>
                                                     <p>Role tidak ada</p>
                                                 <?php } ?>
@@ -157,8 +157,8 @@
                 <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Peran</label>
                 <select name="role" id="role"
                         class="w-full px-4 py-2 border-2 border-blue-100 rounded-xl focus:border-blue-500 focus:ring-blue-500">
-                    <option value="1">Admin</option>
-                    <option value="2">User</option>
+                    <option value="1">Pengelola</option>
+                    <option value="2">Peneliti</option>
                 </select>
             </div>
             <div>

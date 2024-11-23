@@ -20,7 +20,7 @@ const navItems = [
   },
   {name: 'Agenda', href: '#agenda'},
   {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '#'}]},
-  {name: 'Galeri', href: '/galeri'},
+  {name: 'Galeri', href: '/galeriweb'},
 ];
 
 // Render navigation items
