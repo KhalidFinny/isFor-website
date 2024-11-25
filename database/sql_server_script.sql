@@ -1,135 +1,148 @@
--- Membuat database
+-- Script untuk SQL Server
 CREATE
-DATABASE isfor;
+DATABASE isfor_database;
 GO
 
--- Menggunakan database
-USE isfor;
+USE isfor_database;
 GO
 
--- Membuat tabel role
-CREATE TABLE role
+-- Table: agenda
+CREATE TABLE agenda
 (
-    role_id   INT PRIMARY KEY IDENTITY(1,1),
-    role_name VARCHAR(50)
+    agenda_id  INT PRIMARY KEY IDENTITY(1,1),
+    title      NVARCHAR(255) NOT NULL,
+    roadmap_id INT NOT NULL,
+    created_by INT NULL
 );
+GO
 
-
--- Menambahkan role 'admin' dan 'user' ke tabel role
-INSERT INTO role (role_name)
-VALUES ('admin');
-INSERT INTO role (role_name)
-VALUES ('user');
-
--- Membuat tabel users
-CREATE TABLE users
-(
-    user_id  INT PRIMARY KEY IDENTITY(1,1),
-    username VARCHAR(50),
-    password VARCHAR(255),
-    email    VARCHAR(100),
-    role_id  INT DEFAULT 2,
-    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role (role_id)
-);
-
--- Membuat tabel researchers
-CREATE TABLE researchers
-(
-    researcher_id   INT PRIMARY KEY IDENTITY(1,1),
-    user_id         INT,
-    bio             TEXT,
-    profile_picture VARCHAR(255),
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (user_id)
-);
-
--- Membuat tabel interests
-CREATE TABLE interests
-(
-    interest_id   INT PRIMARY KEY IDENTITY(1,1),
-    interest_name VARCHAR(100)
-);
-
--- Membuat tabel untuk menghubungkan researchers dengan interests
-CREATE TABLE researcher_interests
-(
-    researcher_id INT,
-    interest_id   INT,
-    PRIMARY KEY (researcher_id, interest_id),
-    CONSTRAINT fk_researcher_interest FOREIGN KEY (researcher_id) REFERENCES researchers (researcher_id),
-    CONSTRAINT fk_interest FOREIGN KEY (interest_id) REFERENCES interests (interest_id)
-);
-
--- Membuat tabel education
-CREATE TABLE education
-(
-    education_id   INT PRIMARY KEY IDENTITY(1,1),
-    education_name VARCHAR(100)
-);
-
--- Membuat tabel untuk menghubungkan researchers dengan education
-CREATE TABLE researcher_education
-(
-    researcher_id INT,
-    education_id  INT,
-    PRIMARY KEY (researcher_id, education_id),
-    CONSTRAINT fk_researcher_education FOREIGN KEY (researcher_id) REFERENCES researchers (researcher_id),
-    CONSTRAINT fk_education FOREIGN KEY (education_id) REFERENCES education (education_id)
-);
-
--- Membuat tabel archives
+-- Table: archives
 CREATE TABLE archives
 (
     archive_id  INT PRIMARY KEY IDENTITY(1,1),
-    user_id     INT,
-    title       VARCHAR(100),
-    description TEXT,
-    location    VARCHAR(255),
-    CONSTRAINT fk_user_archive FOREIGN KEY (user_id) REFERENCES users (user_id)
+    title       NVARCHAR(255) NOT NULL,
+    description NVARCHAR(MAX) NOT NULL,
+    file_url    NVARCHAR(255) NOT NULL,
+    roadmap_id  INT NULL,
+    uploaded_by INT NULL
 );
+GO
 
--- Membuat tabel papers
-CREATE TABLE papers
-(
-    paper_id      INT PRIMARY KEY IDENTITY(1,1),
-    researcher_id INT,
-    archive_id    INT,
-    title         VARCHAR(100),
-    file_url      VARCHAR(255),
-    comment       TEXT,
-    CONSTRAINT fk_researcher_paper FOREIGN KEY (researcher_id) REFERENCES researchers (researcher_id),
-    CONSTRAINT fk_archive_paper FOREIGN KEY (archive_id) REFERENCES archives (archive_id)
-);
-
--- Membuat tabel galleries
+-- Table: galleries
 CREATE TABLE galleries
 (
-    image_id      INT PRIMARY KEY IDENTITY(1,1),
-    researcher_id INT,
-    image_url     VARCHAR(255),
-    caption       TEXT,
-    uploaded_at   DATETIME,
-    paper_id      INT,                                                              -- Kolom baru untuk menghubungkan galleries ke papers
-    CONSTRAINT fk_researcher_gallery FOREIGN KEY (researcher_id) REFERENCES researchers (researcher_id),
-    CONSTRAINT fk_paper_gallery FOREIGN KEY (paper_id) REFERENCES papers (paper_id) -- Foreign key ke tabel papers
+    gallery_id  INT PRIMARY KEY IDENTITY(1,1),
+    image       NVARCHAR(255) NULL,
+    category    NVARCHAR(100) NOT NULL,
+    title       NVARCHAR(255) NOT NULL,
+    status      INT NOT NULL,
+    uploaded_by INT NOT NULL
 );
+GO
 
--- Membuat tabel agenda_status
-CREATE TABLE agenda_status
+-- Table: letters
+CREATE TABLE letters
 (
-    agenda_status_id   INT PRIMARY KEY IDENTITY(1,1),
-    agenda_status_name VARCHAR(50)
+    letter_id INT PRIMARY KEY IDENTITY(1,1),
+    title     NVARCHAR(50) NULL,
+    file_url  NVARCHAR(255) NOT NULL,
+    status    INT NOT NULL,
+    user_id   INT NOT NULL
 );
+GO
 
--- Membuat tabel agenda
-CREATE TABLE agenda
+-- Table: research_outputs
+CREATE TABLE research_outputs
 (
-    agenda_id        INT PRIMARY KEY IDENTITY(1,1),
-    title            VARCHAR(100),
-    description      TEXT,
-    location         VARCHAR(255),
-    date             DATE,
-    agenda_status_id INT,
-    researcher_id    INT, -- Menghubungkan agenda dengan researcher
-    CONSTRAINT fk_agenda_status FOREIGN KEY (agenda_status_id) REFERENCES agenda_status (agenda_status_id),
-    CONSTRAINT fk_researcher_agenda FOREIGN KEY (researcher_id) REFERENCES researchers (researcher_id)
+    research_output_id INT PRIMARY KEY IDENTITY(1,1),
+    file_url           NVARCHAR(255) NOT NULL,
+    uploaded_by        INT NOT NULL,
+    uploaded_at        DATETIME DEFAULT GETDATE()
 );
+GO
+
+-- Table: roadmaps
+CREATE TABLE roadmaps
+(
+    roadmap_id INT PRIMARY KEY IDENTITY(1,1),
+    year_start INT NOT NULL,
+    year_end   INT NOT NULL,
+    category   NVARCHAR(100) NOT NULL,
+    agenda     NVARCHAR(255) NOT NULL,
+    created_by INT NULL
+);
+GO
+
+-- Table: role
+CREATE TABLE role
+(
+    role_id   INT PRIMARY KEY IDENTITY(1,1),
+    role_name NVARCHAR(50) NOT NULL
+);
+GO
+
+-- Insert data into role
+INSERT INTO role (role_name) VALUES ('admin'), ('user');
+GO
+
+-- Table: status
+CREATE TABLE status
+(
+    id     INT PRIMARY KEY IDENTITY(1,1),
+    status NVARCHAR(50) NOT NULL
+);
+GO
+
+-- Insert data into status
+INSERT INTO status (status) VALUES ('pending'), ('veriffied'), ('rejected');
+GO
+
+-- Table: users
+CREATE TABLE users
+(
+    user_id         INT PRIMARY KEY IDENTITY(1,1),
+    name            NVARCHAR(100) NOT NULL,
+    username        NVARCHAR(50) UNIQUE NOT NULL,
+    email           NVARCHAR(100) UNIQUE NOT NULL,
+    profile_picture NVARCHAR(255) NULL,
+    password        NVARCHAR(255) NOT NULL,
+    role_id         INT NOT NULL
+);
+GO
+
+-- Add foreign key constraints
+ALTER TABLE agenda
+    ADD CONSTRAINT FK_agenda_roadmaps FOREIGN KEY (roadmap_id) REFERENCES roadmaps (roadmap_id) ON DELETE CASCADE,
+    CONSTRAINT FK_agenda_users FOREIGN KEY (created_by) REFERENCES users (user_id) ON
+DELETE
+SET NULL;
+GO
+
+ALTER TABLE archives
+    ADD CONSTRAINT FK_archives_roadmaps FOREIGN KEY (roadmap_id) REFERENCES roadmaps (roadmap_id) ON DELETE SET NULL,
+    CONSTRAINT FK_archives_users FOREIGN KEY (uploaded_by) REFERENCES users (user_id) ON
+DELETE
+SET NULL;
+GO
+
+ALTER TABLE galleries
+    ADD CONSTRAINT FK_galleries_users FOREIGN KEY (uploaded_by) REFERENCES users (user_id) ON DELETE CASCADE,
+    CONSTRAINT FK_galleries_status FOREIGN KEY (status) REFERENCES status (id);
+GO
+
+ALTER TABLE letters
+    ADD CONSTRAINT FK_letters_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    CONSTRAINT FK_letters_status FOREIGN KEY (status) REFERENCES status (id);
+GO
+
+ALTER TABLE research_outputs
+    ADD CONSTRAINT FK_research_outputs_users FOREIGN KEY (uploaded_by) REFERENCES users (user_id) ON DELETE CASCADE;
+GO
+
+ALTER TABLE roadmaps
+    ADD CONSTRAINT FK_roadmaps_users FOREIGN KEY (created_by) REFERENCES users (user_id) ON DELETE SET NULL;
+GO
+
+ALTER TABLE users
+    ADD CONSTRAINT FK_users_role FOREIGN KEY (role_id) REFERENCES role (role_id) ON DELETE CASCADE;
+GO
