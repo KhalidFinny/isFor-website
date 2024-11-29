@@ -1,12 +1,13 @@
 // Navigation items data
 const navItems = [
-  {name: 'Beranda', href: '/isfor-web/App/views/main/home.php'},
+  {name: 'Beranda', href: '/'},
   {
     name: 'Tentang Kami',
     dropdownItems: [
       {name: 'Sejarah', href: '#Sejarah'},
       {name: 'Visi Misi', href: '#Visimisi'},
       {name: 'Roadmap', href: '#Roadmap'},
+      {name: 'Organisasi', href: '#Organisasi'},
       {name: 'Pengelola', href: '#Pengelola'},
       {name: 'List Peneliti', href: '#Peneliti'},
     ],
@@ -18,9 +19,9 @@ const navItems = [
       {name: 'Hasil Peneliti', href: '#'},
     ],
   },
-  {name: 'Agenda', href: '#agenda'},
+  {name: 'Agenda', href: '/isFor-website/php/app/views/main/agenda.php'},
   {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '#'}]},
-  {name: 'Galeri', href: '/galeriweb'},
+  {name: 'Galeri', href: '/isFor-website/php/app/views/main/galeriweb.php'},
 ];
 
 // Render navigation items

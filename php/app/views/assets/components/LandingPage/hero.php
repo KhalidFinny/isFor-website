@@ -5,15 +5,15 @@
             <div class="col-span-12 lg:col-span-5 space-y-8 stagger-animation">
                 <div class="flex items-center space-x-4">
                     <span class="h-px w-12 bg-blue-600"></span>
-                    <span class="text-blue-600 font-medium">Pusat Riset Informatika</span>
+                    <span class="text-blue-600 font-medium">Internet of Things For Human Life's</span>
                 </div>
 
-                <h1 class="display-font text-5xl lg:text-7xl font-bold">
+                <h1 class="display-font text-5xl lg:text-6xl font-bold">
                     <span class="block text-blue-900">IsFor</span>
-                    <span class="text-blue-600">Pusat Riset</span>
+                    <span class="text-blue-600">Internet of Things</span>
                     <span class="relative inline-block">
-                        <span class="absolute -bottom-2 left-0 w-full h-4 bg-blue-100 -z-10"></span>
-                        <span class="text-blue-900">Informatika</span>
+                        <span class="absolute -bottom-2 left-0 w-full h-3 bg-blue-100 -z-10"></span>
+                        <span class="text-blue-900">For Human Life's</span>
                     </span>
                 </h1>
 

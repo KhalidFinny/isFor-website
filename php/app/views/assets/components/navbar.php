@@ -33,7 +33,7 @@
                 <!-- Logo Section -->
                 <a href="<?= BASEURL ?>" class="flex-shrink-0 flex items-center space-x-3">
                     <img src="<?= ASSETS; ?>/images/Logo1.png" alt="IsFor Logo" class="h-10 w-auto"/>
-                    <span class="text-lg font-semibold text-blue-900">IsFor Pusat Riset Informatika</span>
+                    <span class="text-lg font-semibold text-blue-900">Internet of Things For Human Life's</span>
                 </a>
 
                 <!-- Navigation Items -->

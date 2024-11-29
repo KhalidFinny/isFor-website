@@ -59,6 +59,12 @@
                     <!-- Manajemen Section -->
                     <div class="space-y-1">
                         <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Manajemen</p>
+                        <a href="<?= BASEURL; ?>/upload" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
+                            <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                            Upload Gambar
+                        </a>
                         <a href="<?= BASEURL; ?>/User" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
                             <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
