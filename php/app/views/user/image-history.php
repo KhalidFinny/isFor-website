@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat Gambar - IsFor PRI</title>
+    <title>Riwayat Gambar - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -52,8 +52,8 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-50">
-    <div class="flex">
+<body class="bg-white">
+    <div class="flex"></div></div>
         <div class="flex-1 min-h-screen ml-64">
             <main class="py-10 px-8">
                 <div class="max-w-7xl mx-auto">

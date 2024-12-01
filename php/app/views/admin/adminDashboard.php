@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard - IsFor Internet of Things For Human Life's</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -139,7 +139,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-white">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>

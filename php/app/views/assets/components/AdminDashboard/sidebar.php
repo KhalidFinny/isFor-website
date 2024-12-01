@@ -59,7 +59,7 @@
                     <!-- Manajemen Section -->
                     <div class="space-y-1">
                         <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Manajemen</p>
-                        <a href="<?= BASEURL; ?>/upload" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
+                        <a href="http://localhost/IsFor-website/php/app/views/admin/upload-image.php" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
                             <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                             </svg>
@@ -77,7 +77,7 @@
                             </svg>
                             Roadmap
                         </a>
-                        <a href="<?= BASEURL; ?>/admin/manage-agenda.php" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
+                        <a href="http://localhost/IsFor-website/php/app/views/admin/manage-agenda.php" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
                             <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Agenda - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -28,6 +29,7 @@
             color: #93C5FD;
         }
     </style>
+    <title>Agenda - IsFor Internet of Things For Human Life's</title>
 </head>
 <section class="min-h-screen py-20 relative overflow-hidden bg-white">
     <div class="container mx-auto px-6 max-w-4xl">
