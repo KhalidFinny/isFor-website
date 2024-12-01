@@ -15,6 +15,8 @@ session_start();
     <base href="/isfor-web/"/>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <link rel="stylesheet" href="http://localhost/IsFor-website/php/app/views/assets/css/inandout.css">
+    <script src="http://localhost/IsFor-website/php/app/views/assets/js/animations.js" defer></script>
 </head>
 <body class="grid-pattern">
 <?php if (!isset($_SESSION['user_id'])) : ?>

@@ -96,8 +96,8 @@
         {
             name: 'Riset & Publikasi',
             dropdownItems: [
-                {name: 'Penelitian', href: '#'},
-                {name: 'Hasil Penelitian', href: 'c'},
+                {name: 'Penelitian', href: ''},
+                {name: 'Hasil Penelitian', href: 'http://localhost/IsFor-website/php/app/views/main/hasilpenelitian.php'},
             ],
         },
         {name: 'Agenda', href: 'http://localhost/IsFor-website/php/app/views/main/agenda.php'},
@@ -120,10 +120,18 @@
                 const navItem = document.createElement('div');
                 navItem.className = 'nav-item relative group';
                 navItem.innerHTML = `
-                    <a href="${item.href || '#'}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center" tabindex="0">
-                        ${item.name}
-                        ${item.dropdownItems ? `<svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>` : ''}
-                    </a>
+                    ${item.dropdownItems ? `
+                        <button class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center">
+                            ${item.name}
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                    ` : `
+                        <a href="${item.href}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center">
+                            ${item.name}
+                        </a>
+                    `}
                     ${item.dropdownItems ? `
                         <div class="dropdown-content absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">

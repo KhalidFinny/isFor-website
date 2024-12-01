@@ -8,6 +8,8 @@
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= ASSETS; ?>/css/animations.css">
+    <link rel="stylesheet" href="http://localhost/IsFor-website/php/app/views/assets/css/inandout.css">
+    <script src="http://localhost/IsFor-website/php/app/views/assets/js/animations.js" defer></script>
     <style>
         .fade-in {
             animation: fadeIn 0.5s ease-out forwards;

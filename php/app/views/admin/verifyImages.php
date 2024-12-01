@@ -7,44 +7,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= ASSETS; ?>/css/animations.css">
-    <style>
-        .image-card {
-            animation: scaleIn 0.5s ease-out forwards;
-            opacity: 0;
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .image-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .image-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .image-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-    </style>
+    <link rel="stylesheet" href="http://localhost/IsFor-website/php/app/views/assets/css/inandout.css">
+    <script src="http://localhost/IsFor-website/php/app/views/assets/js/animations.js" defer></script>
 </head>
 <body class="bg-gray-50">
-<div class="flex">
+<div class="flex fade-in">
     <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
     <div class="flex-1 min-h-screen ml-64">
-        <main class="py-10 px-8">
+        <main class="py-10 px-8 slide-up">
             <!-- Header -->
-            <div class="max-w-7xl mx-auto mb-12">
+            <div class="max-w-7xl mx-auto mb-12 slide-in-right">
                 <div class="flex items-center space-x-4 mb-4">
                     <span class="h-px w-12 bg-blue-600"></span>
                     <span class="text-blue-600 font-medium">Verifikasi</span>
@@ -55,17 +27,17 @@
             </div>
 
             <!-- Images Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
                 <?php if (empty($images)): ?>
                     <!-- Empty State -->
-                    <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-blue-100">
+                    <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-blue-100 fade-in">
                         <p class="mt-4 text-lg text-blue-900">Belum ada gambar yang perlu diverifikasi</p>
                         <p class="text-sm text-gray-500">Gambar yang membutuhkan verifikasi akan muncul di sini</p>
                     </div>
                 <?php else: ?>
                     <!-- Image Cards -->
                     <?php foreach ($images as $index => $image): ?>
-                        <div class="image-card bg-white rounded-2xl border-2 border-blue-100 overflow-hidden">
+                        <div class="stagger-item scale-in bg-white rounded-2xl border-2 border-blue-100 overflow-hidden">
                             <img src="<?php echo $image['url']; ?>" alt="<?php echo $image['title']; ?>"
                                  class="w-full h-48 object-cover">
                             <div class="p-6">
@@ -103,7 +75,7 @@
 
 <!-- Image Preview Modal -->
 <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
-    <div class="max-w-4xl w-full mx-4">
+    <div class="max-w-4xl w-full mx-4 scale-in">
         <div class="bg-white rounded-2xl overflow-hidden">
             <div class="flex justify-between items-center p-4 border-b border-blue-100">
                 <h3 class="text-xl font-bold text-blue-900">Preview Gambar</h3>
@@ -123,13 +95,21 @@
 <script>
     function viewImage(url) {
         document.getElementById('previewImage').src = url;
-        document.getElementById('imageModal').classList.remove('hidden');
-        document.getElementById('imageModal').classList.add('flex');
+        const modal = document.getElementById('imageModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex', 'fade-in');
+        modal.querySelector('.max-w-4xl').classList.add('scale-in');
     }
 
     function closeImageModal() {
-        document.getElementById('imageModal').classList.add('hidden');
-        document.getElementById('imageModal').classList.remove('flex');
+        const modal = document.getElementById('imageModal');
+        modal.classList.add('fade-out');
+        modal.querySelector('.max-w-4xl').classList.add('scale-out');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex', 'fade-out');
+            modal.querySelector('.max-w-4xl').classList.remove('scale-out');
+        }, 300);
     }
 
     function verifyImage(id) {
