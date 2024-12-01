@@ -13,12 +13,12 @@
             transform: translateY(20px);
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .gallery-item.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .image-container {
             position: relative;
             overflow: hidden;
@@ -100,57 +100,57 @@
             <!-- Topics Navigation -->
             <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
                 <?php
-                $topics = ['Semua', 'Penelitian', 'Workshop', 'Seminar', 'Kolaborasi', 'Publikasi'];
-                foreach ($topics as $index => $topic): ?>
+$topics = ['Semua', 'Penelitian', 'Workshop', 'Seminar', 'Kolaborasi', 'Publikasi'];
+foreach ($topics as $index => $topic): ?>
                     <button class="topic-button px-4 py-2 text-gray-600 hover:text-blue-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
                         <?php echo $topic; ?>
                     </button>
-                <?php endforeach; ?>
+                <?php endforeach;?>
             </div>
 
             <!-- Gallery Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <?php
-                $galleryItems = [
-                    [
-                        "title" => "Workshop AI & Machine Learning",
-                        "category" => "Workshop",
-                        "date" => "15 Oktober 2023",
-                        "description" => "Sesi pembelajaran mendalam tentang implementasi AI dalam industri modern"
-                    ],
-                    [
-                        "title" => "Seminar IoT Development",
-                        "category" => "Seminar",
-                        "date" => "3 November 2023",
-                        "description" => "Diskusi tentang perkembangan IoT dalam smart city"
-                    ],
-                    [
-                        "title" => "Kolaborasi Riset Cybersecurity",
-                        "category" => "Kolaborasi",
-                        "date" => "8 Desember 2023",
-                        "description" => "Kerjasama penelitian dengan institusi internasional"
-                    ],
-                    [
-                        "title" => "Publikasi Penelitian Big Data",
-                        "category" => "Publikasi",
-                        "date" => "22 Januari 2024",
-                        "description" => "Hasil penelitian analisis big data untuk smart governance"
-                    ],
-                    [
-                        "title" => "Workshop Cloud Computing",
-                        "category" => "Workshop",
-                        "date" => "15 Februari 2024",
-                        "description" => "Pelatihan implementasi cloud infrastructure"
-                    ],
-                    [
-                        "title" => "Seminar Software Engineering",
-                        "category" => "Seminar",
-                        "date" => "1 Maret 2024",
-                        "description" => "Best practices dalam pengembangan software modern"
-                    ]
-                ];
+$galleryItems = [
+    [
+        "title" => "Workshop AI & Machine Learning",
+        "category" => "Workshop",
+        "date" => "15 Oktober 2023",
+        "description" => "Sesi pembelajaran mendalam tentang implementasi AI dalam industri modern",
+    ],
+    [
+        "title" => "Seminar IoT Development",
+        "category" => "Seminar",
+        "date" => "3 November 2023",
+        "description" => "Diskusi tentang perkembangan IoT dalam smart city",
+    ],
+    [
+        "title" => "Kolaborasi Riset Cybersecurity",
+        "category" => "Kolaborasi",
+        "date" => "8 Desember 2023",
+        "description" => "Kerjasama penelitian dengan institusi internasional",
+    ],
+    [
+        "title" => "Publikasi Penelitian Big Data",
+        "category" => "Publikasi",
+        "date" => "22 Januari 2024",
+        "description" => "Hasil penelitian analisis big data untuk smart governance",
+    ],
+    [
+        "title" => "Workshop Cloud Computing",
+        "category" => "Workshop",
+        "date" => "15 Februari 2024",
+        "description" => "Pelatihan implementasi cloud infrastructure",
+    ],
+    [
+        "title" => "Seminar Software Engineering",
+        "category" => "Seminar",
+        "date" => "1 Maret 2024",
+        "description" => "Best practices dalam pengembangan software modern",
+    ],
+];
 
-                foreach ($galleryItems as $index => $item): ?>
+foreach ($galleryItems as $index => $item): ?>
                     <div class="gallery-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
                         <div class="image-container">
                             <div class="image-placeholder"></div>
@@ -172,7 +172,7 @@
                             </h3>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                <?php endforeach;?>
             </div>
         </div>
     </section>

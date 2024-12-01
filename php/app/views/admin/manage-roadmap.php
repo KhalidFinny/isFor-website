@@ -22,6 +22,30 @@
                 transform: translateY(0);
             }
         }
+
+        .period-table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .period-table th {
+            background-color: #f8fafc;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .category-cell {
+            background-color: #f0f9ff;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+        }
+        .topic-input {
+            min-height: 40px;
+            transition: all 0.2s;
+        }
+        .topic-input:focus {
+            min-height: 80px;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -30,273 +54,133 @@
 
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
-            <div class="max-w-7xl mx-auto">
-                <!-- Header -->
-                <div class="text-center mb-12">
-                        <span class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
-                            Manajemen
-                        </span>
-                    <h1 class="text-4xl font-bold text-blue-900">
-                        Kelola Roadmap
-                    </h1>
-                </div>
-
-                <!-- Edit Button -->
-                <div class="flex justify-center mb-16">
-                    <button onclick="showRoadmapEditor()"
-                            class="group px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-300">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                            </svg>
-                            <span class="text-lg font-semibold">Edit Roadmap</span>
-                        </div>
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <div class="mb-6 flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Research Roadmap Management</h1>
+                    <button onclick="saveAllChanges()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Save All Changes
                     </button>
                 </div>
 
-                <!-- Preview Section -->
-                <div id="roadmapPreview" class="space-y-20 bg-white rounded-2xl border-2 border-blue-100 p-8">
-                    <!-- Will be populated by JavaScript -->
+                <!-- Period Tabs -->
+                <div class="mb-6 border-b border-gray-200">
+                    <nav class="flex space-x-4" aria-label="Periods">
+                        <button class="px-4 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600" 
+                                onclick="switchPeriod('2018-2022')">
+                            2018-2022
+                        </button>
+                        <button class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700" 
+                                onclick="switchPeriod('2022-2025')">
+                            2022-2025
+                        </button>
+                        <button class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700" 
+                                onclick="switchPeriod('2026-2028')">
+                            2026-2028
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Roadmap Table -->
+                <div class="overflow-x-auto shadow-sm rounded-lg">
+                    <table class="period-table w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Category
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Topics
+                                </th>
+                                <th class="px-6 py-3 w-24 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="roadmapTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
     </div>
 </div>
 
-<!-- Editor Modal -->
-<div id="roadmapModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold text-blue-900">Edit Roadmap</h3>
-            <button onclick="closeRoadmapModal()" class="text-gray-500 hover:text-gray-700">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-        <div id="roadmapEditor" class="space-y-8">
-            <!-- Will be populated by JavaScript -->
-        </div>
-        <div class="flex justify-end space-x-3 mt-6 pt-4 border-t">
-            <button onclick="closeRoadmapModal()"
-                    class="px-4 py-2 text-gray-700 hover:text-gray-900">
-                Cancel
-            </button>
-            <button onclick="saveChanges()"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                Save Changes
-            </button>
-        </div>
-    </div>
+<!-- Add Topic Modal -->
+<div id="addTopicModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <!-- Modal content -->
 </div>
 
 <script>
-    // Initial load
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchRoadmapData();
-    });
+    const categories = [
+        { id: 1, name: 'Smart ICT' },
+        { id: 2, name: 'IoT Applications' },
+        { id: 3, name: 'Data Science & Analytics' },
+        { id: 4, name: 'Business Management' }
+    ];
+
+    let currentPeriod = '2018-2022';
+    let roadmapData = {};
 
     function fetchRoadmapData() {
-        fetch('/isfor-web/App/api/getRoadmap.php')
+        fetch('/api/roadmap')
             .then(response => response.json())
             .then(data => {
-                renderRoadmap(data);
+                roadmapData = data;
+                renderRoadmapTable();
             });
     }
 
-    function renderRoadmap(data) {
-        const preview = document.getElementById('roadmapPreview');
-        let html = '';
-        const groupedData = groupByPeriod(data);
+    function renderRoadmapTable() {
+        const tbody = document.getElementById('roadmapTableBody');
+        tbody.innerHTML = '';
 
-        for (const [period, items] of Object.entries(groupedData)) {
-            html += `
-                    <div class="fade-in">
-                        <div class="flex items-center mb-8">
-                            <div class="p-4 bg-blue-50 rounded-2xl">
-                                <h3 class="text-2xl font-bold text-blue-700">${period}</h3>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            ${Object.entries(items).map(([category, items]) => {
-                const cat = categories.find(c => c.name === category);
-                return `
-                                    <div class="bg-white p-6 rounded-2xl border-2 border-blue-100">
-                                        <div class="flex items-center mb-4">
-                                            <div class="text-${cat.color}-600">
-                                                ${cat.symbol}
-                                            </div>
-                                            <h4 class="text-lg font-semibold ml-3">${category}</h4>
-                                        </div>
-                                        <ul class="space-y-2">
-                                            ${items.map(item => `
-                                                <li class="text-gray-600">${item.item}</li>
-                                            `).join('')}
-                                        </ul>
-                                    </div>
-                                `;
-            }).join('')}
-                        </div>
-                    </div>
-                `;
-        }
-
-        preview.innerHTML = html;
-    }
-
-    function groupByPeriod(data) {
-        return data.reduce((acc, curr) => {
-            if (!acc[curr.period]) {
-                acc[curr.period] = {};
-            }
-            if (!acc[curr.period][curr.category]) {
-                acc[curr.period][curr.category] = [];
-            }
-            acc[curr.period][curr.category].push(curr);
-            return acc;
-        }, {});
-    }
-
-    function showRoadmapEditor() {
-        const modal = document.getElementById('roadmapModal');
-        const editor = document.getElementById('roadmapEditor');
-        fetch('/isfor-web/App/api/getRoadmap.php')
-            .then(response => response.json())
-            .then(data => {
-                let html = '';
-                const groupedData = groupByPeriod(data);
-
-                for (const [period, items] of Object.entries(groupedData)) {
-                    html += generatePeriodEditor(period, items);
-                }
-
-                html += `
-                        <button onclick="addNewPeriod()" 
-                                class="w-full p-4 text-blue-600 border-2 border-dashed border-blue-200 rounded-xl hover:border-blue-400">
-                            + Add New Period
-                        </button>
-                    `;
-
-                editor.innerHTML = html;
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            });
-    }
-
-    function generatePeriodEditor(period, items) {
-        return `
-                <div class="p-6 bg-gray-50 rounded-xl">
-                    <div class="flex justify-between items-center mb-4">
-                        <input type="text" value="${period}" 
-                               onchange="updatePeriod('${period}', this.value)" 
-                               class="text-2xl font-bold text-blue-700 w-full bg-transparent border-none focus:outline-none">
-                        <button onclick="removePeriod('${period}')" class="text-red-500 hover:text-red-700">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        ${Object.entries(items).map(([category, items]) => {
-            return `
-                                <div class="bg-white p-6 rounded-2xl border-2 border-blue-100">
-                                    <div class="flex items-center mb-4">
-                                        <div class="text-${categories.find(c => c.name === category).color}-600">
-                                            ${categories.find(c => c.name === category).symbol}
-                                        </div>
-                                        <h4 class="text-lg font-semibold ml-3">${category}</h4>
-                                    </div>
-                                    <ul class="space-y-2">
-                                        ${items.map(item => `
-                                            <li class="flex justify-between items-center">
-                                                <input type="text" value="${item.item}" 
-                                                       onchange="updateItem(${item.id}, this.value)" 
-                                                       class="text-gray-600 w-full bg-transparent border-none focus:outline-none">
-                                                <button onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700">
-                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </li>
-                                        `).join('')}
-                                    </ul>
-                                    <button onclick="addItem('${period}', '${category}')" 
-                                            class="w-full p-2 text-sm text-blue-600 border border-dashed border-blue-300 rounded hover:border-blue-500">
-                                        + Add New Item
+        categories.forEach(category => {
+            const topics = roadmapData[currentPeriod]?.[category.name] || [];
+            const row = `
+                <tr>
+                    <td class="category-cell px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        ${category.name}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="space-y-2">
+                            ${topics.map(topic => `
+                                <div class="flex items-start gap-2">
+                                    <textarea
+                                        class="topic-input flex-1 text-sm text-gray-700 border rounded-md p-2"
+                                        onchange="updateTopic('${category.name}', this.value, ${topic.id})"
+                                    >${topic.text}</textarea>
+                                    <button onclick="deleteTopic(${topic.id})" 
+                                            class="text-red-500 hover:text-red-700">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
                                     </button>
                                 </div>
-                            `;
-        }).join('')}
-                    </div>
-                </div>
+                            `).join('')}
+                            <button onclick="addTopic('${category.name}')"
+                                    class="text-sm text-blue-600 hover:text-blue-700">
+                                + Add Topic
+                            </button>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <button class="text-gray-500 hover:text-gray-700">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
             `;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
     }
 
-    function updateItem(id, value) {
-        fetch('/isfor-web/App/api/updateItem.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({id, item: value})
-        }).then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    fetchRoadmapData();
-                }
-            });
-    }
-
-    function addItem(period, category) {
-        fetch('/isfor-web/App/api/addPeriod.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({period, category, item: 'New Item'})
-        }).then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showRoadmapEditor();
-                    fetchRoadmapData();
-                }
-            });
-    }
-
-    function removeItem(id) {
-        fetch('/isfor-web/App/api/deleteItem.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({id})
-        }).then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showRoadmapEditor();
-                    fetchRoadmapData();
-                }
-            });
-    }
-
-    function addNewPeriod() {
-        // Logic to add a new period
-    }
-
-    function removePeriod(period) {
-        // Logic to remove a period
-    }
-
-    function closeRoadmapModal() {
-        document.getElementById('roadmapModal').classList.add('hidden');
-        document.getElementById('roadmapModal').classList.remove('flex');
-    }
-
-    function saveChanges() {
-        closeRoadmapModal();
-        fetchRoadmapData();
-    }
+    // Initialize
+    document.addEventListener('DOMContentLoaded', fetchRoadmapData);
 </script>
 </body>
 </html>

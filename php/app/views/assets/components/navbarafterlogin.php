@@ -80,30 +80,30 @@
         </nav>
     </header>
     <script>
-        const navItems = [
-            { name: "Beranda", href: "<?= BASEURL; ?>" },
-            {
-                name: "Tentang Kami",
-                dropdownItems: [
-                    { name: "Sejarah", href: "<?= BASEURL; ?>/#sejarah" },
-                    { name: "Visi Misi", href: "<?= BASEURL; ?>/#visi-misi" },
-                    { name: "Roadmap", href: "<?= BASEURL; ?>/#roadmap" },
-                    { name: "Pengelola", href: "<?= BASEURL; ?>/#pengelola" },
-                    { name: "List Peneliti", href: "<?= BASEURL; ?>/#list-peneliti" }
-                ]
-            },
-            {
-                name: "Riset & Publikasi",
-                dropdownItems: [
-                    { name: "Penelitian", href: "<?= BASEURL; ?>/#" },
-                    { name: "Hasil Peneliti", href: "<?= BASEURL; ?>/#" }
-                ]
-            },
-            { name: "Agenda", href: "<?= BASEURL; ?>/#agenda" },
-            { name: "Arsip", dropdownItems: [{ name: "Dokumen", href: "<?= BASEURL; ?>/#" }] },
-            { name: "Galeri", href: "<?= BASEURL; ?>/galeriweb" }
+         const navItems = [
+        {name: 'Beranda', href: 'http://localhost/IsFor-website/php/app/views/main/home.php'},
+        {
+            name: 'Tentang Kami',
+            dropdownItems: [
+                {name: 'Sejarah', href: '#Sejarah'},
+                {name: 'Visi Misi', href: '#Visimisi'},
+                {name: 'Roadmap', href: '#Roadmap'},
+                {name: 'Organisasi', href: '#Organisasi'},
+                {name: 'Pengelola', href: '#Pengelola'},
+                {name: 'List Peneliti', href: '#Peneliti'},
+            ],
+        },
+        {
+            name: 'Riset & Publikasi',
+            dropdownItems: [
+                {name: 'Penelitian', href: '#'},
+                {name: 'Hasil Penelitian', href: 'c'},
+            ],
+        },
+        {name: 'Agenda', href: 'http://localhost/IsFor-website/php/app/views/main/agenda.php'},
+        {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '#'}]},
+        {name: 'Galeri', href: 'http://localhost/IsFor-website/php/app/views/main/galeriweb.php'},
         ];
-
         const userMenuItems = [
             <?php if ($_SESSION['role_id'] == 1) : ?>
                 { name: "Dashboard", href: "<?= BASEURL; ?>/dashboardadmin" },
