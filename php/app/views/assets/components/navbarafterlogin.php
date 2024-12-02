@@ -80,30 +80,31 @@
         </nav>
     </header>
     <script>
-         const navItems = [
-        {name: 'Beranda', href: 'http://localhost/IsFor-website/php/app/views/main/home.php'},
+        const navItems = [
+        {name: 'Beranda', href: '<?= BASEURL; ?>/#beranda'},
         {
             name: 'Tentang Kami',
             dropdownItems: [
-                {name: 'Sejarah', href: '#Sejarah'},
-                {name: 'Visi Misi', href: '#Visimisi'},
-                {name: 'Roadmap', href: '#Roadmap'},
-                {name: 'Organisasi', href: '#Organisasi'},
-                {name: 'Pengelola', href: '#Pengelola'},
-                {name: 'List Peneliti', href: '#Peneliti'},
+                {name: 'Sejarah', href: '<?= BASEURL; ?>/#Sejarah'},
+                {name: 'Visi Misi', href: '<?= BASEURL; ?>/#Visimisi'},
+                {name: 'Roadmap', href: '<?= BASEURL; ?>/#Roadmap'},
+                {name: 'Organisasi', href: '<?= BASEURL; ?>/#Organisasi'},
+                {name: 'Pengelola', href: '<?= BASEURL; ?>/#Pengelola'},
+                {name: 'List Peneliti', href: '<?= BASEURL; ?>/#Peneliti'},
             ],
         },
         {
             name: 'Riset & Publikasi',
             dropdownItems: [
-                {name: 'Penelitian', href: ''},
-                {name: 'Hasil Penelitian', href: 'http://localhost/IsFor-website/php/app/views/main/hasilpenelitian.php'},
+                {name: 'Penelitian', href: '<?= BASEURL; ?>/#'},
+                {name: 'Hasil Penelitian', href: '<?= BASEURL; ?>/home/hasilpenelitian'},
             ],
         },
-        {name: 'Agenda', href: 'http://localhost/IsFor-website/php/app/views/main/agenda.php'},
-        {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '#'}]},
-        {name: 'Galeri', href: 'http://localhost/IsFor-website/php/app/views/main/galeriweb.php'},
-        ];
+        {name: 'Agenda', href: '<?= BASEURL; ?>/home/agenda'},
+        {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '<?= BASEURL; ?>/#'}]},
+        {name: 'Galeri', href: '<?= BASEURL; ?>/home/galeri'},
+    ];
+
         const userMenuItems = [
             <?php if ($_SESSION['role_id'] == 1) : ?>
                 { name: "Dashboard", href: "<?= BASEURL; ?>/dashboardadmin" },
@@ -120,18 +121,10 @@
                 const navItem = document.createElement('div');
                 navItem.className = 'nav-item relative group';
                 navItem.innerHTML = `
-                    ${item.dropdownItems ? `
-                        <button class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center">
-                            ${item.name}
-                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                    ` : `
-                        <a href="${item.href}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center">
-                            ${item.name}
-                        </a>
-                    `}
+                    <a href="${item.href || '#'}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center" tabindex="0">
+                        ${item.name}
+                        ${item.dropdownItems ? `<svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>` : ''}
+                    </a>
                     ${item.dropdownItems ? `
                         <div class="dropdown-content absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
@@ -148,7 +141,7 @@
                     ${item.dropdownItems ? `
                         <div class="pl-4 space-y-1">
                             ${item.dropdownItems.map(dropItem => `<a href="${dropItem.href}" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md">${dropItem.name}</a>`).join('')}
-                        </div>
+                        </div>x
                     ` : ''}
                 `;
                 mobileNavContainer.appendChild(mobileNavItem);

@@ -3,81 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7" media="print">
     <title>Document</title>
-    <!-- <link rel="stylesheet" href="css/output.css"> -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                fontFamily: {
-                    'timesNewRoman': ['Times New Roman, Times, serif'],
-                },
-                extend: {
-                    colors: {
-                        clifford: '#da373d',
-                    }
-                }
-            }
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
         }
-    </script>
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .header{
+            padding-top: 96px;
+            padding-left: 96px;
+            padding-right: 96px;
+            
+        }
+
+        .header td{
+            border-bottom: 2px black double;
+        }
+
+        .keterangan{
+            padding-top: 30px;
+            padding-left: 96px;
+            padding-right: 96px;
+            
+        }
+
+        .pernyataan{
+            padding-top: 30px;
+            padding-left: 96px;
+            padding-right: 96px;
+        }
+
+        .penutup{
+            padding-top: 30px;
+            padding-left: 96px;
+            padding-right: 96px;
+        }
+
+        .signature{
+            padding-top: 30px;
+            padding-left: 96px;
+            padding-right: 96px;
+            float: right;
+        }
+
+    </style>
 </head>
-<body class="font-timesNewRoman">
-    <div class="container m-[96px] mx-auto max-w-[816px]">
-        <div class="header flex items-center justify-center border-double border-b-4 border-gray-900 mb-11">
-            <img src="img/logo.png" alt="Logo Politeknik Negeri Malang" width="125px">
-            <div class="judul text-center">
-                <h1 class="title font-bold text-xl">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI 
-                    POLITEKNIK NEGERI MALANG
-                </h1>
-                <h3 class="tagline font-bold">PUSAT PENELITIAN DAN PENGABDIAN PADA MASYARAKAT</h3>
-                <p class="alamat text-sm">Jalan Soekarno Hatta No.9 Jatimulyo, Lowokwaru, Malang, 65141 </p>
-                <p class="no text-sm">Telp (0341) 404424 - 404425, Fax (0341) 404420</p>
-                <p class="link underline decoration-sky-400 text-sky-400 text-sm"><a href="http://www.polinema.ac.id" target="_blank">http://www.polinema.ac.id</a></p>
-            </div>
-        </div>
-        <div class="content">
-            <div class="keterangan mb-6">
-                <h1 class="text-center font-bold text-xl">SURAT REKOMENDASI PUSAT RISET</h1>
-                <p>Berdasarkan Pengajuan Proposal Penelitian berikut:</p>
-                <ul class="ml-6">
-                    <li class="flex gap-2 mb-2">
-                        <span class="w-[200px]">Judul</span>
-                        <span>: DESAIN DAN ANALISIS ANTENA HELIKS</span>
-                    </li>
-                    <li class="flex gap-2 mb-2">
-                        <span class="w-[200px]">Ketua Peneliti</span>
-                        <span>: </span>
-                    </li>
-                    <li class="flex gap-2 mb-2">
-                        <span class="w-[200px]">Skema Penelitian</span>
-                        <span>: Pusat Riset Politeknik Negeri Malang</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="pernyataan mb-6">
-                <p>Dengan ini kami menyatakan bahwa proposal dengan judul diatas sesuai dengan <span class="font-bold">Peta Jalan Penelitian</span> pada:</p>
-                <ul class="ml-6">
-                    <li class="flex gap-2 mb-2">
-                        <span class="w-[200px]">Nama Pusat Riset</span>
-                        <span>: Pusat Riset iSFor</span>
-                    </li>
-                    <li class="flex gap-2 mb-2">
-                        <span class="w-[200px]">Topik Riset</span>
-                        <span>: Antenna for ICT- Antenna Performances Enhancement</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="penutup mb-6">
-                <p>
-                    Sebagai pertimbangan untuk evaluasi proposal penelitian, kami lampirkan peta jalan penelitian pusat riset dan peta jalan penelitian pengusul. Demikian surat rekomendasi ini dibuat sebagai bahan pertimbangan untuk pengajuan proposal penelitian dengan pendanaan DIPA Polinema Tahun 2024.
-                </p>
-            </div>
-        </div>
-        <div class="signature flex justify-end">
-            <div class="text-center flex flex-col items-center">
-                <p class="tanggal">Malang, 29 Januari 2024</p>
+<body>
+    <div class="container">
+        <table class="header">
+            <tr>
+                <td style="width: 5%;">
+                    <img src="http://localhost/IsFor-website/php/app/views/assets/components/Doc/img/logo.png" alt="Logo" width="125px">
+                </td>
+                <td style="text-align: center; width: 95%;">
+                    <div class="judul">
+                        <h2 class="title">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI POLITEKNIK NEGERI MALANG
+                        </h2>
+                        <h4 class="tagline">PUSAT PENELITIAN DAN PENGABDIAN PADA MASYARAKAT</h4>
+                        <p class="alamat">Jalan Soekarno Hatta No.9 Jatimulyo, Lowokwaru, Malang, 65141 </p>
+                        <p class="no">Telp (0341) 404424 - 404425, Fax (0341) 404420</p>
+                        <p class="link"><a href="http://www.polinema.ac.id" target="_blank">http://www.polinema.ac.id</a></p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table class="keterangan">
+            <tr>
+                <td colspan="2" style="text-align: center;"><h2>SURAT REKOMENDASI PUSAT RISET</h2></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 100%;"><p>Berdasarkan Pengajuan Proposal Penelitian berikut:</p></td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Judul</td>
+                <td style="width: 70%;">: {{ researchTitle }}</td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Ketua Penelitian</td>
+                <td style="width: 70%;">: {{ leadResearcher }}</td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Skema Penelitian</td>
+                <td style="width: 70%;">: {{ researchScheme }}</td>
+            </tr>
+        </table>
+        <table class="pernyataan">
+            <tr>
+                <td colspan="2" style="width: 100%;"><p>Dengan ini kami menyatakan bahwa proposal dengan judul diatas sesuai dengan <span style="font-weight: bold;">Peta Jalan Penelitian</span> pada:</p></td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Nama Pusat Riset</td>
+                <td style="width: 70%;">: {{ researchCenter }}</td>
+            </tr>
+            <tr>
+                <td style="width: 30%;">Topik Riset</td>
+                <td style="width: 70%;">: {{ researchTopic }}</td>
+            </tr>
+        </table>
+        <table class="penutup">
+            <tr>
+                <td colspan="2" style="width: 100%;">
+                    <p>
+                        Sebagai pertimbangan untuk evaluasi proposal penelitian, kami lampirkan peta jalan penelitian pusat riset dan peta jalan penelitian pengusul. Demikian surat rekomendasi ini dibuat sebagai bahan pertimbangan untuk pengajuan proposal penelitian dengan pendanaan DIPA Polinema Tahun 2024.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <div class="signature">
+            <div style="text-align: center;">
+                <p class="tanggal">Malang, {{ tanggal }}</p>
                 <p class="posisi">Ketua Pusat Riset iSFor</p>
-                <img src="img/signature.png" alt="tanda tangan">
+                <img src="http://localhost/IsFor-website/php/app/views/assets/components/Doc/img/signature.png" alt="tanda tangan">
                 <p class="nama">Dr. Rakhmat Arianto, S.ST., M.Kom</p>
                 <p class="nidn">NIDN. 0308018702</p>
             </div>

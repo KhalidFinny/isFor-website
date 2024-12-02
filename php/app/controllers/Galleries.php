@@ -2,7 +2,7 @@
 
 class Galleries extends Controller{
     public function index(){
-        
+        $this->view("main/galeri");
     }
 
     public function uploadImgView(){
@@ -27,5 +27,23 @@ class Galleries extends Controller{
         }else{
             header('Location: ' . $this->getLastVisitedPage());
         }
+    }
+
+    public function imgHistoryView(){
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
+        if($role == 2){
+            $this->saveLastVisitedPage();
+            $this->view('user/image-history');
+        }else{
+            header('Location: ' . $this->getLastVisitedPage());
+        }
+    }
+
+    
+
+    public function uploadImg(){
+        $this->view('admin/upload-image');
     }
 }

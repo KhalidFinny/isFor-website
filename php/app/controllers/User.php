@@ -69,7 +69,7 @@ class User extends Controller
         }
 
         //cek jika ukurannya terlalu besar
-        if ($sizeFile > 2000000) {
+        if ($sizeFile > 5000000) {
             echo "ukuran gambar terlalu besar";
             return false;
         }
@@ -101,11 +101,10 @@ class User extends Controller
 
     public function edit()
     {
-
+        $id = $_POST['user_id'];
         $oldPhoto = $_POST["oldImage"];
         $oldPass = $_POST["oldPass"];
         $newPass = $_POST["password"];
-        $id = $_POST['user_id'];
 
         if (!empty($newPass)) {
             // Jika password baru diinputkan, hash password baru dan simpan
@@ -127,7 +126,12 @@ class User extends Controller
             }
         }
 
-        $this->model('UsersModel')->editUser($id, $_POST, $photo, $password);
+        if ($this->model('UsersModel')->editUser($id, $_POST, $photo, $password) > 0) {
+            header('Location: ' . BASEURL . '/User');
+            echo "data berhasil diupdate";
+        }else{
+            echo "data tidak berhasil diupdate";
+        }
     }
 
     public function delete($id)

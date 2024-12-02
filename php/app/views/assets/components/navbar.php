@@ -115,28 +115,28 @@
 <script>
     // Navigation items data
     const navItems = [
-        {name: 'Beranda', href: 'http://localhost/IsFor-website/php/app/views/main/home.php'},
+        {name: 'Beranda', href: '<?= BASEURL; ?>/#beranda'},
         {
             name: 'Tentang Kami',
             dropdownItems: [
-                {name: 'Sejarah', href: '#Sejarah'},
-                {name: 'Visi Misi', href: '#Visimisi'},
-                {name: 'Roadmap', href: '#Roadmap'},
-                {name: 'Organisasi', href: '#Organisasi'},
-                {name: 'Pengelola', href: '#Pengelola'},
-                {name: 'List Peneliti', href: '#Peneliti'},
+                {name: 'Sejarah', href: '<?= BASEURL; ?>/#Sejarah'},
+                {name: 'Visi Misi', href: '<?= BASEURL; ?>/#Visimisi'},
+                {name: 'Roadmap', href: '<?= BASEURL; ?>/#Roadmap'},
+                {name: 'Organisasi', href: '<?= BASEURL; ?>/#Organisasi'},
+                {name: 'Pengelola', href: '<?= BASEURL; ?>/#Pengelola'},
+                {name: 'List Peneliti', href: '<?= BASEURL; ?>/#Peneliti'},
             ],
         },
         {
             name: 'Riset & Publikasi',
             dropdownItems: [
-                {name: 'Penelitian', href: '#'},
-                {name: 'Hasil Penelitian', href: 'http://localhost/IsFor-website/php/app/views/main/hasilpenelitian.php'},
+                {name: 'Penelitian', href: '<?= BASEURL; ?>/#'},
+                {name: 'Hasil Penelitian', href: '<?= BASEURL; ?>/home/hasilpenelitian'},
             ],
         },
-        {name: 'Agenda', href: 'http://localhost/IsFor-website/php/app/views/main/agenda.php'},
-        {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '#'}]},
-        {name: 'Galeri', href: 'http://localhost/IsFor-website/php/app/views/main/galeriweb.php'},
+        {name: 'Agenda', href: '<?= BASEURL; ?>/home/agenda'},
+        {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '<?= BASEURL; ?>/#'}]},
+        {name: 'Galeri', href: '<?= BASEURL; ?>/home/galeri'},
     ];
 
     // Render navigation items
