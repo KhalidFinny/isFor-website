@@ -72,3 +72,60 @@ const renderPengelola = () => {
         container.appendChild(pengelolaDiv);
     });
 };
+// Add after pengelolaList
+const researchers = {
+    teknologiInformasi: [
+        {name: "Vipkas Al Hadid Firdaus, ST., MT"},
+        {name: "Ade Ismail, S.Kom., M.TI"},
+        {name: "Habibie Ed Dien, S.Kom., MT"},
+        {name: "Septian Enggar Sukmana, S.Pd., MT"},
+        {name: "Vivi Nur Wijayaningrum, S.Kom., M.Kom"},
+        {name: "Rokhimatul Wakhidah, S.Pd., M.T."},
+        {name: "Noprianto, S.Kom., M.Eng."},
+        {name: "Anugrah Nur Rahmanto"}
+    ],
+    administrasiNiaga: [
+        {name: "Maskur, S.Kom., M.Kom"},
+        {name: "Nurul Hidayatinnisa', SE., MM"}
+    ],
+    teknikElektro: [
+        {name: "Sapto Wibowo, S.T., M.Sc., Ph.D."},
+        {name: "Ir. Nugroho Suharto, M.T"},
+        {name: "Galih Putra Riatma, S.ST., M.T."}
+    ]
+};
+
+// Add the render function
+const renderResearchers = () => {
+    const container = document.getElementById('researchers-list');
+    Object.keys(researchers).forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'bg-blue-50/50 rounded-2xl p-8 border-2 border-blue-100 animate-scale';
+        categoryDiv.innerHTML = `
+            <h2 class="text-2xl font-bold text-blue-700 mb-8 flex items-center">
+                <div class="w-3 h-12 bg-blue-400 mr-4 rounded-full"></div>
+                <span class="border-b-2 border-dashed border-blue-200 pb-2">
+                    ${category.replace(/([A-Z])/g, ' $1')}
+                </span>
+            </h2>
+            <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                ${researchers[category].map(researcher => `
+                    <li class="flex items-center group p-3 rounded-xl border-2 border-transparent hover:border-blue-200 hover:bg-white transition-all">
+                        <div class="w-2 h-2 rounded-full bg-blue-300 group-hover:bg-blue-500 mr-3 transition-all group-hover:scale-150"></div>
+                        <span class="text-gray-600 group-hover:text-blue-700 transition-colors">
+                            ${researcher.name}
+                        </span>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+        container.appendChild(categoryDiv);
+    });
+};
+
+// Update the DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', () => {
+    // renderTimeline(); // Uncomment if needed
+    renderPengelola();
+    renderResearchers();
+});

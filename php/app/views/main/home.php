@@ -6,7 +6,7 @@ session_start();
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>IsFor Internet of Things For Human Life's</title>
+    <title>IsFor Pusat Riset Informatika</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -38,6 +38,8 @@ session_start();
 <div id="Peneliti">
     <?php include_once '../app/views/assets/components/LandingPage/researchers-list.php'; ?>
 </div>
+<?php include_once '../app/views/assets/components/footer.php'; ?>
+<!-- Add data.js script -->
 <script src="<?= ASSETS; ?>/js/data.js"></script>
 </body>
 </html>

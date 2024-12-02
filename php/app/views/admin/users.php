@@ -90,10 +90,14 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="h-10 w-10 flex-shrink-0">
-                                                    <img class="h-10 w-10 rounded-full object-cover" src="<?= PHOTOPROFILE . $allUser['profile_picture']?>" alt="">
+                                                    <?php if($allUser['profile_picture'] == NULL) :?>
+                                                        <img class="h-10 w-10 rounded-full object-cover" src="<?= ASSETS ?>/images/empty-user.png" alt="">
+                                                    <?php else :?>
+                                                        <img class="h-10 w-10 rounded-full object-cover" src="<?= PHOTOPROFILE . $allUser['profile_picture']?>" alt="">
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900"><?= $allUser['username'] ?></div>
+                                                    <div class="text-sm font-medium text-gray-900"><?= $allUser['name'] ?></div>
                                                     
                                                 </div>
                                             </div>
@@ -104,9 +108,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">
                                                 <?php if ($allUser['role_id'] == 1) { ?>
-                                                    <p>Pengelola</p>
+                                                    <p>Admin</p>
                                                 <?php } elseif ($allUser['role_id'] == 2) { ?>
-                                                    <p>Peneliti</p>
+                                                    <p>Researcher</p>
                                                 <?php } else { ?>
                                                     <p>Role tidak ada</p>
                                                 <?php } ?>
@@ -136,7 +140,13 @@
         <h3 class="text-2xl font-bold text-blue-900 mb-6">Tambah Pengguna Baru</h3>
         <form action="<?= BASEURL; ?>/User/create" method="POST" class="space-y-4" enctype="multipart/form-data">
             <div>
-                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                <input type="text" name="name" id="name"
+                       class="w-full px-4 py-2 border-2 border-blue-100 rounded-xl focus:border-blue-500 focus:ring-blue-500"
+                       required placeholder="name">
+            </div>
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
                 <input type="text" name="username" id="username"
                        class="w-full px-4 py-2 border-2 border-blue-100 rounded-xl focus:border-blue-500 focus:ring-blue-500"
                        required placeholder="Username">
@@ -157,8 +167,8 @@
                 <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Peran</label>
                 <select name="role" id="role"
                         class="w-full px-4 py-2 border-2 border-blue-100 rounded-xl focus:border-blue-500 focus:ring-blue-500">
-                    <option value="1">Pengelola</option>
-                    <option value="2">Peneliti</option>
+                    <option value="1">Admin</option>
+                    <option value="2">User</option>
                 </select>
             </div>
             <div>

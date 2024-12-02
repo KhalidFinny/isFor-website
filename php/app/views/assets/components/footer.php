@@ -11,7 +11,7 @@
         <div class="max-w-7xl mx-auto px-4 py-8">
             <div class="flex flex-col items-center justify-center space-y-4">
                 <div class="flex items-center space-x-3">
-                    <img src="<?= BASEURL; ?>/assets/images/Logo1.png" alt="IsFor Logo" class="h-8 w-auto" />
+                    <img src="<?= ASSETS; ?>/images/Logo1.png" alt="IsFor Logo" class="h-8 w-auto" />
                     <span class="text-white font-medium">IsFor</span>
                 </div>
                 <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-blue-300 rounded-full"></div>

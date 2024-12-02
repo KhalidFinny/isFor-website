@@ -1,28 +1,28 @@
-// Navigation items data
-const navItems = [
-  {name: 'Beranda', href: '/'},
-  {
-    name: 'Tentang Kami',
-    dropdownItems: [
-      {name: 'Sejarah', href: '#Sejarah'},
-      {name: 'Visi Misi', href: '#Visimisi'},
-      {name: 'Roadmap', href: '#Roadmap'},
-      {name: 'Organisasi', href: '#Organisasi'},
-      {name: 'Pengelola', href: '#Pengelola'},
-      {name: 'List Peneliti', href: '#Peneliti'},
-    ],
-  },
-  {
-    name: 'Riset & Publikasi',
-    dropdownItems: [
-      {name: 'Penelitian', href: '#'},
-      {name: 'Hasil Peneliti', href: '#'},
-    ],
-  },
-  {name: 'Agenda', href: '/isFor-website/php/app/views/main/agenda.php'},
-  {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '#'}]},
-  {name: 'Galeri', href: '/isFor-website/php/app/views/main/galeriweb.php'},
-];
+import { BASEURL } from "./config.js";
+
+// const navItems = [
+//   {name: 'Beranda', href: '/isfor-Website/php/public'},
+//   {
+//     name: 'Tentang Kami',
+//     dropdownItems: [
+//       {name: 'Sejarah', href: '#Sejarah'},
+//       {name: 'Visi Misi', href: '#Visimisi'},
+//       {name: 'Roadmap', href: '#Roadmap'},
+//       {name: 'Pengelola', href: '#Pengelola'},
+//       {name: 'List Peneliti', href: '#Peneliti'},
+//     ],
+//   },
+//   {
+//     name: 'Riset & Publikasi',
+//     dropdownItems: [
+//       {name: 'Penelitian', href: '#'},
+//       {name: 'Hasil Peneliti', href: '#'},
+//     ],
+//   },
+//   {name: 'Agenda', href: '#agenda'},
+//   {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '#'}]},
+//   {name: 'Galeri', href: `${BASEURL}/galeri`},
+// ];
 
 // Render navigation items
 const renderNavItems = () => {
@@ -133,12 +133,22 @@ document.addEventListener ('DOMContentLoaded', () => {
   });
 });
 // Add after existing code
+// const handleNavigation = e => {
+//   const link = e.currentTarget;
+//   if (!link.href.startsWith ('#')) {
+//     e.preventDefault ();
+//     document.body.classList.add ('opacity-0');
+//     setTimeout (() => {
+//       window.location.href = link.href;
+//     }, 300);
+//   }
+// };
 const handleNavigation = e => {
   const link = e.currentTarget;
-  if (!link.href.startsWith ('#')) {
-    e.preventDefault ();
-    document.body.classList.add ('opacity-0');
-    setTimeout (() => {
+  if (!link.href.startsWith('#') && !link.href.includes('/galeri')) {
+    e.preventDefault();
+    document.body.classList.add('opacity-0');
+    setTimeout(() => {
       window.location.href = link.href;
     }, 300);
   }

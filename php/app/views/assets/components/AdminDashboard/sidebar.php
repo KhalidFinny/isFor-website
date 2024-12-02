@@ -42,7 +42,7 @@
                     <!-- Verifikasi Section -->
                     <div class="space-y-1">
                         <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Verifikasi</p>
-                        <a href="<?= BASEURL; ?>/papers/verifyPaperview" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
+                        <a href="<?= BASEURL; ?>/letter/verifyLetterview" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
                             <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
@@ -59,25 +59,19 @@
                     <!-- Manajemen Section -->
                     <div class="space-y-1">
                         <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Manajemen</p>
-                        <a href="<?= BASEURL; ?>/upload" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
-                            <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                            </svg>
-                            Upload Gambar
-                        </a>
                         <a href="<?= BASEURL; ?>/User" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
                             <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                             Pengguna
                         </a>
-                        <a href="<?= BASEURL; ?>/admin/manage-roadmap.php" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
+                        <a href="<?= BASEURL; ?>/roadmap" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
                             <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                             </svg>
                             Roadmap
                         </a>
-                        <a href="<?= BASEURL; ?>/admin/manage-agenda.php" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
+                        <a href="<?= BASEURL; ?>/agenda" class="sidebar-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-900 hover:bg-blue-50">
                             <svg class="w-5 h-5 mr-3 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>

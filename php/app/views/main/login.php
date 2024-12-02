@@ -17,7 +17,7 @@
     <div class="card-container rounded-2xl p-8">
         <!-- Header -->
         <div class="text-center mb-8">
-            <img src="<?php echo BASEURL; ?>/assets/images/Logo1.png" alt="IsFor Logo"
+            <img src="<?= ASSETS ?>/images/Logo1.png" alt="IsFor Logo"
                  class="h-16 mx-auto mb-4 hover:scale-110 transition-transform duration-300"/>
             <h2 class="text-2xl font-bold text-blue-700">Pusat Riset Informatika</h2>
             <h3 class="text-small font-regular text-blue-700">Masuk untuk lanjut</h3>

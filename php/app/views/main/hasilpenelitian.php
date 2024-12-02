@@ -1,3 +1,6 @@
+<?php 
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,6 +91,11 @@
     </style>
 </head>
 <body class="bg-white">
+    <?php if (!isset($_SESSION['user_id'])) : ?>
+        <?php include_once '../app/views/assets/components/navbar.php'; ?>
+    <?php else : ?>
+        <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
+    <?php endif; ?>
     <section class="min-h-screen py-20 relative overflow-hidden">
         <div class="container mx-auto px-6 max-w-7xl">
             <!-- Header -->

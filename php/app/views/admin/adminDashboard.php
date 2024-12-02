@@ -164,8 +164,8 @@
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Surat Masih Pending</p>
-                                <p class="text-xl font-semibold text-blue-700">0</p>
+                                <p class="text-sm font-medium text-gray-500">Pending Letters</p>
+                                <p class="text-xl font-semibold text-blue-700"><?= $data['pending']['total'] ?></p>
                             </div>
                         </div>
                     </div>
@@ -178,8 +178,8 @@
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Surat Terverifikasi</p>
-                                <p class="text-lg font-semibold text-gray-900">0</p>
+                                <p class="text-sm font-medium text-gray-600">Verified Letters</p>
+                                <p class="text-lg font-semibold text-gray-900"><?= $data['verify']['total'] ?></p>
                             </div>
                         </div>
                     </div>
@@ -193,8 +193,8 @@
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Gambar Masih Pending</p>
-                                <p class="text-lg font-semibold text-gray-900">0</p>
+                                <p class="text-sm font-medium text-gray-600">Pending Images</p>
+                                <p class="text-lg font-semibold text-gray-900">8</p>
                             </div>
                         </div>
                     </div>
@@ -207,8 +207,8 @@
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Dokumen Ditolak</p>
-                                <p class="text-lg font-semibold text-gray-900">0</p>
+                                <p class="text-sm font-medium text-gray-600">Rejected Items</p>
+                                <p class="text-lg font-semibold text-gray-900">3</p>
                             </div>
                         </div>
                     </div>
@@ -233,15 +233,19 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <?php foreach ($data['allUser'] as $allUser) :?>
+                                    <?php foreach ($data['allUser'] as $allUser) :?>                
                                     <tr class="table-row">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="h-10 w-10 flex-shrink-0">
-                                                    <img class="h-10 w-10 rounded-full object-cover" src="<?= PHOTOPROFILE . $allUser['profile_picture']?>" alt="">
+                                                    <?php if($allUser['profile_picture'] == NULL) :?>
+                                                        <img class="h-10 w-10 rounded-full object-cover" src="<?= ASSETS ?>/images/empty-user.png" alt="">
+                                                    <?php else :?>
+                                                        <img class="h-10 w-10 rounded-full object-cover" src="<?= PHOTOPROFILE . $allUser['profile_picture']?>" alt="">
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900"><?= $allUser['username'] ?></div>
+                                                    <div class="text-sm font-medium text-gray-900"><?= $allUser['name'] ?></div>
                                                     <div class="text-sm text-gray-500"><?= $allUser['email'] ?></div>
                                                 </div>
                                             </div>
@@ -249,9 +253,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">
                                                 <?php if ($allUser['role_id'] == 1) { ?>
-                                                    <p>Pengelola</p>
+                                                    <p>Admin</p>
                                                 <?php } elseif ($allUser['role_id'] == 2) { ?>
-                                                    <p>Peneliti</p>
+                                                    <p>Researcher</p>
                                                 <?php } else { ?>
                                                     <p>Role tidak ada</p>
                                                 <?php } ?>
