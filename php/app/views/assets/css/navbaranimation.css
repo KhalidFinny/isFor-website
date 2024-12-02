@@ -13,6 +13,10 @@
 .fade-enter {
     opacity: 0;
     transform: translateY(10px);
+    -webkit-transform: translateY(10px);
+    -moz-transform: translateY(10px);
+    -ms-transform: translateY(10px);
+    -o-transform: translateY(10px);
 }
 
 .fade-enter-active {

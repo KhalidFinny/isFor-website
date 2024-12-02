@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard User - IsFor PRI</title>
+    <title>Dashboard User - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo BASEURL; ?>/assets/css/styles.css">
 </head>
-<body class="bg-gray-50">
+<body class="bg-white">
 <div class="flex">
     <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
     <div class="flex-1 min-h-screen ml-64">
