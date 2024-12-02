@@ -70,8 +70,8 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo Section -->
                 <a href="<?=BASEURL?>" class="flex-shrink-0 flex items-center space-x-3">
-                    <img src="<?=ASSETS;?>/images/Logo1.png" alt="IsFor Logo" class="h-10 w-auto"/>
-                    <span class="text-lg font-semibold text-blue-900">Internet of Things For Human Life's</span>
+                    <img src="<?=ASSETS;?>/images/Logo1.png" alt="IsFor Logo" class="h-9 w-auto"/>
+                    <span class="text-l font-semibold text-blue-900">Internet of Things For Human Life's</span>
                 </a>
 
                 <!-- Navigation Items -->
