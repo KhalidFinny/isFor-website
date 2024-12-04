@@ -203,7 +203,7 @@ class Letter extends Controller{
             
             $data['jumlahHalaman'] = $jumlahHalaman;
             $data['halamanAktif'] = $halamanAktif;
-            $data['letter'] = $this->model('LettersModel')->countAllLeterbyUserId($_SESSION['user_id']);
+            $data['letter'] = $this->model('LettersModel')->countAllLetterbyUserId($_SESSION['user_id']);
             $data['allLetters'] = $this->model('LettersModel')->getLetterByUserIdPaginate($_SESSION['user_id'], $awalData, $jumlahDataperhalaman);
             $this->view('user/letter-history', $data);
         }else{
@@ -238,13 +238,23 @@ class Letter extends Controller{
         echo json_encode($letters);
     }
 
-    public function search(){
+    public function search() {
         session_start();
-        $session = $_SESSION['user_id'];
-        $keyword = $_POST['keyword'];
-
-        $letters = $this->model('LettersModel')->searchLetter($session, $keyword);
-        // Lakukan pencarian berdasarkan keyword dan kirimkan hasilnya dalam format JSON
-        echo json_encode($letters);
+        $user_id = $_SESSION['user_id']; // Atau cara Anda mendapatkan user_id
+        $keyword = $_POST['keyword'] ?? '';
+        
+        try {
+            $results = $this->model('LettersModel')->searchLetter($user_id, $keyword);
+            
+            // Cetak debug
+            echo "Query Results: ";
+            print_r($results);
+            
+            // Lanjutkan proses normal
+        } catch (Exception $e) {
+            // Tangani error
+            echo "Search Error: " . $e->getMessage();
+        }
     }
+    
 }
