@@ -59,7 +59,7 @@
 
             <!-- Agenda List -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php if (empty($agendas)): ?>
+                <?php if (empty($data['agenda'])): ?>
                     <!-- Empty State -->
                     <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-blue-100">
                         <img src="/isfor-web/App/public/assets/images/empty-agenda.png" alt="No Agenda"
@@ -69,26 +69,26 @@
                     </div>
                 <?php else: ?>
                     <!-- Agenda Cards -->
-                    <?php foreach ($agendas as $index => $agenda): ?>
+                    <?php foreach ($data['agenda'] as $index => $agenda): ?>
                         <div class="agenda-card bg-white rounded-2xl border-2 border-blue-100 overflow-hidden"
                              style="animation-delay: <?php echo $index * 0.1; ?>s">
                             <div class="p-6">
                                 <div class="flex items-center justify-between mb-4">
                                 <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
-                                    <?php echo $agenda['category']; ?>
+                                    <?php echo $agenda['category_name']; ?>
                                 </span>
                                     <span class="text-sm text-gray-500"><?php echo $agenda['date']; ?></span>
                                 </div>
                                 <h3 class="text-lg font-semibold text-blue-900 mb-2"><?php echo $agenda['title']; ?></h3>
-                                <p class="text-gray-600 text-sm mb-4"><?php echo $agenda['description']; ?></p>
+                                <p class="text-gray-600 text-sm mb-4"><?php echo $agenda['deskripsi']; ?></p>
 
                                 <!-- Action Buttons -->
                                 <div class="flex space-x-3">
-                                    <button onclick="editAgenda(<?php echo $agenda['id']; ?>)"
+                                    <button onclick="editAgenda(<?php echo $agenda['agenda_id']; ?>)"
                                             class="flex-1 px-4 py-2 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-colors">
                                         Edit
                                     </button>
-                                    <button onclick="deleteAgenda(<?php echo $agenda['id']; ?>)"
+                                    <button onclick="deleteAgenda(<?php echo $agenda['agenda_id']; ?>)"
                                             class="flex-1 px-4 py-2 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 transition-colors">
                                         Hapus
                                     </button>
@@ -152,6 +152,23 @@
 <script>
     // Modal functions similar to verify-letters.php
     // References lines 105-124 from verify-letters.php for modal functionality
+    function showAddAgendaModal() {
+        document.getElementById('agendaModal').classList.remove('hidden');
+        document.getElementById('agendaModal').classList.add('flex');
+    }
+
+    function closeAgendaModal() {
+        document.getElementById('agendaModal').classList.add('hidden');
+        document.getElementById('agendaModal').classList.remove('flex');
+    }
+
+    function deleteAgenda($id){
+        
+    }
+
+    function editAgenda($id){
+
+    }
 </script>
 </body>
 </html> 

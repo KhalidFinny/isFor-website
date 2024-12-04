@@ -7,9 +7,11 @@ class Agenda extends Controller{
         $this->checkSessionTimeOut();
         if($role == 1){
             $this->saveLastVisitedPage();
-            $this->view('admin/manage-agenda');
+            $data['agenda'] = $this->model('AgendaModel')->getAllAgenda();
+            $this->view('admin/manage-agenda', $data);
         }else{
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
+    
 }
