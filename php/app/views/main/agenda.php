@@ -116,7 +116,7 @@ session_start();
                     <div class="agenda-item group">
                         <div class="flex items-start space-x-8 p-8 border-2 border-gray-100 hover:border-blue-200 transition-all duration-300">
                             <div class="number-label text-6xl font-bold leading-none">
-                                <?php echo $no++; ?>
+                                <?php echo $data['no']++; ?>
                             </div>
                             <div class="flex-1 pt-2">
                                 <h3 class="text-2xl font-bold text-blue-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
