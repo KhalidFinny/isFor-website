@@ -1,16 +1,17 @@
+-- Active: 1733144391775@@localhost@1433@master
 -- Script untuk SQL Server
 CREATE
-DATABASE isfor_database;
+DATABASE master;
 GO
 
-USE isfor_database;
+USE master;
 GO
 
 -- Table: agenda
 CREATE TABLE agenda
 (
-    agenda_id  INT PRIMARY KEY IDENTITY(1,1),
-    title      NVARCHAR(255) NOT NULL,
+    agenda_id INT PRIMARY KEY IDENTITY(1,1),
+    title NVARCHAR(255) NOT NULL,
     roadmap_id INT NOT NULL,
     created_by INT NULL
 );
@@ -19,11 +20,11 @@ GO
 -- Table: archives
 CREATE TABLE archives
 (
-    archive_id  INT PRIMARY KEY IDENTITY(1,1),
-    title       NVARCHAR(255) NOT NULL,
+    archive_id INT PRIMARY KEY IDENTITY(1,1),
+    title NVARCHAR(255) NOT NULL,
     description NVARCHAR(MAX) NOT NULL,
-    file_url    NVARCHAR(255) NOT NULL,
-    roadmap_id  INT NULL,
+    file_url NVARCHAR(255) NOT NULL,
+    roadmap_id INT NULL,
     uploaded_by INT NULL
 );
 GO
@@ -31,11 +32,11 @@ GO
 -- Table: galleries
 CREATE TABLE galleries
 (
-    gallery_id  INT PRIMARY KEY IDENTITY(1,1),
-    image       NVARCHAR(255) NULL,
-    category    NVARCHAR(100) NOT NULL,
-    title       NVARCHAR(255) NOT NULL,
-    status      INT NOT NULL,
+    gallery_id INT PRIMARY KEY IDENTITY(1,1),
+    image NVARCHAR(255) NULL,
+    category NVARCHAR(100) NOT NULL,
+    title NVARCHAR(255) NOT NULL,
+    status INT NOT NULL,
     uploaded_by INT NOT NULL
 );
 GO
@@ -44,10 +45,10 @@ GO
 CREATE TABLE letters
 (
     letter_id INT PRIMARY KEY IDENTITY(1,1),
-    title     NVARCHAR(50) NULL,
-    file_url  NVARCHAR(255) NOT NULL,
-    status    INT NOT NULL,
-    user_id   INT NOT NULL
+    title NVARCHAR(50) NULL,
+    file_url NVARCHAR(255) NOT NULL,
+    status INT NOT NULL,
+    user_id INT NOT NULL
 );
 GO
 
@@ -55,9 +56,9 @@ GO
 CREATE TABLE research_outputs
 (
     research_output_id INT PRIMARY KEY IDENTITY(1,1),
-    file_url           NVARCHAR(255) NOT NULL,
-    uploaded_by        INT NOT NULL,
-    uploaded_at        DATETIME DEFAULT GETDATE()
+    file_url NVARCHAR(255) NOT NULL,
+    uploaded_by INT NOT NULL,
+    uploaded_at DATETIME DEFAULT GETDATE()
 );
 GO
 
@@ -66,9 +67,9 @@ CREATE TABLE roadmaps
 (
     roadmap_id INT PRIMARY KEY IDENTITY(1,1),
     year_start INT NOT NULL,
-    year_end   INT NOT NULL,
-    category   NVARCHAR(100) NOT NULL,
-    agenda     NVARCHAR(255) NOT NULL,
+    year_end INT NOT NULL,
+    category NVARCHAR(100) NOT NULL,
+    agenda NVARCHAR(255) NOT NULL,
     created_by INT NULL
 );
 GO
@@ -76,37 +77,46 @@ GO
 -- Table: role
 CREATE TABLE role
 (
-    role_id   INT PRIMARY KEY IDENTITY(1,1),
+    role_id INT PRIMARY KEY IDENTITY(1,1),
     role_name NVARCHAR(50) NOT NULL
 );
 GO
 
 -- Insert data into role
-INSERT INTO role (role_name) VALUES ('admin'), ('user');
+INSERT INTO role
+    (role_name)
+VALUES
+    ('admin'),
+    ('user');
 GO
 
 -- Table: status
 CREATE TABLE status
 (
-    id     INT PRIMARY KEY IDENTITY(1,1),
+    id INT PRIMARY KEY IDENTITY(1,1),
     status NVARCHAR(50) NOT NULL
 );
 GO
 
 -- Insert data into status
-INSERT INTO status (status) VALUES ('pending'), ('veriffied'), ('rejected');
+INSERT INTO status
+    (status)
+VALUES
+    ('pending'),
+    ('veriffied'),
+    ('rejected');
 GO
 
 -- Table: users
 CREATE TABLE users
 (
-    user_id         INT PRIMARY KEY IDENTITY(1,1),
-    name            NVARCHAR(100) NOT NULL,
-    username        NVARCHAR(50) UNIQUE NOT NULL,
-    email           NVARCHAR(100) UNIQUE NOT NULL,
+    user_id INT PRIMARY KEY IDENTITY(1,1),
+    name NVARCHAR(100) NOT NULL,
+    username NVARCHAR(50) UNIQUE NOT NULL,
+    email NVARCHAR(100) UNIQUE NOT NULL,
     profile_picture NVARCHAR(255) NULL,
-    password        NVARCHAR(255) NOT NULL,
-    role_id         INT NOT NULL
+    password NVARCHAR(255) NOT NULL,
+    role_id INT NOT NULL
 );
 GO
 
@@ -146,3 +156,7 @@ GO
 ALTER TABLE users
     ADD CONSTRAINT FK_users_role FOREIGN KEY (role_id) REFERENCES role (role_id) ON DELETE CASCADE;
 GO
+
+INSERT INTO users (user_id, username, password, email, profile_picture, role_id) VALUES
+(19, 'admin', '$2y$10$Mrb1qdEaOsSaoTqDcWZn.OdT/ktjUpYG8acsflhE4bevNw18CeE8y', 'admin@example.com', '6739fbe52d88e.jpg', 1),
+(20, 'admin2', '$2y$10$BikPz8zcrW5G9MZPTcFgz.o08FVT/gEa/9hK9MGYqxMKhwg4wocGq', 'ayam@gmail.com', '673c159204ac3.jpg', 1);

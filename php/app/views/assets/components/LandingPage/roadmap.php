@@ -12,14 +12,14 @@
     <section id="roadmap" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Research Roadmap</h2>
+                <h2 class="text-4xl font-bold text-red-700 mb-4">Research Roadmap</h2>
                 <p class="text-gray-600 text-lg">Our strategic research direction for the coming years</p>
             </div>
 
             <!-- Timeline Container -->
             <div class="relative">
                 <!-- Timeline Line -->
-                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-blue-200"></div>
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-red-200"></div>
 
                 <!-- Timeline Content -->
                 <div class="space-y-24" id="roadmapContent">
@@ -57,18 +57,18 @@
 
             .topic-item:hover {
                 transform: translateX(5px);
-                color: #3b82f6;
+                color: #dc2626; /* Red-600 */
             }
 
             .period-badge {
-                background: linear-gradient(135deg, #3b82f6, #2563eb);
-                box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+                background: #dc2626; /* Red-600 */
+                box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
                 transition: all 0.3s ease;
             }
 
             .period-badge:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
             }
         </style>
 
@@ -168,13 +168,13 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 ${Object.entries(period.categories).map(([category, topics], categoryIndex) => `
-                                    <div class="category-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-300"
+                                    <div class="category-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-red-300"
                                          style="animation-delay: ${categoryIndex * 100}ms">
                                         <h3 class="text-lg font-semibold text-gray-900 mb-4">${category}</h3>
                                         <ul class="space-y-3">
                                             ${topics.map(topic => `
                                                 <li class="topic-item flex items-start space-x-2 text-gray-600 text-sm">
-                                                    <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                                     </svg>
                                                     <span>${topic}</span>

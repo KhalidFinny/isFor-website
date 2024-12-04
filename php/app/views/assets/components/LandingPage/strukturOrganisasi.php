@@ -27,7 +27,7 @@
         }
         
         .image-container:hover {
-            border-color: #93C5FD;
+            border-color: #F87171;
         }
         
         .image-container::after {
@@ -60,13 +60,13 @@
         <div class="swiss-grid">
             <!-- Header -->
             <div class="col-span-12 text-center mb-16">
-                <span class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
+                <span class="inline-block px-4 py-2 bg-red-50 text-red-500 rounded-full text-sm font-medium mb-4">
                     Struktur
                 </span>
-                <h2 class="display-font text-4xl lg:text-5xl font-bold mb-4 text-blue-900">
+                <h2 class="display-font text-4xl lg:text-5xl font-bold mb-4 text-red-700">
                     Struktur Organisasi
                 </h2>
-                <div class="w-24 h-1 mx-auto bg-gradient-to-r from-blue-600 to-blue-800 rounded-full"></div>
+                <div class="w-24 h-1 mx-auto bg-red-700 rounded-full"></div>
             </div>
 
             <!-- Image Container -->

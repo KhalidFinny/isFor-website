@@ -1,24 +1,27 @@
-version: '3'
 services:
   mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:latest
     user: root
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=StrongPassword00
+    volumes:
+      - final_project_mssql:/var/opt/mssql/data
     ports:
       - '1433:1433'
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123
+  nginx:
+    image: nginx:latest
+    ports:
+      - '8080:80'
     volumes:
-      - mssql-data:/var/opt/mssql/data
-  php-apache:
+      - .:/var/www/html
+      - ./docker/php/nginx.conf:/etc/nginx/conf.d/default.conf
+  php-fpm:
     build:
       context: ./docker/php
       dockerfile: Dockerfile
-    ports:
-      - '80:80'
     volumes:
-      - ./astro:/var/www/html
-      - ./php:/var/www/html
+      - .:/var/www/html
       - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
 volumes:
-  mssql-data:
+  final_project_mssql:

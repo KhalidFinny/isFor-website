@@ -8,6 +8,11 @@
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= ASSETS; ?>/css/animations.css">
+    <style>
+        .image-container:hover {
+            border-color: #F87171;
+        }
+    </style>
 </head>
 <body>
 <script>
@@ -72,10 +77,10 @@
                         loading="lazy"
                     />
                 </div>
-                <div class="pengelola-info">
-                    <h4 class="display-font text-lg font-bold text-white mb-1">${person.name}</h4>
-                    <p class="text-blue-200 text-sm mb-2">${person.role}</p>
-                    <p class="text-blue-100 text-xs">
+                <div class="pengelola-info bg-gradient-to-t from-red-700 to-transparent text-white p-4 rounded-b-lg">
+                    <h4 class="display-font text-lg font-bold mb-1">${person.name}</h4>
+                    <p class="text-sm mb-2">${person.role}</p>
+                    <p class="text-xs">
                         NIP: ${person.nip}
                     </p>
                 </div>
@@ -92,13 +97,13 @@
     <div class="container mx-auto px-6">
         <div class="swiss-grid">
             <div class="col-span-12 text-center mb-16">
-                <span class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
+                <span class="inline-block px-4 py-2 bg-red-500 text-white rounded-full text-sm font-medium mb-4">
                     Tim Kami
                 </span>
-                <h2 class="display-font text-4xl lg:text-5xl font-bold mb-4 text-blue-900">
+                <h2 class="display-font text-4xl lg:text-5xl font-bold mb-4 text-red-700">
                     Pengelola
                 </h2>
-                <div class="w-24 h-1 mx-auto bg-gradient-to-r from-blue-600 to-blue-800 rounded-full"></div>
+                <div class="w-24 h-1 mx-auto bg-red-700 rounded-full"></div>
             </div>
 
             <div id="pengelola-list" class="col-span-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"></div>
