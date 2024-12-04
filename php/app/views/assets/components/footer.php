@@ -7,15 +7,15 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <footer class="bg-gradient-to-r from-blue-900 to-blue-800">
+    <footer class="bg-red-100">
         <div class="max-w-7xl mx-auto px-4 py-8">
             <div class="flex flex-col items-center justify-center space-y-4">
                 <div class="flex items-center space-x-3">
                     <img src="<?= ASSETS; ?>/images/Logo1.png" alt="IsFor Logo" class="h-8 w-auto" />
-                    <span class="text-white font-medium">IsFor</span>
+                    <span class="text-red-700 font-medium">IsFor</span>
                 </div>
-                <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-blue-300 rounded-full"></div>
-                <p class="text-blue-100 text-center text-sm" id="footer-year"></p>
+                <div class="w-24 h-1 bg-red-300 rounded-full"></div>
+                <p class="text-red-600 text-center text-sm" id="footer-year"></p>
             </div>
         </div>
     </footer>

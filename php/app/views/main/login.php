@@ -8,8 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo BASEURL; ?>/assets/css/login.css">
-    <link rel="stylesheet" href="<?php echo BASEURL; ?>/assets/css/animations.css">
+    <link rel="stylesheet" href="<?php echo ASSETS; ?>/assets/css/login.css">
+    <link rel="stylesheet" href="<?php echo ASSETS; ?>/assets/css/animations.css">
 
 </head>
 <body class="grid-pattern min-h-screen flex items-center justify-center p-6">

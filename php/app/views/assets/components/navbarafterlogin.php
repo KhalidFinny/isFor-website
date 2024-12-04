@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="/astro/src/css/style.css" rel="stylesheet">
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -34,13 +33,13 @@
                 <div class="flex justify-between items-center h-16">
                     <!-- Logo Section -->
                     <div class="flex-shrink-0 flex items-center space-x-3">
-                        <img src="<?= ASSETS; ?>/images/Logo1.png" alt="IsFor Logo" class="h-10 w-auto" />
-                        <span class="text-lg font-semibold text-blue-900">IsFor Pusat Riset Informatika</span>
+                        <img src="<?= ASSETS; ?>/images/Logo1.png" alt="IsFor Logo" class="h-9 w-auto" />
+                        <span class="text-l font-semibold text-green-600">Internet of Things For Human Life's</span>
                     </div>
                     <div class="hidden lg:flex lg:items-center">
                         <div class="flex items-center space-x-6" id="nav-items"></div>
                         <div class="relative nav-item group">
-                            <button class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition-colors inline-flex items-center">
+                            <button class="text-sm font-medium text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md transition-colors inline-flex items-center">
                                 Dashboard
                                 <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -81,29 +80,29 @@
     </header>
     <script>
         const navItems = [
-        {name: 'Beranda', href: '<?= BASEURL; ?>/#beranda'},
-        {
-            name: 'Tentang Kami',
-            dropdownItems: [
-                {name: 'Sejarah', href: '<?= BASEURL; ?>/#Sejarah'},
-                {name: 'Visi Misi', href: '<?= BASEURL; ?>/#Visimisi'},
-                {name: 'Roadmap', href: '<?= BASEURL; ?>/#Roadmap'},
-                {name: 'Organisasi', href: '<?= BASEURL; ?>/#Organisasi'},
-                {name: 'Pengelola', href: '<?= BASEURL; ?>/#Pengelola'},
-                {name: 'List Peneliti', href: '<?= BASEURL; ?>/#Peneliti'},
-            ],
-        },
-        {
-            name: 'Riset & Publikasi',
-            dropdownItems: [
-                {name: 'Penelitian', href: '<?= BASEURL; ?>/#'},
-                {name: 'Hasil Penelitian', href: '<?= BASEURL; ?>/home/hasilpenelitian'},
-            ],
-        },
-        {name: 'Agenda', href: '<?= BASEURL; ?>/home/agenda'},
-        {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '<?= BASEURL; ?>/#'}]},
-        {name: 'Galeri', href: '<?= BASEURL; ?>/home/galeri'},
-    ];
+            {name: 'Beranda', href: '<?= BASEURL; ?>/#beranda'},
+            {
+                name: 'Tentang Kami',
+                dropdownItems: [
+                    {name: 'Sejarah', href: '<?= BASEURL; ?>/#Sejarah'},
+                    {name: 'Visi Misi', href: '<?= BASEURL; ?>/#Visimisi'},
+                    {name: 'Roadmap', href: '<?= BASEURL; ?>/#Roadmap'},
+                    {name: 'Organisasi', href: '<?= BASEURL; ?>/#Organisasi'},
+                    {name: 'Pengelola', href: '<?= BASEURL; ?>/#Pengelola'},
+                    {name: 'List Peneliti', href: '<?= BASEURL; ?>/#Peneliti'},
+                ],
+            },
+            {
+                name: 'Riset & Publikasi',
+                dropdownItems: [
+                    {name: 'Penelitian', href: '<?= BASEURL; ?>/#'},
+                    {name: 'Hasil Penelitian', href: '<?= BASEURL; ?>/home/hasilpenelitian'},
+                ],
+            },
+            {name: 'Agenda', href: '<?= BASEURL; ?>/home/agenda'},
+            {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '<?= BASEURL; ?>/#'}]},
+            {name: 'Galeri', href: '<?= BASEURL; ?>/home/galeri'},
+        ];
 
         const userMenuItems = [
             <?php if ($_SESSION['role_id'] == 1) : ?>
@@ -121,14 +120,20 @@
                 const navItem = document.createElement('div');
                 navItem.className = 'nav-item relative group';
                 navItem.innerHTML = `
-                    <a href="${item.href || '#'}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center" tabindex="0">
-                        ${item.name}
-                        ${item.dropdownItems ? `<svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>` : ''}
-                    </a>
+                    ${item.dropdownItems ? `
+                        <button class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center" tabindex="0">
+                            ${item.name}
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                    ` : `
+                        <a href="${item.href}" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center" tabindex="0">
+                            ${item.name}
+                        </a>
+                    `}
                     ${item.dropdownItems ? `
                         <div class="dropdown-content absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
-                                ${item.dropdownItems.map(dropItem => `<a href="${dropItem.href}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">${dropItem.name}</a>`).join('')}
+                                ${item.dropdownItems.map(dropItem => `<a href="${dropItem.href}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-600 transition-colors">${dropItem.name}</a>`).join('')}
                             </div>
                         </div>
                     ` : ''}
@@ -137,12 +142,16 @@
 
                 const mobileNavItem = document.createElement('div');
                 mobileNavItem.innerHTML = `
-                    <a href="${item.href || '#'}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">${item.name}</a>
                     ${item.dropdownItems ? `
+                        <button class="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">
+                            ${item.name}
+                        </button>
                         <div class="pl-4 space-y-1">
                             ${item.dropdownItems.map(dropItem => `<a href="${dropItem.href}" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md">${dropItem.name}</a>`).join('')}
-                        </div>x
-                    ` : ''}
+                        </div>
+                    ` : `
+                        <a href="${item.href}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">${item.name}</a>
+                    `}
                 `;
                 mobileNavContainer.appendChild(mobileNavItem);
             });
