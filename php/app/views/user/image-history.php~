@@ -96,24 +96,28 @@
                 <!-- Image List Section -->
                 <div class="bg-white rounded-xl border-2 border-blue-100 overflow-hidden slide-up"
                      style="animation-delay: 0.2s">
+
                     <!-- Filters and Search -->
                     <div class="p-6 border-b border-blue-100">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center space-x-4">
-                                <button class="px-4 py-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                                <a href="?status=all" class="px-4 py-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
                                     Semua
-                                </button>
-                                <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                </a>
+                                <a href="?status=2" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                                     Disetujui
-                                </button>
-                                <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                </a>
+                                <a href="?status=1" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                                     Tertunda
-                                </button>
+                                </a>
+                                <a href="?status=0" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                    Ditolak
+                                </a>
                             </div>
                             <div class="relative">
                                 <input type="text" placeholder="Cari gambar..."
                                        class="pl-10 pr-4 py-2 bg-blue-50 border-0 rounded-lg text-blue-900 placeholder-blue-400
-                                                  focus:ring-2 focus:ring-blue-500">
+                              focus:ring-2 focus:ring-blue-500">
                                 <svg class="w-5 h-5 text-blue-400 absolute left-3 top-2.5" fill="none"
                                      viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -136,7 +140,7 @@
                                 <p class="text-blue-600 mb-6">Mulai unggah gambar penelitian Anda sekarang</p>
                                 <a href="<?= BASEURL; ?>/images/upload"
                                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700
-                                              transition-colors">
+                          transition-colors">
                                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M12 4v16m8-8H4"/>
@@ -155,24 +159,22 @@
                                     <p class="text-xs text-blue-500 mt-2">Diunggah
                                         pada <?= date('d M Y', strtotime($image['created_at'])); ?></p>
                                     <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg mt-2 inline-block
-            <?php
+                <?php
                                     if ($image['status'] == 1) echo 'bg-yellow-100 text-yellow-600';
                                     elseif ($image['status'] == 2) echo 'bg-green-100 text-green-600';
                                     else echo 'bg-red-100 text-red-600';
                                     ?>">
-            <?php
-            if ($image['status'] == 1) echo 'Pending';
-            elseif ($image['status'] == 2) echo 'Approved';
-            else echo 'Rejected';
-            ?>
-        </span>
+                    <?php
+                    if ($image['status'] == 1) echo 'Pending';
+                    elseif ($image['status'] == 2) echo 'Approved';
+                    else echo 'Rejected';
+                    ?>
+                </span>
                                 </div>
                             <?php endforeach; ?>
-
-
-                            <!-- Image cards here -->
                         <?php endif; ?>
                     </div>
+
                 </div>
             </div>
         </main>

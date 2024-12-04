@@ -105,14 +105,6 @@ class GalleryModel
         return $this->db->resultSet(); // Mengembalikan semua hasil dalam bentuk array
     }
 
-    public function getImagesByStatus($status)
-    {
-        $query = "SELECT * FROM " . $this->table . " WHERE status = :status";
-        $this->db->query($query);
-        $this->db->bind(':status', $status);
-        return $this->db->resultSet();
-    }
-
     // Delete a gallery entry
     public function delete($id)
     {

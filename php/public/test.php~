@@ -1,7 +1,1 @@
 <?php
-// test.php
-require_once '../app/config/config.php'; // pastikan path-nya sesuai dengan lokasi file config.php
-
-echo 'BASEURL: ' . BASEURL;
-echo '<br>';
-echo 'Current URL: ' . $_SERVER['REQUEST_URI'];
