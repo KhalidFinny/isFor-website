@@ -105,10 +105,11 @@ class GalleryModel
         return $this->db->resultSet(); // Mengembalikan semua hasil dalam bentuk array
     }
 
-    public function getImagesByStatus($status)
+    public function getImagesByUserAndStatus($userId, $status)
     {
-        $query = "SELECT * FROM " . $this->table . " WHERE status = :status";
+        $query = "SELECT * FROM " . $this->table . " WHERE uploaded_by = :user_id AND status = :status";
         $this->db->query($query);
+        $this->db->bind(':user_id', $userId);
         $this->db->bind(':status', $status);
         return $this->db->resultSet();
     }

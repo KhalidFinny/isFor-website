@@ -43,7 +43,7 @@ class Galleries extends Controller
     }
 
 
-    public function imgHistoryView()
+    public function imgHistoryView($status = 'all')
     {
         $this->checkLogin();
         $role = $this->checkRole();
@@ -53,14 +53,21 @@ class Galleries extends Controller
             $this->saveLastVisitedPage();
 
             $galleryModel = $this->model('GalleryModel');
-            $userId = $_SESSION['user_id']; // Mengambil ID pengguna dari session
+            $userId = $_SESSION['user_id'];
 
-            $totalImages = $galleryModel->countImagesByUser($userId);
-            $images = $galleryModel->getImagesByUser($userId); // Mendapatkan gambar user
+            // Filter berdasarkan status
+            if ($status === 'all') {
+                $images = $galleryModel->getImagesByUser($userId);
+            } else {
+                $images = $galleryModel->getImagesByUserAndStatus($userId, $status);
+            }
+
+            $totalImages = count($images);
 
             $this->view('user/image-history', [
                 'totalImages' => $totalImages,
-                'images' => $images // Mengirim data gambar ke view
+                'images' => $images,
+                'selectedStatus' => $status  // Menggunakan 'selectedStatus' secara konsisten
             ]);
         } else {
             header('Location: ' . $this->getLastVisitedPage());
@@ -121,6 +128,56 @@ class Galleries extends Controller
                 }
             } else {
                 $this->view('user/uploadImage');
+            }
+        } else {
+            header('Location: ' . $this->getLastVisitedPage());
+        }
+    }
+
+    public function uploadImgAdmin()
+    {
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
+
+        if ($role == 2) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $title = htmlspecialchars(trim($_POST['imageTitle']));
+                $category = htmlspecialchars(trim($_POST['category']));
+                $description = htmlspecialchars(trim($_POST['description']));
+
+                if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+                    $targetDir = __DIR__ . "/../img/gallery/files/";
+                    $fileName = basename($_FILES['image']['name']);
+                    $uniqueName = uniqid() . "_" . $fileName; // Nama file dengan unique ID
+                    $targetFilePath = $targetDir . $uniqueName;
+                    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+                    $status = 'pending';
+
+                    $allowedTypes = ['jpg', 'png', 'gif', 'jpeg'];
+                    if (in_array(strtolower($fileType), $allowedTypes)) {
+                        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
+                            // Simpan nama file unik ke database
+                            $uploadSuccess = $this->model('GalleryModel')->create($uniqueName, $category, $title, $status, $_SESSION['user_id']);
+                            if ($uploadSuccess) {
+                                header('Location: ' . BASEURL . '/galleries/uploadImgView');
+                                exit();
+                            } else {
+                                error_log("Database insert failed for image upload.");
+                                echo "Gagal menyimpan informasi gambar.";
+                            }
+                        } else {
+                            error_log("Failed to move uploaded files.");
+                            echo "Gagal mengunggah files.";
+                        }
+                    } else {
+                        echo "Tipe files tidak diizinkan. Hanya JPG, PNG, dan GIF.";
+                    }
+                } else {
+                    echo "Tidak ada files yang diunggah atau terjadi kesalahan.";
+                }
+            } else {
+                $this->view('admin/upload-image');
             }
         } else {
             header('Location: ' . $this->getLastVisitedPage());

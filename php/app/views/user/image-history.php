@@ -99,17 +99,25 @@
                     <!-- Filters and Search -->
                     <div class="p-6 border-b border-blue-100">
                         <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-4">
-                                <button class="px-4 py-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                            <form id="statusFilterForm" action="<?= BASEURL; ?>/user/image-history" method="GET">
+                                <!-- Tombol Filter Status -->
+                                <button type="button" onclick="filterStatus('all')"
+                                        class="px-4 py-2 <?= ($data['selectedStatus'] == 'all') ? 'bg-blue-100' : 'hover:bg-blue-50'; ?> text-blue-600 rounded-lg transition-colors">
                                     Semua
                                 </button>
-                                <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                <button type="button" onclick="filterStatus(1)"
+                                        class="px-4 py-2 <?= ($data['selectedStatus'] == 1) ? 'bg-blue-100' : 'hover:bg-blue-50'; ?> text-blue-600 rounded-lg transition-colors">
+                                    Pending
+                                </button>
+                                <button type="button" onclick="filterStatus(2)"
+                                        class="px-4 py-2 <?= ($data['selectedStatus'] == 2) ? 'bg-blue-100' : 'hover:bg-blue-50'; ?> text-blue-600 rounded-lg transition-colors">
                                     Disetujui
                                 </button>
-                                <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                                    Tertunda
+                                <button type="button" onclick="filterStatus(3)"
+                                        class="px-4 py-2 <?= ($data['selectedStatus'] == 3) ? 'bg-blue-100' : 'hover:bg-blue-50'; ?> text-blue-600 rounded-lg transition-colors">
+                                    Ditolak
                                 </button>
-                            </div>
+                            </form>
                             <div class="relative">
                                 <input type="text" placeholder="Cari gambar..."
                                        class="pl-10 pr-4 py-2 bg-blue-50 border-0 rounded-lg text-blue-900 placeholder-blue-400
@@ -134,7 +142,7 @@
                                 </svg>
                                 <h3 class="text-xl font-medium text-blue-900 mb-2">Belum ada gambar</h3>
                                 <p class="text-blue-600 mb-6">Mulai unggah gambar penelitian Anda sekarang</p>
-                                <a href="<?= BASEURL; ?>/images/upload"
+                                <a href="<?= BASEURL; ?>/galleries/uploadImg"
                                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700
                                               transition-colors">
                                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -228,6 +236,12 @@
     document.querySelectorAll('.image-card').forEach(card => {
         observer.observe(card);
     });
+
+    function filterStatus(status) {
+        document.getElementById('statusInput').value = status;
+        document.getElementById('statusFilterForm').submit();
+    }
+
 </script>
 </body>
 </html> 
