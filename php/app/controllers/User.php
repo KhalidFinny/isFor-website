@@ -27,7 +27,9 @@ class User extends Controller
             return false;
         }
 
-        if ($this->model('UsersModel')->addUser($_POST, $photo) > 0) {
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+
+        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
 
             header('Location: ' . BASEURL . '/User');
             echo "tambah data berhasil";
@@ -101,6 +103,7 @@ class User extends Controller
 
     public function edit()
     {
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $id = $_POST['user_id'];
         $oldPhoto = $_POST["oldImage"];
         $oldPass = $_POST["oldPass"];
@@ -126,7 +129,7 @@ class User extends Controller
             }
         }
 
-        if ($this->model('UsersModel')->editUser($id, $_POST, $photo, $password) > 0) {
+        if ($this->model('UsersModel')->editUser($email, $id, $_POST, $photo, $password) > 0) {
             header('Location: ' . BASEURL . '/User');
             echo "data berhasil diupdate";
         }else{
