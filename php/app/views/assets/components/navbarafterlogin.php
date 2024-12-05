@@ -147,10 +147,10 @@
                             ${item.name}
                         </button>
                         <div class="pl-4 space-y-1">
-                            ${item.dropdownItems.map(dropItem => `<a href="${dropItem.href}" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md">${dropItem.name}</a>`).join('')}
+                            ${item.dropdownItems.map(dropItem => `<a href="${dropItem.href}" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-md">${dropItem.name}</a>`).join('')}
                         </div>
                     ` : `
-                        <a href="${item.href}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">${item.name}</a>
+                        <a href="${item.href}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md">${item.name}</a>
                     `}
                 `;
                 mobileNavContainer.appendChild(mobileNavItem);
@@ -161,13 +161,13 @@
             userMenuItems.forEach(menuItem => {
                 const userMenuItem = document.createElement('a');
                 userMenuItem.href = menuItem.href;
-                userMenuItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors';
+                userMenuItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-600 transition-colors';
                 userMenuItem.textContent = menuItem.name;
                 userMenuContainer.appendChild(userMenuItem);
 
                 const mobileUserMenuItem = document.createElement('a');
                 mobileUserMenuItem.href = menuItem.href;
-                mobileUserMenuItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors';
+                mobileUserMenuItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-600 transition-colors';
                 mobileUserMenuItem.textContent = menuItem.name;
                 mobileUserMenuContainer.appendChild(mobileUserMenuItem);
             });
