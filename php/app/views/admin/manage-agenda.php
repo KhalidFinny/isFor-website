@@ -40,7 +40,7 @@
     </style>
 </head>
 <body class="bg-white">
-
+<?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 <!-- Main Content Area -->
 <div class="flex-1 min-h-screen ml-64 bg-gray-50">
     <main class="py-10 px-8">
@@ -83,31 +83,59 @@
                 ]
             ];
 
-            foreach ($sampleAgendas as $agenda): ?>
-                <div class="agenda-card bg-white p-6 rounded-2xl border-2 border-red-100">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-4xl font-bold text-red-500"><?= $agenda['number'] ?></span>
-                        <div class="flex space-x-2">
-                            <button onclick="openAgendaModal('edit', <?= htmlspecialchars(json_encode($agenda)) ?>)" 
-                                    class="p-2 text-red-400 hover:text-red-500 transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                </svg>
-                            </button>
-                            <button onclick="confirmDelete(<?= $agenda['id'] ?>)" 
-                                    class="p-2 text-red-400 hover:text-red-500 transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
+            if (empty($data['agenda'])): ?>
+                <?php foreach ($sampleAgendas as $agenda): ?>
+                    <div class="agenda-card bg-white p-6 rounded-2xl border-2 border-red-100">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-4xl font-bold text-red-500"><?= $agenda['number'] ?></span>
+                            <div class="flex space-x-2">
+                                <button onclick="openAgendaModal('edit', <?= htmlspecialchars(json_encode($agenda)) ?>)" 
+                                        class="p-2 text-red-400 hover:text-red-500 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </button>
+                                <button onclick="confirmDelete(<?= $agenda['id'] ?>)" 
+                                        class="p-2 text-red-400 hover:text-red-500 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
+                        <h3 class="text-xl font-semibold text-red-800 mb-2"><?= $agenda['title'] ?></h3>
+                        <p class="text-red-600"><?= $agenda['description'] ?></p>
                     </div>
-                    <h3 class="text-xl font-semibold text-red-800 mb-2"><?= $agenda['title'] ?></h3>
-                    <p class="text-red-600"><?= $agenda['description'] ?></p>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach ($data['agenda'] as $agenda): ?>
+                    <div class="agenda-card bg-white p-6 rounded-2xl border-2 border-red-100">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-4xl font-bold text-red-500"><?= $data['no'] ?></span>
+                            <div class="flex space-x-2">
+                                <button onclick="openAgendaModal('edit', <?= htmlspecialchars(json_encode($agenda)) ?>)" 
+                                        class="p-2 text-red-400 hover:text-red-500 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </button>
+                                <button onclick="confirmDelete(<?= $agenda['agenda_id'] ?>)" 
+                                        class="p-2 text-red-400 hover:text-red-500 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-red-800 mb-2"><?= $agenda['title'] ?></h3>
+                        <p class="text-red-600"><?= $agenda['deskripsi'] ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>            
         </div>
     </main>
 </div>
