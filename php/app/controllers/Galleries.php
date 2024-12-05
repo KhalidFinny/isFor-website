@@ -134,54 +134,32 @@ class Galleries extends Controller
         }
     }
 
-    public function uploadImgAdmin()
+    public function filter()
     {
-        $this->checkLogin();
-        $role = $this->checkRole();
-        $this->checkSessionTimeOut();
+        session_start();
+        $status = $_POST['status'];
+        $userId = $_SESSION['user_id'];
 
-        if ($role == 2) {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $title = htmlspecialchars(trim($_POST['imageTitle']));
-                $category = htmlspecialchars(trim($_POST['category']));
-                $description = htmlspecialchars(trim($_POST['description']));
-
-                if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                    $targetDir = __DIR__ . "/../img/gallery/files/";
-                    $fileName = basename($_FILES['image']['name']);
-                    $uniqueName = uniqid() . "_" . $fileName; // Nama file dengan unique ID
-                    $targetFilePath = $targetDir . $uniqueName;
-                    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-                    $status = 'pending';
-
-                    $allowedTypes = ['jpg', 'png', 'gif', 'jpeg'];
-                    if (in_array(strtolower($fileType), $allowedTypes)) {
-                        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
-                            // Simpan nama file unik ke database
-                            $uploadSuccess = $this->model('GalleryModel')->create($uniqueName, $category, $title, $status, $_SESSION['user_id']);
-                            if ($uploadSuccess) {
-                                header('Location: ' . BASEURL . '/galleries/uploadImgView');
-                                exit();
-                            } else {
-                                error_log("Database insert failed for image upload.");
-                                echo "Gagal menyimpan informasi gambar.";
-                            }
-                        } else {
-                            error_log("Failed to move uploaded files.");
-                            echo "Gagal mengunggah files.";
-                        }
-                    } else {
-                        echo "Tipe files tidak diizinkan. Hanya JPG, PNG, dan GIF.";
-                    }
-                } else {
-                    echo "Tidak ada files yang diunggah atau terjadi kesalahan.";
-                }
-            } else {
-                $this->view('admin/upload-image');
-            }
-        } else {
-            header('Location: ' . $this->getLastVisitedPage());
+        switch ($status) {
+            case 0: // Semua surat
+                $images = $this->model('GalleryModel')->getImageByUserId($userId);
+                break;
+            case 1: // Surat tertunda
+                $images = $this->model('GalleryModel')->getImageByUserIdPending($userId);
+                break;
+            case 2: // Surat disetujui
+                $images = $this->model('GalleryModel')->getImageByUserIdVerify($userId);
+                break;
+            case 3: // Surat ditolak
+                $images = $this->model('GalleryModel')->getImageByUserIdReject($userId);
+                break;
+            default:
+                echo json_encode(['error' => 'Invalid status']);
+                return; // Hentikan eksekusi
         }
+
+        // Mengembalikan hasil sebagai JSON
+        echo json_encode($images);
     }
 
     public function verifyImage($id)
