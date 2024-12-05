@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi Gambar - IsFor PRI</title>
+    <title>Verifikasi Gambar - IsFor</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -51,10 +52,7 @@
                 </div>
                 <h1 class="text-4xl font-bold text-blue-900">
                     Verifikasi
-                    <span class="relative inline-block">
-                            <span class="absolute -bottom-2 left-0 w-full h-4 bg-blue-100 -z-10"></span>
-                             <span>Gambar</span>
-                        </span>
+
                 </h1>
             </div>
 
@@ -62,8 +60,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php if (empty($data['images'])): ?>
                     <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-blue-100">
-                        <img src="<?= ASSETS; ?>/images/empty-images.png" alt="No Images"
-                             class="mx-auto h-40 animate-bounce">
+
                         <p class="mt-4 text-lg text-blue-900">Belum ada gambar yang perlu diverifikasi</p>
                         <p class="text-sm text-gray-500">Gambar yang membutuhkan verifikasi akan muncul di sini</p>
                     </div>
@@ -71,7 +68,7 @@
                     <?php foreach ($data['images'] as $image): ?>
                         <div class="image-card bg-white rounded-2xl border-2 border-blue-100 overflow-hidden">
                             <!--                            <p>Path Gambar: --><?php //= GALLERY; ?><!--/files/-->
-                            <?php //= htmlspecialchars($image['image']); ?><!--</p>-->
+                            <?php //= htmlspecialchars($image['image']); ?>
                             <img src="<?= GALLERY; ?>/files/<?= htmlspecialchars($image['image']); ?>"
                                  alt="Gambar <?= htmlspecialchars($image['title']); ?>"/>
                             <div class="p-6">
@@ -172,20 +169,6 @@
             });
 
     }
-
-    fetch(`<?= BASEURL; ?>/galleries/getImages`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({id: id}),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById('previewImage').src = data.filePath;
-            } else {
-                alert(data.message);
-            }
-        });
 </script>
 </body>
 </html> 
