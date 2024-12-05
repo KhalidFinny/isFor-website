@@ -76,9 +76,8 @@
     </style>
 </head>
 <body class="bg-gray-50">
+    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
     <div class="flex">
-     
-
         <div class="flex-1 min-h-screen ml-64">
             <main class="py-10 px-8">
                 <!-- Header -->
