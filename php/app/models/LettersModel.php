@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class LettersModel{
     private $table = 'letters';
@@ -49,10 +49,17 @@ class LettersModel{
     }
 
     public function getLetterByUserIdPaginate($id, $awalData, $jumlahDataPerhalaman) {
-        $this->db->query('SELECT * FROM letters WHERE user_id = :id LIMIT :awalData, :jumlahDataPerhalaman');
+        $query = 'SELECT * 
+              FROM letters 
+              WHERE user_id = :id 
+              ORDER BY date DESC 
+              OFFSET :awalData ROWS 
+              FETCH NEXT :jumlahDataPerhalaman ROWS ONLY';
+
+        $this->db->query($query);
         $this->db->bind(':id', $id);
-        $this->db->bind(':awalData', $awalData);
-        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman);
+        $this->db->bind(':awalData', $awalData, PDO::PARAM_INT);
+        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
@@ -72,7 +79,7 @@ class LettersModel{
         $this->db->bind(':id', $id);
         return $this->db->resultSet();
     }
-    
+
     public function updateStatusLetter($id, $status){
         $this->db->query('UPDATE ' . $this->table . ' SET status = :status WHERE letter_id = :id ');
         $this->db->bind(':status', $status) ;
@@ -85,8 +92,8 @@ class LettersModel{
             return 0;  // Jika tidak ada baris yang terpengaruh
         }
     }
-
-    public function countAllLeterbyUserId($user_id){
+    
+    public function countAllLetterbyUserId($user_id){
         $this->db->query('SELECT COUNT(file_url) AS total FROM letters WHERE user_id = :user_id');
         $this->db->bind(':user_id', $user_id);
         $this->db->execute();
@@ -106,7 +113,7 @@ class LettersModel{
         $this->db->execute();
         return $this->db->single();
     }
-    
+
     public function countRejectStat($user_id){
         $this->db->query('SELECT COUNT(status) AS total FROM letters WHERE status = 3 AND user_id = :user_id');
         $this->db->bind(':user_id', $user_id);

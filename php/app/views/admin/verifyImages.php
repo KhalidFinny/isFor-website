@@ -51,50 +51,34 @@
                 </div>
                 <h1 class="text-4xl font-bold text-blue-900">
                     Verifikasi
-                    <span class="relative inline-block">
-                            <span class="absolute -bottom-2 left-0 w-full h-4 bg-blue-100 -z-10"></span>
-                            <span>Gambar</span>
-                        </span>
+
                 </h1>
             </div>
 
             <!-- Images Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php if (empty($images)): ?>
-                    <!-- Empty State -->
+                <?php if (empty($data['images'])): ?>
                     <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-blue-100">
-                        <img src="<?= ASSETS; ?>s/images/empty-images.png" alt="No Images"
-                             class="mx-auto h-40 animate-bounce">
+
                         <p class="mt-4 text-lg text-blue-900">Belum ada gambar yang perlu diverifikasi</p>
                         <p class="text-sm text-gray-500">Gambar yang membutuhkan verifikasi akan muncul di sini</p>
                     </div>
                 <?php else: ?>
-                    <!-- Image Cards -->
-                    <?php foreach ($images as $index => $image): ?>
+                    <?php foreach ($data['images'] as $image): ?>
                         <div class="image-card bg-white rounded-2xl border-2 border-blue-100 overflow-hidden">
-                            <img src="<?php echo $image['url']; ?>" alt="<?php echo $image['title']; ?>"
-                                 class="w-full h-48 object-cover">
+                            <!--                            <p>Path Gambar: --><?php //= GALLERY; ?><!--/files/-->
+                            <?php //= htmlspecialchars($image['image']); ?><!--</p>-->
+                            <img src="<?= GALLERY; ?>/files/<?= htmlspecialchars($image['image']); ?>"
+                                 alt="Gambar <?= htmlspecialchars($image['title']); ?>"/>
                             <div class="p-6">
-                                <div class="flex items-center justify-between mb-4">
-                                <span class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm font-medium">
-                                    Menunggu Verifikasi
-                                </span>
-                                    <span class="text-sm text-gray-500"><?php echo $image['date']; ?></span>
-                                </div>
-                                <h3 class="text-lg font-semibold text-blue-900 mb-2"><?php echo $image['title']; ?></h3>
-
-                                <!-- Action Buttons -->
-                                <div class="flex space-x-3 mt-4">
-                                    <button onclick="viewImage('<?php echo $image['url']; ?>')"
-                                            class="flex-1 px-4 py-2 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-colors">
-                                        Lihat Detail
-                                    </button>
-                                    <button onclick="verifyImage(<?php echo $image['id']; ?>)"
-                                            class="flex-1 px-4 py-2 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 transition-colors">
+                                <h3 class="text-lg font-semibold text-blue-900 mb-2"><?= htmlspecialchars($image['title']); ?></h3>
+                                <div class="flex items-center justify-between mt-4">
+                                    <button onclick="verifyImage(<?= $image['gallery_id']; ?>)"
+                                            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
                                         Verifikasi
                                     </button>
-                                    <button onclick="rejectImage(<?php echo $image['id']; ?>)"
-                                            class="flex-1 px-4 py-2 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 transition-colors">
+                                    <button onclick="rejectImage(<?= $image['gallery_id']; ?>)"
+                                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
                                         Tolak
                                     </button>
                                 </div>
@@ -102,7 +86,9 @@
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
+
             </div>
+
         </main>
     </div>
 </div>
@@ -139,12 +125,63 @@
     }
 
     function verifyImage(id) {
-        // Implementation for verifying image
+        fetch(`<?= BASEURL; ?>/galleries/verifyImage/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Gambar berhasil diverifikasi');
+                    location.reload();
+                } else {
+                    alert('Gagal memverifikasi gambar: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat memverifikasi gambar.');
+            });
     }
 
     function rejectImage(id) {
-        // Implementation for rejecting image
+        fetch(`<?= BASEURL; ?>/galleries/rejectImage/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Gambar berhasil ditolak');
+                    location.reload();
+                } else {
+                    alert('Gagal menolak gambar: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menolak gambar.');
+            });
+
     }
+
+    fetch(`<?= BASEURL; ?>/galleries/getImages`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: id}),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('previewImage').src = data.filePath;
+            } else {
+                alert(data.message);
+            }
+        });
 </script>
 </body>
 </html> 

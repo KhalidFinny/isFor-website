@@ -65,13 +65,13 @@
             overflow: hidden;
             border-radius: 1rem;
             background: white;
-            border: 2px solid #f3f4f6;
+            border: 2px solid #ff9292;
             transition: all 0.3s ease;
         }
 
         .pengelola-card:hover {
             transform: translateY(-8px);
-            border-color: #dbeafe;
+            border-color: #ff9696;
         }
 
         .pengelola-image-container {
@@ -101,7 +101,7 @@
             left: 0;
             right: 0;
             padding: 1.5rem;
-            background: linear-gradient(to top, rgba(30, 58, 138, 0.95), rgba(30, 58, 138, 0));
+            background: linear-gradient(to top, rgba(138, 30, 30, 0.95), rgba(30, 58, 138, 0));
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -130,4 +130,15 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        /* Update animation classes */
+        .fade-in {
+            -webkit-animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .slide-up {
+            -webkit-animation: slideUp 0.5s ease-out forwards;
+            animation: slideUp 0.5s ease-out forwards;
         }

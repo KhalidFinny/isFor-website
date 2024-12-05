@@ -150,7 +150,7 @@
                 <!-- Header -->
                 <header class="mb-8">
                     <h1 class="text-2xl font-bold text-blue-700">Dashboard Overview</h1>
-                    <p class="mt-1 text-sm text-gray-500">Welcome back, <?php echo htmlspecialchars($data['user']['username']); ?></p>
+                    <p class="mt-1 text-sm text-gray-500">Welcome back, <?php echo htmlspecialchars($data['user']['name']); ?></p>
                 </header>
 
                 <!-- Stats Grid -->

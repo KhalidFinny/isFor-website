@@ -1,0 +1,52 @@
+/* Add this new CSS file for cross-browser compatibility */
+
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Flex container fixes */
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+/* Grid container fixes */
+.grid {
+  display: -ms-grid;
+  display: grid;
+}
+
+/* Animation fixes */
+@-webkit-keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Fix for min-height on flex children */
+.min-h-screen {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+/* Fix for sticky positioning */
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+/* Fix for transforms */
+.transform {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+} 
