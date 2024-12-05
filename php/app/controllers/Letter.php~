@@ -7,7 +7,7 @@ use Symfony\Component\VarDumper\VarDumper;
 
 class Letter extends Controller{
     public function index(){
-
+        
     }
 
     public function addLetterView(){
@@ -48,7 +48,7 @@ class Letter extends Controller{
     }
 
     public function createLetter($preview = false){
-
+        
         $researchTitle = $_POST["researchTitle"];
         $leadResearcher = $_POST["leadResearcher"];
         $researchScheme = $_POST["researchScheme"];
@@ -138,23 +138,23 @@ class Letter extends Controller{
     public function updateStatusLetter(){
         $id = $_POST['id'];
         $status = $_POST['status'];
-
+    
         $affectedRows = $this->model('LettersModel')->updateStatusLetter($id, $status);
         if ($affectedRows > 0) {
-            // Ambil nama files berdasarkan ID
+            // Ambil nama file berdasarkan ID
             $fileName = $this->model('LettersModel')->getLetterById($id);
-
+            
             // Validasi fileName
             if (!$fileName) {
                 echo json_encode(['success' => false, 'message' => 'File tidak ditemukan']);
                 return;
             }
-
+            
             // $pathUpdate = $this->changePathFile($status, $fileName);
             // if ($pathUpdate) {
-            //     echo json_encode(['success' => true, 'message' => 'Status diperbarui dan files berhasil dipindahkan']);
+            //     echo json_encode(['success' => true, 'message' => 'Status diperbarui dan file berhasil dipindahkan']);
             // } else {
-            //     echo json_encode(['success' => false, 'message' => 'Gagal memindahkan files']);
+            //     echo json_encode(['success' => false, 'message' => 'Gagal memindahkan file']);
             // }
 
             echo json_encode(['success' => true, 'message' => 'Status berhasil diperbarui']);
@@ -164,7 +164,7 @@ class Letter extends Controller{
         }
     }
 
-    // // function untuk merubah path files
+    // // function untuk merubah path file
     // public function changePathFile($status, $fileName){
     //     // Tentukan path sumber dan tujuan
     //     if ($status == 2) {  // Status Verified
@@ -175,16 +175,16 @@ class Letter extends Controller{
     //         $destPath = realpath(__DIR__ . '/../letters/reject/' . $fileName);
     //     }
 
-    //     // Pastikan files ada sebelum mencoba untuk memindahkannya
+    //     // Pastikan file ada sebelum mencoba untuk memindahkannya
     //     if (file_exists($sourcePath)) {
     //         if (copy($sourcePath, $destPath)) {
     //             return true;  // Cukup mengembalikan true atau false
     //         } else {
-    //             // Jika gagal memindahkan files
+    //             // Jika gagal memindahkan file
     //             return false;
     //         }
     //     } else {
-    //         // Jika files sumber tidak ditemukan
+    //         // Jika file sumber tidak ditemukan
     //         return false;
     //     }
     // }
@@ -200,10 +200,10 @@ class Letter extends Controller{
             $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
             $halamanAktif = ( isset($_GET["halaman"]) ) ? $_GET["halaman"] : 1;
             $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-
+            
             $data['jumlahHalaman'] = $jumlahHalaman;
             $data['halamanAktif'] = $halamanAktif;
-            $data['letter'] = $this->model('LettersModel')->countAllLetterbyUserId($_SESSION['user_id']);
+            $data['letter'] = $this->model('LettersModel')->countAllLeterbyUserId($_SESSION['user_id']);
             $data['allLetters'] = $this->model('LettersModel')->getLetterByUserIdPaginate($_SESSION['user_id'], $awalData, $jumlahDataperhalaman);
             $this->view('user/letter-history', $data);
         }else{
@@ -238,23 +238,13 @@ class Letter extends Controller{
         echo json_encode($letters);
     }
 
-    public function search() {
+    public function search(){
         session_start();
-        $user_id = $_SESSION['user_id']; // Atau cara Anda mendapatkan user_id
-        $keyword = $_POST['keyword'] ?? '';
-        
-        try {
-            $results = $this->model('LettersModel')->searchLetter($user_id, $keyword);
-            
-            // Cetak debug
-            echo "Query Results: ";
-            print_r($results);
-            
-            // Lanjutkan proses normal
-        } catch (Exception $e) {
-            // Tangani error
-            echo "Search Error: " . $e->getMessage();
-        }
+        $session = $_SESSION['user_id'];
+        $keyword = $_POST['keyword'];
+
+        $letters = $this->model('LettersModel')->searchLetter($session, $keyword);
+        // Lakukan pencarian berdasarkan keyword dan kirimkan hasilnya dalam format JSON
+        echo json_encode($letters);
     }
-    
 }

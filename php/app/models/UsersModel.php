@@ -48,7 +48,7 @@ class UsersModel{
     }
 
     // fungsi menambah user
-    public function addUser($data, $photo){
+    public function addUser($email, $data, $photo){
         $query = "INSERT INTO users (name, username, password, email, profile_picture, role_id)
                     VALUES
                     (:name, :username, :password, :email, :profile_picture, :role)";
@@ -57,7 +57,7 @@ class UsersModel{
         $this->db->bind('name', $data['name']);
         $this->db->bind('username', $data['username']);
         $this->db->bind('password', password_hash($data['password'], PASSWORD_BCRYPT));
-        $this->db->bind('email', $data['email']);
+        $this->db->bind('email', $email);
         $this->db->bind('profile_picture', $photo);
         $this->db->bind('role', $data['role']);
 
@@ -96,7 +96,7 @@ class UsersModel{
     }
 
     //fungsi mengedit user
-    public function editUser($id, $data, $photo, $password){
+    public function editUser($email, $id, $data, $photo, $password){
         $query = "UPDATE users SET
                     name = :name,
                     username = :username,
@@ -110,7 +110,7 @@ class UsersModel{
         $this->db->bind('name', $data['name']);
         $this->db->bind('username', $data['username']);
         $this->db->bind('password', $password);
-        $this->db->bind('email', $data['email']);
+        $this->db->bind('email', $email);
         $this->db->bind('profile_picture', $photo);
         $this->db->bind('role_id', $data['role_id']);
         $this->db->bind('user_id', $id);
