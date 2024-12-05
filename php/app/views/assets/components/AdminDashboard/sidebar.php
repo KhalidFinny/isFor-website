@@ -46,7 +46,7 @@
                     </a>
 
                     <!-- Agenda -->
-                    <a href="http://localhost/IsFor-website/php/app/views/admin/manage-agenda.php" 
+                    <a href="<?= BASEURL ?>/agenda" 
                        class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
@@ -56,7 +56,7 @@
                     </a>
 
                     <!-- Roadmap -->
-                    <a href="http://localhost/IsFor-website/php/app/views/admin/manage-roadmap.php" 
+                    <a href="<?= BASEURL  ?>/roadmap" 
                        class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
@@ -72,7 +72,7 @@
                 <span class="px-4 text-xs font-semibold text-red-500 uppercase tracking-wider">Media</span>
                 <div class="mt-2 space-y-1">
                     <!-- Upload Image -->
-                    <a href="http://localhost/IsFor-website/php/app/views/admin/upload-image.php" 
+                    <a href="<?= BASEURL ?>/galleries/uploadImgView" 
                        class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -88,7 +88,7 @@
                 <span class="px-4 text-xs font-semibold text-red-500 uppercase tracking-wider">Verifikasi</span>
                 <div class="mt-2 space-y-1">
                     <!-- Verify Images -->
-                    <a href="http://localhost/IsFor-website/php/app/views/admin/verifyImages.php" 
+                    <a href="<?= BASEURL ?>/galleries/verifyImgview" 
                        class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
@@ -98,7 +98,7 @@
                     </a>
 
                     <!-- Verify Letters -->
-                    <a href="http://localhost/IsFor-website/php/app/views/admin/verifyLetters.php" 
+                    <a href="<?= BASEURL ?>/letter/verifyLetterview" 
                        class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
@@ -114,7 +114,7 @@
                 <span class="px-4 text-xs font-semibold text-red-500 uppercase tracking-wider">Pengguna</span>
                 <div class="mt-2 space-y-1">
                     <!-- Manage Users -->
-                    <a href="http://localhost/IsFor-website/php/app/views/admin/users.php" 
+                    <a href="<?= BASEURL ?>/user" 
                        class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 

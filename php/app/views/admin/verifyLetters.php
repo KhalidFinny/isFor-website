@@ -31,7 +31,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
 </head>
 <body class="bg-gray-50">
     <div class="flex min-h-screen">
-        
+    <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
         <div class="flex-1 ml-64">
             <main class="p-8">
                 <!-- Header Section -->
@@ -78,7 +78,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                                         </span>
                                     </div>
                                     <h3 class="text-lg font-semibold text-gray-900"><?= $letter['title']; ?></h3>
-                                    <p class="text-sm text-gray-500 mt-1">Dikirim pada <?= date('d F Y', strtotime($letter['created_at'])); ?></p>
+                                    <p class="text-sm text-gray-500 mt-1">Dikirim pada <?= date('d F Y', strtotime($letter['date'])); ?></p>
                                 </div>
                             </div>
                             
@@ -148,7 +148,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                 success: function(data){
                     const letterContent = document.getElementById('letterContent');
                     letterContent.innerHTML = `
-                        <iframe src="${data}" class="w-full h-[600px] rounded-lg border border-gray-100" />
+                        <iframe src="${data}" class="w-full h-[1000px] rounded-lg border border-gray-100" />
                     `;
                 },
                 error: function(data){

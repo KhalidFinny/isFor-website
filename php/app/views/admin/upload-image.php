@@ -88,7 +88,7 @@
 </head>
 <body class="bg-white">
     <div class="flex">
-
+    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
         <div class="flex-1 min-h-screen ml-64 bg-gray-50">
             <main class="py-10 px-8">
                 <!-- Swiss-inspired Header (Matching manage-roadmap.php) -->
