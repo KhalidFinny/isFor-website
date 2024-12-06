@@ -114,13 +114,13 @@ class Galleries extends Controller
                     return;
                 }
 
-                $title = htmlspecialchars(trim($_POST['imageTitle']));
+                $title = htmlspecialchars(trim($_POST['fileTitle']));
                 $category = htmlspecialchars(trim($_POST['category']));
                 $description = htmlspecialchars(trim($_POST['description']));
 
                 // Validasi data wajib diisi
                 if (empty($title)) {
-                    $response['message'] = 'Judul gambar harus diisi.';
+                    $response['message'] = 'Judul file harus diisi.';
                     echo json_encode($response);
                     return;
                 }
@@ -137,35 +137,49 @@ class Galleries extends Controller
                     return;
                 }
 
-                if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                    $targetDir = __DIR__ . "/../img/gallery/files/";
-                    $fileName = basename($_FILES['image']['name']);
-                    $uniqueName = uniqid() . "_" . $fileName;
-                    $targetFilePath = $targetDir . $uniqueName;
-                    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-                    $status = 'pending';
+                if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+                    // Tentukan direktori tujuan
+                    $uploadDir = __DIR__ . '/../files/research_output/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
 
-                    $allowedTypes = ['jpg', 'png', 'gif', 'jpeg'];
-                    if (in_array(strtolower($fileType), $allowedTypes)) {
-                        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
-                            $uploadSuccess = $this->model('GalleryModel')->create($uniqueName, $category, $title, $status, $_SESSION['user_id']);
+                    $fileName = basename($_FILES['file']['name']);
+                    $uniqueName = uniqid() . "_" . $fileName;
+                    $targetFilePath = $uploadDir . $uniqueName;
+                    $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+
+                    // Validasi ekstensi file
+                    $allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xlsx'];
+                    if (in_array($fileType, $allowedExtensions)) {
+                        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
+                            // Simpan data ke database
+                            $uploadSuccess = $this->model('ResearchOutputModel')->create(
+                                $uniqueName,
+                                $category,
+                                $title,
+                                'pending', // Status default
+                                $_SESSION['user_id']
+                            );
+
                             if ($uploadSuccess) {
                                 $response['success'] = true;
-                                $response['message'] = 'Upload berhasil.';
+                                $response['message'] = 'File berhasil diunggah.';
                             } else {
-                                error_log("Gagal menyimpan informasi ke database: " . json_encode([$uniqueName, $category, $title, $status]));
-                                unlink($targetFilePath);
-                                $response['message'] = 'Gagal menyimpan informasi gambar ke database.';
+                                error_log("Gagal menyimpan informasi ke database: " . json_encode([$uniqueName, $category, $title]));
+                                unlink($targetFilePath); // Hapus file jika gagal disimpan ke database
+                                $response['message'] = 'Gagal menyimpan informasi file ke database.';
                             }
                         } else {
                             $response['message'] = 'Gagal memindahkan file yang diunggah.';
                         }
                     } else {
-                        $response['message'] = 'Tipe file tidak diizinkan. Hanya JPG, PNG, dan GIF.';
+                        $response['message'] = 'Ekstensi file tidak didukung.';
                     }
                 } else {
                     $response['message'] = 'Tidak ada file yang diunggah atau terjadi kesalahan.';
                 }
+
                 echo json_encode($response);
             } else {
                 header('Content-Type: application/json');
@@ -175,6 +189,7 @@ class Galleries extends Controller
             echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
         }
     }
+
 
 
 
