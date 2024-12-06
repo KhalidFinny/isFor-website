@@ -106,14 +106,6 @@ class Galleries extends Controller
         if ($role == 1) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $response = ['success' => false, 'message' => ''];
-
-                // Periksa konfirmasi dari pengguna
-                if (empty($_POST['confirmUpload']) || $_POST['confirmUpload'] !== 'true') {
-                    $response['message'] = 'Konfirmasi upload tidak diterima.';
-                    echo json_encode($response);
-                    return;
-                }
-
                 $title = htmlspecialchars(trim($_POST['imageTitle']));
                 $category = htmlspecialchars(trim($_POST['category']));
                 $description = htmlspecialchars(trim($_POST['description']));
@@ -175,7 +167,6 @@ class Galleries extends Controller
             echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
         }
     }
-
 
 
 

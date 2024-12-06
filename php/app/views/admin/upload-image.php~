@@ -95,7 +95,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-
+    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
     <div class="flex-1 min-h-screen ml-64 bg-gray-50">
         <main class="py-10 px-8">
             <!-- Swiss-inspired Header (Matching manage-roadmap.php) -->
@@ -108,8 +108,8 @@
             </div>
 
             <!-- Upload Form -->
-            <form action="http://localhost/IsFor-website/php/public/galleries/uploadImg" method="POST"
-                  enctype="multipart/form-data" id="uploadForm" class="max-w-7xl mx-auto">
+            <form action="<?= BASEURL; ?>/galleries/uploadImg" method="POST" enctype="multipart/form-data"
+                  id="uploadForm" class="max-w-7xl mx-auto" onsubmit="return disableSubmitButton();">
                 <div class="grid grid-cols-12 gap-8">
                     <!-- Left Column -->
                     <div class="col-span-8">
@@ -153,11 +153,6 @@
                                 <label class="block text-sm font-medium text-gray-600">Judul Penelitian</label>
                                 <select name="category" required
                                         class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">
-                                    <!--                                        <option value="">Pilih Judul Penelitian</option>-->
-                                    <!--                                        --><?php //foreach($data['researches'] as $research): ?>
-                                    <!--                                            <option value="-->
-                                    <?php //= $research['id'] ?><!--">--><?php //= $research['title'] ?><!--</option>-->
-                                    <!--                                        --><?php //endforeach; ?>
                                     <option value="">Pilih Kategori</option>
                                     <option value="event">Event</option>
                                     <option value="research">Penelitian</option>
@@ -168,7 +163,7 @@
 
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-600">Judul Gambar</label>
-                                <input type="text" id="imageTitle" required
+                                <input type="text" name="imageTitle" required
                                        class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
                                        placeholder="Masukkan judul gambar">
                             </div>
@@ -180,7 +175,7 @@
                                           placeholder="Masukkan deskripsi gambar"></textarea>
                             </div>
 
-                            <button type="submit"
+                            <button type="submit" id="uploadButton"
                                     class="w-full px-6 py-4 bg-red-500 text-white rounded-xl hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300">
                                 Upload Gambar
                             </button>
@@ -189,6 +184,21 @@
                 </div>
             </form>
         </main>
+    </div>
+    <!-- Modal Konfirmasi -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-semibold mb-4 text-red-800">Konfirmasi Upload</h2>
+            <p class="text-gray-600">Apakah Anda yakin ingin mengunggah gambar ini?</p>
+            <div class="mt-6 flex justify-end space-x-4">
+                <button id="cancelButton" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                    Batal
+                </button>
+                <button id="confirmUploadButton" class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                    Upload
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -238,9 +248,8 @@
             handleFiles(e.target.files);
         }
 
-        // Fungsi Preview Gambar
         function handleFiles(files) {
-            previewContainer.innerHTML = ''; // Bersihkan preview sebelumnya
+            previewContainer.innerHTML = ''; // Clear existing previews
             [...files].forEach((file, index) => {
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
@@ -253,57 +262,161 @@
             });
         }
 
-// Fungsi Membuat Elemen Preview
         function createPreviewElement(src, filename, index) {
             const div = document.createElement('div');
             div.className = 'preview-image relative rounded-lg overflow-hidden';
             div.innerHTML = `
-        <img src="${src}" alt="${filename}" class="w-full h-48 object-cover">
-        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <p class="text-white text-sm px-4 text-center">${filename}</p>
-        </div>
-    `;
+                <img src="${src}" alt="${filename}" class="w-full h-48 object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <p class="text-white text-sm px-4 text-center">${filename}</p>
+                </div>
+            `;
             return div;
         }
 
-        // Form submission with progress
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
 
-            try {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', '<?= BASEURL; ?>/galleries/upload', true);
+        function disableSubmitButton() {
+            const uploadButton = document.getElementById('uploadButton');
+            uploadButton.disabled = true;
+            uploadButton.textContent = 'Uploading...';
+            return true;
+        }
 
-                xhr.upload.onprogress = (e) => {
-                    if (e.lengthComputable) {
-                        const percentComplete = Math.round((e.loaded / e.total) * 100);
-                        progressBar.style.width = percentComplete + '%';
-                        progressText.textContent = percentComplete + '%';
-                    }
-                };
+        document.getElementById('uploadButton').addEventListener('click', () => {
+            const formData = new FormData();
+            const fileInput = document.getElementById('fileInput');
+            const title = document.querySelector('input[name="imageTitle"]').value;
+            const category = document.querySelector('select[name="category"]').value;
+            const description = document.querySelector('textarea[name="description"]').value;
 
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        progressBar.classList.add('bg-green-500');
-                        setTimeout(() => {
-                            window.location.href = '<?= BASEURL; ?>/galleries';
-                        }, 1000);
-                    } else {
-                        throw new Error('Upload failed');
-                    }
-                };
-
-                xhr.onerror = function () {
-                    progressBar.classList.add('bg-red-500');
-                    alert('Upload failed. Please try again.');
-                };
-
-                xhr.send(formData);
-            } catch (error) {
-                console.error('Upload error:', error);
-                alert('An error occurred during upload.');
+            if (!fileInput.files.length) {
+                alert('Silakan pilih file untuk diunggah.');
+                e.preventDefault();
             }
+
+            if (fileInput.files.length > 0) {
+                formData.append('image', fileInput.files[0]);
+            }
+            formData.append('imageTitle', title);
+            formData.append('category', category);
+            formData.append('description', description);
+
+            fetch('<?= BASEURL; ?>/galleries/uploadImg', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        alert('Upload berhasil!');
+                        window.location.href = '<?= BASEURL; ?>/galleries/uploadImgView';
+                    } else {
+                        alert(`Upload gagal: ${data.message}`);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengunggah.');
+                })
+                .finally(() => {
+                    document.getElementById('uploadButton').disabled = false;
+                });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadButton = document.getElementById('uploadButton');
+            uploadButton.addEventListener('click', (e) => {
+                e.preventDefault(); // Mencegah submit form default
+
+                // Ambil nilai input
+                const title = document.querySelector('input[name="imageTitle"]').value.trim();
+                const category = document.querySelector('select[name="category"]').value.trim();
+                const description = document.querySelector('textarea[name="description"]').value.trim();
+                const file = document.getElementById('fileInput').files[0];
+
+                // Validasi input
+                if (!file) {
+                    alert('Silakan pilih file gambar untuk diunggah.');
+                    return;
+                }
+
+                if (!title) {
+                    alert('Silakan masukkan judul gambar.');
+                    return;
+                }
+
+                if (!category) {
+                    alert('Silakan pilih kategori.');
+                    return;
+                }
+
+                if (!description) {
+                    alert('Silakan masukkan deskripsi gambar.');
+                    return;
+                }
+
+                // Konfirmasi sebelum mengunggah
+                const confirmation = confirm("Apakah Anda yakin ingin mengunggah gambar ini?");
+                if (!confirmation) {
+                    return; // Jika batal, hentikan proses
+                }
+
+                // Semua input valid, lanjutkan upload
+                const formData = new FormData();
+                formData.append('image', file);
+                formData.append('imageTitle', title);
+                formData.append('category', category);
+                formData.append('description', description);
+
+                // Nonaktifkan tombol upload saat proses berlangsung
+                uploadButton.disabled = true;
+                uploadButton.textContent = 'Uploading...';
+
+                // Kirim data menggunakan fetch API
+                fetch('<?= BASEURL; ?>/galleries/uploadImg', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            alert('Upload berhasil!');
+                            window.location.href = '<?= BASEURL; ?>/galleries/uploadImgView';
+                        } else {
+                            alert(`Upload gagal: ${data.message}`);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat mengunggah.');
+                    })
+                    .finally(() => {
+                        uploadButton.disabled = false;
+                        uploadButton.textContent = 'Upload Gambar';
+                    });
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('uploadForm');
+        const uploadButton = document.getElementById('uploadButton');
+        const confirmModal = document.getElementById('confirmModal');
+        const cancelButton = document.getElementById('cancelButton');
+        const confirmUploadButton = document.getElementById('confirmUploadButton');
+
+        uploadButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Cegah form dari submit langsung
+            confirmModal.classList.remove('hidden'); // Tampilkan modal konfirmasi
+        });
+
+        cancelButton.addEventListener('click', () => {
+            confirmModal.classList.add('hidden'); // Sembunyikan modal saat dibatalkan
+        });
+
+        confirmUploadButton.addEventListener('click', () => {
+            confirmModal.classList.add('hidden'); // Sembunyikan modal
+            form.submit(); // Submit form jika pengguna konfirmasi
         });
     });
 </script>

@@ -28,8 +28,13 @@ class GalleryModel
         $this->db->bind(':status', $status);
         $this->db->bind(':uploaded_by', $uploaded_by);
 
-        // Eksekusi query
-        return $this->db->execute();
+        try {
+            $this->db->execute();
+            return true; // Return true jika eksekusi berhasil
+        } catch (PDOException $e) {
+            // Log atau tampilkan error jika diperlukan
+            return false; // Return false jika terjadi kesalahan
+        }
     }
 
     // Read all gallery entries
