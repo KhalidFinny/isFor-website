@@ -174,6 +174,74 @@
         };
 
         document.addEventListener('DOMContentLoaded', renderNavItems);
+        
+        // Update back/forward navigation handling
+        window.addEventListener('popstate', (event) => {
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('agenda.php') || 
+                currentPath.includes('hasilpenelitian.php') || 
+                currentPath.includes('galeriweb.php')) {
+                window.location.href = '<?=BASEURL?>'; // Redirect to beranda
+            } else if (document.referrer.includes('loginpage.php')) {
+                window.location.reload();
+            }
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+
+                    // Update URL without page reload
+                    history.pushState(null, '', targetId);
+                }
+            });
+        });
+
+        // Handle back/forward navigation
+        window.addEventListener('popstate', (event) => {
+            if (document.referrer.includes('loginpage.php')) {
+                window.location.reload();
+            }
+        });
+
+        // Handle login button click
+        const loginButtons = document.querySelectorAll('a[href*="loginpage.php"]');
+        loginButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.classList.add('fade-exit-active');
+                setTimeout(() => {
+                    window.location.href = button.href;
+                }, 300);
+            });
+        });
+
+    // Add after existing code
+    const handleNavigation = e => {
+        const link = e.currentTarget;
+        if (!link.href.startsWith('#')) {
+            e.preventDefault();
+            document.body.classList.add('opacity-0');
+            setTimeout(() => {
+                window.location.href = link.href;
+            }, 300);
+        }
+    };
+
+    // Update the renderNavItems function to add transition handlers
+    document.querySelectorAll('a:not([href^="#"])').forEach(link => {
+        link.addEventListener('click', handleNavigation);
+    });
     </script>
 </body>
 </html>
