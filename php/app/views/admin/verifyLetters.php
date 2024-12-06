@@ -116,51 +116,21 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
         </div>
     </div>
 
-    <!-- Modern Modal -->
-    <div id="letterModal" class="fixed inset-0 bg-gray-900/50 hidden items-center justify-center backdrop-blur-sm z-50">
-        <div class="bg-white rounded-2xl shadow-xl max-w-3xl w-full mx-4 transform transition-all">
-            <div class="flex items-center justify-between p-6 border-b border-gray-100">
-                <h3 class="text-lg font-semibold text-gray-900">Detail Surat</h3>
-                <button onclick="closeLetterModal()" class="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-lg p-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-            <div id="letterContent" class="p-6">
-                <!-- Letter content will be loaded here -->
-            </div>
-        </div>
-    </div>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function viewLetter(id) {
-            document.getElementById('letterModal').classList.remove('hidden');
-            document.getElementById('letterModal').classList.add('flex');
-            document.body.style.overflow = 'hidden';
-
             $.ajax({
                 url: '<?= BASEURL ?>/letter/getLetter',
                 method: 'POST',
                 dataType: 'json',
                 data: { id : id},
                 success: function(data){
-                    const letterContent = document.getElementById('letterContent');
-                    letterContent.innerHTML = `
-                        <iframe src="${data}" class="w-full h-[1000px] rounded-lg border border-gray-100" />
-                    `;
+                    window.open(data, '_blank');
                 },
                 error: function(data){
                     alert('Gagal memuat surat');
                 }
             });
-        }
-
-        function closeLetterModal() {
-            document.getElementById('letterModal').classList.add('hidden');
-            document.getElementById('letterModal').classList.remove('flex');
-            document.body.style.overflow = 'auto';
         }
 
         function verifyLetter(id) {
