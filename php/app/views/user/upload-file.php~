@@ -191,6 +191,7 @@
             }
         }
     });
+
     document.getElementById('uploadForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -235,18 +236,23 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    alert('File berhasil diunggah!'); // Tambahkan alert untuk sukses
                     responseMessage.textContent = data.message;
                     responseMessage.className = 'text-green-600';
+                    this.reset(); // Reset form setelah berhasil upload
                 } else {
+                    alert('File gagal diunggah. Coba lagi.'); // Tambahkan alert untuk error
                     responseMessage.textContent = data.message;
                     responseMessage.className = 'text-red-600';
                 }
             })
             .catch(error => {
+                alert('Terjadi kesalahan jaringan. Coba lagi.'); // Tambahkan alert untuk error jaringan
                 responseMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
                 responseMessage.className = 'text-red-600';
             });
     });
+
 
     const form = document.getElementById('uploadForm');
     const confirmationModal = document.getElementById('confirmationModal');
@@ -284,11 +290,13 @@
     // Jika pengguna membatalkan
     cancelButton.addEventListener('click', () => {
         confirmationModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
     });
 
     // Jika pengguna mengonfirmasi
     confirmButton.addEventListener('click', () => {
         confirmationModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
 
         // Kirim data setelah konfirmasi
         const formData = new FormData(form);
@@ -311,7 +319,6 @@
                 responseMessage.className = 'text-red-600';
             });
     });
-
 
 </script>
 </body>

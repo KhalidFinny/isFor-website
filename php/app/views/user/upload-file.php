@@ -191,6 +191,7 @@
             }
         }
     });
+
     document.getElementById('uploadForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -313,7 +314,6 @@
                 responseMessage.className = 'text-red-600';
             });
     });
-
 
 </script>
 </body>

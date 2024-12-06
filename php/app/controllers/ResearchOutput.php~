@@ -25,16 +25,52 @@ class ResearchOutput extends Controller
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
+
         if ($role == 1) {
             $this->saveLastVisitedPage();
-            $galleryModel = $this->model('ResearchOutputModel');
-            $images = $galleryModel->getPendingImages();
-//            echo '<pre>';
-//            print_r($images);
-//            echo '</pre>';
-            $this->view('admin/verifyImages', compact('images'));
+
+            $researchModel = $this->model('ResearchOutputModel');
+            $files = $researchModel->getPendingFiles();
+
+            // Tambahkan judul asli file ke dalam data
+            foreach ($files as &$file) {
+                if (isset($file['file_url']) && !empty($file['file_url'])) {
+                    // Ambil nama file lengkap (misal: '67532969ef71e.jpg')
+                    $fileNameWithExt = pathinfo(basename($file['file_url']), PATHINFO_BASENAME);
+
+                    // Tentukan jalur metadata
+                    $metaFilePath = __DIR__ . '/../files/meta/' . $fileNameWithExt . '.meta';
+
+                    // Cek keberadaan metadata
+                    if (file_exists($metaFilePath)) {
+                        $file['original_name'] = $this->getOriginalFileName($fileNameWithExt);
+                    } else {
+                        $file['original_name'] = 'Judul tidak ditemukan';
+                    }
+                } else {
+                    $file['original_name'] = 'File URL tidak valid';
+                }
+            }
+
+            $this->view('admin/verify-file', compact('files'));
         } else {
             header('Location: ' . $this->getLastVisitedPage());
+            exit;
+        }
+    }
+
+    private function getOriginalFileName($fileNameWithExt)
+    {
+        $metaDir = __DIR__ . '/../files/meta/';
+        $metaFilePath = $metaDir . $fileNameWithExt . '.meta';
+
+        // Debugging jalur metadata (opsional)
+        error_log("Accessing Metadata: $metaFilePath");
+
+        if (file_exists($metaFilePath)) {
+            return file_get_contents($metaFilePath);
+        } else {
+            return 'Judul tidak ditemukan';
         }
     }
 
@@ -52,17 +88,17 @@ class ResearchOutput extends Controller
 
             // Filter berdasarkan status
             if ($status === 'all') {
-                $images = $galleryModel->getImagesByUser($userId);
+                $files = $galleryModel->getFilesByUser($userId);
             } else {
-                $images = $galleryModel->getImagesByUserAndStatus($userId, $status);
+                $files = $galleryModel->getFilesByUserAndStatus($userId, $status);
             }
 
-            $totalImages = count($images);
+            $totalFiles = count($files);
 
-            $this->view('user/image-history', [
-                'totalImages' => $totalImages,
-                'images' => $images,
-                'selectedStatus' => $status  // Menggunakan 'selectedStatus' secara konsisten
+            $this->view('user/files-history', [
+                'totalFiles' => $totalFiles,
+                'files' => $files,
+                'selectedStatus' => $status
             ]);
         } else {
             header('Location: ' . $this->getLastVisitedPage());
@@ -92,10 +128,14 @@ class ResearchOutput extends Controller
             if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
                 $file = $_FILES['file'];
 
-                // Tentukan direktori tujuan
+                // Tentukan direktori tujuan untuk file dan metadata
                 $uploadDir = __DIR__ . '/../files/research_output/';
+                $metaDir = __DIR__ . '/../files/meta/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
+                }
+                if (!is_dir($metaDir)) {
+                    mkdir($metaDir, 0777, true);
                 }
 
                 // Dapatkan ekstensi file
@@ -106,9 +146,14 @@ class ResearchOutput extends Controller
                     // Nama file unik
                     $fileName = uniqid() . '.' . $fileExtension;
                     $filePath = $uploadDir . $fileName;
+                    $metaFilePath = $metaDir . $fileName . '.meta';
 
                     // Pindahkan file ke direktori tujuan
                     if (move_uploaded_file($file['tmp_name'], $filePath)) {
+                        // Simpan metadata (nama asli file)
+                        $originalName = $file['name'];
+                        file_put_contents($metaFilePath, $originalName);
+
                         // Simpan ke database
                         $researchModel = $this->model('ResearchOutputModel');
                         $saveSuccess = $researchModel->create(
@@ -123,7 +168,9 @@ class ResearchOutput extends Controller
                             $response['success'] = true;
                             $response['message'] = 'File berhasil diunggah.';
                         } else {
-                            unlink($filePath); // Hapus file jika gagal menyimpan ke database
+                            // Hapus file dan metadata jika gagal menyimpan ke database
+                            unlink($filePath);
+                            unlink($metaFilePath);
                             $response['message'] = 'Gagal menyimpan data ke database.';
                         }
                     } else {
@@ -142,7 +189,43 @@ class ResearchOutput extends Controller
         }
     }
 
+    public function verifyFile($id)
+    {
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
 
+        if ($role == 1) { // Pastikan hanya admin yang bisa memverifikasi
+            $model = $this->model("ResearchOutputModel");
+            $files = $model->getPendingFiles();
+            if ($model->updateStatus($id, 2)) { // Status 2 untuk verified
+                echo json_encode(['success' => true, 'message' => 'Image verified successfully.']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to verify image.']);
+            }
+        } else {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Unauthorized action.']);
+        }
+    }
 
+    public function rejectFile($id)
+    {
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
+
+        if ($role == 1) { // Pastikan hanya admin yang bisa menolak
+            $model = $this->model("ResearchOutputModel");
+            if ($model->updateStatus($id, 3)) { // Status 3 untuk rejected
+                echo json_encode(['success' => true, 'message' => 'Image rejected successfully.']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to reject image.']);
+            }
+        } else {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Unauthorized action.']);
+        }
+    }
 
 }

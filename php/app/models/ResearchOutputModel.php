@@ -41,7 +41,7 @@ class ResearchOutputModel
     }
 
     // Get pending research outputs
-    public function getPending()
+    public function getPendingFiles()
     {
         $query = "SELECT * FROM " . $this->table . " WHERE status = 1";
         $this->db->query($query);
@@ -100,7 +100,7 @@ class ResearchOutputModel
     }
 
     // Get research outputs by user
-    public function getByUser($userId)
+    public function getFilesByUser($userId)
     {
         $query = "SELECT * FROM " . $this->table . " WHERE uploaded_by = :uploaded_by ORDER BY uploaded_at DESC";
         $this->db->query($query);
@@ -109,7 +109,7 @@ class ResearchOutputModel
     }
 
     // Get research outputs by user and status
-    public function getByUserAndStatus($userId, $status)
+    public function getFilesByUserAndStatus($userId, $status)
     {
         $query = "SELECT * FROM " . $this->table . " WHERE uploaded_by = :uploaded_by AND status = :status";
         $this->db->query($query);
