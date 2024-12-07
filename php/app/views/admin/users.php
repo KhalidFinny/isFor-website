@@ -239,21 +239,24 @@
                         <div class="space-y-2">
                             <label for="name" class="block text-sm font-medium text-red-500">Nama Lengkap</label>
                             <input type="text" name="name" id="name" required
-                                   class="form-input w-full px-4 py-2.5 rounded-xl text-red-600"
+                                   class="form-input w-full px-4 py-2.5 rounded-xl text-gray-600 placeholder-gray-400
+                                          border-2 border-red-100 focus:border-red-500 focus:ring-0 transition-all duration-200"
                                    placeholder="Masukkan nama lengkap">
                         </div>
 
                         <div class="space-y-2">
                             <label for="email" class="block text-sm font-medium text-red-500">Email</label>
                             <input type="email" name="email" id="email" required
-                                   class="form-input w-full px-4 py-2.5 rounded-xl text-red-600"
+                                   class="form-input w-full px-4 py-2.5 rounded-xl text-gray-600 placeholder-gray-400
+                                          border-2 border-red-100 focus:border-red-500 focus:ring-0 transition-all duration-200"
                                    placeholder="Masukkan email">
                         </div>
 
                         <div class="space-y-2">
                             <label for="username" class="block text-sm font-medium text-red-500">Username</label>
                             <input type="text" name="username" id="username" required
-                                   class="form-input w-full px-4 py-2.5 rounded-xl text-red-600"
+                                   class="form-input w-full px-4 py-2.5 rounded-xl text-gray-600 placeholder-gray-400
+                                          border-2 border-red-100 focus:border-red-500 focus:ring-0 transition-all duration-200"
                                    placeholder="Masukkan username">
                         </div>
                     </div>
@@ -263,27 +266,37 @@
                         <div class="space-y-2">
                             <label for="password" class="block text-sm font-medium text-red-500">Password</label>
                             <input type="password" name="password" id="password" required
-                                   class="form-input w-full px-4 py-2.5 rounded-xl text-red-600"
+                                   class="form-input w-full px-4 py-2.5 rounded-xl text-gray-600 placeholder-gray-400
+                                          border-2 border-red-100 focus:border-red-500 focus:ring-0 transition-all duration-200"
                                    placeholder="Masukkan password">
                         </div>
 
                         <div class="space-y-2">
-                            <label for="role" class="block text-sm font-medium text-red-500">Peran</label>
-                            <select name="role" id="role"
-                                    class="form-input w-full px-4 py-2.5 rounded-xl text-red-600">
-                                <option value="1" class="text-red-600">Admin</option>
-                                <option value="2" class="text-red-600">Peneliti</option>
-                            </select>
+                            <label class="block text-sm font-medium text-red-500">Peran</label>
+                            <div class="px-4 py-2.5 rounded-xl bg-red-50 border-2 border-red-100 text-gray-600">
+                                <input type="hidden" name="role" value="2">
+                                Peneliti
+                            </div>
                         </div>
 
                         <div class="space-y-2">
                             <label for="profile_picture" class="block text-sm font-medium text-red-500">Foto Profil</label>
-                            <input type="file" name="profile_picture" id="profile_picture"
-                                   class="form-input w-full px-4 py-2.5 rounded-xl text-red-600 file:mr-4 file:py-2 file:px-4
-                                          file:rounded-full file:border-0
-                                          file:text-sm file:font-semibold
-                                          file:bg-red-50 file:text-red-700
-                                          hover:file:bg-red-100">
+                            <div class="relative">
+                                <input type="file" name="profile_picture" id="profile_picture"
+                                       class="hidden"
+                                       accept="image/*">
+                                <label for="profile_picture"
+                                       class="flex items-center justify-center w-full px-4 py-2.5 rounded-xl
+                                              border-2 border-dashed border-red-200 cursor-pointer
+                                              hover:border-red-400 hover:bg-red-50 transition-all duration-200
+                                              text-gray-500 hover:text-red-500">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    <span id="file-name">Pilih foto profil</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -339,6 +352,14 @@
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+
+        // Add file name display functionality
+        document.getElementById('profile_picture').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || 'Pilih foto profil';
+            document.getElementById('file-name').textContent = fileName;
+        });
     </script>
 </body>
 </html>
+
+</```rewritten_file>
