@@ -34,15 +34,15 @@
             <div class="max-w-4xl mx-auto">
                 <!-- Header -->
                 <div class="text-center mb-12">
-                        <span class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
+                        <span class="inline-block px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
                             Pengajuan
                         </span>
-                    <h1 class="text-4xl font-bold text-blue-900">
+                    <h1 class="text-4xl font-bold text-red-900">
                         Upload File
                     </h1>
                 </div>
                 <!-- Form Section -->
-                <div class="bg-white rounded-2xl border-2 border-blue-100 p-8">
+                <div class="bg-white rounded-2xl border-2 border-red-100 p-8">
                     <form id="uploadForm" action="<?= BASEURL; ?>/researchoutput/uploadFile" method="POST"
                           enctype="multipart/form-data">
                         <div class="space-y-6">
@@ -52,7 +52,7 @@
                                     Judul File
                                 </label>
                                 <input type="text" id="fileTitle" name="fileTitle" required
-                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                        placeholder="Masukkan judul file">
                             </div>
 
@@ -62,7 +62,7 @@
                                     Kategori
                                 </label>
                                 <select id="category" name="category" required
-                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                     <option value="">Pilih Kategori</option>
                                     <option value="event">Event</option>
                                     <option value="research">Penelitian</option>
@@ -77,7 +77,7 @@
                                     Deskripsi
                                 </label>
                                 <textarea id="description" name="description" rows="4" required
-                                          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                           placeholder="Jelaskan secara singkat tentang file yang diupload"></textarea>
                             </div>
 
@@ -95,7 +95,7 @@
                                         </svg>
                                         <div class="flex text-sm text-gray-600">
                                             <label for="file-upload"
-                                                   class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                                   class="relative cursor-pointer bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-red-500">
                                                 <span>Upload a file</span>
                                                 <input id="file-upload" name="file" type="file"
                                                        accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx,.xlsx"
@@ -124,7 +124,7 @@
                             <!-- Submit Button -->
                             <div class="flex justify-end">
                                 <button type="submit"
-                                        class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                        class="px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                                     Upload File
                                 </button>
                             </div>
@@ -151,7 +151,7 @@
                         Batal
                     </button>
                     <button id="confirmButton"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                         Oke
                     </button>
                 </div>

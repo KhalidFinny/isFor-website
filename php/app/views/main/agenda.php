@@ -26,12 +26,12 @@ session_start();
         
         .number-label {
             font-family: 'Space Grotesk', sans-serif;
-            color: #E5E7EB;
+            color: #EBE5E7;
             transition: color 0.3s ease;
         }
         
         .agenda-item:hover .number-label {
-            color: #93C5FD;
+            color: #EF4444;
         }
     </style>
     <title>Agenda - IsFor Internet of Things For Human Life's</title>
@@ -45,13 +45,13 @@ session_start();
     <div class="container mx-auto px-6 max-w-4xl">
         <!-- Header -->
         <div class="mb-20">
-            <span class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
+            <span class="inline-block px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
                 Agenda Riset
             </span>
-            <h2 class="text-5xl font-bold mb-6 text-blue-900">
+            <h2 class="text-5xl font-bold mb-6 text-red-900">
                 Fokus Penelitian
             </h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-blue-600 to-blue-800 rounded-full"></div>
+            <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-red-800 rounded-full"></div>
         </div>
 
         <!-- Agenda Items -->
@@ -94,12 +94,12 @@ session_start();
                 foreach ($agendaTopics as $topic){
                     ?>
                     <div class="agenda-item group">
-                        <div class="flex items-start space-x-8 p-8 border-2 border-gray-100 hover:border-blue-200 transition-all duration-300">
+                        <div class="flex items-start space-x-8 p-8 border-2 border-gray-100 hover:border-red-200 transition-all duration-300">
                             <div class="number-label text-6xl font-bold leading-none">
                                 <?php echo $topic['number']; ?>
                             </div>
                             <div class="flex-1 pt-2">
-                                <h3 class="text-2xl font-bold text-blue-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                                <h3 class="text-2xl font-bold text-red-900 mb-3 group-hover:text-red-600 transition-colors duration-300">
                                     <?php echo $topic['title']; ?>
                                 </h3>
                                 <p class="text-gray-600 leading-relaxed">
@@ -114,16 +114,16 @@ session_start();
                 foreach ($data['agenda'] as $topic):
                     ?>
                     <div class="agenda-item group">
-                        <div class="flex items-start space-x-8 p-8 border-2 border-gray-100 hover:border-blue-200 transition-all duration-300">
+                        <div class="flex items-start space-x-8 p-8 border-2 border-gray-100 hover:border-red-200 transition-all duration-300">
                             <div class="number-label text-6xl font-bold leading-none">
                                 <?php echo $data['no']++; ?>
                             </div>
                             <div class="flex-1 pt-2">
-                                <h3 class="text-2xl font-bold text-blue-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                                <h3 class="text-2xl font-bold text-red-900 mb-3 group-hover:text-red-600 transition-colors duration-300">
                                     <?php echo $topic['title']; ?>
                                 </h3>
                                 <p class="text-gray-600 leading-relaxed">
-                                    <?php echo $topic['deskripsi']; ?>
+                                    <?php echo $topic['description']; ?>
                                 </p>
                             </div>
                         </div>

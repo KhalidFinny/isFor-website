@@ -13,7 +13,7 @@ define('FILES', 'http://localhost/IsFor-website/php/app/files/research_output');
 //define('DB_PASS', 'Password123');
 //define('DB_NAME', 'master');
 
-define('DB_HOST', 'localhost');
-define('DB_USER', '');
-define('DB_PASS', '');
+define('DB_HOST', '192.168.72.223');
+define('DB_USER', 'sa');
+define('DB_PASS', 'MySecureDB#456');
 define('DB_NAME', 'isfor_database');

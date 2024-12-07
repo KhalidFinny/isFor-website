@@ -47,36 +47,54 @@
 </head>
 
 <body class="bg-gray-50">
-    <!-- Layout utama dengan sidebar -->
-    <div class="flex min-h-screen bg-white">
-        <!-- Sidebar admin -->
-        <?php include '../app/views/assets/components/AdminDashboard/sidebar.php';?>
-
-        <!-- Konten utama -->
-        <div class="flex-1 ml-64 page-content">
-            <main class="p-8 max-w-[1600px] mx-auto">
-                <!-- Header dengan desain Swiss -->
-                <div class="max-w-7xl mx-auto mb-12 fade-in">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <span class="h-px w-12 bg-red-600"></span>
-                        <span class="text-red-600 font-medium">Files</span>
-                    </div>
-                    <h1 class="text-5xl font-bold text-red-900 mb-2">Verifikasi File</h1>
+<div class="flex">
+    <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
+    <div class="flex-1 min-h-screen ml-64">
+        <main class="py-10 px-8">
+            <!-- Header -->
+            <div class="max-w-7xl mx-auto mb-12">
+                <div class="flex items-center space-x-4 mb-4">
+                    <span class="h-px w-12 bg-red-600"></span>
+                    <span class="text-red-600 font-medium">Verifikasi</span>
                 </div>
+                <h1 class="text-4xl font-bold text-red-900">
+                    Verifikasi
+                </h1>
+            </div>
 
-                <!-- Grid untuk menampilkan file -->
-                <div class="grid grid-cols-2 gap-8">
-                    <?php if (empty($data['files'])): ?>
-                        <!-- Tampilan saat tidak ada file -->
-                        <div class="col-span-2">
-                            <div class="flex flex-col items-center justify-center">
-                                <!-- Ikon dengan animasi ping -->
-                                <div class="w-20 h-20 border-2 border-red-200 rounded-full flex items-center justify-center mb-6 relative">
-                                    <div class="absolute inset-0 border-2 border-green-200 rounded-full animate-ping opacity-100"></div>
-                                    <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
+            <!-- Images Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php if (empty($data['files'])): ?>
+                    <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-red-100">
+
+                        <p class="mt-4 text-lg text-red-900">Belum ada file yang perlu diverifikasi</p>
+                        <p class="text-sm text-gray-500">Gambar yang membutuhkan verifikasi akan muncul di sini</p>
+                    </div>
+                <?php else: ?>
+                    <?php foreach ($data['files'] as $files): ?>
+                        <div class="image-card bg-white rounded-2xl border-2 border-red-100 overflow-hidden">
+                            <div class="p-6">
+                                <h3 class="text-lg font-semibold text-red-900 mb-2"><?= htmlspecialchars($files['title']); ?></h3>
+
+                                <!-- Preview File -->
+                                <p class="text-sm text-gray-500 mb-4">
+                                    Nama file:
+                                    <a href="<?= FILES; ?>/<?= htmlspecialchars($files['file_url']); ?>"
+                                       target="_blank"
+                                       class="text-red-600 hover:underline">
+                                        <?= htmlspecialchars($files['original_name']); ?>
+                                    </a>
+                                </p>
+
+                                <div class="flex items-center justify-between mt-4">
+                                    <button onclick="verifyFile(<?= $files['research_output_id']; ?>)"
+                                            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                                        Verifikasi
+                                    </button>
+                                    <button onclick="rejectFile(<?= $files['research_output_id']; ?>)"
+                                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                                        Tolak
+                                    </button>
                                 </div>
                                 <!-- Pesan empty state -->
                                 <h3 class="text-xl font-medium text-red-900 mb-2">Tidak Ada File</h3>
@@ -128,44 +146,21 @@ $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif']);
                                     </span>
                                 </div>
 
-                                <!-- Informasi file dan tombol aksi -->
-                                <div class="p-6">
-                                    <!-- ID File -->
-                                    <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
-                                        </svg>
-                                        <span class="font-mono">ID: <?=str_pad($file['research_output_id'], 4, '0', STR_PAD_LEFT);?></span>
-                                    </div>
-
-                                    <!-- Judul file -->
-                                    <h3 class="text-xl font-semibold text-red-900 mb-4"><?=$file['title'];?></h3>
-
-                                    <!-- Tombol-tombol aksi -->
-                                    <div class="grid grid-cols-4 gap-3">
-                                        <!-- Tombol preview -->
-                                        <button onclick="previewFile('<?=FILES?>/<?=$file['file_url']?>')"
-                                                class="btn-hover-effect flex items-center justify-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-all">
-                                            Preview
-                                        </button>
-                                        <!-- Tombol download -->
-                                        <a href="<?=FILES?>/<?=$file['file_url']?>"
-                                           download="<?=$file['original_name']?>"
-                                           class="btn-hover-effect flex items-center justify-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-all">
-                                            Download
-                                        </a>
-                                        <!-- Tombol verifikasi -->
-                                        <button onclick="verifyFile(<?=$file['research_output_id'];?>)"
-                                                class="btn-hover-effect flex items-center justify-center px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all col-span-2">
-                                            Verifikasi
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach;?>
-                    <?php endif;?>
-                </div>
-            </main>
+<!-- Image Preview Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
+    <div class="max-w-4xl w-full mx-4">
+        <div class="bg-white rounded-2xl overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b border-red-100">
+                <h3 class="text-xl font-bold text-red-900">Preview Gambar</h3>
+                <button onclick="closeImageModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <img id="previewImage" src="" alt="Preview" class="max-w-full h-auto rounded-lg">
+            </div>
         </div>
     </div>
 
