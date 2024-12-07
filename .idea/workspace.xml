@@ -6,12 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/manage-agenda.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/config/config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Roadmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Roadmap.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/editUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/manage-agenda.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/manage-agenda.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/manage-roadmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/manage-roadmap.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/verifyLetters.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verifyLetters.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/AdminDashboard/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/AdminDashboard/sidebar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/UserDashboard/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/UserDashboard/sidebar.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +95,7 @@
       <workItem from="1733475103373" duration="2051000" />
       <workItem from="1733490301743" duration="15368000" />
       <workItem from="1733538592486" duration="8355000" />
-      <workItem from="1733549943233" duration="1395000" />
+      <workItem from="1733549943233" duration="3607000" />
     </task>
     <servers />
   </component>

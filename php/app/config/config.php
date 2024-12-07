@@ -8,12 +8,12 @@ define('LETTER', 'http://localhost/IsFor-website/php/app/letters');
 define('GALLERY', 'http://localhost/IsFor-website/php/app/img/gallery');
 define('FILES', 'http://localhost/IsFor-website/php/app/files/research_output');
 
-define('DB_HOST', '192.168.72.248');
-define('DB_USER', 'sa');
-define('DB_PASS', 'MySecureDB#456');
-define('DB_NAME', 'isfor_database');
-
-//define('DB_HOST', 'localhost');
-//define('DB_USER', '');
-//define('DB_PASS', '');
+//define('DB_HOST', '192.168.68.155');
+//define('DB_USER', 'sa');
+//define('DB_PASS', 'MySecureDB#456');
 //define('DB_NAME', 'isfor_database');
+
+define('DB_HOST', 'localhost');
+define('DB_USER', '');
+define('DB_PASS', '');
+define('DB_NAME', 'isfor_database');
