@@ -101,6 +101,48 @@
                 <!-- Roadmap Grid -->
                 <div class="grid gap-8" id="roadmapContent">
                     <!-- Will be populated by JavaScript -->
+                    <?php if(!empty($data['roadmaps'])) :?>
+                        <?php foreach($data['roadmaps'] as $periode => $categories) : ?>
+                        <div class="bg-white rounded-2xl border-2 border-red-100 overflow-hidden fade-in mb-8">
+                            <div class="p-6 border-b border-red-100 flex justify-between items-center">
+                                <h2 class="text-xl font-semibold text-red-800">Periode <?= $periode ?></h2>
+                                <div class="flex space-x-2">
+                                    <button onclick="editRoadmap('<?= $periode ?>')" class="p-2 text-gray-600 hover:text-red-600 rounded-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                    </button>
+                                    <button onclick="deleteRoadmap('<?= $periode ?>')" class="p-2 text-gray-600 hover:text-red-600 rounded-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-8">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    <?php foreach($categories as $category => $topics): ?>
+                                        <div class="category-card bg-white p-6 rounded-xl border-2 border-red-50">
+                                            <h3 class="text-lg font-semibold text-gray-900 mb-4"><?= $category ?></h3>
+                                            <?php foreach ($topics as $topic): ?>
+                                                <ul class="space-y-3">
+                                                    <li class="flex items-start space-x-2 text-gray-600 text-sm">
+                                                        <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                        </svg>
+                                                        <span><?= $topic ?></span>
+                                                    </li>
+                                                </ul>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endforeach ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </main>
         </div>
@@ -117,7 +159,7 @@
             </button>
         </div>
         
-        <form id="roadmapForm" class="flex gap-4 h-[70vh]">
+        <form id="roadmapForm" class="flex gap-4 h-[70vh]" action="<?= BASEURL ?>/roadmap/addRoadmap" method="POST">
             <!-- Left Side - Years -->
             <div class="w-[200px] flex-shrink-0">
                 <div class="space-y-3">
@@ -270,52 +312,6 @@
 
         let currentId = null;
         let categoryCounter = 0;
-        function renderRoadmap() {
-            const container = document.getElementById('roadmapContent');
-            container.innerHTML = roadmaps.map((period, index) => `
-                <div class="bg-white rounded-2xl border-2 border-red-100 overflow-hidden fade-in mb-8">
-                    <div class="p-6 border-b border-red-100 flex justify-between items-center">
-                        <h2 class="text-xl font-semibold text-red-800">Periode ${period.year_start} - ${period.year_end}</h2>
-                        <div class="flex space-x-2">
-                            <button onclick="editRoadmap(${period.id})" 
-                                    class="p-2 text-gray-600 hover:text-red-600 rounded-lg">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                </svg>
-                            </button>
-                            <button onclick="deleteRoadmap(${period.id})" 
-                                    class="p-2 text-gray-600 hover:text-red-600 rounded-lg">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            ${Object.entries(period.categories).map(([category, topics]) => `
-                                <div class="category-card bg-white p-6 rounded-xl border-2 border-red-50">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">${category}</h3>
-                                    <ul class="space-y-3">
-                                        ${topics.map(topic => `
-                                            <li class="flex items-start space-x-2 text-gray-600 text-sm">
-                                                <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                                </svg>
-                                                <span>${topic}</span>
-                                            </li>
-                                        `).join('')}
-                                    </ul>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
         function showAddModal() {
             currentId = null;
             document.getElementById('modalTitle').textContent = 'Tambah Periode Roadmap';
@@ -379,69 +375,115 @@
             topicsContainer.appendChild(topicInput);
         }
 
-        function editRoadmap(id) {
-            currentId = id;
-            const roadmap = roadmaps.find(r => r.id === id);
+        function editRoadmap(periode) {
+            showAddModal();
+            document.getElementById('modalTitle').textContent = 'Edit Periode Roadmap';
+            const form = document.getElementById('roadmapForm');
             
-            if (roadmap) {
-                document.getElementById('modalTitle').textContent = 'Edit Periode Roadmap';
-                const form = document.getElementById('roadmapForm');
-                form.year_start.value = roadmap.year_start;
-                form.year_end.value = roadmap.year_end;
-                
-                // Clear and populate categories
-                const categoriesContainer = document.getElementById('categoriesContainer');
-                categoriesContainer.innerHTML = '';
-                
-                Object.entries(roadmap.categories).forEach(([category, topics]) => {
-                    const categoryId = categoryCounter++;
-                    const categoryDiv = document.createElement('div');
-                    categoryDiv.className = 'border-2 border-red-50 rounded-xl p-4 space-y-4';
-                    categoryDiv.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <input type="text" name="category_${categoryId}" value="${category}"
-                                   class="w-2/3 px-4 py-2 border-2 border-red-100 rounded-xl form-input">
-                            <button type="button" onclick="this.closest('.border-2').remove()" 
-                                    class="text-red-600 hover:text-red-700">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="topics-${categoryId}">
-                                ${topics.map((topic, index) => `
-                                    <input type="text" name="topic_${categoryId}_${index}" value="${topic}"
-                                           class="w-full px-4 py-2 border-2 border-red-100 rounded-xl form-input mb-2">
-                                `).join('')}
-                            </div>
-                            <button type="button" onclick="addTopic(${categoryId})" 
-                                    class="text-sm text-red-600 hover:text-red-700 flex items-center space-x-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                </svg>
-                                <span>Tambah Topik</span>
-                            </button>
-                        </div>
-                    `;
-                    categoriesContainer.appendChild(categoryDiv);
-                });
-                
-                document.getElementById('roadmapModal').classList.remove('hidden');
-                document.getElementById('roadmapModal').classList.add('flex');
-            }
-        }
+            form.action = `<?= BASEURL ?>/roadmap/editRoadmap`;
 
-        function deleteRoadmap(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus periode roadmap ini?')) {
-                roadmaps = roadmaps.filter(r => r.id !== id);
-                renderRoadmap();
+                $.ajax({
+                    url: '<?= BASEURL ?>/roadmap/getUpdate',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: { periode: periode },
+                    success: function(response) {
+                        // console.log(response);
+
+                        const roadmaps = (response) => {
+                            // Ambil `year_start` dan `year_end` dari data pertama
+                            const year_start = response[0]?.year_start;
+                            const year_end = response[0]?.year_end;
+
+                            // Kelompokkan topik berdasarkan kategori
+                            const categories = response.reduce((acc, item) => {
+                                if (!acc[item.category]) {
+                                    acc[item.category] = [];
+                                }
+                                acc[item.category].push(item.topic);
+                                return acc;
+                            }, {});
+
+                            // Gabungkan hasil
+                            return { year_start, year_end, categories };
+                        };
+
+                        // Hasil akhir
+                        const result = roadmaps(response);
+
+                        console.log(result);
+
+                        form.year_start.value = result.year_start;
+                        form.year_end.value = result.year_end;
+                        
+                        // Clear and populate categories
+                        const categoriesContainer = document.getElementById('categoriesContainer');
+                        categoriesContainer.innerHTML = '';
+                        
+                        Object.entries(result.categories).forEach(([category, topics]) => {
+                            const categoryId = categoryCounter++;
+                            const categoryDiv = document.createElement('div');
+                            categoryDiv.className = 'border-2 border-red-50 rounded-xl p-4 space-y-4';
+                            categoryDiv.innerHTML = `
+                                <div class="flex justify-between items-center">
+                                    <input type="text" name="category_${categoryId}" value="${category}"
+                                        class="w-2/3 px-4 py-2 border-2 border-red-100 rounded-xl form-input">
+                                    <button type="button" onclick="this.closest('.border-2').remove()" 
+                                            class="text-red-600 hover:text-red-700">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="topics-${categoryId}">
+                                        ${topics.map((topic, index) => `
+                                            <input type="text" name="topic_${categoryId}_${index}" value="${topic}"
+                                                class="w-full px-4 py-2 border-2 border-red-100 rounded-xl form-input mb-2">
+                                        `).join('')}
+                                    </div>
+                                    <button type="button" onclick="addTopic(${categoryId})" 
+                                            class="text-sm text-red-600 hover:text-red-700 flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                        <span>Tambah Topik</span>
+                                    </button>
+                                </div>
+                            `;
+                            categoriesContainer.appendChild(categoryDiv);
+                        });
+                        
+                        document.getElementById('roadmapModal').classList.remove('hidden');
+                        document.getElementById('roadmapModal').classList.add('flex');
+                    },
+                    error: function(response) {
+                        alert('Gagal memperbarui status surat');
+                    }
+                });
+            }
+
+        function deleteRoadmap(periode) {
+            if(confirm('Apakah Anda yakin ingin menghapus periode roadmap ini?')){
+                $.ajax({
+                    url: '<?= BASEURL ?>/roadmap/delete',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: { periode: periode },
+                    success: function(response){
+                            alert(response.status);
+                            location.reload();
+                    },
+                    error: function(response){
+                        alert('Gagal memperbarui status surat');
+                    }
+                });
             }
         }
 
         // Form submission handler
         document.getElementById('roadmapForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            // e.preventDefault();
             
             const formData = {
                 id: currentId || roadmaps.length + 1,
@@ -478,5 +520,6 @@
         // Initial render
         document.addEventListener('DOMContentLoaded', renderRoadmap);
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
