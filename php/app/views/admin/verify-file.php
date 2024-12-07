@@ -78,6 +78,37 @@
             position: relative;
             overflow: hidden;
         }
+
+        /* Modal styles */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            transform: translateY(-20px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        /* Alert styles */
+        .alert {
+            transform: translateY(-100%);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .alert.active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -180,97 +211,137 @@
     </div>
 </div>
 
-<script>
-    // Fungsi untuk menunjukkan modal pesan
-    function showModalMessage(title, message, isSuccess = true) {
-        const modal = document.getElementById('messageModal');
-        const modalTitle = modal.querySelector('.modal-title');
-        const modalBody = modal.querySelector('.modal-body');
-        const modalHeader = modal.querySelector('.modal-header');
-
-        modalTitle.textContent = title;
-        modalBody.textContent = message;
-
-        // Tambahkan styling berdasarkan keberhasilan/gagal
-        if (isSuccess) {
-            modalHeader.classList.add('bg-green-500', 'text-white');
-            modalHeader.classList.remove('bg-red-500');
-        } else {
-            modalHeader.classList.add('bg-red-500', 'text-white');
-            modalHeader.classList.remove('bg-green-500');
-        }
-
-        // Tampilkan modal
-        modal.classList.remove('hidden');
-    }
-
-    // Fungsi untuk menyembunyikan modal
-    function hideModal() {
-        const modal = document.getElementById('messageModal');
-        modal.classList.add('hidden');
-    }
-
-    // Fungsi untuk verifikasi file
-    async function verifyFile(id) {
-        try {
-            const response = await fetch(`<?= BASEURL; ?>/researchoutput/verifyFile/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const data = await response.json();
-
-            if (data.success) {
-                showModalMessage('Sukses!', 'File berhasil diverifikasi.');
-                setTimeout(() => location.reload(), 2000);
-            } else {
-                showModalMessage('Gagal', `Gagal memverifikasi file: ${data.message}`, false);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            showModalMessage('Error', 'Terjadi kesalahan saat memverifikasi file.', false);
-        }
-    }
-
-    // Fungsi untuk menolak file
-    async function rejectFile(id) {
-        try {
-            const response = await fetch(`<?= BASEURL; ?>/researchoutput/rejectFile/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const data = await response.json();
-
-            if (data.success) {
-                showModalMessage('Sukses!', 'File berhasil ditolak.');
-                setTimeout(() => location.reload(), 2000);
-            } else {
-                showModalMessage('Gagal', `Gagal menolak file: ${data.message}`, false);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            showModalMessage('Error', 'Terjadi kesalahan saat menolak file.', false);
-        }
-    }
-</script>
-
-<!-- Modal untuk pesan -->
-<div id="messageModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white rounded-lg shadow-lg w-1/3">
-        <div class="modal-header px-4 py-2 border-b">
-            <h3 class="modal-title text-lg font-semibold"></h3>
-        </div>
-        <div class="modal-body px-4 py-4 text-gray-700"></div>
-        <div class="modal-footer px-4 py-2 text-right">
-            <button onclick="hideModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
-                Tutup
-            </button>
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="modal-content bg-white rounded-xl shadow-xl max-w-md w-full mx-4 overflow-hidden">
+        <div class="p-6">
+            <div class="mb-4 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Konfirmasi Aksi</h3>
+                <p class="text-sm text-gray-500 mt-2" id="modalMessage">Apakah Anda yakin ingin melakukan aksi ini?</p>
+            </div>
+            <div class="flex gap-3">
+                <button id="confirmButton"
+                        class="flex-1 justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                    Konfirmasi
+                </button>
+                <button onclick="closeModal()"
+                        class="flex-1 justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Batal
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Alert Component -->
+<div id="alert"
+     class="alert fixed top-4 right-4 max-w-sm bg-white rounded-lg shadow-lg border-l-4 border-green-500 p-4 hidden">
+    <div class="flex items-center">
+        <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <div class="ml-3">
+            <p class="text-sm font-medium text-gray-900" id="alertMessage"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentFileId = null;
+    let currentAction = null;
+
+    function showModal(fileId, action, title, message) {
+        currentFileId = fileId;
+        currentAction = action;
+
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalMessage').textContent = message;
+        document.getElementById('confirmationModal').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('confirmationModal').classList.remove('active');
+    }
+
+    function showAlert(message, type = 'success') {
+        const alert = document.getElementById('alert');
+        const alertMessage = document.getElementById('alertMessage');
+
+        alert.classList.remove('hidden');
+        alert.classList.add('active');
+        alertMessage.textContent = message;
+
+        // Auto hide after 3 seconds
+        setTimeout(() => {
+            alert.classList.remove('active');
+            setTimeout(() => alert.classList.add('hidden'), 300);
+        }, 3000);
+    }
+
+    function verifyFile(fileId) {
+        showModal(
+            fileId,
+            'verify',
+            'Konfirmasi Verifikasi',
+            'Apakah Anda yakin ingin memverifikasi file ini?'
+        );
+    }
+
+    function rejectFile(fileId) {
+        showModal(
+            fileId,
+            'reject',
+            'Konfirmasi Penolakan',
+            'Apakah Anda yakin ingin menolak file ini?'
+        );
+    }
+
+    // Add event listener for confirm button
+    document.getElementById('confirmButton').addEventListener('click', async () => {
+        if (!currentFileId || !currentAction) return;
+
+        let endpoint = currentAction === 'verify'
+            ? `<?= BASEURL; ?>/researchoutput/verifyFile/${currentFileId}`
+            : `<?= BASEURL; ?>/researchoutput/rejectFile/${currentFileId}`;
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({fileId: currentFileId})
+            });
+
+            if (response.ok) {
+                showAlert(
+                    currentAction === 'verify'
+                        ? 'File berhasil diverifikasi!'
+                        : 'File berhasil ditolak!'
+                );
+
+                // Hapus elemen file dari UI
+                const fileCard = document.querySelector(`[data-file-id="${currentFileId}"]`);
+                if (fileCard) {
+                    fileCard.style.opacity = '0';
+                    setTimeout(() => fileCard.remove(), 300);
+                }
+            } else {
+                throw new Error('Gagal memproses permintaan.');
+            }
+        } catch (error) {
+            showAlert('Terjadi kesalahan. Silakan coba lagi.', 'error');
+        }
+        closeModal();
+    });
+</script>
 </body>
 </html>
