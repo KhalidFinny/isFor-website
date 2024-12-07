@@ -86,7 +86,12 @@ class ResearchOutputModel
         $this->db->query($query);
         $this->db->bind(':status', $status);
         $this->db->bind(':id', $id);
-        return $this->db->execute();
+        try {
+            $this->db->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 
     // Count research outputs by user

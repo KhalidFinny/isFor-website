@@ -119,6 +119,25 @@
     </div>
 </div>
 
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
+    <div class="max-w-md w-full mx-4 bg-white rounded-2xl overflow-hidden">
+        <div class="p-6">
+            <h3 id="confirmationMessage" class="text-lg font-semibold text-blue-900 mb-4">Apakah Anda yakin?</h3>
+            <div class="flex justify-end space-x-4">
+                <button onclick="closeConfirmationModal()"
+                        class="px-4 py-2 bg-gray-300 text-gray-900 rounded hover:bg-gray-400">
+                    Batal
+                </button>
+                <button id="confirmActionButton"
+                        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                    Ya
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function viewImage(url) {
         document.getElementById('previewImage').src = url;
@@ -131,50 +150,87 @@
         document.getElementById('imageModal').classList.remove('flex');
     }
 
+    let actionToConfirm = null; // Variable untuk menyimpan action sementara
+    let actionId = null; // Variable untuk menyimpan ID sementara
+
+    function showConfirmationModal(message, action, id) {
+        document.getElementById('confirmationMessage').textContent = message;
+        actionToConfirm = action;
+        actionId = id;
+        document.getElementById('confirmationModal').classList.remove('hidden');
+        document.getElementById('confirmationModal').classList.add('flex');
+    }
+
+    function closeConfirmationModal() {
+        document.getElementById('confirmationModal').classList.add('hidden');
+        document.getElementById('confirmationModal').classList.remove('flex');
+        actionToConfirm = null;
+        actionId = null;
+    }
+
+    document.getElementById('confirmActionButton').onclick = function () {
+        if (actionToConfirm && actionId) {
+            actionToConfirm(actionId);
+        }
+        closeConfirmationModal();
+    };
+
     function verifyFile(id) {
-        fetch(`<?= BASEURL; ?>/researchoutput/verifyFile/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
+        showConfirmationModal(
+            "Apakah Anda yakin ingin memverifikasi file ini?",
+            function (id) {
+                fetch(`<?= BASEURL; ?>/researchoutput/verifyFile/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Gambar berhasil diverifikasi');
+                            location.reload();
+                        } else {
+                            alert('Gagal memverifikasi gambar: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat memverifikasi gambar.');
+                    });
             },
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Gambar berhasil diverifikasi');
-                    location.reload();
-                } else {
-                    alert('Gagal memverifikasi gambar: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat memverifikasi gambar.');
-            });
+            id
+        );
     }
 
     function rejectFile(id) {
-        fetch(`<?= BASEURL; ?>/researchoutput/rejectFile/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
+        showConfirmationModal(
+            "Apakah Anda yakin ingin menolak file ini?",
+            function (id) {
+                fetch(`<?= BASEURL; ?>/researchoutput/rejectFile/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('File berhasil ditolak');
+                            location.reload();
+                        } else {
+                            alert('Gagal menolak File: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat menolak File.');
+                    });
             },
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Filwberhasil ditolak');
-                    location.reload();
-                } else {
-                    alert('Gagal menolak File: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat menolak File.');
-            });
-
+            id
+        );
     }
+
 </script>
 </body>
 </html> 
