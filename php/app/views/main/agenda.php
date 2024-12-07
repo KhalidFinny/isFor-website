@@ -123,7 +123,7 @@ session_start();
                                     <?php echo $topic['title']; ?>
                                 </h3>
                                 <p class="text-gray-600 leading-relaxed">
-                                    <?php echo $topic['deskripsi']; ?>
+                                    <?php echo $topic['description']; ?>
                                 </p>
                             </div>
                         </div>
