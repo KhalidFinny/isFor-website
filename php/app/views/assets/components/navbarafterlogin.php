@@ -147,10 +147,10 @@
                             ${item.name}
                         </button>
                         <div class="pl-4 space-y-1">
-                            ${item.dropdownItems.map(dropItem => `<a href="${dropItem.href}" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md">${dropItem.name}</a>`).join('')}
+                            ${item.dropdownItems.map(dropItem => `<a href="${dropItem.href}" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-md">${dropItem.name}</a>`).join('')}
                         </div>
                     ` : `
-                        <a href="${item.href}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md">${item.name}</a>
+                        <a href="${item.href}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md">${item.name}</a>
                     `}
                 `;
                 mobileNavContainer.appendChild(mobileNavItem);
@@ -161,19 +161,87 @@
             userMenuItems.forEach(menuItem => {
                 const userMenuItem = document.createElement('a');
                 userMenuItem.href = menuItem.href;
-                userMenuItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors';
+                userMenuItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-600 transition-colors';
                 userMenuItem.textContent = menuItem.name;
                 userMenuContainer.appendChild(userMenuItem);
 
                 const mobileUserMenuItem = document.createElement('a');
                 mobileUserMenuItem.href = menuItem.href;
-                mobileUserMenuItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors';
+                mobileUserMenuItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-600 transition-colors';
                 mobileUserMenuItem.textContent = menuItem.name;
                 mobileUserMenuContainer.appendChild(mobileUserMenuItem);
             });
         };
 
         document.addEventListener('DOMContentLoaded', renderNavItems);
+        
+        // Update back/forward navigation handling
+        window.addEventListener('popstate', (event) => {
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('agenda.php') || 
+                currentPath.includes('hasilpenelitian.php') || 
+                currentPath.includes('galeriweb.php')) {
+                window.location.href = '<?=BASEURL?>'; // Redirect to beranda
+            } else if (document.referrer.includes('loginpage.php')) {
+                window.location.reload();
+            }
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+
+                    // Update URL without page reload
+                    history.pushState(null, '', targetId);
+                }
+            });
+        });
+
+        // Handle back/forward navigation
+        window.addEventListener('popstate', (event) => {
+            if (document.referrer.includes('loginpage.php')) {
+                window.location.reload();
+            }
+        });
+
+        // Handle login button click
+        const loginButtons = document.querySelectorAll('a[href*="loginpage.php"]');
+        loginButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.classList.add('fade-exit-active');
+                setTimeout(() => {
+                    window.location.href = button.href;
+                }, 300);
+            });
+        });
+
+    // Add after existing code
+    const handleNavigation = e => {
+        const link = e.currentTarget;
+        if (!link.href.startsWith('#')) {
+            e.preventDefault();
+            document.body.classList.add('opacity-0');
+            setTimeout(() => {
+                window.location.href = link.href;
+            }, 300);
+        }
+    };
+
+    // Update the renderNavItems function to add transition handlers
+    document.querySelectorAll('a:not([href^="#"])').forEach(link => {
+        link.addEventListener('click', handleNavigation);
+    });
     </script>
 </body>
 </html>

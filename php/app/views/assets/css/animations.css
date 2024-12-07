@@ -131,3 +131,14 @@
                 transform: translateY(0);
             }
         }
+
+        /* Update animation classes */
+        .fade-in {
+            -webkit-animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .slide-up {
+            -webkit-animation: slideUp 0.5s ease-out forwards;
+            animation: slideUp 0.5s ease-out forwards;
+        }

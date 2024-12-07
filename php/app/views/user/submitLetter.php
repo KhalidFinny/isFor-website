@@ -17,16 +17,16 @@
             <div class="max-w-4xl mx-auto">
                 <!-- Header -->
                 <div class="text-center mb-12">
-                        <span class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
+                        <span class="inline-block px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
                             Pengajuan
                         </span>
-                    <h1 class="text-4xl font-bold text-blue-900">
+                    <h1 class="text-4xl font-bold text-red-900">
                         Surat Rekomendasi Pusat Riset
                     </h1>
                 </div>
 
                 <!-- Form Section -->
-                <div class="bg-white rounded-2xl border-2 border-blue-100 p-8">
+                <div class="bg-white rounded-2xl border-2 border-red-100 p-8">
                     <form action="<?= BASEURL ?>/letter/sendletter" method="POST" id="letterForm">
                         <input type="hidden" name="user_id" value="<?= $_SESSION["user_id"] ?>">
                         <input type="hidden" name="letterType" value="research_recommendation">
@@ -37,7 +37,7 @@
                                     Judul Penelitian
                                 </label>
                                 <input type="text" id="researchTitle" name="researchTitle" required
-                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                        placeholder="Masukkan judul penelitian">
                             </div>
 
@@ -47,7 +47,7 @@
                                     Ketua Peneliti
                                 </label>
                                 <input type="text" id="leadResearcher" name="leadResearcher" required
-                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                        placeholder="Nama ketua peneliti">
                             </div>
 
@@ -57,7 +57,7 @@
                                     Skema Penelitian
                                 </label>
                                 <select id="researchScheme" name="researchScheme" required
-                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                     <option value="">Pilih Skema Penelitian</option>
                                     <option value="DIPA SWADANA">DIPA SWADANA</option>
                                     <option value="DIPA PNBP">DIPA PNBP</option>
@@ -81,7 +81,7 @@
                                     Topik Riset
                                 </label>
                                 <input type="text" id="researchTopic" name="researchTopic" required
-                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                        placeholder="Masukkan topik riset">
                             </div>
 
@@ -92,7 +92,7 @@
                                     Preview Surat
                                 </button>
                                 <button type="submit"
-                                        class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                        class="px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                                     Ajukan Surat
                                 </button>
                             </div>

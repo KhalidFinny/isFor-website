@@ -16,12 +16,12 @@
             <!-- User Info -->
             <div class="max-w-7xl mx-auto mb-12 flex justify-between items-center">
                 <div>
-                    <h1 class="text-4xl font-bold text-blue-900">Dashboard</h1>
+                    <h1 class="text-4xl font-bold text-red-900">Dashboard</h1>
                     <p class="text-gray-600 mt-2">Selamat datang kembali, <?= $data['user']['name'] ?></p>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="text-right">
-                        <p class="font-semibold text-blue-900"><?= $data['user']['name'] ?></p>
+                        <p class="font-semibold text-red-900"><?= $data['user']['name'] ?></p>
                         <p class="text-sm text-gray-600">Peneliti</p>
                     </div>
                     <?php if($data['user']['profile_picture'] == NULL) :?>
@@ -34,7 +34,7 @@
 
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-white p-6 rounded-2xl border-2 border-blue-100">
+                <div class="bg-white p-6 rounded-2xl border-2 border-red-100">
                     <div class="flex items-center">
                         <div class="p-3 bg-green-50 rounded-xl">
                             <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,11 +43,11 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500">Surat Disetujui</p>
-                            <p class="text-2xl font-bold text-blue-900"><?= $data['verify']['total'] ?></p>
+                            <p class="text-2xl font-bold text-red-900"><?= $data['verify']['total'] ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border-2 border-blue-100">
+                <div class="bg-white p-6 rounded-2xl border-2 border-red-100">
                     <div class="flex items-center">
                         <div class="p-3 bg-red-50 rounded-xl">
                             <svg class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -56,11 +56,11 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500">Surat Ditolak</p>
-                            <p class="text-2xl font-bold text-blue-900"><?= $data['reject']['total'] ?></p>
+                            <p class="text-2xl font-bold text-red-900"><?= $data['reject']['total'] ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border-2 border-blue-100">
+                <div class="bg-white p-6 rounded-2xl border-2 border-red-100">
                     <div class="flex items-center">
                         <div class="p-3 bg-yellow-50 rounded-xl">
                             <svg class="w-8 h-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,16 +69,16 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500">Surat Tertunda</p>
-                            <p class="text-2xl font-bold text-blue-900"><?= $data['pending']['total'] ?></p>
+                            <p class="text-2xl font-bold text-red-900"><?= $data['pending']['total'] ?></p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Recent Submissions -->
-            <div class="bg-white rounded-2xl border-2 border-blue-100 overflow-hidden">
-                <div class="p-6 border-b border-blue-100">
-                    <h2 class="text-xl font-semibold text-blue-900">Pengajuan Terbaru</h2>
+            <div class="bg-white rounded-2xl border-2 border-red-100 overflow-hidden">
+                <div class="p-6 border-b border-red-100">
+                    <h2 class="text-xl font-semibold text-red-900">Pengajuan Terbaru</h2>
                 </div>
                 <div class="p-6">
                     <table class="w-full">
@@ -112,7 +112,7 @@
                                 <?php endif ?>
                             </td>
                             <td class="py-4">
-                                <button onclick="viewLetter(<?= $letter['letter_id']; ?>)" class="text-blue-600 hover:text-blue-800">Lihat Detail</button>
+                                <button onclick="viewLetter(<?= $letter['letter_id']; ?>)" class="text-red-600 hover:text-red-800">Lihat Detail</button>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -127,7 +127,7 @@
     <div id="letterModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
         <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-blue-900">Detail Surat</h3>
+                <h3 class="text-2xl font-bold text-red-900">Detail Surat</h3>
                 <button onclick="closeLetterModal()" class="text-gray-500 hover:text-gray-700">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
