@@ -320,15 +320,16 @@
         // Fungsi untuk mengirimkan form setelah konfirmasi
         function submitForm() {
             const formData = new FormData();
-            const file = fileInput.files[0];
+            const image = fileInput.files[0];
             const title = document.querySelector('input[name="imageTitle"]').value.trim();
             const category = document.querySelector('select[name="category"]').value.trim();
             const description = document.querySelector('textarea[name="description"]').value.trim();
 
-            formData.append('image', file);
+            formData.append('image', image);
             formData.append('imageTitle', title);
             formData.append('category', category);
             formData.append('description', description);
+            formData.append('confirmUpload', 'true');
 
             // Nonaktifkan tombol upload
             uploadButton.disabled = true;
@@ -341,6 +342,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     if (data.success) {
                         alert('Upload berhasil!');
                         window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';

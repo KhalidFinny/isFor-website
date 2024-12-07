@@ -7,7 +7,10 @@
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/controllers/Galleries.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Galleries.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_penelitian saya.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_penelitian saya.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/LandingPage/researchers-list.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/LandingPage/researchers-list.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,19 +55,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\laragon\www\isFor-website\php\app\files" />
@@ -89,7 +92,8 @@
       <workItem from="1733475103373" duration="2051000" />
       <workItem from="1733490301743" duration="15368000" />
       <workItem from="1733538592486" duration="8355000" />
-      <workItem from="1733549943233" duration="7679000" />
+      <workItem from="1733549943233" duration="8124000" />
+      <workItem from="1733569964370" duration="5947000" />
     </task>
     <servers />
   </component>

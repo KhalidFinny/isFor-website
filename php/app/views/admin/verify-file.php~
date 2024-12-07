@@ -293,13 +293,6 @@
             'Konfirmasi Verifikasi',
             'Apakah Anda yakin ingin memverifikasi file ini?'
         );
-
-        fetch(`<?= BASEURL; ?>/researchoutput/verifyFile/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
     }
 
     function rejectFile(fileId) {
@@ -309,29 +302,24 @@
             'Konfirmasi Penolakan',
             'Apakah Anda yakin ingin menolak file ini?'
         );
-        fetch(`<?= BASEURL; ?>/researchoutput/rejectFile/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
     }
-        // Add event listener for confirm button
+
+    // Add event listener for confirm button
     document.getElementById('confirmButton').addEventListener('click', async () => {
         if (!currentFileId || !currentAction) return;
 
+        let endpoint = currentAction === 'verify'
+            ? `<?= BASEURL; ?>/researchoutput/verifyFile/${currentFileId}`
+            : `<?= BASEURL; ?>/researchoutput/rejectFile/${currentFileId}`;
+
         try {
-            const response = await fetch(`<?= BASEURL ?>/admin/verifyFile/${currentFileId}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        fileId: currentFileId,
-                        action: currentAction
-                    })
-                });
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({fileId: currentFileId})
+            });
 
             if (response.ok) {
                 showAlert(
@@ -340,17 +328,18 @@
                         : 'File berhasil ditolak!'
                 );
 
-                // Remove the card from the UI
+                // Hapus elemen file dari UI
                 const fileCard = document.querySelector(`[data-file-id="${currentFileId}"]`);
-                fileCard.style.opacity = '0';
-                setTimeout(() => fileCard.remove(), 300);
+                if (fileCard) {
+                    fileCard.style.opacity = '0';
+                    setTimeout(() => fileCard.remove(), 300);
+                }
             } else {
-                throw new Error('Failed to process request');
+                throw new Error('Gagal memproses permintaan.');
             }
         } catch (error) {
             showAlert('Terjadi kesalahan. Silakan coba lagi.', 'error');
         }
-
         closeModal();
     });
 </script>

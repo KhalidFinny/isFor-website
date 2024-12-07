@@ -92,9 +92,8 @@ class Galleries extends Controller
     {
         $id = $_POST['id'];
         $image = $this->model('GalleryModel')->getImageById($id);
-        $filePath = GALLERY . '/files/' . $image['file_url'];
+        $filePath = GALLERY . $image['file_url'];
         echo json_encode(['success' => true, 'filePath' => $filePath]);
-
     }
 
     public function uploadImg()
@@ -118,41 +117,28 @@ class Galleries extends Controller
                 $category = htmlspecialchars(trim($_POST['category']));
                 $description = htmlspecialchars(trim($_POST['description']));
 
-                // Validasi data wajib diisi
-                if (empty($title)) {
-                    $response['message'] = 'Judul file harus diisi.';
+                if (empty($title) || empty($category) || empty($description)) {
+                    $response['message'] = 'Semua field wajib diisi.';
                     echo json_encode($response);
                     return;
                 }
 
-                if (empty($category)) {
-                    $response['message'] = 'Kategori harus dipilih.';
-                    echo json_encode($response);
-                    return;
-                }
-
-                if (empty($description)) {
-                    $response['message'] = 'Deskripsi harus diisi.';
-                    echo json_encode($response);
-                    return;
-                }
-
-                if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+                if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                     // Tentukan direktori tujuan
-                    $uploadDir = __DIR__ . '/../files/research_output/';
+                    $uploadDir = __DIR__ . '/../img/gallery/files/';
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0777, true);
                     }
 
-                    $fileName = basename($_FILES['file']['name']);
+                    $fileName = basename($_FILES['image']['name']);
                     $uniqueName = uniqid() . "_" . $fileName;
-                    $targetFilePath = $uploadDir . $uniqueName;
+                    $targetFilePath = $uploadDir . '/files/' . $uniqueName;
                     $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
 
                     // Validasi ekstensi file
-                    $allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xlsx'];
+                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
                     if (in_array($fileType, $allowedExtensions)) {
-                        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
+                        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
                             // Simpan data ke database
                             $uploadSuccess = $this->model('ResearchOutputModel')->create(
                                 $uniqueName,
