@@ -35,7 +35,7 @@ session_start();
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(37, 99, 235, 0.95);
+            background: rgba(255, 50, 50, 0.9);
             opacity: 0;
             transition: all 0.3s ease;
             display: flex;
@@ -52,12 +52,12 @@ session_start();
         .poster-placeholder {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #fcf8fa 0%, #f0e2e8 100%);
             transition: transform 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px dashed #e2e8f0;
+            border: 2px dashed #f0e2e8;
         }
 
         .poster-item.zoomed .poster-placeholder {
@@ -76,7 +76,7 @@ session_start();
             left: 50%;
             width: 0;
             height: 2px;
-            background: #2563eb;
+            background: #eb2563;
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
@@ -87,7 +87,7 @@ session_start();
         }
 
         .topic-button.active {
-            color: #2563eb;
+            color: #eb2563;
         }
     </style>
 </head>
@@ -101,13 +101,13 @@ session_start();
         <div class="container mx-auto px-6 max-w-7xl">
             <!-- Header -->
             <div class="mb-20">
-                <span class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
+                <span class="inline-block px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
                     Hasil Penelitian
                 </span>
-                <h2 class="text-5xl font-bold mb-6 text-blue-900">
+                <h2 class="text-5xl font-bold mb-6 text-red-900">
                     Poster & Publikasi
                 </h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-blue-600 to-blue-800 rounded-full"></div>
+                <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-red-800 rounded-full"></div>
             </div>
 
             <!-- Topics Navigation -->
@@ -115,7 +115,7 @@ session_start();
                 <?php
                 $topics = ['Semua', 'AI & ML', 'IoT', 'Cybersecurity', 'Big Data', 'Cloud Computing', 'Software Engineering'];
                 foreach ($topics as $index => $topic): ?>
-                    <button class="topic-button px-4 py-2 text-gray-600 hover:text-blue-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
+                    <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
                         <?php echo $topic; ?>
                     </button>
                 <?php endforeach; ?>
@@ -162,25 +162,25 @@ session_start();
                                 <span class="text-gray-400">Poster Preview</span>
                             </div>
                             <div class="poster-overlay">
-                                <span class="text-sm font-semibold text-blue-100 mb-2">
+                                <span class="text-sm font-semibold text-red-100 mb-2">
                                     <?php echo $item['category']; ?> • <?php echo $item['year']; ?>
                                 </span>
                                 <h3 class="text-xl font-bold text-white mb-3">
                                     <?php echo $item['title']; ?>
                                 </h3>
-                                <p class="text-blue-100 text-sm mb-4">
+                                <p class="text-red-100 text-sm mb-4">
                                     <?php echo $item['authors']; ?>
                                 </p>
-                                <p class="text-blue-100 text-sm leading-relaxed">
+                                <p class="text-red-100 text-sm leading-relaxed">
                                     <?php echo $item['abstract']; ?>
                                 </p>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <span class="text-sm font-medium text-blue-600">
+                            <span class="text-sm font-medium text-red-600">
                                 <?php echo $item['category']; ?>
                             </span>
-                            <h3 class="text-lg font-bold text-blue-900 group-hover:text-blue-600 transition-colors duration-300 mt-1">
+                            <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300 mt-1">
                                 <?php echo $item['title']; ?>
                             </h3>
                             <p class="text-gray-600 text-sm mt-1">

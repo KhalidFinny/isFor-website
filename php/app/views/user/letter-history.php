@@ -66,23 +66,23 @@
             <div class="max-w-7xl mx-auto">
                 <!-- Header Section -->
                 <div class="mb-8 fade-in">
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    <h1 class="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-600 bg-clip-text text-transparent">
                         Riwayat Surat
                     </h1>
-                    <p class="mt-2 text-blue-600">Kelola dan pantau status pengajuan surat Anda</p>
+                    <p class="mt-2 text-red-600">Kelola dan pantau status pengajuan surat Anda</p>
                 </div>
 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-xl border-2 border-blue-100 slide-up"
+                    <div class="bg-white p-6 rounded-xl border-2 border-red-100 slide-up"
                          style="animation-delay: 0.1s">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-blue-600">Total Surat</p>
-                                <p class="text-2xl font-bold text-blue-900"><?= $data['letter']['total'] ?></p>
+                                <p class="text-sm font-medium text-red-600">Total Surat</p>
+                                <p class="text-2xl font-bold text-red-900"><?= $data['letter']['total'] ?></p>
                             </div>
-                            <div class="p-3 bg-blue-50 rounded-xl">
-                                <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                            <div class="p-3 bg-red-50 rounded-xl">
+                                <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24"
                                      stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -94,34 +94,34 @@
                 </div>
 
                 <!-- Letter List Section -->
-                <div class="bg-white rounded-xl border-2 border-blue-100 overflow-hidden slide-up"
+                <div class="bg-white rounded-xl border-2 border-red-100 overflow-hidden slide-up"
                      style="animation-delay: 0.2s">
                     <!-- Filters and Search -->
-                    <div class="p-6 border-b border-blue-100">
+                    <div class="p-6 border-b border-red-100">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center space-x-4">
-                                <button class="px-4 py-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                                <button class="px-4 py-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
                                         onclick="filter(0)">
                                     Semua
                                 </button>
-                                <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                <button class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                         onclick="filter(2)">
                                     Disetujui
                                 </button>
-                                <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                <button class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                         onclick="filter(1)">
                                     Tertunda
                                 </button>
-                                <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                <button class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                         onclick="filter(3)">
                                     Ditolak
                                 </button>
                             </div>
                             <div class="relative">
                                 <input type="text" placeholder="Cari surat..." id="keyword"
-                                       class="pl-10 pr-4 py-2 bg-blue-50 border-0 rounded-lg text-blue-900 placeholder-blue-400
-                                                  focus:ring-2 focus:ring-blue-500">
-                                <svg class="w-5 h-5 text-blue-400 absolute left-3 top-2.5" fill="none"
+                                       class="pl-10 pr-4 py-2 bg-red-50 border-0 rounded-lg text-red-900 placeholder-red-400
+                                                  focus:ring-2 focus:ring-red-500">
+                                <svg class="w-5 h-5 text-red-400 absolute left-3 top-2.5" fill="none"
                                      viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -134,15 +134,15 @@
                     <div class="p-6 space-y-4">
                         <?php if (empty($data['allLetters'])) : ?>
                             <div class="text-center py-12">
-                                <svg class="w-16 h-16 text-blue-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24"
+                                <svg class="w-16 h-16 text-red-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24"
                                      stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
-                                <h3 class="text-xl font-medium text-blue-900 mb-2">Belum ada surat</h3>
-                                <p class="text-blue-600 mb-6">Mulai ajukan surat penelitian Anda sekarang</p>
+                                <h3 class="text-xl font-medium text-red-900 mb-2">Belum ada surat</h3>
+                                <p class="text-red-600 mb-6">Mulai ajukan surat penelitian Anda sekarang</p>
                                 <a href="<?= BASEURL; ?>/letter/addLetterView"
-                                   class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700
+                                   class="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700
                                               transition-colors">
                                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -153,7 +153,7 @@
                             </div>
                         <?php else : ?>
                             <!-- Letter Cards -->
-                            <div class="letter-card bg-white p-6 rounded-xl border-2 border-blue-100 hover:border-blue-300">
+                            <div class="letter-card bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300">
                                 <!-- Letter content here -->
                                 <table class="w-full">
                                     <thead>
@@ -187,7 +187,7 @@
                                             </td>
                                             <td class="py-4">
                                                 <button onclick="viewLetter(<?= $letter['letter_id']; ?>)"
-                                                        class="text-blue-600 hover:text-blue-800">Lihat Detail
+                                                        class="text-red-600 hover:text-red-800">Lihat Detail
                                                 </button>
                                             </td>
                                         </tr>
@@ -215,7 +215,7 @@
                                     <?php if ($i == $data['halamanAktif']) : ?>
                                         <li>
                                             <a href="?halaman=<?= $i; ?>" aria-current="page"
-                                               class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i; ?></a>
+                                               class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i; ?></a>
                                         </li>
                                     <?php else : ?>
                                         <li>
@@ -250,7 +250,7 @@
 <div id="letterModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
     <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold text-blue-900">Detail Surat</h3>
+            <h3 class="text-2xl font-bold text-red-900">Detail Surat</h3>
             <button onclick="closeLetterModal()" class="text-gray-500 hover:text-gray-700">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -354,7 +354,7 @@
                                 <td class="py-4">${letter.date}</td>
                                 <td class="py-4">${statusBadge}</td>
                                 <td class="py-4">
-                                    <button onclick="viewLetter(${letter.letter_id})" class="text-blue-600 hover:text-blue-800">Lihat Detail</button>
+                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
                                 </td>
                             </tr>
                         `;
@@ -420,7 +420,7 @@
                                 <td class="py-4">${letter.date}</td>
                                 <td class="py-4">${statusBadge}</td>
                                 <td class="py-4">
-                                    <button onclick="viewLetter(${letter.letter_id})" class="text-blue-600 hover:text-blue-800">Lihat Detail</button>
+                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
                                 </td>
                             </tr>
                         `;

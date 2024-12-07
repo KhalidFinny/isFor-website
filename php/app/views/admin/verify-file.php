@@ -46,10 +46,10 @@
             <!-- Header -->
             <div class="max-w-7xl mx-auto mb-12">
                 <div class="flex items-center space-x-4 mb-4">
-                    <span class="h-px w-12 bg-blue-600"></span>
-                    <span class="text-blue-600 font-medium">Verifikasi</span>
+                    <span class="h-px w-12 bg-red-600"></span>
+                    <span class="text-red-600 font-medium">Verifikasi</span>
                 </div>
-                <h1 class="text-4xl font-bold text-blue-900">
+                <h1 class="text-4xl font-bold text-red-900">
                     Verifikasi
                 </h1>
             </div>
@@ -57,23 +57,23 @@
             <!-- Images Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php if (empty($data['files'])): ?>
-                    <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-blue-100">
+                    <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-red-100">
 
-                        <p class="mt-4 text-lg text-blue-900">Belum ada file yang perlu diverifikasi</p>
+                        <p class="mt-4 text-lg text-red-900">Belum ada file yang perlu diverifikasi</p>
                         <p class="text-sm text-gray-500">Gambar yang membutuhkan verifikasi akan muncul di sini</p>
                     </div>
                 <?php else: ?>
                     <?php foreach ($data['files'] as $files): ?>
-                        <div class="image-card bg-white rounded-2xl border-2 border-blue-100 overflow-hidden">
+                        <div class="image-card bg-white rounded-2xl border-2 border-red-100 overflow-hidden">
                             <div class="p-6">
-                                <h3 class="text-lg font-semibold text-blue-900 mb-2"><?= htmlspecialchars($files['title']); ?></h3>
+                                <h3 class="text-lg font-semibold text-red-900 mb-2"><?= htmlspecialchars($files['title']); ?></h3>
 
                                 <!-- Preview File -->
                                 <p class="text-sm text-gray-500 mb-4">
                                     Nama file:
                                     <a href="<?= FILES; ?>/<?= htmlspecialchars($files['file_url']); ?>"
                                        target="_blank"
-                                       class="text-blue-600 hover:underline">
+                                       class="text-red-600 hover:underline">
                                         <?= htmlspecialchars($files['original_name']); ?>
                                     </a>
                                 </p>
@@ -104,8 +104,8 @@
 <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
     <div class="max-w-4xl w-full mx-4">
         <div class="bg-white rounded-2xl overflow-hidden">
-            <div class="flex justify-between items-center p-4 border-b border-blue-100">
-                <h3 class="text-xl font-bold text-blue-900">Preview Gambar</h3>
+            <div class="flex justify-between items-center p-4 border-b border-red-100">
+                <h3 class="text-xl font-bold text-red-900">Preview Gambar</h3>
                 <button onclick="closeImageModal()" class="text-gray-500 hover:text-gray-700">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
