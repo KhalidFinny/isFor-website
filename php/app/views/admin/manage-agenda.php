@@ -113,7 +113,7 @@
                 <?php foreach ($data['agenda'] as $agenda): ?>
                     <div class="agenda-card bg-white p-6 rounded-2xl border-2 border-red-100">
                         <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl font-bold text-red-500"><?= $data['no'] ?></span>
+                            <span class="text-4xl font-bold text-red-500"><?= $data['no']++ ?></span>
                             <div class="flex space-x-2">
                                 <button onclick="openAgendaModal('edit', <?= htmlspecialchars(json_encode($agenda)) ?>)" 
                                         class="p-2 text-red-400 hover:text-red-500 transition-colors">
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                         <h3 class="text-xl font-semibold text-red-800 mb-2"><?= $agenda['title'] ?></h3>
-                        <p class="text-red-600"><?= $agenda['deskripsi'] ?></p>
+                        <p class="text-red-600"><?= $agenda['description'] ?></p>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>            
@@ -152,13 +152,13 @@
             </button>
         </div>
 
-        <form id="agendaForm" class="space-y-6">
-            <input type="hidden" name="id" id="agendaId">
+        <form action="<?= BASEURL; ?>/agenda/addAgenda" method="POST" id="agendaForm" class="space-y-6">
+            <input type="hidden" name="agenda_id" id="agendaId">
             
             <div class="flex space-x-4">
                 <div class="w-1/3">
                     <label class="block text-sm font-medium text-red-700 mb-1">Nomor</label>
-                    <input type="text" name="number" id="agendaNumber" required readonly
+                    <input type="text" id="agendaNumber" required readonly
                            class="w-full px-4 py-2 border-2 border-red-100 rounded-xl text-center bg-red-50 text-red-600 font-semibold focus:border-red-500 focus:ring-0">
                 </div>
                 <div class="flex-1">
@@ -207,7 +207,7 @@
                         class="px-4 py-2 text-red-700 hover:text-red-900">
                     Batal
                 </button>
-                <button onclick="closeConfirmAlert()" 
+                <button onclick="deleteAgenda()" 
                         class="px-6 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300">
                     Hapus
                 </button>
@@ -240,10 +240,32 @@ function openAgendaModal(mode, agenda = null) {
 
     if (mode === 'edit' && agenda) {
         title.textContent = 'Edit Agenda';
-        document.getElementById('agendaId').value = agenda.id;
-        document.getElementById('agendaNumber').value = agenda.number;
-        document.getElementById('agendaTitle').value = agenda.title;
-        document.getElementById('agendaDescription').value = agenda.description;
+        // console.log(agenda);
+
+        const agendaId = agenda.agenda_id;
+
+        $.ajax({
+            url: '<?= BASEURL ?>/agenda/getAgendaById',
+            method: 'POST',
+            data: { agenda_id: agendaId },
+            dataType: 'json',
+            success(data) {
+                // console.log(data); 
+                document.getElementById('agendaId').value = data.agenda_id;
+                document.getElementById('agendaNumber').value = agenda.number;
+                document.getElementById('agendaTitle').value = data.title;
+                document.getElementById('agendaDescription').value = data.description;
+            },
+            error: function (xhr, status, error) {
+                console.error('Error Status:', status);
+                console.error('Error Details:', error);
+                console.error('Response Text:', xhr.responseText);
+                alert('Gagal mengambil data agenda');
+            }
+        });
+
+        form.action = "<?= BASEURL; ?>/agenda/editAgenda";
+
     } else {
         title.textContent = 'Tambah Agenda Baru';
         form.reset();
@@ -263,6 +285,8 @@ function closeAgendaModal() {
 }
 
 function confirmDelete(id) {
+    agendaIdToDelete = id;
+
     const alert = document.getElementById('confirmAlert');
     alert.classList.remove('hidden');
     alert.classList.add('flex');
@@ -274,11 +298,38 @@ function closeConfirmAlert() {
     alert.classList.remove('flex');
 }
 
+function deleteAgenda() {
+    if (agendaIdToDelete !== null) {
+        // Kirim AJAX untuk menghapus agenda
+        $.ajax({
+            url: '<?= BASEURL ?>/agenda/deleteAgenda/' + agendaIdToDelete,
+            method: 'POST',
+            data: { agenda_id: agendaIdToDelete },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Jika berhasil, tutup modal dan reload atau hapus elemen agenda dari halaman
+                    closeConfirmAlert();
+                    alert('Agenda berhasil dihapus!');
+                    location.reload();  // Reload halaman untuk melihat perubahan
+                } else {
+                    alert('Gagal menghapus agenda!');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menghapus agenda.');
+            }
+        });
+    }
+}
+
 // Simple form handler for demo
-document.getElementById('agendaForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    closeAgendaModal();
-});
+// document.getElementById('agendaForm').addEventListener('submit', function(e) {
+//     e.preventDefault();
+//     closeAgendaModal();
+// });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
