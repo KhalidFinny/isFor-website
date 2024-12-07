@@ -21,6 +21,11 @@ class Roadmap extends Controller{
         foreach ($uniqueYears as $year) {
             $roadmaps = $this->model('RoadmapsModel')->getRoadmaps($year['year_start'], $year['year_end']);
             
+            // Mengurutkan roadmap berdasarkan year_start
+            usort($roadmaps, function($a, $b) {
+                return $a['year_start'] <=> $b['year_start']; // Mengurutkan dari kecil ke besar
+            });
+
             foreach($roadmaps as $roadmap){
                 $period = $roadmap['year_start'] . '-' . $roadmap['year_end'];
                 $category = $roadmap['category'];
@@ -42,6 +47,9 @@ class Roadmap extends Controller{
             }
         }
 
+        // Mengurutkan kelompok berdasarkan year_start secara keseluruhan
+        ksort($groupedRoadmaps);
+
         return $groupedRoadmaps;
     }
 
@@ -54,7 +62,6 @@ class Roadmap extends Controller{
     }
 
     public function addRoadmap(){
-
         $year_start = $_POST['year_start'];
         $year_end = $_POST['year_end'];
         $data = [];

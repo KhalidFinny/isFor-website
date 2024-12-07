@@ -47,6 +47,13 @@ class UsersModel{
         return $this->db->resultSet();
     }
 
+    public function getUserByRole($role){
+        $this->db->query('SELECT * FROM ' . $this->table . ' WHERE role_id = :role');
+        $this->db->bind(':role', $role);
+        $this->db->execute();
+        return $this->db->resultSet();
+    }
+
     // fungsi menambah user
     public function addUser($email, $data, $photo){
         $query = "INSERT INTO users (name, username, password, email, profile_picture, role_id)
@@ -80,7 +87,7 @@ class UsersModel{
         return $this->db->single();
     }
 
-    //fungsi menghapus img di file profile
+    //fungsi menghapus img di files profile
     public function deleteImage($id){
         $this->db->query('SELECT profile_picture FROM users WHERE user_id = :user_id');
         $this->db->bind(':user_id', $id);
