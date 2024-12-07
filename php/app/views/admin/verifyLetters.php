@@ -221,6 +221,18 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
      */
     function viewLetter(id) {
         // Implementasi view letter
+        $.ajax({
+            url: '<?= BASEURL ?>/letter/getLetter',
+            method: 'POST',
+            dataType: 'json',
+            data: { id : id},
+            success: function(data){
+                window.open(data, '_blank');
+            },
+            error: function(data){
+                alert('Gagal memuat surat');
+            }
+        });
     }
 
     /**
@@ -228,11 +240,12 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
      * @param {number} id - ID surat yang akan diverifikasi
      */
     function verifyLetter(id) {
-        showCustomConfirm(function(confirm) {
-            if (confirm) {
-                updateLetterStatus(id, 2);
-            }
-        });
+        updateLetterStatus(id, 2);
+        // showCustomConfirm(function(confirm) {
+        //     if (confirm) {
+
+        //     }
+        // });
     }
 
     /**
@@ -240,11 +253,12 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
      * @param {number} id - ID surat yang akan ditolak
      */
     function rejectLetter(id) {
-        showCustomConfirm(function(confirm) {
-            if (confirm) {
-                updateLetterStatus(id, 3);
-            }
-        });
+        updateLetterStatus(id, 3);
+        // showCustomConfirm(function(confirm) {
+        //     if (confirm) {
+
+        //     }
+        // });
     }
 
     /**
@@ -253,38 +267,21 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
      * @param {number} status - Status baru (2 = terverifikasi, 3 = ditolak)
      */
     function updateLetterStatus(id, status) {
-        const letterCard = document.querySelector(`[data-letter-id="${id}"]`);
-        
-        // Animasi slide out
-        letterCard.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-        letterCard.style.transform = 'translateX(50px)';
-        letterCard.style.opacity = '0';
-        
-        // Kirim request update
-        setTimeout(() => {
+        if(confirm("Apakah Anda yakin ingin mengupdate data dengan ID " + id + "?")){
             $.ajax({
-                url: '<?= BASEURL ?>/letter/updateStatus',
+                url: '<?= BASEURL ?>/letter/updateStatusLetter',
                 method: 'POST',
                 dataType: 'json',
-                data: { id: id, status: status },
-                success: function(msg) {
-                    // Hapus card jika berhasil
-                    setTimeout(() => {
-                        letterCard.remove();
-                        if (document.querySelectorAll('.letter-card').length === 0) {
-                            location.reload();
-                        }
-                    }, 500);
-                    showAlert('Status surat berhasil diperbarui!', false);
+                data: { id : id, status : status },
+                success: function(msg){
+                    // console.log(msg);
+                    location.reload();
                 },
-                error: function(msg) {
-                    // Kembalikan posisi card jika gagal
-                    letterCard.style.transform = 'translateX(0)';
-                    letterCard.style.opacity = '1';
-                    showAlert('Gagal memperbarui status surat', true);
+                error: function(msg){
+                    alert('Gagal memperbarui status');
                 }
             });
-        }, 10);
+        }
     }
 
     /**
@@ -297,5 +294,6 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
         });
     });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
