@@ -95,8 +95,8 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
-    <div class="flex-1 min-h-screen ml-64 bg-gray-50">
+    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php';?>
+    <div class="flex-1 min-h-screen ml-64 bg-white">
         <main class="py-10 px-8">
             <!-- Swiss-inspired Header (Matching manage-roadmap.php) -->
             <div class="max-w-7xl mx-auto mb-12 fade-in">
@@ -108,7 +108,7 @@
             </div>
 
             <!-- Upload Form -->
-            <form action="<?= BASEURL; ?>/galleries/uploadImg" method="POST" enctype="multipart/form-data"
+            <form action="<?=BASEURL;?>/galleries/uploadImg" method="POST" enctype="multipart/form-data"
                   id="uploadForm" name="confirmUpload" class="max-w-7xl mx-auto" onsubmit="return disableSubmitButton();">
                 <div class="grid grid-cols-12 gap-8">
                     <!-- Left Column -->
@@ -150,7 +150,7 @@
                     <div class="col-span-4">
                         <div class="sticky top-8 bg-white rounded-2xl p-8 border-2 border-red-100 space-y-6">
                             <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-600">Judul Penelitian</label>
+                                <label class="block text-sm font-medium text-gray-600">Topik Penelitian</label>
                                 <select name="category" required
                                         class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">
                                     <option value="">Pilih Kategori</option>
@@ -301,7 +301,7 @@
             formData.append('category', category);
             formData.append('description', description);
 
-            fetch('<?= BASEURL; ?>/galleries/uploadImg', {
+            fetch('<?=BASEURL;?>/galleries/uploadImg', {
                 method: 'POST',
                 body: formData,
             })
@@ -309,7 +309,7 @@
                 .then((data) => {
                     if (data.success) {
                         alert('Upload berhasil!');
-                        window.location.href = '<?= BASEURL; ?>/galleries/uploadImgView';
+                        window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
                     } else {
                         alert(`Upload gagal: ${data.message}`);
                     }
@@ -373,7 +373,7 @@
                 uploadButton.textContent = 'Uploading...';
 
                 // Kirim data menggunakan fetch API
-                fetch('<?= BASEURL; ?>/galleries/uploadImg', {
+                fetch('<?=BASEURL;?>/galleries/uploadImg', {
                     method: 'POST',
                     body: formData,
                 })
@@ -381,7 +381,7 @@
                     .then((data) => {
                         if (data.success) {
                             alert('Upload berhasil!');
-                            window.location.href = '<?= BASEURL; ?>/galleries/uploadImgView';
+                            window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
                         } else {
                             alert(`Upload gagal: ${data.message}`);
                         }
