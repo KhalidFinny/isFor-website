@@ -92,7 +92,7 @@ class LettersModel{
             return 0;  // Jika tidak ada baris yang terpengaruh
         }
     }
-    
+
     public function countAllLetterbyUserId($user_id){
         $this->db->query('SELECT COUNT(file_url) AS total FROM letters WHERE user_id = :user_id');
         $this->db->bind(':user_id', $user_id);

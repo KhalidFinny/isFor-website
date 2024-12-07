@@ -51,33 +51,39 @@
                 </div>
                 <h1 class="text-4xl font-bold text-blue-900">
                     Verifikasi
-
                 </h1>
             </div>
 
             <!-- Images Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php if (empty($data['images'])): ?>
+                <?php if (empty($data['files'])): ?>
                     <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-blue-100">
 
-                        <p class="mt-4 text-lg text-blue-900">Belum ada gambar yang perlu diverifikasi</p>
+                        <p class="mt-4 text-lg text-blue-900">Belum ada file yang perlu diverifikasi</p>
                         <p class="text-sm text-gray-500">Gambar yang membutuhkan verifikasi akan muncul di sini</p>
                     </div>
                 <?php else: ?>
-                    <?php foreach ($data['images'] as $image): ?>
+                    <?php foreach ($data['files'] as $files): ?>
                         <div class="image-card bg-white rounded-2xl border-2 border-blue-100 overflow-hidden">
-                            <!--                            <p>Path Gambar: --><?php //= GALLERY; ?><!--/files/-->
-                            <?php //= htmlspecialchars($image['image']); ?>
-                            <img src="<?= GALLERY; ?>/files/<?= htmlspecialchars($image['image']); ?>"
-                                 alt="Gambar <?= htmlspecialchars($image['title']); ?>"/>
                             <div class="p-6">
-                                <h3 class="text-lg font-semibold text-blue-900 mb-2"><?= htmlspecialchars($image['title']); ?></h3>
+                                <h3 class="text-lg font-semibold text-blue-900 mb-2"><?= htmlspecialchars($files['title']); ?></h3>
+
+                                <!-- Preview File -->
+                                <p class="text-sm text-gray-500 mb-4">
+                                    Nama file:
+                                    <a href="<?= FILES; ?>/<?= htmlspecialchars($files['file_url']); ?>"
+                                       target="_blank"
+                                       class="text-blue-600 hover:underline">
+                                        <?= htmlspecialchars($files['original_name']); ?>
+                                    </a>
+                                </p>
+
                                 <div class="flex items-center justify-between mt-4">
-                                    <button onclick="verifyImage(<?= $image['gallery_id']; ?>)"
+                                    <button onclick="verifyFile(<?= $files['research_output_id']; ?>)"
                                             class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
                                         Verifikasi
                                     </button>
-                                    <button onclick="rejectImage(<?= $image['gallery_id']; ?>)"
+                                    <button onclick="rejectFile(<?= $files['research_output_id']; ?>)"
                                             class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
                                         Tolak
                                     </button>
@@ -85,6 +91,7 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
+
                 <?php endif; ?>
 
             </div>
@@ -124,8 +131,8 @@
         document.getElementById('imageModal').classList.remove('flex');
     }
 
-    function verifyImage(id) {
-        fetch(`<?= BASEURL; ?>/galleries/verifyImage/${id}`, {
+    function verifyFile(id) {
+        fetch(`<?= BASEURL; ?>/researchoutput/verifyFile/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -146,8 +153,8 @@
             });
     }
 
-    function rejectImage(id) {
-        fetch(`<?= BASEURL; ?>/galleries/rejectImage/${id}`, {
+    function rejectFile(id) {
+        fetch(`<?= BASEURL; ?>/researchoutput/rejectFile/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -156,15 +163,15 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Gambar berhasil ditolak');
+                    alert('Filwberhasil ditolak');
                     location.reload();
                 } else {
-                    alert('Gagal menolak gambar: ' + data.message);
+                    alert('Gagal menolak File: ' + data.message);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Terjadi kesalahan saat menolak gambar.');
+                alert('Terjadi kesalahan saat menolak File.');
             });
 
     }

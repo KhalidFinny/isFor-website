@@ -63,9 +63,9 @@
     <div class="flex flex-col flex-1 ml-64 min-h-screen bg-gray-50">
         <header class="py-6 px-8 bg-white shadow-md">
             <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Riwayat Gambar
+                Riwayat File
             </h1>
-            <p class="mt-2 text-blue-600">Kelola dan pantau riwayat gambar Anda</p>
+            <p class="mt-2 text-blue-600">Kelola dan pantau riwayat file Anda</p>
         </header>
 
         <main class="py-6 px-8 flex-1">
@@ -73,51 +73,48 @@
                 <!-- Tombol Filter -->
                 <div class="flex space-x-4 mb-8">
                     <button class="filter-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                            data-status="all" onclick="filterImages('all')">Semua
+                            data-status="all" onclick="filterFile('all')">Semua
                     </button>
                     <button class="filter-button bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
-                            data-status="1" onclick="filterImages(1)">Pending
+                            data-status="1" onclick="filterFile(1)">Pending
                     </button>
                     <button class="filter-button bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                            data-status="2" onclick="filterImages(2)">Disetujui
+                            data-status="2" onclick="filterFile(2)">Disetujui
                     </button>
                     <button class="filter-button bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                            data-status="3" onclick="filterImages(3)">Ditolak
+                            data-status="3" onclick="filterFile(3)">Ditolak
                     </button>
                 </div>
 
                 <!-- Statistik Gambar -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-                        <p class="text-sm font-medium text-blue-600">Total Gambar</p>
-                        <p class="text-2xl font-bold text-blue-900"><?= $data['totalImages']; ?></p>
+                        <p class="text-sm font-medium text-blue-600">Total File</p>
+                        <p class="text-2xl font-bold text-blue-900"><?= htmlspecialchars($data['totalFiles']); ?></p>
                     </div>
                     <!-- Tambahkan statistik lainnya jika diperlukan -->
                 </div>
 
                 <!-- Daftar Gambar -->
                 <div id="imageListContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <?php if (empty($data['images'])) : ?>
+                    <?php if (empty($data['files'])) : ?>
                         <div class="col-span-full text-center py-12">
                             <svg class="w-16 h-16 text-blue-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <h3 class="text-xl font-medium text-blue-900 mb-2">Belum ada gambar</h3>
+                            <h3 class="text-xl font-medium text-blue-900 mb-2">Belum ada File</h3>
                         </div>
                     <?php else : ?>
-                        <?php foreach ($data['images'] as $image) : ?>
+                        <?php foreach ($data['files'] as $files) : ?>
                             <div class="bg-white p-4 rounded-xl shadow-md border border-gray-200 image-card">
-                                <img src="<?= GALLERY; ?>/files/<?= htmlspecialchars($image['image']); ?>"
-                                     alt="Gambar <?= htmlspecialchars($image['title']); ?>"
-                                     class="w-full h-40 object-cover rounded-t-lg">
-                                <h3 class="text-lg font-bold text-blue-900 mt-3"><?= htmlspecialchars($image['title']); ?></h3>
-                                <p class="text-sm text-blue-600"><?= htmlspecialchars($image['category']); ?></p>
+                                <h3 class="text-lg font-bold text-blue-900 mt-3"><?= htmlspecialchars($files['title']); ?></h3>
+                                <p class="text-sm text-blue-600"><?= htmlspecialchars($files['category']); ?></p>
                                 <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg mt-2 inline-block
-                                <?= $image['status'] == 1 ? 'bg-yellow-100 text-yellow-600' :
-                                    ($image['status'] == 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'); ?>">
-                                    <?= $image['status'] == 1 ? 'Pending' : ($image['status'] == 2 ? 'Approved' : 'Rejected'); ?>
+                                <?= $files['status'] == 1 ? 'bg-yellow-100 text-yellow-600' :
+                                    ($files['status'] == 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'); ?>">
+                                    <?= $files['status'] == 1 ? 'Pending' : ($files['status'] == 2 ? 'Approved' : 'Rejected'); ?>
                                 </span>
                             </div>
                         <?php endforeach; ?>
@@ -160,11 +157,11 @@
     document.querySelectorAll('.filter-button').forEach(button => {
         button.addEventListener('click', function () {
             const status = this.getAttribute('data-status');
-            filterImages(status);
+            filterFile(status);
         });
     });
 
-    function filterImages(status) {
+    function filterFile(status) {
         fetch('<?= BASEURL; ?>/galleries/filter', {
             method: 'POST',
             headers: {
@@ -181,7 +178,7 @@
                     imageListContainer.innerHTML = `
                 <div class="col-span-full text-center py-12">
                     <h3 class="text-xl font-medium text-blue-900 mb-2">Belum ada gambar</h3>
-                    <p class="text-blue-600 mb-6">Mulai unggah gambar Anda sekarang</p>
+                    <p class="text-blue-600 mb-6">Mulai unggah File Anda sekarang</p>
                 </div>
             `;
                     return;
@@ -211,6 +208,5 @@
 
 
 </script>
-<>
 </body>
 </html> 

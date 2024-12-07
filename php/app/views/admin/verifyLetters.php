@@ -8,7 +8,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi Surat - IsFor</title>
+    <title>Verifikasi Surat</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -35,19 +35,12 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
         <div class="flex-1 ml-64">
             <main class="p-8">
                 <!-- Header Section -->
-                <div class="mb-8 fade-in">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h1 class="text-2xl font-bold text-gray-900">Verifikasi Surat</h1>
-                            <p class="text-sm text-gray-500 mt-1">Kelola dan verifikasi surat masuk</p>
-                        </div>
-                        <div class="flex gap-3">
-                            <span class="inline-flex items-center px-3 py-1 text-sm bg-red-50 text-red-700 rounded-full">
-                                <span class="w-2 h-2 mr-2 bg-red-500 rounded-full"></span>
-                                <?= count($filteredLetters) ?> Surat Menunggu
-                            </span>
-                        </div>
+                <div class="max-w-7xl mx-auto mb-12 fade-in">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <span class="h-px w-12 bg-red-600"></span>
+                        <span class="text-red-600 font-medium">Verifikasi</span>
                     </div>
+                    <h1 class="text-5xl font-bold text-red-900 mb-2">Verifikasi Surat</h1>
                 </div>
 
                 <!-- Letters Container -->
@@ -77,8 +70,8 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                                             ID: <?= str_pad($letter['letter_id'], 4, '0', STR_PAD_LEFT); ?>
                                         </span>
                                     </div>
-                                    <h3 class="text-lg font-semibold text-gray-900"><?= $letter['title']; ?></h3>
-                                    <p class="text-sm text-gray-500 mt-1">Dikirim pada <?= date('d F Y', strtotime($letter['date'])); ?></p>
+                                    <h3 class="text-lg font-semibold text-red-700"><?= $letter['title']; ?></h3>
+                                    <!-- <p class="text-sm text-gray-500 mt-1">Dikirim pada <?= date('d F Y', strtotime($letter['date'])); ?></p> -->
                                 </div>
                             </div>
                             
@@ -116,6 +109,36 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
         </div>
     </div>
 
+    <div id="alert" class="fixed top-4 right-4 hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg" role="alert">
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline" id="alertMessage">Something went wrong.</span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg class="fill-current h-6 w-6 text-red-500" role="button" onclick="closeAlert()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <title>Close</title>
+                <path d="M14.348 5.652a1 1 0 00-1.414 0L10 8.586 7.066 5.652a1 1 0 10-1.414 1.414L8.586 10l-2.934 2.934a1 1 0 101.414 1.414L10 11.414l2.934 2.934a1 1 0 001.414-1.414L11.414 10l2.934-2.934a1 1 0 000-1.414z"/>
+            </svg>
+        </span>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+        <div class="bg-white rounded-2xl p-6 w-80 mx-4 fade-in relative transform transition-transform duration-300 scale-95">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-red-800">Konfirmasi</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+            <div class="flex justify-end gap-3">
+                <button id="cancelButton" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300">Batal</button>
+                <button id="confirmButton" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function viewLetter(id) {
@@ -133,16 +156,62 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
             });
         }
 
+        function showCustomConfirm(callback) {
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('hidden');
+            modal.querySelector('.fade-in').classList.add('scale-100');
+
+            const confirmButton = document.getElementById('confirmButton');
+            const cancelButton = document.getElementById('cancelButton');
+
+            confirmButton.onclick = function() {
+                closeModal();
+                callback(true);
+            };
+
+            cancelButton.onclick = function() {
+                closeModal();
+                callback(false);
+            };
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('confirmModal');
+            modal.querySelector('.fade-in').classList.remove('scale-100');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
         function verifyLetter(id) {
-            if(confirm('Apakah Anda yakin ingin memverifikasi surat ini?')) {
-                updateLetterStatus(id, 2);
-            }
+            showCustomConfirm(function(confirm) {
+                if (confirm) {
+                    updateLetterStatus(id, 2);
+                }
+            });
         }
 
         function rejectLetter(id) {
-            if(confirm('Apakah Anda yakin ingin menolak surat ini?')) {
-                updateLetterStatus(id, 3);
-            }
+            showCustomConfirm(function(confirm) {
+                if (confirm) {
+                    updateLetterStatus(id, 3);
+                }
+            });
+        }
+
+        function showAlert(message, isError = true) {
+            const alertBox = document.getElementById('alert');
+            const alertMessage = document.getElementById('alertMessage');
+            alertMessage.textContent = message;
+            alertBox.classList.remove('hidden');
+            alertBox.classList.toggle('bg-red-100', isError);
+            alertBox.classList.toggle('bg-green-100', !isError);
+            alertBox.classList.toggle('border-red-400', isError);
+            alertBox.classList.toggle('border-green-400', !isError);
+            alertBox.classList.toggle('text-red-700', isError);
+            alertBox.classList.toggle('text-green-700', !isError);
+        }
+
+        function closeAlert() {
+            document.getElementById('alert').classList.add('hidden');
         }
 
         function updateLetterStatus(id, status){
@@ -152,10 +221,11 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                 dataType: 'json',
                 data: { id : id, status : status },
                 success: function(msg){
-                    location.reload();
+                    showAlert('Status surat berhasil diperbarui!', false);
+                    setTimeout(() => location.reload(), 2000);
                 },
                 error: function(msg){
-                    alert('Gagal memperbarui status surat');
+                    showAlert('Gagal memperbarui status surat');
                 }
             });
         }
