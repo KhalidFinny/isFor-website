@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Galleries.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Galleries.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +57,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "com.codeium.enabled": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -88,7 +89,7 @@
       <workItem from="1733475103373" duration="2051000" />
       <workItem from="1733490301743" duration="15368000" />
       <workItem from="1733538592486" duration="8355000" />
-      <workItem from="1733549943233" duration="6131000" />
+      <workItem from="1733549943233" duration="7679000" />
     </task>
     <servers />
   </component>

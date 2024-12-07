@@ -190,8 +190,90 @@ class Galleries extends Controller
         }
     }
 
-
-
+//    public function uploadImg()
+//    {
+//        $this->checkLogin();
+//        $role = $this->checkRole();
+//        $this->checkSessionTimeOut();
+//
+//        if ($role !== 1) {
+//            echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
+//            return;
+//        }
+//
+//        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//            echo json_encode(['success' => false, 'message' => 'Metode tidak valid.']);
+//            return;
+//        }
+//
+//        $response = ['success' => false, 'message' => ''];
+//
+//        // Validasi input dari pengguna
+//        $title = htmlspecialchars(trim($_POST['fileTitle'] ?? ''));
+//        $category = htmlspecialchars(trim($_POST['category'] ?? ''));
+//        $description = htmlspecialchars(trim($_POST['description'] ?? ''));
+//
+//        if (empty($title) || empty($category) || empty($description)) {
+//            $response['message'] = 'Semua field wajib diisi.';
+//            echo json_encode($response);
+//            return;
+//        }
+//
+//        // Validasi file
+//        if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+//            $response['message'] = 'Tidak ada file yang diunggah atau terjadi kesalahan.';
+//            echo json_encode($response);
+//            return;
+//        }
+//
+//        $file = $_FILES['file'];
+//        $uploadDir = __DIR__ . '/../files/research_output/';
+//        if (!is_dir($uploadDir)) {
+//            mkdir($uploadDir, 0777, true);
+//        }
+//
+//        // Dapatkan ekstensi file
+//        $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+//        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+//
+//        if (!in_array($fileExtension, $allowedExtensions)) {
+//            $response['message'] = 'Ekstensi file tidak didukung. Hanya diperbolehkan: ' . implode(', ', $allowedExtensions);
+//            echo json_encode($response);
+//            return;
+//        }
+//
+//        // Buat nama file unik
+//        $uniqueFileName = uniqid() . '.' . $fileExtension;
+//        $filePath = $uploadDir . $uniqueFileName;
+//
+//        // Pindahkan file ke direktori tujuan
+//        if (!move_uploaded_file($file['tmp_name'], $filePath)) {
+//            $response['message'] = 'Gagal memindahkan file.';
+//            echo json_encode($response);
+//            return;
+//        }
+//
+//        // Simpan informasi file ke database
+//        $researchModel = $this->model('ResearchOutputModel');
+//        $saveSuccess = $researchModel->create(
+//            $uniqueFileName,  // Nama file yang disimpan
+//            $_SESSION['user_id'], // ID user
+//            $title, // Judul file
+//            $category, // Kategori
+//            $description // Deskripsi
+//        );
+//
+//        if ($saveSuccess) {
+//            $response['success'] = true;
+//            $response['message'] = 'File berhasil diunggah.';
+//        } else {
+//            // Jika penyimpanan ke database gagal, hapus file
+//            unlink($filePath);
+//            $response['message'] = 'Gagal menyimpan informasi file ke database.';
+//        }
+//
+//        echo json_encode($response);
+//    }
 
 
 //    public function filter()
