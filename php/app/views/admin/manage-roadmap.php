@@ -173,7 +173,7 @@
         </div>
 
         <!-- Two-column Layout -->
-        <form id="roadmapForm" class="grid grid-cols-5 h-[calc(85vh-73px)]">
+        <form id="roadmapForm" action="<?= BASEURL ?>/roadmap/addRoadmap" method="post" class="grid grid-cols-5 h-[calc(85vh-73px)]">
             <!-- Left Column - Timeline -->
             <div class="col-span-1 border-r border-red-50 p-8">
                 <div class="space-y-8">
@@ -199,11 +199,11 @@
 
                     <!-- Action Buttons -->
                     <div class="space-y-3 pt-6 border-t border-red-50">
-                        <button type="submit" 
+                        <button type="submit" id="submitButton" 
                                 class="w-full py-2.5 bg-red-500 text-white rounded-md hover:bg-red-600 
                                        transition-all duration-200 text-sm font-medium
                                        active:scale-[0.98] transform active:bg-red-700">
-                            Simpan Perubahan
+                            Tambah Roadmap
                         </button>
                         <button type="button" onclick="closeModal()" 
                                 class="w-full py-2.5 text-red-500 bg-red-50 rounded-md hover:bg-red-100 
@@ -219,7 +219,7 @@
             <div class="col-span-4 bg-gray-50/50 p-8">
                 <div class="flex justify-between items-center mb-6">
                     <h4 class="text-base text-red-500 font-medium">Kategori dan Topik</h4>
-                    <button type="button" onclick="addCategory()" 
+                    <button type="button"  onclick="addCategory()" 
                             class="inline-flex items-center px-4 py-2 text-sm text-red-500 hover:text-red-600 
                                    transition-all duration-200 border border-red-100 rounded-md
                                    hover:bg-red-50 active:scale-[0.98] transform">
@@ -491,7 +491,9 @@
 
     function editRoadmap(periode) {
         document.getElementById('modalTitle').textContent = 'Edit Periode Roadmap';
+        document.getElementById('submitButton').textContent = 'simpan perubahan';
         const form = document.getElementById('roadmapForm');
+
         
         form.action = `<?= BASEURL ?>/roadmap/editRoadmap`;
 
@@ -595,40 +597,40 @@
     }
 
     // Form submission handler
-    document.getElementById('roadmapForm').addEventListener('submit', function(e) {
-        // e.preventDefault();
+    // document.getElementById('roadmapForm').addEventListener('submit', function(e) {
+    //     // e.preventDefault();
         
-        const formData = {
-            id: currentId || roadmaps.length + 1,
-            year_start: parseInt(this.year_start.value),
-            year_end: parseInt(this.year_end.value),
-            categories: {}
-        };
+    //     const formData = {
+    //         id: currentId || roadmaps.length + 1,
+    //         year_start: parseInt(this.year_start.value),
+    //         year_end: parseInt(this.year_end.value),
+    //         categories: {}
+    //     };
 
-        // Collect categories and topics
-        const categoryInputs = document.querySelectorAll('[name^="category_"]');
-        categoryInputs.forEach(categoryInput => {
-            const categoryId = categoryInput.name.split('_')[1];
-            const categoryName = categoryInput.value;
-            const topicInputs = document.querySelectorAll(`[name^="topic_${categoryId}_"]`);
-            const topics = Array.from(topicInputs).map(input => input.value).filter(Boolean);
+    //     // Collect categories and topics
+    //     const categoryInputs = document.querySelectorAll('[name^="category_"]');
+    //     categoryInputs.forEach(categoryInput => {
+    //         const categoryId = categoryInput.name.split('_')[1];
+    //         const categoryName = categoryInput.value;
+    //         const topicInputs = document.querySelectorAll(`[name^="topic_${categoryId}_"]`);
+    //         const topics = Array.from(topicInputs).map(input => input.value).filter(Boolean);
             
-            if (categoryName && topics.length > 0) {
-                formData.categories[categoryName] = topics;
-            }
-        });
+    //         if (categoryName && topics.length > 0) {
+    //             formData.categories[categoryName] = topics;
+    //         }
+    //     });
 
-        if (currentId) {
-            // Edit existing roadmap
-            roadmaps = roadmaps.map(r => r.id === currentId ? formData : r);
-        } else {
-            // Add new roadmap
-            roadmaps.push(formData);
-        }
+    //     if (currentId) {
+    //         // Edit existing roadmap
+    //         roadmaps = roadmaps.map(r => r.id === currentId ? formData : r);
+    //     } else {
+    //         // Add new roadmap
+    //         roadmaps.push(formData);
+    //     }
 
-        renderRoadmap();
-        closeModal();
-    });
+    //     renderRoadmap();
+    //     closeModal();
+    // });
 
     // Initial render
     document.addEventListener('DOMContentLoaded', renderRoadmap);

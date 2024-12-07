@@ -1,3 +1,4 @@
+<?php var_dump($data["allUser"]) ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -65,16 +66,29 @@
                     ["name" => "Ir. Nugroho Suharto, M.T"],
                     ["name" => "Galih Putra Riatma, S.ST., M.T."]
                 ];
+                ?>
 
-                foreach ($researchers as $index => $researcher): ?>
-                    <div class="researcher-card group p-5 bg-white rounded-xl border-2 border-red-200 hover:border-red-400 transition-all duration-300 ease-in-out"
-                         style="animation-delay: <?php echo $index * 0.1; ?>s">
-                        <h3 class="text-lg font-medium text-red-700 group-hover:text-red-500 transition-colors duration-300">
-                            <?php echo $researcher['name']; ?>
-                        </h3>
-                        <div class="w-0 group-hover:w-full h-0.5 bg-red-500 transition-all duration-300 ease-in-out mt-2"></div>
-                    </div>
-                <?php endforeach; ?>
+                <?php if(empty($data['allUser'])) : ?>
+                    <?php foreach ($researchers as $index => $researcher): ?>
+                        <div class="researcher-card group p-5 bg-white rounded-xl border-2 border-red-200 hover:border-red-400 transition-all duration-300 ease-in-out"
+                             style="animation-delay: <?php echo $index * 0.1; ?>s">
+                            <h3 class="text-lg font-medium text-red-700 group-hover:text-red-500 transition-colors duration-300">
+                                <?php echo $researcher['name']; ?>
+                            </h3>
+                            <div class="w-0 group-hover:w-full h-0.5 bg-red-500 transition-all duration-300 ease-in-out mt-2"></div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <?php foreach ($data['allUser'] as $index => $researcher): ?>
+                        <div class="researcher-card group p-5 bg-white rounded-xl border-2 border-red-200 hover:border-red-400 transition-all duration-300 ease-in-out"
+                             style="animation-delay: <?php echo $index * 0.1; ?>s">
+                            <h3 class="text-lg font-medium text-red-700 group-hover:text-red-500 transition-colors duration-300">
+                                <?php echo $researcher['name']; ?>
+                            </h3>
+                            <div class="w-0 group-hover:w-full h-0.5 bg-red-500 transition-all duration-300 ease-in-out mt-2"></div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
