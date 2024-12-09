@@ -11,7 +11,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #fff;
         }
-        
+
         /* Modern Animations */
         .animate-fade-in {
             animation: smoothFadeIn 0.4s ease-out;
@@ -95,21 +95,90 @@
             transition: all 0.2s ease;
             border: 1px solid currentColor;
         }
+
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .animate-pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
+        <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php';?>
 
         <!-- Main Content -->
         <main class="flex-1 ml-64 p-8 bg-white">
             <div class="max-w-7xl mx-auto">
-                <!-- Modern Header -->
-                <header class="mb-8">
-                    <h1 class="text-3xl font-bold text-red-600">Dashboard Overview</h1>
-                    <p class="mt-2 text-sm text-gray-600">Welcome back, <?php echo htmlspecialchars($data['user']['name']); ?></p>
-                </header>
+                <!-- Modern Header with Profile Section -->
+                <div class="flex justify-between items-center mb-8">
+                    <div class="space-y-6">
+                        <h1 class="text-3xl font-bold text-red-600">Dashboard Overview</h1>
+
+                        <!-- Swiss-style Date Time Display -->
+                        <div class="inline-flex items-center space-x-8 bg-white border-2 border-red-100 rounded-2xl p-4 shadow-sm">
+                            <!-- Date Display -->
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 bg-red-50 rounded-xl">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-xs uppercase tracking-wider text-gray-500 font-medium">Date</span>
+                                    <span id="currentDate" class="text-lg font-bold text-gray-800"></span>
+                                </div>
+                            </div>
+
+                            <!-- Vertical Divider -->
+                            <div class="h-12 w-px bg-red-100"></div>
+
+                            <!-- Time Display -->
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 bg-red-50 rounded-xl">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-xs uppercase tracking-wider text-gray-500 font-medium">Time</span>
+                                    <span id="currentTime" class="text-lg font-bold text-gray-800 tabular-nums"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-sm text-gray-600">Welcome back, <?php echo htmlspecialchars($data['user']['name']); ?></p>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900"><?php echo htmlspecialchars($data['user']['name']); ?></p>
+                            <p class="text-xs text-gray-500">
+                                <?php echo ($data['user']['role_id'] == 1) ? 'Administrator' : 'Researcher'; ?>
+                            </p>
+                        </div>
+                        <div class="h-10 w-10 rounded-lg overflow-hidden bg-gray-100">
+                            <?php if ($data['user']['profile_picture'] == null): ?>
+                                <img class="h-full w-full object-cover"
+                                     src="<?=ASSETS?>/images/empty-user.png" alt="Profile">
+                            <?php else: ?>
+                                <img class="h-full w-full object-cover"
+                                     src="<?=PHOTOPROFILE . $data['user']['profile_picture']?>" alt="Profile">
+                            <?php endif;?>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Redesigned Stats Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
@@ -124,7 +193,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600 group-hover:text-gray-800">Pending Letters</p>
-                                <p class="text-xl font-semibold text-red-600"><?= $data['pending']['total'] ?></p>
+                                <p class="text-xl font-semibold text-red-600"><?=$data['pending']['total']?></p>
                             </div>
                         </div>
                     </div>
@@ -140,7 +209,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600 group-hover:text-gray-800">Verified Letters</p>
-                                <p class="text-xl font-semibold text-green-600"><?= $data['verify']['total'] ?></p>
+                                <p class="text-xl font-semibold text-green-600"><?=$data['verify']['total']?></p>
                             </div>
                         </div>
                     </div>
@@ -177,20 +246,20 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Modern Add User Button -->
                 <button class="mb-6 px-5 py-2.5 text-sm font-medium text-white rounded-lg btn-primary">
-                    <a href="<?= BASEURL; ?>/User">Add User</a>
+                    <a href="<?=BASEURL;?>/User">Add User</a>
                 </button>
-                
+
                 <!-- Modern Swiss-style Users Table -->
                 <div class="animate-slide-in">
                     <div class="bg-white rounded-lg overflow-hidden">
                         <div class="px-8 py-6 flex justify-between items-center border-b border-gray-100">
                             <h2 class="text-2xl font-light text-red-500 tracking-tight">Recent Users</h2>
                             <div class="relative">
-                                <input type="text" 
-                                       placeholder="Search users..." 
+                                <input type="text"
+                                       placeholder="Search users..."
                                        class="pl-11 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-600 placeholder-gray-400 w-64"
                                 >
                                 <svg class="w-5 h-5 absolute left-4 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,67 +283,58 @@
                                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Role</span>
                                         </th>
                                         <th scope="col" class="px-8 py-5 text-left">
-                                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Status</span>
-                                        </th>
-                                        <th scope="col" class="px-8 py-5 text-left">
                                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</span>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-50">
-                                    <?php foreach ($data['allUser'] as $allUser) :?>                
+                                    <?php foreach ($data['allUser'] as $allUser): ?>
                                     <tr class="group hover:bg-gray-50/50 transition-all duration-200">
                                         <td class="px-8 py-5">
                                             <div class="flex items-center space-x-4">
                                                 <div class="flex-shrink-0 h-10 w-10 rounded-lg overflow-hidden bg-gray-100">
-                                                    <?php if($allUser['profile_picture'] == NULL) :?>
-                                                        <img class="h-full w-full object-cover" 
-                                                             src="<?= ASSETS ?>/images/empty-user.png" alt="">
-                                                    <?php else :?>
-                                                        <img class="h-full w-full object-cover" 
-                                                             src="<?= PHOTOPROFILE . $allUser['profile_picture']?>" alt="">
-                                                    <?php endif; ?>
+                                                    <?php if ($allUser['profile_picture'] == null): ?>
+                                                        <img class="h-full w-full object-cover"
+                                                             src="<?=ASSETS?>/images/empty-user.png" alt="">
+                                                    <?php else: ?>
+                                                        <img class="h-full w-full object-cover"
+                                                             src="<?=PHOTOPROFILE . $allUser['profile_picture']?>" alt="">
+                                                    <?php endif;?>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <p class="text-sm font-medium text-gray-900">
-                                                        <?= $allUser['name'] ?>
+                                                        <?=$allUser['name']?>
                                                     </p>
                                                     <p class="text-sm text-gray-500">
-                                                        <?= $allUser['email'] ?>
+                                                        <?=$allUser['email']?>
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-8 py-5">
-                                            <?php if ($allUser['role_id'] == 1) { ?>
+                                            <?php if ($allUser['role_id'] == 1) {?>
                                                 <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600">
                                                     <span class="w-1 h-1 mr-1.5 rounded-full bg-red-500"></span>
                                                     Admin
                                                 </span>
-                                            <?php } elseif ($allUser['role_id'] == 2) { ?>
+                                            <?php } elseif ($allUser['role_id'] == 2) {?>
                                                 <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-600">
                                                     <span class="w-1 h-1 mr-1.5 rounded-full bg-blue-500"></span>
                                                     Researcher
                                                 </span>
-                                            <?php } ?>
-                                        </td>
-                                        <td class="px-8 py-5">
-                                            <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-green-50 text-green-600">
-                                                <span class="w-1 h-1 mr-1.5 rounded-full bg-green-500"></span>
-                                                Active
-                                            </span>
+                                            <?php }?>
                                         </td>
                                         <td class="px-8 py-5 text-sm space-x-3">
-                                            <a href="<?= BASEURL; ?>/User/editView/<?= $allUser['user_id'] ?>" 
-                                               class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
+                                            <a href="<?=BASEURL;?>/User/editView/<?=$allUser['user_id']?>"
+                                            class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </a>
-                                            <?php if ($allUser['user_id'] != $_SESSION['user_id']) { ?>
-                                                <a href="<?= BASEURL; ?>/User/Delete/<?= $allUser['user_id'] ?>" 
-                                                   class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200"
-                                                   onclick="return confirm('Are you sure you want to delete this user?')">
+                                            <?php if ($allUser['user_id'] != $_SESSION['user_id']) {?>
+                                                <a href="<?=BASEURL;?>/User/Delete/<?=$allUser['user_id']?>"
+                                                class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200"
+                                                onclick="return confirm('Apakah yakin untuk dihapus?')">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                     </svg>
@@ -282,7 +342,7 @@
                                             <?php }?>
                                         </td>
                                     </tr>
-                                    <?php endforeach; ?>
+                                    <?php endforeach;?>
                                 </tbody>
                             </table>
                         </div>
@@ -304,24 +364,56 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Modern Logout Button -->
-            <form action="<?= BASEURL; ?>/login/logout" method="POST" class="absolute top-6 right-6">
-                <input type="hidden" name="action" value="logout">
-                <button type="submit" class="px-5 py-2.5 text-sm font-medium rounded-lg btn-outline">
-                    Logout
-                </button>
-            </form>
         </main>
     </div>
 
     <script>
         // Update user profile section with session data
         const userData = <?php echo json_encode($userData); ?>;
-        
+
         document.getElementById('username').textContent = userData.username;
         document.getElementById('userRole').textContent = userData.role;
         document.getElementById('userAvatar').src = userData.avatar;
+    </script>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+
+            // Date formatting
+            const dateOptions = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            const dateFormatter = new Intl.DateTimeFormat('en-US', dateOptions);
+            document.getElementById('currentDate').textContent = dateFormatter.format(now);
+
+            // Time formatting
+            const timeOptions = {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            };
+            const timeFormatter = new Intl.DateTimeFormat('en-US', timeOptions);
+            const timeElement = document.getElementById('currentTime');
+            const newTime = timeFormatter.format(now);
+
+            if (timeElement.textContent !== newTime) {
+                timeElement.classList.add('animate-pulse');
+                setTimeout(() => {
+                    timeElement.classList.remove('animate-pulse');
+                }, 500);
+            }
+
+            timeElement.textContent = newTime;
+        }
+
+        // Initialize DateTime
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
     </script>
 </body>
 </html>

@@ -3,163 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Gambar - IsFor PRI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
-          rel="stylesheet">
+    <title>Upload File - IsFor Internet of Things For Human Life's</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/IsFor-Website/App/public/assets/css/styles.css">
     <style>
-        /* Atur modal untuk tampil di atas overlay */
-        #confirmationModal {
-            z-index: 50; /* Modal memiliki z-index lebih tinggi */
+        /* Simplified Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        #confirmationModal .bg-black {
-            z-index: 40; /* Overlay memiliki z-index lebih rendah */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
         }
 
-        /* Pastikan modal berada di tengah layar */
-        #confirmationModal .flex {
-            z-index: 50;
+        .upload-zone {
+            background-size: 40px 40px;
+            background-image: radial-gradient(circle, #fee2e2 1px, transparent 1px);
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:hover {
+            background-color: #FEF2F2;
+        }
+
+        .form-input:focus {
+            border-color: #ef4444;
+            transform: translateY(-2px);
         }
     </style>
-
 </head>
-<body class="bg-gray-50">
+<body class="bg-white">
 <div class="flex">
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
-
-    <div class="flex-1 min-h-screen ml-64">
+    <?php include '../app/views/assets/components/UserDashboard/sidebar.php';?>
+    <div class="flex-1 min-h-screen ml-64 bg-white">
         <main class="py-10 px-8">
-            <div class="max-w-4xl mx-auto">
-                <!-- Header -->
-                <div class="text-center mb-12">
-                        <span class="inline-block px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
-                            Pengajuan
-                        </span>
-                    <h1 class="text-4xl font-bold text-red-900">
-                        Upload File
-                    </h1>
+            <!-- Swiss-inspired Header -->
+            <div class="max-w-7xl mx-auto mb-12 fade-in">
+                <div class="flex items-center space-x-4 mb-4">
+                    <span class="h-px w-12 bg-red-600"></span>
+                    <span class="text-red-600 font-medium">Pengajuan</span>
                 </div>
-                <!-- Form Section -->
-                <div class="bg-white rounded-2xl border-2 border-red-100 p-8">
-                    <form id="uploadForm" action="<?= BASEURL; ?>/researchoutput/uploadFile" method="POST"
-                          enctype="multipart/form-data">
-                        <div class="space-y-6">
-                            <!-- Judul Gambar -->
-                            <div>
-                                <label for="fileTitle" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Judul File
-                                </label>
-                                <input type="text" id="fileTitle" name="fileTitle" required
-                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                       placeholder="Masukkan judul file">
-                            </div>
+                <h1 class="text-5xl font-bold text-red-900 mb-2">Upload File</h1>
+            </div>
 
-                            <!-- Kategori -->
-                            <div>
-                                <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Kategori
-                                </label>
-                                <select id="category" name="category" required
-                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    <option value="">Pilih Kategori</option>
-                                    <option value="event">Event</option>
-                                    <option value="research">Penelitian</option>
-                                    <option value="facility">Fasilitas</option>
-                                    <option value="other">Lainnya</option>
-                                </select>
+            <!-- Upload Form -->
+            <form action="<?=BASEURL;?>/researchoutput/uploadFile" method="POST" enctype="multipart/form-data"
+                  id="uploadForm" class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-12 gap-8">
+                    <!-- Left Column -->
+                    <div class="col-span-8">
+                        <!-- Upload Section -->
+                        <section class="bg-white rounded-2xl border-2 border-red-100 overflow-hidden fade-in mb-8">
+                            <div class="p-6 border-b border-red-100">
+                                <h2 class="text-xl font-semibold text-red-800">Area Unggah</h2>
                             </div>
-
-                            <!-- Deskripsi -->
-                            <div>
-                                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Deskripsi
-                                </label>
-                                <textarea id="description" name="description" rows="4" required
-                                          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                          placeholder="Jelaskan secara singkat tentang file yang diupload"></textarea>
-                            </div>
-
-                            <!-- Image Upload -->
-                            <div>
-                                <label for="file" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Unggah File
-                                </label>
-                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
-                                    <div class="space-y-1 text-center">
-                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
-                                             viewBox="0 0 48 48">
-                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                        <div class="flex text-sm text-gray-600">
-                                            <label for="file-upload"
-                                                   class="relative cursor-pointer bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-red-500">
-                                                <span>Upload a file</span>
-                                                <input id="file-upload" name="file" type="file"
-                                                       accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx,.xlsx"
-                                                       class="sr-only" required>
-                                            </label>
-                                            <p class="pl-1">or drag and drop</p>
+                            <div class="p-8">
+                                <div class="upload-zone group h-72 border-2 border-dashed border-red-200 rounded-xl relative">
+                                    <input type="file" name="file" id="file-upload" class="hidden"
+                                           accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.zip,.rar" required>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center transform group-hover:-translate-y-2 transition-all duration-300">
+                                        <div class="w-20 h-20 mb-6 rounded-full bg-red-50 flex items-center justify-center group-hover:bg-red-100 transition-all duration-300">
+                                            <!-- File Icon (Changed from image icon) -->
+                                            <svg class="w-10 h-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                            </svg>
                                         </div>
-                                        <p class="text-xs text-gray-500">
-                                            PNG, JPG, GIF up to 5MB
-                                        </p>
+                                        <div class="space-y-3 pt-4">
+                                            <!-- Preview Button -->
+                                            <button type="button" onclick="document.getElementById('file-upload').click()"
+                                                    class="w-full px-6 py-4 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                                                           hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1
+                                                           transition-all duration-300 flex items-center justify-center space-x-2">
+                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                                </svg>
+                                                <span>Pilih File</span>
+                                            </button>
+                                        </div>
+                                        <p class="mt-4 text-sm text-gray-400">atau drag & drop file Anda di sini</p>
+
                                     </div>
                                 </div>
                             </div>
+                        </section>
 
-                            <!-- Preview Modal -->
-                            <div id="filePreview" class="hidden">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Preview
-                                </label>
-                                <img id="previewImage" src="#" alt="Preview Gambar"
-                                     class="max-w-full h-auto rounded-lg hidden">
-                                <p id="previewText" class="text-gray-700 text-sm mt-2 hidden"></p>
-                            </div>
-
-
-                            <!-- Submit Button -->
-                            <div class="flex justify-end">
-                                <button type="submit"
-                                        class="px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                    Upload File
-                                </button>
+                        <!-- Preview Section -->
+                        <div id="filePreview" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6">
+                            <h3 class="text-lg font-semibold text-red-800 mb-4">Preview File</h3>
+                            <div id="previewContent" class="space-y-4">
+                                <!-- Preview content will be inserted here -->
                             </div>
                         </div>
-                    </form>
-                    <div id="responseMessage" class="mt-4 text-sm"></div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-span-4">
+                        <div class="sticky top-8 bg-white rounded-2xl p-8 border-2 border-red-100 space-y-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-600">Judul File</label>
+                                <input type="text" id="fileTitle" name="fileTitle" required
+                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
+                                       placeholder="Masukkan judul file">
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-600">Skema Penelitian</label>
+                                <select id="category" name="category" required
+                                        class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">
+                                    <option value="">Pilih Skema Penelitian</option>
+                                    <option value="DIPA SWADANA">DIPA SWADANA</option>
+                                    <option value="DIPA PNBP">DIPA PNBP</option>
+                                    <option value="Tesis Magister">Tesis Magister</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-600">Deskripsi</label>
+                                <textarea id="description" name="description" required
+                                          class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300 h-32"
+                                          placeholder="Masukkan deskripsi file"></textarea>
+                            </div>
+
+                            <button type="submit" id="uploadButton"
+                                    class="w-full px-6 py-4 bg-red-500 text-white rounded-xl hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300">
+                                Upload File
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </main>
     </div>
-    <div id="confirmationModal" class="hidden fixed z-10 inset-0">
-        <!-- Overlay -->
-        <div class="fixed inset-0 bg-black opacity-50"></div>
-        <!-- Modal Content -->
-        <div class="flex items-center justify-center min-h-screen px-4 relative z-50">
-            <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-auto">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi</h2>
-                <p class="text-sm text-gray-600 mb-6">
-                    Apakah Anda yakin ingin mengunggah file ini?
-                </p>
-                <div class="flex justify-end space-x-4">
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal"
+     class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 z-50 fade-in"
+     style="backdrop-filter: blur(4px);">
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0"
+             id="modalContent">
+            <div class="p-6">
+                <div class="w-16 h-16 rounded-full bg-red-50 mx-auto mb-4 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-semibold text-center text-red-800 mb-2">Konfirmasi Upload</h2>
+                <p class="text-gray-600 text-center mb-6">Apakah Anda yakin ingin mengunggah file ini?</p>
+                <div class="flex justify-center space-x-3">
                     <button id="cancelButton"
-                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                            class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                                   hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 transition-all duration-300">
                         Batal
                     </button>
                     <button id="confirmButton"
-                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                        Oke
+                            class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
+                                   transform hover:-translate-y-1 transition-all duration-300">
+                        Upload
                     </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Modal Konfirmasi -->
+
+<!-- Alert Messages -->
+<div id="alertMessage"
+     class="hidden fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 translate-y-[-100%]">
+</div>
+
 <script>
     // Image preview functionality
     document.getElementById('file-upload').addEventListener('change', function (e) {
@@ -229,7 +246,7 @@
 
         if (!isValid) return; // Jangan kirim form jika ada error
 
-        fetch('<?= BASEURL; ?>/researchoutput/uploadFile', {
+        fetch('<?=BASEURL;?>/researchoutput/uploadFile', {
             method: 'POST',
             body: form
         })
@@ -296,7 +313,7 @@
         // Kirim data setelah konfirmasi
         const formData = new FormData(form);
 
-        fetch('<?= BASEURL; ?>/researchoutput/uploadFile', {
+        fetch('<?=BASEURL;?>/researchoutput/uploadFile', {
             method: 'POST',
             body: formData,
         })
@@ -315,6 +332,99 @@
             });
     });
 
+    // Add this after your existing script
+    function showAlert(message, type = 'success') {
+        const alertElement = document.getElementById('alertMessage');
+        const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+        const icon = type === 'success'
+            ? `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+               </svg>`
+            : `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+               </svg>`;
+
+        alertElement.className = `fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 ${bgColor}`;
+        alertElement.innerHTML = `
+            <div class="p-4 flex items-center">
+                <div class="flex-shrink-0 text-white">
+                    ${icon}
+                </div>
+                <div class="ml-3 text-white font-medium">${message}</div>
+                <button onclick="closeAlert()" class="ml-auto text-white hover:text-gray-200">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        alertElement.style.transform = 'translateY(0)';
+        alertElement.classList.remove('hidden');
+
+        // Auto hide after 5 seconds
+        setTimeout(closeAlert, 5000);
+    }
+
+    function closeAlert() {
+        const alertElement = document.getElementById('alertMessage');
+        alertElement.style.transform = 'translateY(-100%)';
+        setTimeout(() => alertElement.classList.add('hidden'), 300);
+    }
+
+    // Update your modal show/hide logic
+    function showModal() {
+        const modal = document.getElementById('confirmationModal');
+        const modalContent = document.getElementById('modalContent');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 50);
+    }
+
+    function hideModal() {
+        const modal = document.getElementById('confirmationModal');
+        const modalContent = document.getElementById('modalContent');
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    // Update your existing event listeners
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (validateForm()) {
+            showModal();
+        }
+    });
+
+    cancelButton.addEventListener('click', hideModal);
+
+    // Update your fetch success/error handling
+    confirmButton.addEventListener('click', () => {
+        hideModal();
+        const formData = new FormData(form);
+
+        fetch('<?=BASEURL;?>/researchoutput/uploadFile', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert(data.message, 'success');
+                form.reset();
+            } else {
+                showAlert(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showAlert('Terjadi kesalahan. Silakan coba lagi.', 'error');
+        });
+    });
 </script>
 </body>
 </html>

@@ -55,6 +55,34 @@
         .status-badge:hover {
             transform: scale(1.05);
         }
+
+        .filter-btn {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #dc2626; /* red-600 */
+            transition: width 0.3s ease;
+        }
+
+        .filter-btn.active {
+            color: #dc2626;
+        }
+
+        .filter-btn.active::after {
+            width: 100%;
+        }
+
+        .filter-btn:hover {
+            background-color: #fee2e2; /* red-100 */
+        }
     </style>
 </head>
 <body class="bg-white">
@@ -99,20 +127,27 @@
                     <!-- Filters and Search -->
                     <div class="p-6 border-b border-red-100">
                         <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-4">
-                                <button class="px-4 py-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                            <div class="relative flex items-center space-x-4">
+                                <!-- Animated Underline -->
+                                <div class="absolute bottom-0 h-0.5 bg-red-600 transition-all duration-300" id="activeIndicator"></div>
+                                
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn active" 
+                                        data-status="0"
                                         onclick="filter(0)">
                                     Semua
                                 </button>
-                                <button class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn" 
+                                        data-status="2"
                                         onclick="filter(2)">
                                     Disetujui
                                 </button>
-                                <button class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn" 
+                                        data-status="1"
                                         onclick="filter(1)">
                                     Tertunda
                                 </button>
-                                <button class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn" 
+                                        data-status="3"
                                         onclick="filter(3)">
                                     Ditolak
                                 </button>
@@ -261,6 +296,11 @@
             <!-- Letter content will be loaded here -->
         </div>
     </div>
+</div>
+
+<!-- Alert Container -->
+<div id="alertMessage" class="fixed top-0 right-0 m-8 transition-transform duration-300 transform translate-y-[-100%] hidden">
+    <!-- Alert content will be injected here by showAlert() -->
 </div>
 
 <script>
@@ -433,6 +473,60 @@
             });
         }, 500);
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Call the existing filter function
+                filter(this.dataset.status);
+            });
+        });
+    });
+
+    function showAlert(message, type = 'success') {
+        const alertElement = document.getElementById('alertMessage');
+        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+        const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
+        const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
+
+        alertElement.innerHTML = `
+            <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
+                <div class="flex-shrink-0 ${iconColor}">
+                    ${type === 'success' 
+                        ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+                        : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+                    }
+                </div>
+                <div class="ml-3 ${textColor} font-medium">${message}</div>
+                <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        alertElement.style.transform = 'translateY(0)';
+        alertElement.classList.remove('hidden');
+
+        // Auto hide after 5 seconds
+        setTimeout(closeAlert, 5000);
+    }
+
+    function closeAlert() {
+        const alertElement = document.getElementById('alertMessage');
+        alertElement.style.transform = 'translateY(-100%)';
+        setTimeout(() => alertElement.classList.add('hidden'), 300);
+    }
+
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>

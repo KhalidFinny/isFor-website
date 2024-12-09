@@ -61,9 +61,9 @@
             <div class="col-span-12 lg:col-span-5 lg:col-start-8">
                 <div class="relative">
                     <div class="absolute inset-0 blob-shape bg-red-100 animate-float"></div>
-                    <img src="<?= ASSETS; ?>/images/Logo1.png"
+                    <img src="<?= ASSETS; ?>/images/Logo1.webp"
                          alt="IsFor Logo"
-                         class="relative rounded-3xl"/>
+                         class="relative rounded-3xl animate-float"/>
                 </div>
             </div>
         </div>
