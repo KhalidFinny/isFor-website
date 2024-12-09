@@ -88,11 +88,11 @@ session_start();
     </style>
 </head>
 <body class="bg-white">
-<?php if (!isset($_SESSION['user_id'])) : ?>
-    <?php include_once '../app/views/assets/components/navbar.php'; ?>
-<?php else : ?>
-    <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
-<?php endif; ?>
+<?php if (!isset($_SESSION['user_id'])): ?>
+    <?php include_once '../app/views/assets/components/navbar.php';?>
+<?php else: ?>
+    <?php include_once '../app/views/assets/components/navbarafterlogin.php';?>
+<?php endif;?>
 <section class="min-h-screen py-20 relative overflow-hidden">
     <div class="container mx-auto px-6 max-w-7xl">
         <!-- Header -->
@@ -109,12 +109,12 @@ session_start();
         <!-- Topics Navigation -->
         <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
             <?php
-            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
-            foreach ($topics as $index => $topic): ?>
+$topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
+foreach ($topics as $index => $topic): ?>
                 <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
                     <?php echo $topic; ?>
                 </button>
-            <?php endforeach; ?>
+            <?php endforeach;?>
         </div>
 
         <!-- Gallery Grid -->
@@ -123,7 +123,7 @@ session_start();
                 <div class="gallery-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
                     <div class="image-container">
                         <div class="image-placeholder">
-                            <img src="<?= GALLERY; ?>/files/<?php echo $item['image']; ?>"
+                            <img src="<?=GALLERY;?>/files/<?php echo $item['image']; ?>"
                                  alt="<?php echo $item['title']; ?>" class="w-full h-full object-cover">
                         </div>
                         <div class="image-overlay">
@@ -138,13 +138,24 @@ session_start();
                             </p>
                         </div>
                     </div>
-                    <div class="mt-4">
+                    <div class="mt-4 flex justify-between items-center">
                         <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
                             <?php echo $item['title']; ?>
                         </h3>
+
+                        <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
+                            <button onclick="deleteImage(<?php echo $item['id']; ?>)"
+                                    class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="Delete">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        <?php endif;?>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php endforeach;?>
         </div>
     </div>
 </section>
@@ -190,6 +201,29 @@ session_start();
             });
         });
     });
+
+    function deleteImage(imageId) {
+        if (confirm('Are you sure you want to delete this image?')) {
+            fetch(`<?=BASEURL?>/gallery/delete/${imageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Error deleting image');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting image');
+            });
+        }
+    }
 </script>
 </body>
 </html>

@@ -129,7 +129,7 @@
             ],
         },
         {name: 'Agenda', href: '<?= BASEURL; ?>/home/agenda'},
-        {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '<?= BASEURL; ?>/#'}]},
+        {name: 'Arsip', dropdownItems: [{name: 'Dokumen', href: '<?= BASEURL; ?>/home/archives'}]},
         {name: 'Galeri', href: '<?= BASEURL; ?>/home/galeri'},
     ];
 

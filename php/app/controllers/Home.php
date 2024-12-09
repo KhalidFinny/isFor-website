@@ -76,4 +76,8 @@ class Home extends Controller
 
         $this->view('main/hasilpenelitian', $data);
     }
+    public function archives(){
+        $this->view('main/dokumen');
+    }
+
 }
