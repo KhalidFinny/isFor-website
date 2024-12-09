@@ -8,22 +8,6 @@ class Galleries extends Controller
         $this->view("main/galeri");
     }
 
-//    public function uploadImgView()
-//    {
-//        $this->checkLogin();
-//        $role = $this->checkRole();
-//        $this->checkSessionTimeOut();
-//        if ($role == 2) {
-//            $this->saveLastVisitedPage();
-//            $this->view('user/uploadImage');
-//        } else if ($role == 1) {
-//            $this->saveLastVisitedPage();
-//            $this->view('admin/upload-image');
-//        } else {
-//            header('Location: ' . $this->getLastVisitedPage());
-//        }
-//    }
-
     public function uploadImgView()
     {
         $this->checkLogin();
@@ -36,57 +20,6 @@ class Galleries extends Controller
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
-
-//    public function verifyImgView()
-//    {
-//        $this->checkLogin();
-//        $role = $this->checkRole();
-//        $this->checkSessionTimeOut();
-//        if ($role == 1) {
-//            $this->saveLastVisitedPage();
-//            $galleryModel = $this->model('GalleryModel');
-//            $images = $galleryModel->getPendingImages();
-////            echo '<pre>';
-////            print_r($images);
-////            echo '</pre>';
-//            $this->view('admin/verifyImages', compact('images'));
-//        } else {
-//            header('Location: ' . $this->getLastVisitedPage());
-//        }
-//    }
-
-
-//    public function imgHistoryView($status = 'all')
-//    {
-//        $this->checkLogin();
-//        $role = $this->checkRole();
-//        $this->checkSessionTimeOut();
-//
-//        if ($role == 2) {
-//            $this->saveLastVisitedPage();
-//
-//            $galleryModel = $this->model('GalleryModel');
-//            $userId = $_SESSION['user_id'];
-//
-//            // Filter berdasarkan status
-//            if ($status === 'all') {
-//                $images = $galleryModel->getImagesByUser($userId);
-//            } else {
-//                $images = $galleryModel->getImagesByUserAndStatus($userId, $status);
-//            }
-//
-//            $totalImages = count($images);
-//
-//            $this->view('user/image-history', [
-//                'totalImages' => $totalImages,
-//                'images' => $images,
-//                'selectedStatus' => $status  // Menggunakan 'selectedStatus' secara konsisten
-//            ]);
-//        } else {
-//            header('Location: ' . $this->getLastVisitedPage());
-//        }
-//    }
-
 
     public function getImages()
     {
@@ -113,13 +46,14 @@ class Galleries extends Controller
                     return;
                 }
 
-                $title = htmlspecialchars(trim($_POST['fileTitle']));
+                $title = htmlspecialchars(trim($_POST['imageTitle']));
                 $category = htmlspecialchars(trim($_POST['category']));
                 $description = htmlspecialchars(trim($_POST['description']));
 
                 if (empty($title) || empty($category) || empty($description)) {
                     $response['message'] = 'Semua field wajib diisi.';
                     echo json_encode($response);
+                    error_log("Data yang diterima: " . json_encode($_POST));
                     return;
                 }
 
@@ -132,7 +66,7 @@ class Galleries extends Controller
 
                     $fileName = basename($_FILES['image']['name']);
                     $uniqueName = uniqid() . "_" . $fileName;
-                    $targetFilePath = $uploadDir . '/files/' . $uniqueName;
+                    $targetFilePath = $uploadDir . $uniqueName;
                     $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
 
                     // Validasi ekstensi file
@@ -140,12 +74,13 @@ class Galleries extends Controller
                     if (in_array($fileType, $allowedExtensions)) {
                         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
                             // Simpan data ke database
-                            $uploadSuccess = $this->model('ResearchOutputModel')->create(
+                            $uploadSuccess = $this->model('GalleryModel')->create(
                                 $uniqueName,
                                 $category,
                                 $title,
-                                'pending', // Status default
-                                $_SESSION['user_id']
+                                $_SESSION['user_id'],
+                                $description
+
                             );
 
                             if ($uploadSuccess) {
@@ -175,158 +110,4 @@ class Galleries extends Controller
             echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
         }
     }
-
-//    public function uploadImg()
-//    {
-//        $this->checkLogin();
-//        $role = $this->checkRole();
-//        $this->checkSessionTimeOut();
-//
-//        if ($role !== 1) {
-//            echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
-//            return;
-//        }
-//
-//        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-//            echo json_encode(['success' => false, 'message' => 'Metode tidak valid.']);
-//            return;
-//        }
-//
-//        $response = ['success' => false, 'message' => ''];
-//
-//        // Validasi input dari pengguna
-//        $title = htmlspecialchars(trim($_POST['fileTitle'] ?? ''));
-//        $category = htmlspecialchars(trim($_POST['category'] ?? ''));
-//        $description = htmlspecialchars(trim($_POST['description'] ?? ''));
-//
-//        if (empty($title) || empty($category) || empty($description)) {
-//            $response['message'] = 'Semua field wajib diisi.';
-//            echo json_encode($response);
-//            return;
-//        }
-//
-//        // Validasi file
-//        if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
-//            $response['message'] = 'Tidak ada file yang diunggah atau terjadi kesalahan.';
-//            echo json_encode($response);
-//            return;
-//        }
-//
-//        $file = $_FILES['file'];
-//        $uploadDir = __DIR__ . '/../files/research_output/';
-//        if (!is_dir($uploadDir)) {
-//            mkdir($uploadDir, 0777, true);
-//        }
-//
-//        // Dapatkan ekstensi file
-//        $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-//        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-//
-//        if (!in_array($fileExtension, $allowedExtensions)) {
-//            $response['message'] = 'Ekstensi file tidak didukung. Hanya diperbolehkan: ' . implode(', ', $allowedExtensions);
-//            echo json_encode($response);
-//            return;
-//        }
-//
-//        // Buat nama file unik
-//        $uniqueFileName = uniqid() . '.' . $fileExtension;
-//        $filePath = $uploadDir . $uniqueFileName;
-//
-//        // Pindahkan file ke direktori tujuan
-//        if (!move_uploaded_file($file['tmp_name'], $filePath)) {
-//            $response['message'] = 'Gagal memindahkan file.';
-//            echo json_encode($response);
-//            return;
-//        }
-//
-//        // Simpan informasi file ke database
-//        $researchModel = $this->model('ResearchOutputModel');
-//        $saveSuccess = $researchModel->create(
-//            $uniqueFileName,  // Nama file yang disimpan
-//            $_SESSION['user_id'], // ID user
-//            $title, // Judul file
-//            $category, // Kategori
-//            $description // Deskripsi
-//        );
-//
-//        if ($saveSuccess) {
-//            $response['success'] = true;
-//            $response['message'] = 'File berhasil diunggah.';
-//        } else {
-//            // Jika penyimpanan ke database gagal, hapus file
-//            unlink($filePath);
-//            $response['message'] = 'Gagal menyimpan informasi file ke database.';
-//        }
-//
-//        echo json_encode($response);
-//    }
-
-
-//    public function filter()
-//    {
-//        session_start();
-//        $status = $_POST['status'];
-//        $userId = $_SESSION['user_id'];
-//
-//        switch ($status) {
-//            case 0: // Semua surat
-//                $images = $this->model('GalleryModel')->getImageByUserId($userId);
-//                break;
-//            case 1: // Surat tertunda
-//                $images = $this->model('GalleryModel')->getImageByUserIdPending($userId);
-//                break;
-//            case 2: // Surat disetujui
-//                $images = $this->model('GalleryModel')->getImageByUserIdVerify($userId);
-//                break;
-//            case 3: // Surat ditolak
-//                $images = $this->model('GalleryModel')->getImageByUserIdReject($userId);
-//                break;
-//            default:
-//                echo json_encode(['error' => 'Invalid status']);
-//                return; // Hentikan eksekusi
-//        }
-//
-//        // Mengembalikan hasil sebagai JSON
-//        echo json_encode($images);
-//    }
-
-//    public function verifyImage($id)
-//    {
-//        $this->checkLogin();
-//        $role = $this->checkRole();
-//        $this->checkSessionTimeOut();
-//
-//        if ($role == 1) { // Pastikan hanya admin yang bisa memverifikasi
-//            $model = $this->model("GalleryModel");
-//            $images = $model->getPendingImages();
-//            if ($model->updateStatus($id, 2)) { // Status 2 untuk verified
-//                echo json_encode(['success' => true, 'message' => 'Image verified successfully.']);
-//            } else {
-//                echo json_encode(['success' => false, 'message' => 'Failed to verify image.']);
-//            }
-//        } else {
-//            http_response_code(403);
-//            echo json_encode(['success' => false, 'message' => 'Unauthorized action.']);
-//        }
-//    }
-
-//    public function rejectImage($id)
-//    {
-//        $this->checkLogin();
-//        $role = $this->checkRole();
-//        $this->checkSessionTimeOut();
-//
-//        if ($role == 1) { // Pastikan hanya admin yang bisa menolak
-//            $model = $this->model("GalleryModel");
-//            if ($model->updateStatus($id, 3)) { // Status 3 untuk rejected
-//                echo json_encode(['success' => true, 'message' => 'Image rejected successfully.']);
-//            } else {
-//                echo json_encode(['success' => false, 'message' => 'Failed to reject image.']);
-//            }
-//        } else {
-//            http_response_code(403);
-//            echo json_encode(['success' => false, 'message' => 'Unauthorized action.']);
-//        }
-//    }
-
 }

@@ -2,12 +2,14 @@
 
 require_once "Roadmap.php";
 
-class Home extends Controller{
+class Home extends Controller
+{
 
     // Fungsi untuk menginisialisasi user default
-    private function initializeDefaultUser() {
+    private function initializeDefaultUser()
+    {
         $userModel = $this->model('UsersModel');
-        
+
         // Cek apakah user sudah ada
         if (!$userModel->checkUserExists()) {
             // Jika belum ada, tambahkan user default
@@ -15,7 +17,8 @@ class Home extends Controller{
         }
     }
 
-    public function index(){
+    public function index()
+    {
         $this->initializeDefaultUser();
         $roadmapController = new Roadmap();
         $data['roadmaps'] = $roadmapController->groupingRoadmap();
@@ -23,18 +26,54 @@ class Home extends Controller{
         $this->view('main/home', $data);
     }
 
-    public function agenda(){
+    public function agenda()
+    {
         $data['agenda'] = $this->model('AgendaModel')->getAllAgenda();
         $data['no'] = 1;
         $this->view('main/agenda', $data);
     }
 
-    public function galeri(){
-        $this->view('main/galeriweb');
+    public function galeri()
+    {
+        $data['galeri'] = $this->model('GalleryModel')->getAll();
+        $this->view('main/galeriweb', $data);
     }
 
-    public function hasilPenelitian(){
-        $this->view('main/hasilpenelitian');
+//    public function hasilPenelitian(){
+//        $data['researchoutput'] = $this->model('ResearchOutputModel')->getAll();
+//        $this->view('main/hasilpenelitian', $data);
+//    }
+
+    public function getOriginalFileName($fileNameWithExt)
+    {
+        $metaDir = __DIR__ . '/../files/meta/';
+        $metaFilePath = $metaDir . $fileNameWithExt . '.meta';
+
+        // Debugging jalur metadata (opsional)
+        error_log("Accessing Metadata: $metaFilePath");
+
+        if (file_exists($metaFilePath)) {
+            return file_get_contents($metaFilePath);
+        } else {
+            return 'Judul tidak ditemukan';
+        }
     }
 
+    public function hasilPenelitian()
+    {
+        $researchModel = $this->model('ResearchOutputModel');
+        $data['researchOutputs'] = $researchModel->getVerifyFiles();
+
+        // Jika ingin menambahkan pengolahan data, seperti menambahkan `original_name`:
+        foreach ($data['researchOutputs'] as &$researchOutput) {
+            $fileNameWithExt = pathinfo(basename($researchOutput['file_url']), PATHINFO_BASENAME);
+            $metaFilePath = __DIR__ . '/../files/meta/' . $fileNameWithExt . '.meta';
+
+            $researchOutput['original_name'] = file_exists($metaFilePath)
+                ? $this->getOriginalFileName($fileNameWithExt)
+                : 'Judul tidak ditemukan';
+        }
+
+        $this->view('main/hasilpenelitian', $data);
+    }
 }

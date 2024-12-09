@@ -50,7 +50,7 @@ class ResearchOutputModel
 
     public function getVerifyFiles()
     {
-        $query = "SELECT * FROM " . $this->table . " WHERE status = 2 ORDER BY uploaded_at DESC";
+        $query = "SELECT * FROM " . $this->table . " WHERE status = 2";
         $this->db->query($query);
         return $this->db->resultSet();
     }

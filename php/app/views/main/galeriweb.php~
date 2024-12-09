@@ -7,30 +7,29 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hasil Penelitian</title>
+    <title>Gallery</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
     <style>
-        .poster-item {
+        .gallery-item {
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .poster-item.visible {
+        .gallery-item.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .poster-container {
+        .image-container {
             position: relative;
             overflow: hidden;
-            aspect-ratio: 3/4; /* Portrait ratio for posters */
+            aspect-ratio: 4/3;
         }
 
-        .poster-overlay {
+        .image-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -46,22 +45,18 @@ session_start();
             cursor: pointer;
         }
 
-        .poster-item:hover .poster-overlay {
+        .gallery-item:hover .image-overlay {
             opacity: 1;
         }
 
-        .poster-placeholder {
+        .image-placeholder {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #fcf8fa 0%, #f0e2e8 100%);
+            background: linear-gradient(135deg, #f9f1f5 25%, #f0e2e8 25%);
             transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #f0e2e8;
         }
 
-        .poster-item.zoomed .poster-placeholder {
+        .gallery-item.zoomed .image-placeholder {
             transform: scale(1.1);
         }
 
@@ -103,10 +98,10 @@ session_start();
         <!-- Header -->
         <div class="mb-20">
                 <span class="inline-block px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
-                    Hasil Penelitian
+                    Dokumentasi
                 </span>
             <h2 class="text-5xl font-bold mb-6 text-red-900">
-                Poster & Publikasi
+                Galeri Kegiatan
             </h2>
             <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-red-800 rounded-full"></div>
         </div>
@@ -114,7 +109,7 @@ session_start();
         <!-- Topics Navigation -->
         <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
             <?php
-            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
+            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Seminar', 'Tesis Magister'];
             foreach ($topics as $index => $topic): ?>
                 <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
                     <?php echo $topic; ?>
@@ -122,43 +117,41 @@ session_start();
             <?php endforeach; ?>
         </div>
 
-        <!-- Poster Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <?php foreach ($data['researchOutputs'] as $index => $item): ?>
-                <div class="poster-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
-                    <div class="poster-container">
-                        <img src="<?= FILES; ?>/<?php echo htmlspecialchars($item['file_url']); ?>"
-                             alt="<?php echo htmlspecialchars($item['title']); ?>"
-                             class="w-full h-full object-cover">
-                        <div class="poster-overlay">
-                        <span class="text-sm font-semibold text-red-100 mb-2">
-                            <?php echo htmlspecialchars($item['category']); ?> • <?php echo htmlspecialchars($item['uploaded_at']); ?>
-                        </span>
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <?php foreach ($data['galeri'] as $index => $item): ?>
+                <div class="gallery-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
+                    <div class="image-container">
+                        <div class="image-placeholder">
+                            <img src="<?= GALLERY; ?>/files/<?php echo $item['image']; ?>"
+                                 alt="<?php echo $item['title']; ?>" class="w-full h-full object-cover">
+                        </div>
+                        <div class="image-overlay">
+                    <span class="text-sm font-semibold text-red-100 mb-2">
+                        <?php echo $item['category']; ?> • <?php echo date('d M Y', strtotime($item['created_at'])); ?>
+                    </span>
                             <h3 class="text-xl font-bold text-white mb-3">
-                                <?php echo htmlspecialchars($item['title']); ?>
+                                <?php echo $item['title']; ?>
                             </h3>
                             <p class="text-red-100 text-sm leading-relaxed">
-                                <?php echo htmlspecialchars($item['description']); ?>
+                                <?php echo $item['description']; ?>
                             </p>
                         </div>
                     </div>
                     <div class="mt-4">
-                    <span class="text-sm font-medium text-red-600">
-                        <?php echo htmlspecialchars($item['category']); ?>
-                    </span>
-                        <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300 mt-1">
-                            <?php echo htmlspecialchars($item['title']); ?>
+                        <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
+                            <?php echo $item['title']; ?>
                         </h3>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
-
     </div>
 </section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Intersection Observer for fade-in animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
@@ -171,6 +164,7 @@ session_start();
             threshold: 0.1
         });
 
+        // Topic button interactions
         const topicButtons = document.querySelectorAll('.topic-button');
         topicButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -179,10 +173,10 @@ session_start();
             });
         });
 
-        const posterItems = document.querySelectorAll('.poster-item');
-        posterItems.forEach(item => {
+        // Gallery item zoom functionality
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
             observer.observe(item);
-
             item.addEventListener('click', () => {
                 item.classList.toggle('zoomed');
             });

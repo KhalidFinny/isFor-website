@@ -7,6 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -154,12 +157,18 @@
                                 <label class="block text-sm font-medium text-gray-600">Topik Penelitian</label>
                                 <select name="category" required
                                         class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">
-                                    <option value="">Pilih Kategori</option>
-                                    <option value="event">Event</option>
-                                    <option value="research">Penelitian</option>
-                                    <option value="facility">Fasilitas</option>
-                                    <option value="other">Lainnya</option>
+                                    <option value="">Pilih Skema Penelitian</option>
+                                    <option value="DIPA SWADANA">DIPA SWADANA</option>
+                                    <option value="DIPA PNBP">DIPA PNBP</option>
+                                    <option value="Tesis Magister">Tesis Magister</option>
                                 </select>
+<!--                                --><?php //echo '<select name="category" required class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">';
+//                                echo '<option value="">Pilih Skema Penelitian</option>';
+//                                foreach ($categories as $category) {
+//                                    echo "<option value=\"{$category['category_name']}\">{$category['category_name']}</option>";
+//                                }
+//                                echo '</select>';
+//                                ?>
                             </div>
 
                             <div class="space-y-2">
@@ -204,98 +213,86 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('uploadForm');
-        const fileInput = document.getElementById('fileInput');
-        const uploadButton = document.getElementById('uploadButton');
-        const confirmModal = document.getElementById('confirmModal');
-        const cancelButton = document.getElementById('cancelButton');
-        const confirmUploadButton = document.getElementById('confirmUploadButton');
-        const previewContainer = document.getElementById('imagePreview');
-        const dropZone = document.querySelector('.upload-zone');
+    $(document).ready(function () {
+        const $form = $('#uploadForm');
+        const $fileInput = $('#fileInput');
+        const $uploadButton = $('#uploadButton');
+        const $confirmModal = $('#confirmModal');
+        const $cancelButton = $('#cancelButton');
+        const $confirmUploadButton = $('#confirmUploadButton');
+        const $previewContainer = $('#imagePreview');
+        const $dropZone = $('.upload-zone');
 
         // Event listeners
-        fileInput.addEventListener('change', handleFileSelect);
-        uploadButton.addEventListener('click', handleUploadButtonClick);
-        cancelButton.addEventListener('click', () => confirmModal.classList.add('hidden'));
-        confirmUploadButton.addEventListener('click', submitForm);
+        $fileInput.on('change', handleFileSelect);
+        $uploadButton.on('click', handleUploadButtonClick);
+        $cancelButton.on('click', () => $confirmModal.addClass('hidden'));
+        $confirmUploadButton.on('click', submitForm);
 
         // Drag and drop event listeners
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults);
+            $dropZone.on(eventName, preventDefaults);
         });
-        dropZone.addEventListener('dragenter', highlight);
-        dropZone.addEventListener('dragover', highlight);
-        dropZone.addEventListener('dragleave', unhighlight);
-        dropZone.addEventListener('drop', handleDrop);
+        $dropZone.on('dragenter dragover', highlight);
+        $dropZone.on('dragleave drop', unhighlight);
+        $dropZone.on('drop', handleDrop);
 
-        // Fungsi untuk mencegah aksi default (drag dan drop)
         function preventDefaults(e) {
             e.preventDefault();
             e.stopPropagation();
         }
 
-        // Highlight tampilan saat file di-drag
         function highlight() {
-            dropZone.classList.add('border-red-500', 'bg-red-50');
+            $dropZone.addClass('border-red-500 bg-red-50');
         }
 
-        // Menghapus highlight tampilan saat drag selesai
         function unhighlight() {
-            dropZone.classList.remove('border-red-500', 'bg-red-50');
+            $dropZone.removeClass('border-red-500 bg-red-50');
         }
 
-        // Fungsi saat file di-drop ke area
         function handleDrop(e) {
             unhighlight();
-            const files = e.dataTransfer.files;
+            const files = e.originalEvent.dataTransfer.files;
             handleFiles(files);
         }
 
-        // Fungsi untuk menangani file dari input file
         function handleFileSelect(e) {
             handleFiles(e.target.files);
         }
 
-        // Fungsi untuk memproses file
         function handleFiles(files) {
-            previewContainer.innerHTML = ''; // Clear existing previews
-            [...files].forEach((file) => {
+            $previewContainer.empty(); // Clear existing previews
+            $.each(files, (i, file) => {
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         const preview = createPreviewElement(e.target.result, file.name);
-                        previewContainer.appendChild(preview);
+                        $previewContainer.append(preview);
                     };
                     reader.readAsDataURL(file);
                 }
             });
         }
 
-        // Fungsi untuk membuat elemen preview gambar
         function createPreviewElement(src, filename) {
-            const div = document.createElement('div');
-            div.className = 'preview-image relative rounded-lg overflow-hidden';
-            div.innerHTML = `
+            const $div = $('<div>', {class: 'preview-image relative rounded-lg overflow-hidden'});
+            $div.html(`
             <img src="${src}" alt="${filename}" class="w-full h-48 object-cover">
             <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <p class="text-white text-sm px-4 text-center">${filename}</p>
             </div>
-        `;
-            return div;
+        `);
+            return $div;
         }
 
-        // Fungsi yang dipanggil saat tombol upload diklik
         function handleUploadButtonClick(e) {
             e.preventDefault();
 
-            // Ambil nilai input
-            const title = document.querySelector('input[name="imageTitle"]').value.trim();
-            const category = document.querySelector('select[name="category"]').value.trim();
-            const description = document.querySelector('textarea[name="description"]').value.trim();
-            const file = fileInput.files[0];
+            const title = $('input[name="imageTitle"]').val().trim();
+            const category = $('select[name="category"]').val().trim();
+            const description = $('textarea[name="description"]').val().trim();
+            const file = $fileInput[0].files[0];
 
-            // Validasi input
             if (!file) {
                 alert('Silakan pilih file gambar untuk diunggah.');
                 return;
@@ -313,17 +310,15 @@
                 return;
             }
 
-            // Tampilkan modal konfirmasi
-            confirmModal.classList.remove('hidden');
+            $confirmModal.removeClass('hidden');
         }
 
-        // Fungsi untuk mengirimkan form setelah konfirmasi
         function submitForm() {
             const formData = new FormData();
-            const image = fileInput.files[0];
-            const title = document.querySelector('input[name="imageTitle"]').value.trim();
-            const category = document.querySelector('select[name="category"]').value.trim();
-            const description = document.querySelector('textarea[name="description"]').value.trim();
+            const image = $fileInput[0].files[0];
+            const title = $('input[name="imageTitle"]').val().trim();
+            const category = $('select[name="category"]').val().trim();
+            const description = $('textarea[name="description"]').val().trim();
 
             formData.append('image', image);
             formData.append('imageTitle', title);
@@ -331,36 +326,30 @@
             formData.append('description', description);
             formData.append('confirmUpload', 'true');
 
-            // Nonaktifkan tombol upload
-            uploadButton.disabled = true;
-            uploadButton.textContent = 'Uploading...';
+            $uploadButton.prop('disabled', true).text('Uploading...');
 
-            // Kirim data ke server
-            fetch('<?=BASEURL;?>/galleries/uploadImg', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => response.json())
-                .then(data => {
+            $.ajax({
+                url: '<?=BASEURL;?>/galleries/uploadImg',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
                     console.log(data);
-                    if (data.success) {
-                        alert('Upload berhasil!');
-                        window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
-                    } else {
-                        alert(`Upload gagal: ${data.message}`);
-                    }
-                })
-                .catch(error => {
+                    alert('Upload berhasil!');
+                    window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
+
+                },
+                error: function (xhr, status, error) {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan saat mengunggah.');
-                })
-                .finally(() => {
-                    uploadButton.disabled = false;
-                    uploadButton.textContent = 'Upload Gambar';
-                });
+                },
+                complete: function () {
+                    $uploadButton.prop('disabled', false).text('Upload Gambar');
+                }
+            });
         }
     });
-
 </script>
 </body>
 </html>

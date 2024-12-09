@@ -98,6 +98,9 @@ class Galleries extends Controller
 
     public function uploadImg()
     {
+//        header('Content-Type: application/json');
+//        echo json_encode(var_dump($_POST));
+
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
@@ -113,26 +116,14 @@ class Galleries extends Controller
                     return;
                 }
 
-                $title = htmlspecialchars(trim($_POST['fileTitle']));
+                $title = htmlspecialchars(trim($_POST['imageTitle']));
                 $category = htmlspecialchars(trim($_POST['category']));
                 $description = htmlspecialchars(trim($_POST['description']));
 
-                // Validasi data wajib diisi
-                if (empty($title)) {
-                    $response['message'] = 'Judul file harus diisi.';
+                if (empty($title) || empty($category) || empty($description)) {
+                    $response['message'] = 'Semua field wajib diisi.';
                     echo json_encode($response);
-                    return;
-                }
-
-                if (empty($category)) {
-                    $response['message'] = 'Kategori harus dipilih.';
-                    echo json_encode($response);
-                    return;
-                }
-
-                if (empty($description)) {
-                    $response['message'] = 'Deskripsi harus diisi.';
-                    echo json_encode($response);
+                    error_log("Data yang diterima: " . json_encode($_POST));
                     return;
                 }
 
@@ -145,7 +136,7 @@ class Galleries extends Controller
 
                     $fileName = basename($_FILES['image']['name']);
                     $uniqueName = uniqid() . "_" . $fileName;
-                    $targetFilePath = $uploadDir . '/files/' . $uniqueName;
+                    $targetFilePath = $uploadDir . $uniqueName;
                     $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
 
                     // Validasi ekstensi file
@@ -153,12 +144,13 @@ class Galleries extends Controller
                     if (in_array($fileType, $allowedExtensions)) {
                         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
                             // Simpan data ke database
-                            $uploadSuccess = $this->model('ResearchOutputModel')->create(
+                            $uploadSuccess = $this->model('GalleryModel')->create(
                                 $uniqueName,
                                 $category,
                                 $title,
-                                'pending', // Status default
-                                $_SESSION['user_id']
+                                $_SESSION['user_id'],
+                                $description
+
                             );
 
                             if ($uploadSuccess) {

@@ -1,0 +1,12 @@
+<?php
+
+class GalleryModel
+{
+    private $db;
+    private $table = 'c';
+
+    public function __construct()
+    {
+        $this->db = new Database;
+    }
+}
