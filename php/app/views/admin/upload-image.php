@@ -131,8 +131,14 @@
                                             </svg>
                                         </div>
                                         <button type="button" onclick="document.getElementById('fileInput').click()"
-                                                class="px-8 py-4 bg-red-500 text-white rounded-xl hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300">
-                                            Pilih File Gambar
+                                                class="w-half px-6 py-4 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                                                       hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1
+                                                       transition-all duration-300 flex items-center justify-center space-x-2">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                            </svg>
+                                            <span>Pilih File Gambar</span>
                                         </button>
                                         <p class="mt-4 text-sm text-gray-400">atau drag & drop file Anda di sini</p>
                                     </div>
@@ -176,8 +182,14 @@
                             </div>
 
                             <button type="submit" id="uploadButton"
-                                    class="w-full px-6 py-4 bg-red-500 text-white rounded-xl hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300">
-                                Upload Gambar
+                                    class="w-full px-6 py-4 bg-red-500 text-white rounded-xl
+                                           hover:bg-red-600 transform hover:-translate-y-1
+                                           transition-all duration-300 flex items-center justify-center space-x-2">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                </svg>
+                                <span>Upload Gambar</span>
                             </button>
                         </div>
                     </div>
@@ -200,6 +212,11 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Alert Container -->
+<div id="alertMessage" 
+     class="hidden fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 translate-y-[-100%]">
 </div>
 
 <script>
@@ -417,6 +434,74 @@
         confirmUploadButton.addEventListener('click', () => {
             confirmModal.classList.add('hidden'); // Sembunyikan modal
             form.submit(); // Submit form jika pengguna konfirmasi
+        });
+    });
+
+    // Add alert functions
+    function showAlert(message, type = 'success') {
+        const alertElement = document.getElementById('alertMessage');
+        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+        const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
+        const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
+
+        alertElement.innerHTML = `
+            <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
+                <div class="flex-shrink-0 ${iconColor}">
+                    ${type === 'success' 
+                        ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+                        : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+                    }
+                </div>
+                <div class="ml-3 ${textColor} font-medium">${message}</div>
+                <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        alertElement.style.transform = 'translateY(0)';
+        alertElement.classList.remove('hidden');
+
+        // Auto hide after 5 seconds
+        setTimeout(closeAlert, 5000);
+    }
+
+    function closeAlert() {
+        const alertElement = document.getElementById('alertMessage');
+        alertElement.style.transform = 'translateY(-100%)';
+        setTimeout(() => alertElement.classList.add('hidden'), 300);
+    }
+
+    // Update your fetch call to use the new alert system
+    confirmUploadButton.addEventListener('click', () => {
+        confirmModal.classList.add('hidden');
+        const formData = new FormData(form);
+
+        fetch('<?=BASEURL;?>/galleries/uploadImg', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('Gambar berhasil diunggah!', 'success');
+                form.reset();
+                setTimeout(() => {
+                    window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
+                }, 2000);
+            } else {
+                showAlert(data.message || 'Gagal mengunggah gambar.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('Terjadi kesalahan saat mengunggah.', 'error');
+        })
+        .finally(() => {
+            uploadButton.disabled = false;
+            uploadButton.textContent = 'Upload Gambar';
         });
     });
 </script>

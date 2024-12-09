@@ -117,7 +117,7 @@
     <div class="min-h-screen flex flex-col items-center justify-center p-6 relative z-10">
         <!-- Logo -->
         <div class="mb-8">
-            <img src="<?=ASSETS?>/images/Logo1.png" alt="IsFor Logo" class="h-16"/>
+            <img src="<?=ASSETS?>/images/Logo1.webp" alt="IsFor Logo" class="h-16"/>
         </div>
 
         <!-- Login Container -->
