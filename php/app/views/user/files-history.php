@@ -8,90 +8,83 @@
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-            opacity: 0;
+        :root {
+        --primary-red: #E53E3E;
+        --primary-dark: #742A2A;
+        --primary-light: #FEB2B2;
+        --accent-red: #FC8181;
         }
 
-        .slide-up {
-            animation: slideUp 0.5s ease-out forwards;
-            opacity: 0;
+        body {
+        background-color: #FFF5F5;
+        font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .custom-gradient {
+        background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-dark) 100%);
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .custom-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(229, 62, 62, 0.1);
+        transition: all 0.3s ease;
         }
 
-        .image-card {
-            transition: all 0.3s ease;
-            transform: translateY(0);
+        .custom-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px -8px rgba(229, 62, 62, 0.15);
         }
 
-        .image-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px -10px rgba(51, 65, 85, 0.1);
-        }
+        .custom-button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+    }
 
-        .status-badge {
-            transition: all 0.3s ease;
-        }
-
-        .status-badge:hover {
-            transform: scale(1.05);
+        .custom-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
         }
     </style>
 </head>
-<body class="bg-white">
-<div class="flex">
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
-    <div class="flex flex-col flex-1 ml-64 min-h-screen bg-gray-50">
-        <header class="py-6 px-8 bg-white shadow-md">
-            <h1 class="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-600 bg-clip-text text-transparent">
-                Riwayat File
-            </h1>
-            <p class="mt-2 text-red-600">Kelola dan pantau riwayat file Anda</p>
-        </header>
+    <body class="bg-white">
+    <div class="flex">
+        <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
+        <div class="flex flex-col flex-1 ml-64 min-h-screen bg-gray-50">
+        <header class="py-8 px-8 bg-white shadow-lg rounded-b-3xl">
+    <h1 class="text-4xl font-bold custom-gradient text-transparent bg-clip-text">
+        Riwayat File
+    </h1>
+    <p class="mt-2 text-red-700">Kelola dan pantau riwayat file Anda</p>
+</header>
 
         <main class="py-6 px-8 flex-1">
             <div class="max-w-7xl mx-auto">
                 <!-- Tombol Filter -->
-                <div class="flex space-x-4 mb-8">
-                    <button class="filter-button bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                            data-status="all" onclick="filterFile('all')">Semua
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <button class="custom-button custom-gradient text-white" data-status="all" onclick="filterFile('all')">
+                        Semua
                     </button>
-                    <button class="filter-button bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
-                            data-status="1" onclick="filterFile(1)">Pending
+                    <button class="custom-button bg-yellow-400 text-white" data-status="1" onclick="filterFile(1)">
+                        Pending
                     </button>
-                    <button class="filter-button bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                            data-status="2" onclick="filterFile(2)">Disetujui
+                    <button class="custom-button bg-green-500 text-white" data-status="2" onclick="filterFile(2)">
+                        Disetujui
                     </button>
-                    <button class="filter-button bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                            data-status="3" onclick="filterFile(3)">Ditolak
+                    <button class="custom-button bg-red-500 text-white" data-status="3" onclick="filterFile(3)">
+                        Ditolak
                     </button>
                 </div>
 
                 <!-- Statistik Gambar -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-                        <p class="text-sm font-medium text-red-600">Total File</p>
-                        <p class="text-2xl font-bold text-red-900"><?= htmlspecialchars($data['totalFiles']); ?></p>
-                    </div>
+                <div class="custom-card p-6 border-l-4 border-red-500">
+                <p class="text-sm font-medium text-red-700">Total File</p>
+                <p class="text-3xl font-bold text-red-900"><?= htmlspecialchars($data['totalFiles']); ?></p>
+                </div>
                     <!-- Tambahkan statistik lainnya jika diperlukan -->
                 </div>
 
@@ -108,12 +101,12 @@
                         </div>
                     <?php else : ?>
                         <?php foreach ($data['files'] as $files) : ?>
-                            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-200 image-card">
+                            <div class="custom-card p-6 hover:border-red-400 border-2 border-transparent">
                                 <h3 class="text-lg font-bold text-red-900 mt-3"><?= htmlspecialchars($files['title']); ?></h3>
-                                <p class="text-sm text-red-600"><?= htmlspecialchars($files['category']); ?></p>
-                                <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg mt-2 inline-block
-                                <?= $files['status'] == 1 ? 'bg-yellow-100 text-yellow-600' :
-                                    ($files['status'] == 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'); ?>">
+                                <p class="text-sm text-red-700"><?= htmlspecialchars($files['category']); ?></p>
+                                <span class="status-badge text-xs font-semibold px-3 py-1.5 rounded-full mt-3 inline-block
+                                <?= $files['status'] == 1 ? 'bg-yellow-100 text-yellow-700' :
+                                    ($files['status'] == 2 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'); ?>">
                                     <?= $files['status'] == 1 ? 'Pending' : ($files['status'] == 2 ? 'Approved' : 'Rejected'); ?>
                                 </span>
                             </div>
