@@ -1,5 +1,6 @@
-<?php 
+<?php
 session_start();
+//var_dump($data);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,56 +13,32 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <style>
-        .poster-item {
+        .file-card {
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        .poster-item.visible {
+
+        .file-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
-        .poster-container {
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 3/4; /* Portrait ratio for posters */
-        }
 
-        .poster-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 50, 50, 0.9);
-            opacity: 0;
+        .file-icon {
+            width: 64px;
+            height: 64px;
             transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 2rem;
-            cursor: pointer;
         }
 
-        .poster-item:hover .poster-overlay {
+        .action-button {
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .file-card:hover .action-button {
+            transform: translateY(0);
             opacity: 1;
-        }
-
-        .poster-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #fcf8fa 0%, #f0e2e8 100%);
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #f0e2e8;
-        }
-
-        .poster-item.zoomed .poster-placeholder {
-            transform: scale(1.1);
         }
 
         .topic-button {
@@ -92,138 +69,210 @@ session_start();
     </style>
 </head>
 <body class="bg-white">
-    <?php if (!isset($_SESSION['user_id'])) : ?>
-        <?php include_once '../app/views/assets/components/navbar.php'; ?>
-    <?php else : ?>
-        <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
-    <?php endif; ?>
-    <section class="min-h-screen py-20 relative overflow-hidden">
-        <div class="container mx-auto px-6 max-w-7xl">
-            <!-- Header -->
-            <div class="mb-20">
+<?php if (!isset($_SESSION['user_id'])): ?>
+    <?php include_once '../app/views/assets/components/navbar.php';?>
+<?php else: ?>
+    <?php include_once '../app/views/assets/components/navbarafterlogin.php';?>
+<?php endif;?>
+<section class="min-h-screen py-20 relative overflow-hidden">
+    <div class="container mx-auto px-6 max-w-7xl">
+        <!-- Header -->
+        <div class="mb-20">
                 <span class="inline-block px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
                     Hasil Penelitian
                 </span>
-                <h2 class="text-5xl font-bold mb-6 text-red-900">
-                    Poster & Publikasi
-                </h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-red-800 rounded-full"></div>
-            </div>
+            <h2 class="text-5xl font-bold mb-6 text-red-900">
+                Hasil Penelitian
+            </h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-red-800 rounded-full"></div>
+        </div>
 
-            <!-- Topics Navigation -->
-            <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
-                <?php
-                $topics = ['Semua', 'AI & ML', 'IoT', 'Cybersecurity', 'Big Data', 'Cloud Computing', 'Software Engineering'];
-                foreach ($topics as $index => $topic): ?>
-                    <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
-                        <?php echo $topic; ?>
-                    </button>
-                <?php endforeach; ?>
-            </div>
+        <!-- Topics Navigation -->
+        <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
+            <?php
+$topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
+foreach ($topics as $index => $topic): ?>
+                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
+                    <?php echo $topic; ?>
+                </button>
+            <?php endforeach;?>
+        </div>
 
-            <!-- Poster Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <?php
-                $posterItems = [
-                    [
-                        "title" => "Implementasi Deep Learning untuk Deteksi Anomali",
-                        "category" => "AI & ML",
-                        "authors" => "Dr. Budi Santoso, et al.",
-                        "year" => "2024",
-                        "abstract" => "Penelitian tentang penggunaan deep learning dalam mendeteksi anomali pada sistem keamanan"
-                    ],
-                    [
-                        "title" => "Smart City IoT Framework",
-                        "category" => "IoT",
-                        "authors" => "Prof. Dewi Putri, et al.",
-                        "year" => "2023",
-                        "abstract" => "Framework IoT untuk implementasi smart city di Indonesia"
-                    ],
-                    [
-                        "title" => "Blockchain untuk Keamanan Data",
-                        "category" => "Cybersecurity",
-                        "authors" => "Dr. Ahmad Wijaya, et al.",
-                        "year" => "2024",
-                        "abstract" => "Implementasi blockchain dalam pengamanan data sensitif"
-                    ],
-                    [
-                        "title" => "Analisis Big Data untuk Smart Governance",
-                        "category" => "Big Data",
-                        "authors" => "Dr. Sarah Putri, et al.",
-                        "year" => "2023",
-                        "abstract" => "Pemanfaatan big data analytics dalam tata kelola pemerintahan"
-                    ]
-                ];
-
-                foreach ($posterItems as $index => $item): ?>
-                    <div class="poster-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
-                        <div class="poster-container">
-                            <div class="poster-placeholder">
-                                <span class="text-gray-400">Poster Preview</span>
-                            </div>
-                            <div class="poster-overlay">
-                                <span class="text-sm font-semibold text-red-100 mb-2">
-                                    <?php echo $item['category']; ?> • <?php echo $item['year']; ?>
-                                </span>
-                                <h3 class="text-xl font-bold text-white mb-3">
-                                    <?php echo $item['title']; ?>
-                                </h3>
-                                <p class="text-red-100 text-sm mb-4">
-                                    <?php echo $item['authors']; ?>
-                                </p>
-                                <p class="text-red-100 text-sm leading-relaxed">
-                                    <?php echo $item['abstract']; ?>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <span class="text-sm font-medium text-red-600">
-                                <?php echo $item['category']; ?>
+        <!-- Files Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php if (isset($data['researchOutputs']) && !empty($data['researchOutputs'])): ?>
+                <?php foreach ($data['researchOutputs'] as $item): ?>
+                    <div class="file-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                        <!-- Category Badge -->
+                        <div class="px-6 py-4 border-b border-gray-100">
+                            <span class="inline-block px-3 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-full">
+                                <?php echo htmlspecialchars($item['category'] ?? 'research'); ?>
                             </span>
-                            <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300 mt-1">
-                                <?php echo $item['title']; ?>
-                            </h3>
-                            <p class="text-gray-600 text-sm mt-1">
-                                <?php echo $item['authors']; ?>
-                            </p>
+                        </div>
+
+                        <!-- File Info -->
+                        <div class="p-6">
+                            <div class="flex items-start gap-4">
+                                <!-- File Icon -->
+                                <div class="text-gray-400">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+
+                                <!-- Title and Description -->
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900 mb-1">
+                                        <?php echo htmlspecialchars($item['title']); ?>
+                                    </h3>
+                                    <p class="text-sm text-gray-500 mb-2">
+                                        <?php echo htmlspecialchars($item['description']); ?>
+                                    </p>
+                                    <span class="text-xs text-gray-400">
+                                        Uploaded on <?php echo date('d M Y', strtotime($item['uploaded_at'])); ?>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex justify-end gap-2 mt-4 pt-4 border-t border-gray-100">
+                                <!-- Preview Button -->
+                                <button onclick="previewFile('<?php echo htmlspecialchars($item['file_url']); ?>')"
+                                        class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Preview">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Download Button -->
+                                <a href="<?= FILES . '/' . $item['file_url']; ?>" 
+                                   class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                   download>
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                    </svg>
+                                </a>
+
+                                <!-- Delete Button (Admin Only) -->
+                                <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
+                                    <button onclick="deleteFile(<?php echo $item['id']; ?>)"
+                                            class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            title="Delete">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+    </button>
+<?php endif;?>
+                            </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                <?php endforeach;?>
+            <?php endif;?>
         </div>
-    </section>
+    </div>
+</section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('visible');
-                        }, index * 100);
-                    }
-                });
-            }, {
-                threshold: 0.1
+<!-- Preview Modal -->
+<div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl max-w-4xl w-full mx-4 p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold">File Preview</h3>
+            <button onclick="closePreview()" class="text-gray-500 hover:text-red-600">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div id="previewContent" class="w-full h-[600px]">
+            <!-- Preview content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
             });
+        }, {
+            threshold: 0.1
+        });
 
-            const topicButtons = document.querySelectorAll('.topic-button');
-            topicButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    topicButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                });
-            });
-
-            const posterItems = document.querySelectorAll('.poster-item');
-            posterItems.forEach(item => {
-                observer.observe(item);
-                
-                item.addEventListener('click', () => {
-                    item.classList.toggle('zoomed');
-                });
+        const topicButtons = document.querySelectorAll('.topic-button');
+        topicButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                topicButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
             });
         });
-    </script>
+
+        const fileCards = document.querySelectorAll('.file-card');
+        fileCards.forEach(item => {
+            observer.observe(item);
+
+            item.addEventListener('click', () => {
+                item.classList.toggle('zoomed');
+            });
+        });
+    });
+
+    function previewFile(fileUrl) {
+        const modal = document.getElementById('previewModal');
+        const previewContent = document.getElementById('previewContent');
+        const fileExtension = fileUrl.split('.').pop().toLowerCase();
+
+        if (fileExtension === 'pdf') {
+            previewContent.innerHTML = `<iframe src="<?=FILES;?>/${fileUrl}" class="w-full h-full"></iframe>`;
+        } else {
+            previewContent.innerHTML = `<div class="flex items-center justify-center h-full">
+                <p class="text-gray-500">Preview not available for this file type</p>
+            </div>`;
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closePreview() {
+        const modal = document.getElementById('previewModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function deleteFile(fileId) {
+        if (confirm('Are you sure you want to delete this file?')) {
+            fetch(`<?=BASEURL?>/researchoutput/delete/${fileId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Error deleting file');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting file');
+            });
+        }
+    }
+</script>
 </body>
 </html>

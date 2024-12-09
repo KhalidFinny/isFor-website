@@ -7,6 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -95,7 +98,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php';?>
+    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
     <div class="flex-1 min-h-screen ml-64 bg-white">
         <main class="py-10 px-8">
             <!-- Swiss-inspired Header (Matching manage-roadmap.php) -->
@@ -108,8 +111,9 @@
             </div>
 
             <!-- Upload Form -->
-            <form action="<?=BASEURL;?>/galleries/uploadImg" method="POST" enctype="multipart/form-data"
-                  id="uploadForm" name="confirmUpload" class="max-w-7xl mx-auto" onsubmit="return disableSubmitButton();">
+            <form action="<?= BASEURL; ?>/galleries/uploadImg" method="POST" enctype="multipart/form-data"
+                  id="uploadForm" name="confirmUpload" class="max-w-7xl mx-auto"
+                  onsubmit="return disableSubmitButton();">
                 <div class="grid grid-cols-12 gap-8">
                     <!-- Left Column -->
                     <div class="col-span-8">
@@ -131,8 +135,14 @@
                                             </svg>
                                         </div>
                                         <button type="button" onclick="document.getElementById('fileInput').click()"
-                                                class="px-8 py-4 bg-red-500 text-white rounded-xl hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300">
-                                            Pilih File Gambar
+                                                class="w-half px-6 py-4 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                                                       hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1
+                                                       transition-all duration-300 flex items-center justify-center space-x-2">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                            </svg>
+                                            <span>Pilih File Gambar</span>
                                         </button>
                                         <p class="mt-4 text-sm text-gray-400">atau drag & drop file Anda di sini</p>
                                     </div>
@@ -153,12 +163,18 @@
                                 <label class="block text-sm font-medium text-gray-600">Topik Penelitian</label>
                                 <select name="category" required
                                         class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">
-                                    <option value="">Pilih Kategori</option>
-                                    <option value="event">Event</option>
-                                    <option value="research">Penelitian</option>
-                                    <option value="facility">Fasilitas</option>
-                                    <option value="other">Lainnya</option>
+                                    <option value="">Pilih Skema Penelitian</option>
+                                    <option value="DIPA SWADANA">DIPA SWADANA</option>
+                                    <option value="DIPA PNBP">DIPA PNBP</option>
+                                    <option value="Tesis Magister">Tesis Magister</option>
                                 </select>
+<!--                                --><?php //echo '<select name="category" required class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">';
+//                                echo '<option value="">Pilih Skema Penelitian</option>';
+//                                foreach ($categories as $category) {
+//                                    echo "<option value=\"{$category['category_name']}\">{$category['category_name']}</option>";
+//                                }
+//                                echo '</select>';
+//                                ?>
                             </div>
 
                             <div class="space-y-2">
@@ -176,8 +192,14 @@
                             </div>
 
                             <button type="submit" id="uploadButton"
-                                    class="w-full px-6 py-4 bg-red-500 text-white rounded-xl hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300">
-                                Upload Gambar
+                                    class="w-full px-6 py-4 bg-red-500 text-white rounded-xl
+                                           hover:bg-red-600 transform hover:-translate-y-1
+                                           transition-all duration-300 flex items-center justify-center space-x-2">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                </svg>
+                                <span>Upload Gambar</span>
                             </button>
                         </div>
                     </div>
@@ -202,27 +224,35 @@
     </div>
 </div>
 
+<!-- Alert Container -->
+<div id="alertMessage" 
+     class="hidden fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 translate-y-[-100%]">
+</div>
+
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('uploadForm');
-        const fileInput = document.getElementById('fileInput');
-        const previewContainer = document.getElementById('imagePreview');
-        const progressBar = document.querySelector('.progress-bar');
-        const progressText = document.getElementById('uploadProgress');
+    $(document).ready(function () {
+        const $form = $('#uploadForm');
+        const $fileInput = $('#fileInput');
+        const $uploadButton = $('#uploadButton');
+        const $confirmModal = $('#confirmModal');
+        const $cancelButton = $('#cancelButton');
+        const $confirmUploadButton = $('#confirmUploadButton');
+        const $previewContainer = $('#imagePreview');
+        const $dropZone = $('.upload-zone');
 
-        // Handle file selection
-        fileInput.addEventListener('change', handleFileSelect);
+        // Event listeners
+        $fileInput.on('change', handleFileSelect);
+        $uploadButton.on('click', handleUploadButtonClick);
+        $cancelButton.on('click', () => $confirmModal.addClass('hidden'));
+        $confirmUploadButton.on('click', submitForm);
 
-        // Handle drag and drop
-        const dropZone = document.querySelector('.upload-zone');
+        // Drag and drop event listeners
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults);
+            $dropZone.on(eventName, preventDefaults);
         });
-
-        dropZone.addEventListener('dragenter', highlight);
-        dropZone.addEventListener('dragover', highlight);
-        dropZone.addEventListener('dragleave', unhighlight);
-        dropZone.addEventListener('drop', handleDrop);
+        $dropZone.on('dragenter dragover', highlight);
+        $dropZone.on('dragleave drop', unhighlight);
+        $dropZone.on('drop', handleDrop);
 
         function preventDefaults(e) {
             e.preventDefault();
@@ -230,17 +260,16 @@
         }
 
         function highlight() {
-            dropZone.classList.add('border-red-500', 'bg-red-50');
+            $dropZone.addClass('border-red-500 bg-red-50');
         }
 
         function unhighlight() {
-            dropZone.classList.remove('border-red-500', 'bg-red-50');
+            $dropZone.removeClass('border-red-500 bg-red-50');
         }
 
         function handleDrop(e) {
             unhighlight();
-            const dt = e.dataTransfer;
-            const files = dt.files;
+            const files = e.originalEvent.dataTransfer.files;
             handleFiles(files);
         }
 
@@ -249,174 +278,161 @@
         }
 
         function handleFiles(files) {
-            previewContainer.innerHTML = ''; // Clear existing previews
-            [...files].forEach((file, index) => {
+            $previewContainer.empty(); // Clear existing previews
+            $.each(files, (i, file) => {
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        const preview = createPreviewElement(e.target.result, file.name, index);
-                        previewContainer.appendChild(preview);
+                        const preview = createPreviewElement(e.target.result, file.name);
+                        $previewContainer.append(preview);
                     };
                     reader.readAsDataURL(file);
                 }
             });
         }
 
-        function createPreviewElement(src, filename, index) {
-            const div = document.createElement('div');
-            div.className = 'preview-image relative rounded-lg overflow-hidden';
-            div.innerHTML = `
-                <img src="${src}" alt="${filename}" class="w-full h-48 object-cover">
-                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <p class="text-white text-sm px-4 text-center">${filename}</p>
-                </div>
-            `;
-            return div;
+        function createPreviewElement(src, filename) {
+            const $div = $('<div>', {class: 'preview-image relative rounded-lg overflow-hidden'});
+            $div.html(`
+            <img src="${src}" alt="${filename}" class="w-full h-48 object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <p class="text-white text-sm px-4 text-center">${filename}</p>
+            </div>
+        `);
+            return $div;
         }
 
+        function handleUploadButtonClick(e) {
+            e.preventDefault();
 
-        function disableSubmitButton() {
-            const uploadButton = document.getElementById('uploadButton');
-            uploadButton.disabled = true;
-            uploadButton.textContent = 'Uploading...';
-            return true;
+            const title = $('input[name="imageTitle"]').val().trim();
+            const category = $('select[name="category"]').val().trim();
+            const description = $('textarea[name="description"]').val().trim();
+            const file = $fileInput[0].files[0];
+
+            if (!file) {
+                alert('Silakan pilih file gambar untuk diunggah.');
+                return;
+            }
+            if (!title) {
+                alert('Silakan masukkan judul gambar.');
+                return;
+            }
+            if (!category) {
+                alert('Silakan pilih kategori.');
+                return;
+            }
+            if (!description) {
+                alert('Silakan masukkan deskripsi gambar.');
+                return;
+            }
+
+            $confirmModal.removeClass('hidden');
         }
 
-        document.getElementById('uploadButton').addEventListener('click', () => {
+        function submitForm() {
             const formData = new FormData();
-            const fileInput = document.getElementById('fileInput');
-            const title = document.querySelector('input[name="imageTitle"]').value;
-            const category = document.querySelector('select[name="category"]').value;
-            const description = document.querySelector('textarea[name="description"]').value;
+            const image = $fileInput[0].files[0];
+            const title = $('input[name="imageTitle"]').val().trim();
+            const category = $('select[name="category"]').val().trim();
+            const description = $('textarea[name="description"]').val().trim();
 
-            if (!fileInput.files.length) {
-                alert('Silakan pilih file untuk diunggah.');
-                e.preventDefault();
-            }
-
-            if (fileInput.files.length > 0) {
-                formData.append('image', fileInput.files[0]);
-            }
+            formData.append('image', image);
             formData.append('imageTitle', title);
             formData.append('category', category);
             formData.append('description', description);
+            formData.append('confirmUpload', 'true');
 
-            fetch('<?=BASEURL;?>/galleries/uploadImg', {
-                method: 'POST',
-                body: formData,
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        alert('Upload berhasil!');
-                        window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
-                    } else {
-                        alert(`Upload gagal: ${data.message}`);
-                    }
-                })
-                .catch((error) => {
+            $uploadButton.prop('disabled', true).text('Uploading...');
+
+            $.ajax({
+                url: '<?=BASEURL;?>/galleries/uploadImg',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data);
+                    alert('Upload berhasil!');
+                    window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
+
+                },
+                error: function (xhr, status, error) {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan saat mengunggah.');
-                })
-                .finally(() => {
-                    document.getElementById('uploadButton').disabled = false;
-                });
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const uploadButton = document.getElementById('uploadButton');
-            uploadButton.addEventListener('click', (e) => {
-                e.preventDefault(); // Mencegah submit form default
-
-                // Ambil nilai input
-                const title = document.querySelector('input[name="imageTitle"]').value.trim();
-                const category = document.querySelector('select[name="category"]').value.trim();
-                const description = document.querySelector('textarea[name="description"]').value.trim();
-                const file = document.getElementById('fileInput').files[0];
-
-                // Validasi input
-                if (!file) {
-                    alert('Silakan pilih file gambar untuk diunggah.');
-                    return;
+                },
+                complete: function () {
+                    $uploadButton.prop('disabled', false).text('Upload Gambar');
                 }
-
-                if (!title) {
-                    alert('Silakan masukkan judul gambar.');
-                    return;
-                }
-
-                if (!category) {
-                    alert('Silakan pilih kategori.');
-                    return;
-                }
-
-                if (!description) {
-                    alert('Silakan masukkan deskripsi gambar.');
-                    return;
-                }
-
-                // Konfirmasi sebelum mengunggah
-                const confirmation = confirm("Apakah Anda yakin ingin mengunggah gambar ini?");
-                if (!confirmation) {
-                    return; // Jika batal, hentikan proses
-                }
-
-                // Semua input valid, lanjutkan upload
-                const formData = new FormData();
-                formData.append('image', file);
-                formData.append('imageTitle', title);
-                formData.append('category', category);
-                formData.append('description', description);
-
-                // Nonaktifkan tombol upload saat proses berlangsung
-                uploadButton.disabled = true;
-                uploadButton.textContent = 'Uploading...';
-
-                // Kirim data menggunakan fetch API
-                fetch('<?=BASEURL;?>/galleries/uploadImg', {
-                    method: 'POST',
-                    body: formData,
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.success) {
-                            alert('Upload berhasil!');
-                            window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
-                        } else {
-                            alert(`Upload gagal: ${data.message}`);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat mengunggah.');
-                    })
-                    .finally(() => {
-                        uploadButton.disabled = false;
-                        uploadButton.textContent = 'Upload Gambar';
-                    });
             });
-        });
+        }
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('uploadForm');
-        const uploadButton = document.getElementById('uploadButton');
-        const confirmModal = document.getElementById('confirmModal');
-        const cancelButton = document.getElementById('cancelButton');
-        const confirmUploadButton = document.getElementById('confirmUploadButton');
+    // Add alert functions
+    function showAlert(message, type = 'success') {
+        const alertElement = document.getElementById('alertMessage');
+        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+        const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
+        const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
 
-        uploadButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Cegah form dari submit langsung
-            confirmModal.classList.remove('hidden'); // Tampilkan modal konfirmasi
-        });
+        alertElement.innerHTML = `
+            <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
+                <div class="flex-shrink-0 ${iconColor}">
+                    ${type === 'success' 
+                        ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+                        : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+                    }
+                </div>
+                <div class="ml-3 ${textColor} font-medium">${message}</div>
+                <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        `;
 
-        cancelButton.addEventListener('click', () => {
-            confirmModal.classList.add('hidden'); // Sembunyikan modal saat dibatalkan
-        });
+        alertElement.style.transform = 'translateY(0)';
+        alertElement.classList.remove('hidden');
 
-        confirmUploadButton.addEventListener('click', () => {
-            confirmModal.classList.add('hidden'); // Sembunyikan modal
-            form.submit(); // Submit form jika pengguna konfirmasi
+        // Auto hide after 5 seconds
+        setTimeout(closeAlert, 5000);
+    }
+
+    function closeAlert() {
+        const alertElement = document.getElementById('alertMessage');
+        alertElement.style.transform = 'translateY(-100%)';
+        setTimeout(() => alertElement.classList.add('hidden'), 300);
+    }
+
+    // Update your fetch call to use the new alert system
+    confirmUploadButton.addEventListener('click', () => {
+        confirmModal.classList.add('hidden');
+        const formData = new FormData(form);
+
+        fetch('<?=BASEURL;?>/galleries/uploadImg', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('Gambar berhasil diunggah!', 'success');
+                form.reset();
+                setTimeout(() => {
+                    window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
+                }, 2000);
+            } else {
+                showAlert(data.message || 'Gagal mengunggah gambar.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('Terjadi kesalahan saat mengunggah.', 'error');
+        })
+        .finally(() => {
+            uploadButton.disabled = false;
+            uploadButton.textContent = 'Upload Gambar';
         });
     });
 </script>

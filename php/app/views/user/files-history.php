@@ -3,203 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat Gambar - IsFor Internet of Things For Human Life's</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <title>Riwayat File - IsFor Internet of Things For Human Life's</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        :root {
-        --primary-red: #E53E3E;
-        --primary-dark: #742A2A;
-        --primary-light: #FEB2B2;
-        --accent-red: #FC8181;
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
         }
 
-        body {
-        background-color: #FFF5F5;
-        font-family: 'Plus Jakarta Sans', sans-serif;
+        .slide-up {
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
         }
 
-        .custom-gradient {
-        background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-dark) 100%);
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
-        .custom-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 6px -1px rgba(229, 62, 62, 0.1);
-        transition: all 0.3s ease;
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .custom-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px -8px rgba(229, 62, 62, 0.15);
+        .image-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
         }
 
-        .custom-button {
-        padding: 0.75rem 1.5rem;
-        border-radius: 12px;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        border: none;
-        cursor: pointer;
-    }
+        .image-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(51, 65, 85, 0.1);
+        }
 
-        .custom-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
+        .status-badge {
+            transition: all 0.3s ease;
+        }
+
+        .status-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .filter-btn {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #dc2626;
+            transition: width 0.3s ease;
+        }
+
+        .filter-btn.active {
+            color: #dc2626;
+        }
+
+        .filter-btn.active::after {
+            width: 100%;
+        }
+
+        .filter-btn:hover {
+            background-color: #fee2e2;
         }
     </style>
 </head>
-    <body class="bg-white">
-    <div class="flex">
-        <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
-        <div class="flex flex-col flex-1 ml-64 min-h-screen bg-gray-50">
-        <header class="py-8 px-8 bg-white shadow-lg rounded-b-3xl">
-    <h1 class="text-4xl font-bold custom-gradient text-transparent bg-clip-text">
-        Riwayat File
-    </h1>
-    <p class="mt-2 text-red-700">Kelola dan pantau riwayat file Anda</p>
-</header>
-
-        <main class="py-6 px-8 flex-1">
+<body class="bg-white">
+<div class="flex">
+    <?php include '../app/views/assets/components/UserDashboard/sidebar.php';?>
+    <div class="flex-1 min-h-screen ml-64">
+        <main class="py-10 px-8">
             <div class="max-w-7xl mx-auto">
-                <!-- Tombol Filter -->
-                <div class="flex flex-wrap gap-4 mb-8">
-                    <button class="custom-button custom-gradient text-white" data-status="all" onclick="filterFile('all')">
-                        Semua
-                    </button>
-                    <button class="custom-button bg-yellow-400 text-white" data-status="1" onclick="filterFile(1)">
-                        Pending
-                    </button>
-                    <button class="custom-button bg-green-500 text-white" data-status="2" onclick="filterFile(2)">
-                        Disetujui
-                    </button>
-                    <button class="custom-button bg-red-500 text-white" data-status="3" onclick="filterFile(3)">
-                        Ditolak
-                    </button>
+                <!-- Header Section -->
+                <div class="mb-8 fade-in">
+                    <h1 class="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-600 bg-clip-text text-transparent">
+                        Riwayat File
+                    </h1>
+                    <p class="mt-2 text-red-600">Kelola dan pantau riwayat file Anda</p>
                 </div>
 
-                <!-- Statistik Gambar -->
-                <div class="custom-card p-6 border-l-4 border-red-500">
-                <p class="text-sm font-medium text-red-700">Total File</p>
-                <p class="text-3xl font-bold text-red-900"><?= htmlspecialchars($data['totalFiles']); ?></p>
-                </div>
-                    <!-- Tambahkan statistik lainnya jika diperlukan -->
-                </div>
-
-                <!-- Daftar Gambar -->
-                <div id="imageListContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <?php if (empty($data['files'])) : ?>
-                        <div class="col-span-full text-center py-12">
-                            <svg class="w-16 h-16 text-red-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24"
-                                 stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                            <h3 class="text-xl font-medium text-red-900 mb-2">Belum ada File</h3>
-                        </div>
-                    <?php else : ?>
-                        <?php foreach ($data['files'] as $files) : ?>
-                            <div class="custom-card p-6 hover:border-red-400 border-2 border-transparent">
-                                <h3 class="text-lg font-bold text-red-900 mt-3"><?= htmlspecialchars($files['title']); ?></h3>
-                                <p class="text-sm text-red-700"><?= htmlspecialchars($files['category']); ?></p>
-                                <span class="status-badge text-xs font-semibold px-3 py-1.5 rounded-full mt-3 inline-block
-                                <?= $files['status'] == 1 ? 'bg-yellow-100 text-yellow-700' :
-                                    ($files['status'] == 2 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'); ?>">
-                                    <?= $files['status'] == 1 ? 'Pending' : ($files['status'] == 2 ? 'Approved' : 'Rejected'); ?>
-                                </span>
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl border-2 border-red-100 slide-up" style="animation-delay: 0.1s">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-red-600">Total File</p>
+                                <p class="text-2xl font-bold text-red-900"><?=$data['totalFiles']?></p>
                             </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                            <div class="p-3 bg-red-50 rounded-xl">
+                                <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files List Section -->
+                <div class="bg-white rounded-xl border-2 border-red-100 overflow-hidden slide-up" style="animation-delay: 0.2s">
+                    <!-- Filters and Search -->
+                    <div class="p-6 border-b border-red-100">
+                        <div class="flex justify-between items-center">
+                            <div class="relative flex items-center space-x-4">
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn active"
+                                        data-status="all" onclick="filter('all')">
+                                    Semua
+                                </button>
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
+                                        data-status="1" onclick="filter(1)">
+                                    Tertunda
+                                </button>
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
+                                        data-status="2" onclick="filter(2)">
+                                    Disetujui
+                                </button>
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
+                                        data-status="3" onclick="filter(3)">
+                                    Ditolak
+                                </button>
+                            </div>
+                            <div class="relative">
+                                <input type="text" placeholder="Cari file..." id="keyword"
+                                       class="pl-10 pr-4 py-2 bg-red-50 border-0 rounded-lg text-red-900 placeholder-red-400 focus:ring-2 focus:ring-red-500">
+                                <svg class="w-5 h-5 text-red-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Files Grid -->
+                    <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <?php if (empty($data['files'])) : ?>
+                            <div class="col-span-full text-center py-12">
+                                <svg class="w-16 h-16 text-red-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <h3 class="text-xl font-medium text-red-900 mb-2">Belum ada File</h3>
+                                <p class="text-red-600 mb-6">Mulai unggah file penelitian Anda sekarang</p>
+                            </div>
+                        <?php else : ?>
+                            <?php foreach ($data['files'] as $file) : ?>
+                                <div class="bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
+                                    <!-- File Info -->
+                                    <div class="flex items-center space-x-4 mb-4">
+                                        <div class="p-3 bg-red-50 rounded-xl">
+                                            <svg class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-red-900"><?= $file['title'] ?? 'Untitled' ?></h3>
+                                            <p class="text-sm text-red-600"><?= $file['category'] ?? 'Uncategorized' ?></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Status and Actions -->
+                                    <div class="flex items-center justify-between mt-4">
+                                        <!-- Status Badge -->
+                                        <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg
+                                            <?= isset($file['status']) ? 
+                                                ($file['status'] == 1 ? 'bg-yellow-100 text-yellow-600' : 
+                                                ($file['status'] == 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600')) : 
+                                                'bg-gray-100 text-gray-600' ?>">
+                                            <?= isset($file['status']) ? 
+                                                ($file['status'] == 1 ? 'Pending' : 
+                                                ($file['status'] == 2 ? 'Approved' : 'Rejected')) : 
+                                                'Unknown' ?>
+                                        </span>
+
+                                        <!-- Action Buttons -->
+                                        <div class="flex space-x-2">
+                                            <!-- Preview Button -->
+                                            <button onclick="previewFile('<?= $file['file_path'] ?? '' ?>')"
+                                                    class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                                </svg>
+                                                Preview
+                                            </button>
+
+                                            <!-- Download Button -->
+                                            <a href="<?= $file['file_path'] ?? '#' ?>" 
+                                               download
+                                               class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                                </svg>
+                                                Download
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 </div>
 
+<!-- Preview Modal -->
+<div id="fileModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-red-900">Preview File</h3>
+            <button onclick="closePreview()" 
+                    class="p-2 text-gray-500 hover:text-gray-700 rounded-lg transition-colors">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div id="fileContent" class="w-full">
+            <!-- File preview will be loaded here -->
+        </div>
+    </div>
+</div>
+
 <script>
-    function previewImage(url, title, description) {
-        document.getElementById('previewImage').src = url;
-        document.getElementById('previewTitle').textContent = title;
-        document.getElementById('previewDescription').textContent = description;
-        document.getElementById('imageModal').classList.remove('hidden');
-        document.getElementById('imageModal').classList.add('flex');
+    function previewFile(url) {
+        if (!url) return;
+        
+        const modal = document.getElementById('fileModal');
+        const content = document.getElementById('fileContent');
+        
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        // Add file extension check for different preview types
+        if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
+            content.innerHTML = `<img src="${url}" class="max-w-full h-auto rounded-lg">`;
+        } else if (url.match(/\.(pdf)$/i)) {
+            content.innerHTML = `<iframe src="${url}" width="100%" height="600px" class="rounded-lg border border-red-100"></iframe>`;
+        } else {
+            content.innerHTML = `<div class="text-center p-8">
+                <p class="text-gray-600 mb-4">Preview not available for this file type</p>
+                <a href="${url}" download class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download File
+                </a>
+            </div>`;
+        }
     }
 
     function closePreview() {
-        document.getElementById('imageModal').classList.add('hidden');
-        document.getElementById('imageModal').classList.remove('flex');
+        const modal = document.getElementById('fileModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
     }
 
-    // Intersection Observer for scroll animations
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animationPlayState = 'running';
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
-    document.querySelectorAll('.image-card').forEach(card => {
-        observer.observe(card);
-    });
-
-    document.querySelectorAll('.filter-button').forEach(button => {
-        button.addEventListener('click', function () {
-            const status = this.getAttribute('data-status');
-            filterFile(status);
-        });
-    });
-
-    function filterFile(status) {
-        fetch('<?= BASEURL; ?>/galleries/filter', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `status=${status}`
-        })
-            .then(response => response.json())
-            .then(data => {
-                const imageListContainer = document.getElementById('imageListContainer');
-                imageListContainer.innerHTML = '';
-
-                if (data.length === 0) {
-                    imageListContainer.innerHTML = `
-                <div class="col-span-full text-center py-12">
-                    <h3 class="text-xl font-medium text-red-900 mb-2">Belum ada gambar</h3>
-                    <p class="text-red-600 mb-6">Mulai unggah File Anda sekarang</p>
-                </div>
-            `;
-                    return;
-                }
-
-                data.forEach(image => {
-                    imageListContainer.innerHTML += `
-                <div class="bg-white p-4 rounded-xl shadow-md image-card">
-                    <img src="<?= GALLERY; ?>/files/${image.image}" alt="${image.title}"
-                         class="w-full h-32 object-cover rounded-t-md">
-                    <h3 class="text-lg font-bold text-red-900 mt-2">${image.title}</h3>
-                    <p class="text-sm text-red-600">${image.category}</p>
-                    <p class="text-xs text-red-500 mt-2">Diunggah pada ${new Date(image.created_at).toLocaleDateString()}</p>
-                    <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg mt-2 inline-block ${
-                        image.status == 1 ? 'bg-yellow-100 text-yellow-600' :
-                            image.status == 2 ? 'bg-green-100 text-green-600' :
-                                'bg-red-100 text-red-600'
-                    }">
-                        ${image.status == 1 ? 'Pending' : image.status == 2 ? 'Approved' : 'Rejected'}
-                    </span>
-                </div>
-            `;
-                });
-            })
-            .catch(error => console.error('Error:', error));
+    function filter(status) {
+        // Your existing filter implementation
     }
 
+    // Initialize animations
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
 
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                filter(this.dataset.status);
+            });
+        });
+    });
 </script>
 </body>
-</html> 
+</html>

@@ -48,6 +48,13 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
+    public function getVerifyFiles()
+    {
+        $query = "SELECT * FROM " . $this->table . " WHERE status = 2 ORDER BY uploaded_at DESC";
+        $this->db->query($query);
+        return $this->db->resultSet();
+    }
+
     // Read a specific research output by ID
     public function getById($id)
     {
@@ -86,7 +93,12 @@ class ResearchOutputModel
         $this->db->query($query);
         $this->db->bind(':status', $status);
         $this->db->bind(':id', $id);
-        return $this->db->execute();
+        try {
+            $this->db->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 
     // Count research outputs by user

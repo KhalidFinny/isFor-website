@@ -33,7 +33,7 @@
                 <div class="flex justify-between items-center h-16">
                     <!-- Logo Section -->
                     <div class="flex-shrink-0 flex items-center space-x-3">
-                        <img src="<?= ASSETS; ?>/images/Logo1.png" alt="IsFor Logo" class="h-9 w-auto" />
+                        <img src="<?= ASSETS; ?>/images/Logo1.webp" alt="IsFor Logo" class="h-9 w-auto" />
                         <span class="text-l font-semibold text-green-600">Internet of Things For Human Life's</span>
                     </div>
                     <div class="hidden lg:flex lg:items-center">
@@ -95,7 +95,6 @@
             {
                 name: 'Riset & Publikasi',
                 dropdownItems: [
-                    {name: 'Penelitian', href: '<?= BASEURL; ?>/#'},
                     {name: 'Hasil Penelitian', href: '<?= BASEURL; ?>/home/hasilpenelitian'},
                 ],
             },

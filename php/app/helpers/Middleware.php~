@@ -1,19 +1,20 @@
 <?php
 
-namespace app\helpers;
-
 class Middleware{
     private const SESSION_TIMEOUT = 3600;
 
-    function isLoggedIn(): bool
-    {
+    function isLoggedIn() {
         session_start();
         return isset($_SESSION['user_id']);
     }
 
-    function checkRole() {
-        return $_SESSION['role_id'] ?? 0;
+    public function checkRole() {
+        if (!isset($_SESSION[''])) {
+            return null; // Jika role tidak ditemukan, kembalikan null
+        }
+        return $_SESSION['role_id']; // Kembalikan nilai role
     }
+
 
     public function saveLastVisitedPage() {
         if (session_status() == PHP_SESSION_NONE) {
@@ -28,10 +29,10 @@ class Middleware{
             session_start();
         }
 
-        return $_SESSION['last_visited'] ?? BASEURL . '/home';
+        return isset($_SESSION['last_visited']) ? $_SESSION['last_visited'] : BASEURL . '/home';
     }
 
-    public static function checkSessionTimeout(): void
+    public static function checkSessionTimeout()
     {
         if (isset($_SESSION['LAST_ACTIVITY'])) {
             $timeInactive = time() - $_SESSION['LAST_ACTIVITY'];

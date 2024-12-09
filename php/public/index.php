@@ -8,6 +8,5 @@ if (function_exists('opcache_reset')) {
 }
 
 $app = new App;
-?>
 
 

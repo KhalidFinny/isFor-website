@@ -1,5 +1,6 @@
-<?php 
+<?php
 session_start();
+//var_dump($data);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,137 +88,134 @@ session_start();
     </style>
 </head>
 <body class="bg-white">
-    <?php if (!isset($_SESSION['user_id'])) : ?>
-        <?php include_once '../app/views/assets/components/navbar.php'; ?>
-    <?php else : ?>
-        <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
-    <?php endif; ?>
-    <section class="min-h-screen py-20 relative overflow-hidden">
-        <div class="container mx-auto px-6 max-w-7xl">
-            <!-- Header -->
-            <div class="mb-20">
+<?php if (!isset($_SESSION['user_id'])): ?>
+    <?php include_once '../app/views/assets/components/navbar.php';?>
+<?php else: ?>
+    <?php include_once '../app/views/assets/components/navbarafterlogin.php';?>
+<?php endif;?>
+<section class="min-h-screen py-20 relative overflow-hidden">
+    <div class="container mx-auto px-6 max-w-7xl">
+        <!-- Header -->
+        <div class="mb-20">
                 <span class="inline-block px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
                     Dokumentasi
                 </span>
-                <h2 class="text-5xl font-bold mb-6 text-red-900">
-                    Galeri Kegiatan
-                </h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-red-800 rounded-full"></div>
-            </div>
+            <h2 class="text-5xl font-bold mb-6 text-red-900">
+                Galeri Kegiatan
+            </h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-red-800 rounded-full"></div>
+        </div>
 
-            <!-- Topics Navigation -->
-            <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
-                <?php
-$topics = ['Semua', 'Penelitian', 'Workshop', 'Seminar', 'Kolaborasi', 'Publikasi'];
+        <!-- Topics Navigation -->
+        <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
+            <?php
+$topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
 foreach ($topics as $index => $topic): ?>
-                    <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
-                        <?php echo $topic; ?>
-                    </button>
-                <?php endforeach;?>
-            </div>
+                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
+                    <?php echo $topic; ?>
+                </button>
+            <?php endforeach;?>
+        </div>
 
-            <!-- Gallery Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <?php
-$galleryItems = [
-    [
-        "title" => "Workshop AI & Machine Learning",
-        "category" => "Workshop",
-        "date" => "15 Oktober 2023",
-        "description" => "Sesi pembelajaran mendalam tentang implementasi AI dalam industri modern",
-    ],
-    [
-        "title" => "Seminar IoT Development",
-        "category" => "Seminar",
-        "date" => "3 November 2023",
-        "description" => "Diskusi tentang perkembangan IoT dalam smart city",
-    ],
-    [
-        "title" => "Kolaborasi Riset Cybersecurity",
-        "category" => "Kolaborasi",
-        "date" => "8 Desember 2023",
-        "description" => "Kerjasama penelitian dengan institusi internasional",
-    ],
-    [
-        "title" => "Publikasi Penelitian Big Data",
-        "category" => "Publikasi",
-        "date" => "22 Januari 2024",
-        "description" => "Hasil penelitian analisis big data untuk smart governance",
-    ],
-    [
-        "title" => "Workshop Cloud Computing",
-        "category" => "Workshop",
-        "date" => "15 Februari 2024",
-        "description" => "Pelatihan implementasi cloud infrastructure",
-    ],
-    [
-        "title" => "Seminar Software Engineering",
-        "category" => "Seminar",
-        "date" => "1 Maret 2024",
-        "description" => "Best practices dalam pengembangan software modern",
-    ],
-];
-
-foreach ($galleryItems as $index => $item): ?>
-                    <div class="gallery-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
-                        <div class="image-container">
-                            <div class="image-placeholder"></div>
-                            <div class="image-overlay">
-                                <span class="text-sm font-semibold text-red-100 mb-2">
-                                    <?php echo $item['category']; ?> • <?php echo $item['date']; ?>
-                                </span>
-                                <h3 class="text-xl font-bold text-white mb-3">
-                                    <?php echo $item['title']; ?>
-                                </h3>
-                                <p class="text-red-100 text-sm leading-relaxed">
-                                    <?php echo $item['description']; ?>
-                                </p>
-                            </div>
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <?php foreach ($data['galeri'] as $index => $item): ?>
+                <div class="gallery-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
+                    <div class="image-container">
+                        <div class="image-placeholder">
+                            <img src="<?=GALLERY;?>/files/<?php echo $item['image']; ?>"
+                                 alt="<?php echo $item['title']; ?>" class="w-full h-full object-cover">
                         </div>
-                        <div class="mt-4">
-                            <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
+                        <div class="image-overlay">
+                    <span class="text-sm font-semibold text-red-100 mb-2">
+                        <?php echo $item['category']; ?> • <?php echo date('d M Y', strtotime($item['created_at'])); ?>
+                    </span>
+                            <h3 class="text-xl font-bold text-white mb-3">
                                 <?php echo $item['title']; ?>
                             </h3>
+                            <p class="text-red-100 text-sm leading-relaxed">
+                                <?php echo $item['description']; ?>
+                            </p>
                         </div>
                     </div>
-                <?php endforeach;?>
-            </div>
+                    <div class="mt-4 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
+                            <?php echo $item['title']; ?>
+                        </h3>
+
+                        <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
+                            <button onclick="deleteImage(<?php echo $item['id']; ?>)"
+                                    class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="Delete">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        <?php endif;?>
+                    </div>
+                </div>
+            <?php endforeach;?>
         </div>
-    </section>
+    </div>
+</section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Intersection Observer for fade-in animation
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('visible');
-                        }, index * 100);
-                    }
-                });
-            }, {
-                threshold: 0.1
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Intersection Observer for fade-in animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
             });
+        }, {
+            threshold: 0.1
+        });
 
-            // Topic button interactions
-            const topicButtons = document.querySelectorAll('.topic-button');
-            topicButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    topicButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                });
-            });
-
-            // Gallery item zoom functionality
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            galleryItems.forEach(item => {
-                observer.observe(item);
-                item.addEventListener('click', () => {
-                    item.classList.toggle('zoomed');
-                });
+        // Topic button interactions
+        const topicButtons = document.querySelectorAll('.topic-button');
+        topicButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                topicButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
             });
         });
-    </script>
+
+        // Gallery item zoom functionality
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
+            observer.observe(item);
+            item.addEventListener('click', () => {
+                item.classList.toggle('zoomed');
+            });
+        });
+    });
+
+    function deleteImage(imageId) {
+        if (confirm('Are you sure you want to delete this image?')) {
+            fetch(`<?=BASEURL?>/gallery/delete/${imageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Error deleting image');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting image');
+            });
+        }
+    }
+</script>
 </body>
 </html>
