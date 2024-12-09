@@ -149,6 +149,14 @@ session_start();
     </div>
 </section>
 
+<!-- Add this modal HTML at the end of your body -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+    <div class="relative max-w-4xl w-full">
+        <button id="closeModal" class="absolute top-2 right-2 text-white text-2xl">&times;</button>
+        <img id="modalImage" class="w-full h-auto rounded-lg shadow-lg" src="" alt="Preview">
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Intersection Observer for fade-in animation
