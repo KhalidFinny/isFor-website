@@ -24,6 +24,36 @@
                 <!-- Timeline Content -->
                 <div class="space-y-24" id="roadmapContent">
                     <!-- Will be populated by JavaScript -->
+                    <?php if(!empty($data['roadmaps'])) :?>
+                        <?php foreach($data['roadmaps'] as $periode => $categories) : ?>
+                            <div class="timeline-period relative">
+                                <div class="text-center mb-12">
+                                    <span class="period-badge inline-flex items-center justify-center w-40 py-3 text-white rounded-full text-lg font-semibold">
+                                    <?php echo $periode; ?>
+                                    </span>
+                                    
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <?php foreach($categories as $category => $topics): ?>
+                                    <div class="category-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-red-300"
+                                        style="animation-delay: <?= $category ?> * 100ms">
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-4"><?= $category ?></h3>
+                                        <?php foreach ($topics as $topic): ?>
+                                            <ul class="space-y-3">
+                                                <li class="topic-item flex items-start space-x-2 text-gray-600 text-sm">
+                                                    <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                    </svg>
+                                                    <span><?= $topic ?></span>
+                                                </li>
+                                            </ul>
+                                        <?php endforeach ?>
+                                    </div>
+                                <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -73,121 +103,121 @@
         </style>
 
         <script>
-            const roadmapData = {
-                periods: [
-                    {
-                        years: '2018-2022',
-                        categories: {
-                            'Smart ICT': [
-                                'Network management System',
-                                'Network Topology',
-                                'Concept Electronics and IT Embedded System'
-                            ],
-                            'IoT Applications': [
-                                'IoT systems',
-                                'Sensors for IoT Systems'
-                            ],
-                            'Data Science & Analytics': [
-                                'Decision Support System',
-                                'Classification System',
-                                'Prediction System',
-                                'Cluster Analysis'
-                            ],
-                            'Business Management': [
-                                'Digital Marketing',
-                                'Micro Commerce Management',
-                                'Digital Tax Management'
-                            ]
-                        }
-                    },
-                    {
-                        years: '2022-2025',
-                        categories: {
-                            'Smart ICT': [
-                                'LORA Systems',
-                                'LORA mesh for IT Systems',
-                                'LORA for Smart Systems'
-                            ],
-                            'IoT Applications': [
-                                'IoT for urban farming',
-                                'IoT for freshwater fish',
-                                'Smart Home',
-                                'IoT for Power Electric Distribution'
-                            ],
-                            'Data Science & Analytics': [
-                                'Big Data Analysis',
-                                'Natural Language Processing',
-                                'Image Processing'
-                            ],
-                            'Business Management': [
-                                'Governance Fiscal Independency',
-                                'Commercial Port Management System',
-                                'Document Archiving Management'
-                            ]
-                        }
-                    },
-                    {
-                        years: '2026-2028',
-                        categories: {
-                            'Smart ICT': [
-                                'ICT for Industrial Automation',
-                                'Integrated Data Transaction'
-                            ],
-                            'IoT Applications': [
-                                'Smart City',
-                                'Smart Ecosystem',
-                                'Smart monitoring Systems'
-                            ],
-                            'Data Science & Analytics': [
-                                'Voice Command Technology',
-                                'Land & Building Mapping',
-                                'Intelligence System',
-                                'Integrated Information System: Trends & Prediction'
-                            ],
-                            'Business Management': [
-                                'Customer Relation Management System',
-                                'Supply Chain Management',
-                                'Analytic of Documents Archiving'
-                            ]
-                        }
-                    }
-                ]
-            };
+            // const roadmapData = {
+            //     periods: [
+            //         {
+            //             years: '2018-2022',
+            //             categories: {
+            //                 'Smart ICT': [
+            //                     'Network management System',
+            //                     'Network Topology',
+            //                     'Concept Electronics and IT Embedded System'
+            //                 ],
+            //                 'IoT Applications': [
+            //                     'IoT systems',
+            //                     'Sensors for IoT Systems'
+            //                 ],
+            //                 'Data Science & Analytics': [
+            //                     'Decision Support System',
+            //                     'Classification System',
+            //                     'Prediction System',
+            //                     'Cluster Analysis'
+            //                 ],
+            //                 'Business Management': [
+            //                     'Digital Marketing',
+            //                     'Micro Commerce Management',
+            //                     'Digital Tax Management'
+            //                 ]
+            //             }
+            //         },
+            //         {
+            //             years: '2022-2025',
+            //             categories: {
+            //                 'Smart ICT': [
+            //                     'LORA Systems',
+            //                     'LORA mesh for IT Systems',
+            //                     'LORA for Smart Systems'
+            //                 ],
+            //                 'IoT Applications': [
+            //                     'IoT for urban farming',
+            //                     'IoT for freshwater fish',
+            //                     'Smart Home',
+            //                     'IoT for Power Electric Distribution'
+            //                 ],
+            //                 'Data Science & Analytics': [
+            //                     'Big Data Analysis',
+            //                     'Natural Language Processing',
+            //                     'Image Processing'
+            //                 ],
+            //                 'Business Management': [
+            //                     'Governance Fiscal Independency',
+            //                     'Commercial Port Management System',
+            //                     'Document Archiving Management'
+            //                 ]
+            //             }
+            //         },
+            //         {
+            //             years: '2026-2028',
+            //             categories: {
+            //                 'Smart ICT': [
+            //                     'ICT for Industrial Automation',
+            //                     'Integrated Data Transaction'
+            //                 ],
+            //                 'IoT Applications': [
+            //                     'Smart City',
+            //                     'Smart Ecosystem',
+            //                     'Smart monitoring Systems'
+            //                 ],
+            //                 'Data Science & Analytics': [
+            //                     'Voice Command Technology',
+            //                     'Land & Building Mapping',
+            //                     'Intelligence System',
+            //                     'Integrated Information System: Trends & Prediction'
+            //                 ],
+            //                 'Business Management': [
+            //                     'Customer Relation Management System',
+            //                     'Supply Chain Management',
+            //                     'Analytic of Documents Archiving'
+            //                 ]
+            //             }
+            //         }
+            //     ]
+            // };
 
             function renderRoadmap() {
                 const container = document.getElementById('roadmapContent');
-                container.innerHTML = '';
+                // container.innerHTML = '';
 
-                roadmapData.periods.forEach((period, periodIndex) => {
-                    const periodHtml = `
-                        <div class="timeline-period relative" data-period="${period.years}">
-                            <div class="text-center mb-12">
-                                <span class="period-badge inline-flex items-center justify-center w-40 py-3 text-white rounded-full text-lg font-semibold">
-                                    ${period.years}
-                                </span>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                ${Object.entries(period.categories).map(([category, topics], categoryIndex) => `
-                                    <div class="category-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-red-300"
-                                         style="animation-delay: ${categoryIndex * 100}ms">
-                                        <h3 class="text-lg font-semibold text-gray-900 mb-4">${category}</h3>
-                                        <ul class="space-y-3">
-                                            ${topics.map(topic => `
-                                                <li class="topic-item flex items-start space-x-2 text-gray-600 text-sm">
-                                                    <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                                    </svg>
-                                                    <span>${topic}</span>
-                                                </li>
-                                            `).join('')}
-                                        </ul>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                    container.insertAdjacentHTML('beforeend', periodHtml);
-                });
+                // roadmapData.periods.forEach((period, periodIndex) => {
+                //     const periodHtml = `
+                //         <div class="timeline-period relative" data-period="${period.years}">
+                //             <div class="text-center mb-12">
+                //                 <span class="period-badge inline-flex items-center justify-center w-40 py-3 text-white rounded-full text-lg font-semibold">
+                //                     ${period.years}
+                //                 </span>
+                //             </div>
+                //             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                //                 ${Object.entries(period.categories).map(([category, topics], categoryIndex) => `
+                //                     <div class="category-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-red-300"
+                //                          style="animation-delay: ${categoryIndex * 100}ms">
+                //                         <h3 class="text-lg font-semibold text-gray-900 mb-4">${category}</h3>
+                //                         <ul class="space-y-3">
+                //                             ${topics.map(topic => `
+                //                                 <li class="topic-item flex items-start space-x-2 text-gray-600 text-sm">
+                //                                     <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                //                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                //                                     </svg>
+                //                                     <span>${topic}</span>
+                //                                 </li>
+                //                             `).join('')}
+                //                         </ul>
+                //                     </div>
+                //                 `).join('')}
+                //             </div>
+                //         </div>
+                //     `;
+                //     container.insertAdjacentHTML('beforeend', periodHtml);
+                // });
 
                 // Initialize animations
                 initializeAnimations();

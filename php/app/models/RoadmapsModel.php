@@ -34,7 +34,7 @@ class RoadmapsModel {
     public function getRoadmaps($year_start, $year_end) {
         $query = "SELECT * FROM " . $this->table . " 
                     WHERE year_start = :year_start AND year_end = :year_end 
-                    ORDER BY category, topic";
+                    ORDER BY year_start ASC";
         $this->db->query($query);
         $this->db->bind(':year_start', $year_start);
         $this->db->bind(':year_end', $year_end);
