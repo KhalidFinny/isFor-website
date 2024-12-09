@@ -5,37 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/php/app/files/meta/6756bff5034d7.pdf.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php/app/files/research_output/6756bff5034d7.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php/app/img/profile/6756566fda1d0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php/app/views/assets/images/Logo1.webp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6751a54a3389e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/AdminDashboard/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/AdminDashboard/sidebar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/LandingPage/sejarah.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/LandingPage/sejarah.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/UserDashboard/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/UserDashboard/sidebar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/footer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/navbar.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/navbar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/navbarafterlogin.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/navbarafterlogin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/2020-08-22.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/DSC_0746-scaled.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/GT1QVFO.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/IMG_5714-scaled.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/Logo1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/Ni05cBF.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/Polinema-Malang.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/THeVLo6.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/spicy1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/letter-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/letter-history.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/submitLetter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/submitLetter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/upload-file.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/upload-file.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/userDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/userDashboard.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +55,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "com.codeium.enabled": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/laragon/www/isFor-website/php/app/views/main",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -126,7 +96,7 @@
       <workItem from="1733705382113" duration="634000" />
       <workItem from="1733706452108" duration="7425000" />
       <workItem from="1733719670891" duration="3782000" />
-      <workItem from="1733729041224" duration="12365000" />
+      <workItem from="1733729041224" duration="12946000" />
     </task>
     <servers />
   </component>
