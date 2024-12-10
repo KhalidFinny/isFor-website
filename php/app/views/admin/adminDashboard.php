@@ -214,18 +214,19 @@
                         </div>
                     </div>
 
-                    <!-- Pending Images Card -->
+                    <!-- Pending Files Card -->
                     <div class="group border border-gray-200 rounded-xl p-6 hover:border-yellow-500 transition-all duration-300 hover:scale-105 hover:shadow-lg bg-white relative overflow-hidden">
                         <div class="absolute inset-0 bg-gradient-to-r from-yellow-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <div class="flex items-center relative z-10">
                             <div class="p-3 rounded-xl bg-yellow-50 text-yellow-600 group-hover:bg-yellow-100 transition-colors duration-300">
                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 group-hover:text-gray-800">Pending Images</p>
-                                <p class="text-xl font-semibold text-yellow-600">8</p>
+                                <p class="text-sm font-medium text-gray-600 group-hover:text-gray-800">Pending Files</p>
+                                <p class="text-xl font-semibold text-yellow-600"><?=$data['pendingFiles']['total'] ?? 0?></p>
                             </div>
                         </div>
                     </div>

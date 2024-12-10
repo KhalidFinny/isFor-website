@@ -94,6 +94,18 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
+
+        .alert-show {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            pointer-events: auto !important;
+        }
+
+        .alert-hide {
+            opacity: 0 !important;
+            transform: translateY(-100%) !important;
+            pointer-events: none !important;
+        }
     </style>
 </head>
 <body class="bg-white">
@@ -226,7 +238,38 @@
 
 <!-- Alert Container -->
 <div id="alertMessage" 
-     class="hidden fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 translate-y-[-100%]">
+     class="fixed top-4 right-4 max-w-md w-full opacity-0 transform translate-y-[-100%] transition-all duration-300 ease-out pointer-events-none">
+</div>
+
+<!-- Add this modal HTML before the closing body tag -->
+<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div id="modalContent" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                                 bg-white rounded-2xl p-8 w-96 opacity-0 scale-95 
+                                 transition-all duration-300">
+        <div class="text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-semibold text-red-800 mb-2">Konfirmasi Upload</h2>
+            <p class="text-gray-600 mb-6">Apakah Anda yakin ingin mengunggah gambar ini?</p>
+            <div class="flex justify-center space-x-3">
+                <button id="cancelButton" 
+                        class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 
+                               transition-all duration-300">
+                    Batal
+                </button>
+                <button id="confirmButton" 
+                        class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
+                               transform hover:-translate-y-1 transition-all duration-300">
+                    Upload
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -368,73 +411,142 @@
         }
     });
 
-    // Add alert functions
-    function showAlert(message, type = 'success') {
-        const alertElement = document.getElementById('alertMessage');
-        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-        const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
-        const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
+    // Update the form submission handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('uploadForm');
+        const uploadButton = document.getElementById('uploadButton');
+        const confirmModal = document.getElementById('confirmModal');
 
-        alertElement.innerHTML = `
-            <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
-                <div class="flex-shrink-0 ${iconColor}">
-                    ${type === 'success' 
-                        ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-                        : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form fields
+            const title = document.querySelector('input[name="imageTitle"]').value.trim();
+            const category = document.querySelector('select[name="category"]').value.trim();
+            const description = document.querySelector('textarea[name="description"]').value.trim();
+            const file = document.querySelector('input[type="file"]').files[0];
+
+            if (!file) {
+                showAlert('Silakan pilih file gambar untuk diunggah.', 'error');
+                return;
+            }
+            if (!title) {
+                showAlert('Silakan masukkan judul gambar.', 'error');
+                return;
+            }
+            if (!category) {
+                showAlert('Silakan pilih kategori.', 'error');
+                return;
+            }
+            if (!description) {
+                showAlert('Silakan masukkan deskripsi gambar.', 'error');
+                return;
+            }
+
+            // Show confirmation modal
+            confirmModal.classList.remove('hidden');
+        });
+
+        // Handle confirmation button click
+        document.getElementById('confirmButton').addEventListener('click', function() {
+            const formData = new FormData(form);
+            
+            // Hide modal
+            confirmModal.classList.add('hidden');
+            
+            // Show loading state
+            uploadButton.disabled = true;
+            uploadButton.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Mengunggah...
+            `;
+
+            fetch('<?=BASEURL;?>/galleries/uploadImg', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showAlert('Gambar berhasil diunggah!', 'success');
+                    form.reset();
+                    if (document.getElementById('imagePreview')) {
+                        document.getElementById('imagePreview').innerHTML = '';
                     }
+                    // Optional: redirect after successful upload
+                    setTimeout(() => {
+                        window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Gagal mengunggah gambar');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert(error.message || 'Terjadi kesalahan saat mengunggah.', 'error');
+            })
+            .finally(() => {
+                uploadButton.disabled = false;
+                uploadButton.innerHTML = 'Upload Gambar';
+            });
+        });
+
+        // Handle cancel button click
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            confirmModal.classList.add('hidden');
+        });
+    });
+
+    function showAlert(message, type = 'success') {
+        const alertMessage = document.getElementById('alertMessage');
+        const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+        const icon = type === 'success'
+            ? `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+               </svg>`
+            : `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+               </svg>`;
+
+        alertMessage.innerHTML = `
+            <div class="shadow-lg rounded-2xl overflow-hidden ${bgColor}">
+                <div class="p-4 flex items-center">
+                    <div class="flex-shrink-0 text-white">
+                        ${icon}
+                    </div>
+                    <div class="ml-3 text-white font-medium">${message}</div>
+                    <button onclick="closeAlert()" class="ml-auto text-white hover:text-gray-200">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
                 </div>
-                <div class="ml-3 ${textColor} font-medium">${message}</div>
-                <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
             </div>
         `;
 
-        alertElement.style.transform = 'translateY(0)';
-        alertElement.classList.remove('hidden');
+        alertMessage.classList.remove('hidden', 'alert-hide');
+        void alertMessage.offsetWidth; // Force reflow
+        alertMessage.classList.add('alert-show');
 
-        // Auto hide after 5 seconds
         setTimeout(closeAlert, 5000);
     }
 
     function closeAlert() {
-        const alertElement = document.getElementById('alertMessage');
-        alertElement.style.transform = 'translateY(-100%)';
-        setTimeout(() => alertElement.classList.add('hidden'), 300);
+        const alertMessage = document.getElementById('alertMessage');
+        alertMessage.classList.remove('alert-show');
+        alertMessage.classList.add('alert-hide');
+        setTimeout(() => {
+            alertMessage.classList.add('hidden');
+        }, 300);
     }
-
-    // Update your fetch call to use the new alert system
-    confirmUploadButton.addEventListener('click', () => {
-        confirmModal.classList.add('hidden');
-        const formData = new FormData(form);
-
-        fetch('<?=BASEURL;?>/galleries/uploadImg', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showAlert('Gambar berhasil diunggah!', 'success');
-                form.reset();
-                setTimeout(() => {
-                    window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
-                }, 2000);
-            } else {
-                showAlert(data.message || 'Gagal mengunggah gambar.', 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showAlert('Terjadi kesalahan saat mengunggah.', 'error');
-        })
-        .finally(() => {
-            uploadButton.disabled = false;
-            uploadButton.textContent = 'Upload Gambar';
-        });
-    });
 </script>
 </body>
 </html>

@@ -168,6 +168,36 @@ foreach ($topics as $index => $topic): ?>
     </div>
 </div>
 
+<!-- Tambahkan modal preview di akhir body sebelum script -->
+<div id="imagePreviewModal" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50">
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <!-- Tombol close -->
+        <button onclick="closeImagePreview()" class="absolute top-4 right-4 text-white hover:text-red-500 z-50">
+            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+
+        <!-- Container gambar dan info -->
+        <div class="relative max-w-7xl w-full flex flex-col md:flex-row gap-8 items-center">
+            <!-- Container gambar dengan zoom -->
+            <div class="flex-1 relative overflow-hidden rounded-2xl">
+                <img id="previewImage" class="w-full h-auto max-h-[80vh] object-contain transform transition-transform duration-300" src="" alt="">
+            </div>
+
+            <!-- Info panel -->
+            <div class="w-full md:w-96 bg-white rounded-2xl p-6 space-y-4">
+                <h3 id="previewTitle" class="text-2xl font-bold text-red-900"></h3>
+                <div class="space-y-2">
+                    <p id="previewCategory" class="text-sm font-semibold text-red-600"></p>
+                    <p id="previewDate" class="text-sm text-gray-500"></p>
+                </div>
+                <p id="previewDescription" class="text-gray-600 leading-relaxed"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Intersection Observer for fade-in animation
@@ -224,6 +254,106 @@ foreach ($topics as $index => $topic): ?>
             });
         }
     }
+
+    // Fungsi untuk menampilkan preview gambar
+    function showImagePreview(imageUrl, title, category, date, description) {
+        const modal = document.getElementById('imagePreviewModal');
+        const image = document.getElementById('previewImage');
+        const titleEl = document.getElementById('previewTitle');
+        const categoryEl = document.getElementById('previewCategory');
+        const dateEl = document.getElementById('previewDate');
+        const descriptionEl = document.getElementById('previewDescription');
+
+        // Set konten
+        image.src = imageUrl;
+        titleEl.textContent = title;
+        categoryEl.textContent = category;
+        dateEl.textContent = date;
+        descriptionEl.textContent = description;
+
+        // Tampilkan modal
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+
+        // Inisialisasi zoom
+        let scale = 1;
+        let panning = false;
+        let pointX = 0;
+        let pointY = 0;
+        let start = { x: 0, y: 0 };
+
+        image.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            start = { x: e.clientX - pointX, y: e.clientY - pointY };
+            panning = true;
+        });
+
+        image.addEventListener('mousemove', (e) => {
+            e.preventDefault();
+            if (!panning) return;
+            pointX = e.clientX - start.x;
+            pointY = e.clientY - start.y;
+            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        });
+
+        image.addEventListener('mouseup', () => {
+            panning = false;
+        });
+
+        image.addEventListener('mouseleave', () => {
+            panning = false;
+        });
+
+        // Zoom dengan wheel
+        image.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const xs = (e.clientX - pointX) / scale;
+            const ys = (e.clientY - pointY) / scale;
+            
+            if (e.deltaY < 0) {
+                scale *= 1.1;
+            } else {
+                scale /= 1.1;
+            }
+            
+            // Batasi zoom
+            scale = Math.min(Math.max(1, scale), 4);
+            
+            pointX = e.clientX - xs * scale;
+            pointY = e.clientY - ys * scale;
+            
+            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        });
+    }
+
+    // Fungsi untuk menutup preview
+    function closeImagePreview() {
+        const modal = document.getElementById('imagePreviewModal');
+        const image = document.getElementById('previewImage');
+        
+        // Reset transformasi
+        image.style.transform = 'translate(0px, 0px) scale(1)';
+        
+        modal.classList.add('hidden');
+        document.body.style.overflow = ''; // Enable scrolling
+    }
+
+    // Tambahkan event listener untuk setiap gambar
+    document.addEventListener('DOMContentLoaded', function() {
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
+            const image = item.querySelector('img');
+            const title = item.querySelector('h3').textContent;
+            const category = item.querySelector('.text-sm').textContent.split('•')[0].trim();
+            const date = item.querySelector('.text-sm').textContent.split('•')[1].trim();
+            const description = item.querySelector('.text-red-100').textContent;
+
+            // Tambahkan event click ke container gambar
+            item.querySelector('.image-container').addEventListener('click', () => {
+                showImagePreview(image.src, title, category, date, description);
+            });
+        });
+    });
 </script>
 </body>
 </html>
