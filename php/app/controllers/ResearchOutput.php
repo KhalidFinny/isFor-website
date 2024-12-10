@@ -167,7 +167,8 @@ class ResearchOutput extends Controller
                         if ($saveSuccess) {
                             $response['success'] = true;
                             $response['message'] = 'File berhasil diunggah.';
-                            header('location:' . $this->getLastVisitedPage());
+                            echo json_encode($response);
+                            exit;
                         } else {
                             // Hapus file dan metadata jika gagal menyimpan ke database
                             unlink($filePath);
