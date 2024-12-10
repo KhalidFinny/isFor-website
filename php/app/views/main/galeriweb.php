@@ -144,7 +144,7 @@ foreach ($topics as $index => $topic): ?>
                         </h3>
 
                         <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
-                            <button onclick="deleteImage(<?php echo $item['id']; ?>)"
+                            <button onclick="deleteImage(<?php echo $item['gallery_id']; ?>)"
                                     class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                     title="Delete">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -205,7 +205,7 @@ foreach ($topics as $index => $topic): ?>
     function deleteImage(imageId) {
         if (confirm('Are you sure you want to delete this image?')) {
             fetch(`<?=BASEURL?>/gallery/delete/${imageId}`, {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 }
