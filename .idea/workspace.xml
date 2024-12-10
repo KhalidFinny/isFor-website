@@ -4,7 +4,59 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="" />
+    <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6753b79a5ceae.xlsx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6753b890ce62e.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6753bf22aeb85.docx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6753bf5ba0344.pdf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6753bf9ff0113.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/67563f1f51e98.xlsx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/67564f8e5743d.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/67569e2318884.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6756bff5034d7.pdf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757bbb7a1830.xlsx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757bc1c01385.xlsx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757bc4509474.xlsx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c619191b4.pdf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c64998f92.pdf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c791b36b1.xlsx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c79b5bbca.xlsx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c7f6f1e16.pdf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c87dc4bf0.docx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c89db8276.docx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c8e50c8d9.pdf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757c9a5d65f8.docx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6757ca8b48a05.pdf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6753b79a5ceae.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6753b890ce62e.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6753bf22aeb85.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6753bf5ba0344.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6753bf9ff0113.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/67563f1f51e98.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/67564f8e5743d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/67569e2318884.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6756bff5034d7.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757bbb7a1830.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757bc1c01385.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757bc4509474.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c619191b4.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c64998f92.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c791b36b1.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c79b5bbca.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c7f6f1e16.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c87dc4bf0.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c89db8276.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c8e50c8d9.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757c9a5d65f8.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6757ca8b48a05.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/67565825dc663_pp2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/675658ae018d5_pp4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/67569bf9aae5b_pp4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6756c60987dfb_pp4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6756da03718be_67569e2318884 (1).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757a6b28bc7e_67569e2318884 (1).jpg" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -96,7 +148,7 @@
       <workItem from="1733719670891" duration="3782000" />
       <workItem from="1733729041224" duration="12946000" />
       <workItem from="1733750371443" duration="6495000" />
-      <workItem from="1733797499139" duration="9005000" />
+      <workItem from="1733797499139" duration="10295000" />
     </task>
     <servers />
   </component>
