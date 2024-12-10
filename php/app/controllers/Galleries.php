@@ -110,4 +110,14 @@ class Galleries extends Controller
             echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
         }
     }
+
+    public function delete($id)
+    {
+        if ($this->model('GalleryModel')->delete($id) > 0) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to delete the image.']);
+        }
+        exit();
+    }
 }

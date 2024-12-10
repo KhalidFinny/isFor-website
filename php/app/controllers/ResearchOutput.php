@@ -228,4 +228,44 @@ class ResearchOutput extends Controller
         }
     }
 
+    public function filter()
+    {
+        session_start();
+        // Ambil `status` dari permintaan POST
+        $status = isset($_POST['status']) ? $_POST['status'] : null;
+        $userId = $_SESSION['user_id']; // Ambil user ID dari sesi
+
+        // Filter data berdasarkan status
+        $model = $this->model('ResearchOutputModel'); // Sesuaikan nama model
+        switch ($status) {
+            case 0: // Semua data
+                $outputs = $model->getFilesByUser($userId);
+                break;
+            case 1: // Data tertunda
+                $outputs = $model->getFilesByUserAndStatus($userId, 'pending');
+                break;
+            case 2: // Data disetujui
+                $outputs = $model->getFilesByUserAndStatus($userId, 'approved');
+                break;
+            case 3: // Data ditolak
+                $outputs = $model->getFilesByUserAndStatus($userId, 'rejected');
+                break;
+            default:
+                echo json_encode(['error' => 'Invalid status']);
+                return;
+        }
+
+        // Kembalikan data dalam format JSON
+        echo json_encode($outputs);
+    }
+
+    public function delete($id)
+    {
+        if ($this->model('ResearchOutputModel')->delete($id) > 0) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to delete the image.']);
+        }
+        exit();
+    }
 }

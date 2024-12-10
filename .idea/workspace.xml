@@ -5,45 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian-temp.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/config/config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/controllers/Galleries.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Galleries.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Home.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Home.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/674fa873eadfb_pp2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/674faeb744ddc_pp2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/674fb435df018_test2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/674fcdc45de99_pp2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/674fdde82ef84_pp.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/674fde60dff0a_pp.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/675036164f25c_pp2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/675047af07144_pp3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/67504cfb3d9f7_pp3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/67504d94a5af5_pp.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/67504e7fe391f_pp2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/67514afae5e26_pp4.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751902366a90_pp.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751a771cfd80_pp2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751a771d6f8e_pp2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751a791ca84b_pp.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751a791cd609_pp.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751b569a81bb_pp3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751bf909e371_pp3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751c15b161fe_pp3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751c15b29f79_pp3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751c252496f2_pp3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751c25253c25_pp3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751c26e8d17f_test2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751c26e924ea_test2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751c63d49fd9_pp.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6751c63d4f50d_pp.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_test 5.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_test 5.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/upload-image.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeri-test.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/CategoryModel.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/dokumen.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/dokumen.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +104,9 @@
       <workItem from="1733705382113" duration="634000" />
       <workItem from="1733706452108" duration="7425000" />
       <workItem from="1733719670891" duration="3782000" />
-      <workItem from="1733729041224" duration="1352000" />
+      <workItem from="1733729041224" duration="12946000" />
+      <workItem from="1733750371443" duration="6495000" />
+      <workItem from="1733797499139" duration="3462000" />
     </task>
     <servers />
   </component>

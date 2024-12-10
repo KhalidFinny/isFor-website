@@ -1,21 +1,35 @@
+<?php
+// var_dump($data);
+?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Agenda</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
 
         .agenda-card {
             transition: all 0.3s ease;
@@ -30,8 +44,12 @@
 
         /* Alert Animation */
         @keyframes slideIn {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(0); }
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
         }
 
         .alert-animate {
@@ -90,9 +108,17 @@
         }
 
         /* Staggered animation delays */
-        .form-element:nth-child(1) { animation-delay: 0.1s; }
-        .form-element:nth-child(2) { animation-delay: 0.2s; }
-        .form-element:nth-child(3) { animation-delay: 0.3s; }
+        .form-element:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-element:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .form-element:nth-child(3) {
+            animation-delay: 0.3s;
+        }
 
         /* Interactive Elements Animation */
         button, input, textarea {
@@ -117,7 +143,7 @@
     </style>
 </head>
 <body class="bg-white">
-<?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php';?>
+<?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 <!-- Main Content Area -->
 <div class="flex-1 min-h-screen ml-64 bg-white">
     <main class="py-10 px-8">
@@ -139,41 +165,20 @@
         <!-- Grid Layout with Sample Data -->
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
             <?php
-$sampleAgendas = [
-    [
-        "id" => 1,
-        "number" => "01",
-        "title" => "Artificial Intelligence & Machine Learning",
-        "description" => "Pengembangan sistem cerdas dan pembelajaran mesin untuk solusi inovatif",
-    ],
-    [
-        "id" => 2,
-        "number" => "02",
-        "title" => "Internet of Things (IoT)",
-        "description" => "Implementasi teknologi IoT untuk smart city dan industri 4.0",
-    ],
-    [
-        "id" => 3,
-        "number" => "03",
-        "title" => "Cybersecurity",
-        "description" => "Penelitian keamanan siber dan perlindungan infrastruktur digital",
-    ],
-];
-
-if (empty($data['agenda'])): ?>
-                <?php foreach ($sampleAgendas as $agenda): ?>
+            if (empty($data['agenda'])): ?>
+                <?php foreach ($data['agenda'] as $agenda): ?>
                     <div class="agenda-card bg-white p-6 rounded-2xl border-2 border-red-100">
                         <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl font-bold text-red-500"><?=$agenda['number']?></span>
+                            <span class="text-4xl font-bold text-red-500"><?= $agenda['number'] ?></span>
                             <div class="flex space-x-2">
-                                <button onclick="openAgendaModal('edit', <?=htmlspecialchars(json_encode($agenda))?>)"
+                                <button onclick="openAgendaModal('edit', <?= htmlspecialchars(json_encode($agenda['agenda_id'])) ?>)"
                                         class="p-2 text-red-400 hover:text-red-500 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                 </button>
-                                <button onclick="confirmDelete(<?=$agenda['id']?>)"
+                                <button onclick="confirmDelete(<?= $agenda['id'] ?>)"
                                         class="p-2 text-red-400 hover:text-red-500 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -182,24 +187,24 @@ if (empty($data['agenda'])): ?>
                                 </button>
                             </div>
                         </div>
-                        <h3 class="text-xl font-semibold text-red-800 mb-2"><?=$agenda['title']?></h3>
-                        <p class="text-red-600"><?=$agenda['description']?></p>
+                        <h3 class="text-xl font-semibold text-red-800 mb-2"><?= $agenda['title'] ?></h3>
+                        <p class="text-red-600"><?= $agenda['description'] ?></p>
                     </div>
-                <?php endforeach;?>
+                <?php endforeach; ?>
             <?php else: ?>
                 <?php foreach ($data['agenda'] as $agenda): ?>
                     <div class="agenda-card bg-white p-6 rounded-2xl border-2 border-red-100">
                         <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl font-bold text-red-500"><?=$data['no']++?></span>
+                            <span class="text-4xl font-bold text-red-500"><?= $data['no']++ ?></span>
                             <div class="flex space-x-2">
-                                <button onclick="openAgendaModal('edit', <?=htmlspecialchars(json_encode($agenda))?>)"
+                                <button onclick="openAgendaModal('edit', <?= htmlspecialchars(json_encode($agenda)) ?>)"
                                         class="p-2 text-red-400 hover:text-red-500 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                 </button>
-                                <button onclick="confirmDelete(<?=$agenda['agenda_id']?>)"
+                                <button onclick="confirmDelete(<?= $agenda['agenda_id'] ?>)"
                                         class="p-2 text-red-400 hover:text-red-500 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -208,11 +213,11 @@ if (empty($data['agenda'])): ?>
                                 </button>
                             </div>
                         </div>
-                        <h3 class="text-xl font-semibold text-red-800 mb-2"><?=$agenda['title']?></h3>
-                        <p class="text-red-600"><?=$agenda['description']?></p>
+                        <h3 class="text-xl font-semibold text-red-800 mb-2"><?= $agenda['title'] ?></h3>
+                        <p class="text-red-600"><?= $agenda['description'] ?></p>
                     </div>
-                <?php endforeach;?>
-            <?php endif;?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </main>
 </div>
@@ -239,8 +244,8 @@ if (empty($data['agenda'])): ?>
             </button>
         </div>
 
-        <form action="<?=BASEURL;?>/agenda/addAgenda" method="POST" id="agendaForm" class="space-y-6">
-            <input type="hidden" name="agenda_id" id="agendaId">
+        <form action="<?= BASEURL; ?>/agenda/addAgenda" method="POST" id="agendaForm" class="space-y-6">
+            <input type="hidden" id="agenda_id" name="agenda_id" value="">
 
             <div class="flex space-x-4 form-element">
                 <div class="w-1/3">
@@ -309,98 +314,106 @@ if (empty($data['agenda'])): ?>
 </div>
 
 <script>
-// Simplify the JavaScript to only handle fixed numbers
-function getHighestNumber() {
-    const agendaCards = document.querySelectorAll('.agenda-card');
-    let highest = 0;
-    agendaCards.forEach(card => {
-        const numberText = card.querySelector('.text-4xl').textContent;
-        const number = parseInt(numberText);
-        if (number > highest) highest = number;
-    });
-    return highest;
-}
-
-function formatNumber(num) {
-    return num.toString().padStart(2, '0');
-}
-
-function openAgendaModal(mode, agenda = null) {
-    const modal = document.getElementById('agendaModal');
-    modal.style.display = 'flex';
-    modal.offsetHeight; // Force reflow
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-
-    const form = document.getElementById('agendaForm');
-    const title = document.getElementById('modalTitle');
-
-    if (mode === 'edit' && agenda) {
-        title.textContent = 'Edit Agenda';
-        // Your existing edit logic
-    } else {
-        title.textContent = 'Tambah Agenda Baru';
-        form.reset();
-        const nextNumber = formatNumber(getHighestNumber() + 1);
-        document.getElementById('agendaNumber').value = nextNumber;
-    }
-}
-
-function closeAgendaModal() {
-    const modal = document.getElementById('agendaModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    // Wait for animation to complete before hiding
-    setTimeout(() => {
-        modal.style.display = 'none';
-    }, 300);
-}
-
-function confirmDelete(id) {
-    agendaIdToDelete = id;
-
-    const alert = document.getElementById('confirmAlert');
-    alert.classList.remove('hidden');
-    alert.classList.add('flex');
-}
-
-function closeConfirmAlert() {
-    const alert = document.getElementById('confirmAlert');
-    alert.classList.add('hidden');
-    alert.classList.remove('flex');
-}
-
-function deleteAgenda() {
-    if (agendaIdToDelete !== null) {
-        // Kirim AJAX untuk menghapus agenda
-        $.ajax({
-            url: '<?=BASEURL?>/agenda/deleteAgenda/' + agendaIdToDelete,
-            method: 'POST',
-            data: { agenda_id: agendaIdToDelete },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    // Jika berhasil, tutup modal dan reload atau hapus elemen agenda dari halaman
-                    closeConfirmAlert();
-                    alert('Agenda berhasil dihapus!');
-                    location.reload();  // Reload halaman untuk melihat perubahan
-                } else {
-                    alert('Gagal menghapus agenda!');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat menghapus agenda.');
-            }
+    // Simplify the JavaScript to only handle fixed numbers
+    function getHighestNumber() {
+        const agendaCards = document.querySelectorAll('.agenda-card');
+        let highest = 0;
+        agendaCards.forEach(card => {
+            const numberText = card.querySelector('.text-4xl').textContent;
+            const number = parseInt(numberText);
+            if (number > highest) highest = number;
         });
+        return highest;
     }
-}
 
-// Simple form handler for demo
-// document.getElementById('agendaForm').addEventListener('submit', function(e) {
-//     e.preventDefault();
-//     closeAgendaModal();
-// });
+    function formatNumber(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    function openAgendaModal(mode, agenda = null) {
+        const modal = document.getElementById('agendaModal');
+        modal.style.display = 'flex';
+        modal.offsetHeight; // Force reflow
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        const form = document.getElementById('agendaForm');
+        const title = document.getElementById('modalTitle');
+
+        if (mode === 'edit' && agenda) {
+            console.log(agenda);
+            title.textContent = 'Edit Agenda';
+            document.getElementById("agenda_id").value = agenda.agenda_id;
+            document.getElementById('agendaNumber').value = agenda.number;
+            document.getElementById('agendaTitle').value = agenda.title;
+            document.getElementById('agendaDescription').value = agenda.description;
+
+            form.action = '<?=BASEURL;?>/agenda/editAgenda';
+
+            // Your existing edit logic
+        } else {
+            title.textContent = 'Tambah Agenda Baru';
+            form.reset();
+            const nextNumber = formatNumber(getHighestNumber() + 1);
+            document.getElementById('agendaNumber').value = nextNumber;
+        }
+    }
+
+    function closeAgendaModal() {
+        const modal = document.getElementById('agendaModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        // Wait for animation to complete before hiding
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    function confirmDelete(id) {
+        agendaIdToDelete = id;
+
+        const alert = document.getElementById('confirmAlert');
+        alert.classList.remove('hidden');
+        alert.classList.add('flex');
+    }
+
+    function closeConfirmAlert() {
+        const alert = document.getElementById('confirmAlert');
+        alert.classList.add('hidden');
+        alert.classList.remove('flex');
+    }
+
+    function deleteAgenda() {
+        if (agendaIdToDelete !== null) {
+            // Kirim AJAX untuk menghapus agenda
+            $.ajax({
+                url: '<?=BASEURL?>/agenda/deleteAgenda/' + agendaIdToDelete,
+                method: 'POST',
+                data: {agenda_id: agendaIdToDelete},
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        // Jika berhasil, tutup modal dan reload atau hapus elemen agenda dari halaman
+                        closeConfirmAlert();
+                        alert('Agenda berhasil dihapus!');
+                        location.reload();  // Reload halaman untuk melihat perubahan
+                    } else {
+                        alert('Gagal menghapus agenda!');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat menghapus agenda.');
+                }
+            });
+        }
+    }
+
+    // Simple form handler for demo
+    // document.getElementById('agendaForm').addEventListener('submit', function(e) {
+    //     e.preventDefault();
+    //     closeAgendaModal();
+    // });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>

@@ -541,7 +541,7 @@
                         categoryDiv.className = 'border-2 border-red-50 rounded-xl p-4 space-y-4';
                         categoryDiv.innerHTML = `
                             <input type="hidden" name="old_year_start" value="${result.year_start}">
-                            <input type="hidden" name="old_year_end" value="${result.year_end}">
+                            <input type="hidden" name="old_year_start" value="${result.year_start}">
                             <div class="flex justify-between items-center">
                                 <input type="text" name="category_${categoryId}" value="${category}"
                                     class="w-2/3 px-4 py-2 border-2 border-red-100 rounded-xl form-input">

@@ -33,16 +33,16 @@ class Agenda extends Controller{
     }
 
     public function editAgenda(){
-//        var_dump($_POST);
-        if ($this->model('AgendaModel')->editAgenda($_POST) > 0) {
-            header('Location: ' . BASEURL . '/agenda');
-            echo "ubah data berhasil";
-        } else {
-            echo
-            '<script/>
-                    alert("ubah data gagal");
-                </script>';
-        }
+        var_dump($_POST);
+//        if ($this->model('AgendaModel')->editAgenda($_POST) > 0) {
+//            header('Location: ' . BASEURL . '/agenda');
+//            echo "ubah data berhasil";
+//        } else {
+//            echo
+//            '<script/>
+//                    alert("ubah data gagal");
+//                </script>';
+//        }
     }
 
     public function deleteAgenda($id){

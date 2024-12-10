@@ -144,7 +144,7 @@ foreach ($topics as $index => $topic): ?>
                         </h3>
 
                         <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
-                            <button onclick="deleteImage(<?php echo $item['id']; ?>)"
+                            <button onclick="deleteImage(<?php echo $item['gallery_id']; ?>)"
                                     class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                     title="Delete">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -159,6 +159,14 @@ foreach ($topics as $index => $topic): ?>
         </div>
     </div>
 </section>
+
+<!-- Add this modal HTML at the end of your body -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+    <div class="relative max-w-4xl w-full">
+        <button id="closeModal" class="absolute top-2 right-2 text-white text-2xl">&times;</button>
+        <img id="modalImage" class="w-full h-auto rounded-lg shadow-lg" src="" alt="Preview">
+    </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -197,7 +205,7 @@ foreach ($topics as $index => $topic): ?>
     function deleteImage(imageId) {
         if (confirm('Are you sure you want to delete this image?')) {
             fetch(`<?=BASEURL?>/gallery/delete/${imageId}`, {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 }

@@ -142,8 +142,8 @@ class Roadmap extends Controller{
                     // Cek apakah kategori ditemukan, jika ya, simpan data
                     if ($category_name  && !empty($value)) {
                         $data[] = [
-                            'year_start' => $new_year_start,
-                            'year_end' => $new_year_end,
+                            'year_start' => $year_start,
+                            'year_end' => $year_end,
                             'category' => $category_name,
                             'topic' => $value
                         ];
