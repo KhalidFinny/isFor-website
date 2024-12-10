@@ -351,26 +351,47 @@ confirmButton.addEventListener('click', function() {
         Mengirim...
     `;
 
-    // Simulasi progress pengiriman
-    let progress = 0;
-    const progressInterval = setInterval(() => {
-        progress += 5;
-        if (progress <= 90) {
-            previewProgress.style.width = progress + '%';
-            previewStatus.textContent = `Mengirim... ${progress}%`;
+    // Actually submit the form
+    const formData = new FormData(form);
+    fetch('<?= BASEURL ?>/letter/sendletter', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    }, 100);
+        return response.text();
+    })
+    .then(data => {
+        // Simulasi progress pengiriman
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 5;
+            if (progress <= 90) {
+                previewProgress.style.width = progress + '%';
+                previewStatus.textContent = `Mengirim... ${progress}%`;
+            }
+        }, 100);
 
-    // Simulasi selesai pengiriman
-    setTimeout(() => {
-        clearInterval(progressInterval);
-        previewProgress.style.width = '100%';
-        previewStatus.textContent = 'Pengiriman selesai!';
-        
-        // Menampilkan pesan sukses
-        showAlert('Surat berhasil diajukan!', 'success');
-        
-        // Mengembalikan tampilan tombol submit
+        // Simulasi selesai pengiriman
+        setTimeout(() => {
+            clearInterval(progressInterval);
+            previewProgress.style.width = '100%';
+            previewStatus.textContent = 'Pengiriman selesai!';
+            
+            // Menampilkan pesan sukses
+            showAlert('Surat berhasil diajukan!', 'success');
+            
+            // Redirect to dashboard after successful submission
+            setTimeout(() => {
+                window.location.href = '<?= BASEURL ?>/dashboardUser';
+            }, 2000);
+        }, 2000);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Gagal mengirim surat. Silakan coba lagi.', 'error');
         submitButton.disabled = false;
         submitButton.innerHTML = `
             <svg class="w-5 h-5 mr-2 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -379,15 +400,7 @@ confirmButton.addEventListener('click', function() {
             </svg>
             Ajukan Surat
         `;
-        
-        // Reset form
-        form.reset();
-        
-        // Menyembunyikan preview setelah beberapa detik
-        setTimeout(() => {
-            letterPreview.classList.add('hidden');
-        }, 3000);
-    }, 2000);
+    });
 });
 
 /**
