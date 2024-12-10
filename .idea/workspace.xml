@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_asd.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_asdasd.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_pe.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +57,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "last_opened_file_path": "C:/laragon/www/isFor-website/php/app/views/main",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -103,7 +100,7 @@
       <workItem from="1733719670891" duration="3782000" />
       <workItem from="1733729041224" duration="12946000" />
       <workItem from="1733750371443" duration="6495000" />
-      <workItem from="1733797499139" duration="11483000" />
+      <workItem from="1733797499139" duration="12200000" />
     </task>
     <servers />
   </component>

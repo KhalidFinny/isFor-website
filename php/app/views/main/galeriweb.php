@@ -86,6 +86,37 @@ session_start();
         .topic-button.active {
             color: #eb2563;
         }
+
+        .modal-open {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .content-show {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .zoom-active {
+            cursor: zoom-in;
+        }
+
+        .zoom-active.zoomed {
+            cursor: grab;
+        }
+
+        .zoom-active.zoomed:active {
+            cursor: grabbing;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gallery-item {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
     </style>
 </head>
 <body class="bg-white">
@@ -122,14 +153,21 @@ foreach ($topics as $index => $topic): ?>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php foreach ($data['galeri'] as $index => $item): ?>
                 <div class="gallery-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
-                    <div class="image-container">
+                    <div class="image-container cursor-pointer" onclick="showImagePreview(
+                        '<?=GALLERY;?>/files/<?php echo $item['image']; ?>', 
+                        '<?php echo htmlspecialchars($item['title'], ENT_QUOTES); ?>', 
+                        '<?php echo htmlspecialchars($item['category'], ENT_QUOTES); ?>', 
+                        '<?php echo date('d M Y', strtotime($item['created_at'])); ?>', 
+                        '<?php echo htmlspecialchars($item['description'], ENT_QUOTES); ?>'
+                    )">
                         <div class="image-placeholder">
                             <img src="<?=GALLERY;?>/files/<?php echo $item['image']; ?>"
-                                 alt="<?php echo $item['title']; ?>" class="w-full h-full object-cover">
+                                 alt="<?php echo htmlspecialchars($item['title'], ENT_QUOTES); ?>" 
+                                 class="w-full h-full object-cover">
                         </div>
                         <div class="image-overlay">
-                    <span class="text-sm font-semibold text-red-100 mb-2">
-                        <?php echo $item['category']; ?> • <?php echo date('d M Y', strtotime($item['created_at'])); ?>
+                    <span class="text-xl font-bold text-white mb-2">
+                        <?php echo $item['category']; ?> · <?php echo date('d M Y', strtotime($item['created_at'])); ?>
                     </span>
                             <h3 class="text-xl font-bold text-white mb-3">
                                 <?php echo $item['title']; ?>
@@ -170,28 +208,32 @@ foreach ($topics as $index => $topic): ?>
 </div>
 
 <!-- Tambahkan modal preview di akhir body sebelum script -->
-<div id="imagePreviewModal" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50">
+<div id="imagePreviewModal" class="fixed inset-0 bg-black opacity-0 invisible transition-all duration-300 ease-out z-50">
     <div class="absolute inset-0 flex items-center justify-center p-4">
-        <!-- Tombol close -->
-        <button onclick="closeImagePreview()" class="absolute top-4 right-4 text-white hover:text-red-500 z-50">
+        <!-- Tombol close dengan animasi -->
+        <button onclick="closeImagePreview()" 
+                class="absolute top-4 right-4 text-white hover:text-red-500 z-50 transform hover:scale-110 transition-all duration-300">
             <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
         </button>
 
-        <!-- Container gambar dan info -->
-        <div class="relative max-w-7xl w-full flex flex-col md:flex-row gap-8 items-center">
+        <!-- Container gambar dan info dengan animasi -->
+        <div class="relative max-w-7xl w-full flex flex-col md:flex-row gap-8 items-center 
+                    opacity-0 translate-y-4 transition-all duration-500 ease-out" id="previewContent">
             <!-- Container gambar dengan zoom -->
             <div class="flex-1 relative overflow-hidden rounded-2xl">
-                <img id="previewImage" class="w-full h-auto max-h-[80vh] object-contain transform transition-transform duration-300" src="" alt="">
+                <img id="previewImage" 
+                     class="w-full h-auto max-h-[80vh] object-contain transform transition-all duration-300" 
+                     src="" alt="">
             </div>
 
-            <!-- Info panel -->
-            <div class="w-full md:w-96 bg-white rounded-2xl p-6 space-y-4">
+            <!-- Info panel dengan animasi -->
+            <div class="w-full md:w-96 bg-white rounded-2xl p-6 space-y-4 transform transition-all duration-500">
                 <h3 id="previewTitle" class="text-2xl font-bold text-red-900"></h3>
                 <div class="space-y-2">
-                    <p id="previewCategory" class="text-sm font-semibold text-red-600"></p>
-                    <p id="previewDate" class="text-sm text-gray-500"></p>
+                    <p id="previewCategory" class="text-xl font-bold text-red-600"></p>
+                    <p id="previewDate" class="text-xl font-bold text-red-600"></p>
                 </div>
                 <p id="previewDescription" class="text-gray-600 leading-relaxed"></p>
             </div>
@@ -254,34 +296,83 @@ foreach ($topics as $index => $topic): ?>
     // Fungsi untuk menampilkan preview gambar
     function showImagePreview(imageUrl, title, category, date, description) {
         const modal = document.getElementById('imagePreviewModal');
+        const content = document.getElementById('previewContent');
         const image = document.getElementById('previewImage');
         const titleEl = document.getElementById('previewTitle');
         const categoryEl = document.getElementById('previewCategory');
         const dateEl = document.getElementById('previewDate');
         const descriptionEl = document.getElementById('previewDescription');
 
-        // Set konten
+        // Set content
         image.src = imageUrl;
         titleEl.textContent = title;
         categoryEl.textContent = category;
         dateEl.textContent = date;
         descriptionEl.textContent = description;
 
-        // Tampilkan modal
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        // Show modal with animation
+        modal.classList.add('modal-open');
+        setTimeout(() => {
+            content.classList.add('content-show');
+        }, 100);
 
-        // Inisialisasi zoom
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+
+        // Initialize zoom functionality
+        initializeZoom(image);
+    }
+
+    // Separate zoom functionality into its own function
+    function initializeZoom(image) {
         let scale = 1;
         let panning = false;
         let pointX = 0;
         let pointY = 0;
         let start = { x: 0, y: 0 };
 
+        image.classList.add('zoom-active');
+
+        // Double click to reset zoom
+        image.addEventListener('dblclick', () => {
+            scale = 1;
+            pointX = 0;
+            pointY = 0;
+            image.style.transform = `translate(0px, 0px) scale(1)`;
+            image.classList.remove('zoomed');
+        });
+
+        // Mouse wheel zoom
+        image.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const xs = (e.clientX - pointX) / scale;
+            const ys = (e.clientY - pointY) / scale;
+            
+            if (e.deltaY < 0) {
+                scale *= 1.1;
+                image.classList.add('zoomed');
+            } else {
+                scale /= 1.1;
+                if (scale <= 1) {
+                    scale = 1;
+                    image.classList.remove('zoomed');
+                }
+            }
+            
+            scale = Math.min(Math.max(1, scale), 4);
+            pointX = e.clientX - xs * scale;
+            pointY = e.clientY - ys * scale;
+            
+            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        });
+
+        // Pan functionality
         image.addEventListener('mousedown', (e) => {
             e.preventDefault();
-            start = { x: e.clientX - pointX, y: e.clientY - pointY };
-            panning = true;
+            if (scale > 1) {
+                start = { x: e.clientX - pointX, y: e.clientY - pointY };
+                panning = true;
+            }
         });
 
         image.addEventListener('mousemove', (e) => {
@@ -292,62 +383,43 @@ foreach ($topics as $index => $topic): ?>
             image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
         });
 
-        image.addEventListener('mouseup', () => {
-            panning = false;
-        });
-
-        image.addEventListener('mouseleave', () => {
-            panning = false;
-        });
-
-        // Zoom dengan wheel
-        image.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const xs = (e.clientX - pointX) / scale;
-            const ys = (e.clientY - pointY) / scale;
-            
-            if (e.deltaY < 0) {
-                scale *= 1.1;
-            } else {
-                scale /= 1.1;
-            }
-            
-            // Batasi zoom
-            scale = Math.min(Math.max(1, scale), 4);
-            
-            pointX = e.clientX - xs * scale;
-            pointY = e.clientY - ys * scale;
-            
-            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
-        });
+        image.addEventListener('mouseup', () => panning = false);
+        image.addEventListener('mouseleave', () => panning = false);
     }
 
-    // Fungsi untuk menutup preview
+    // Make sure closeImagePreview is defined
     function closeImagePreview() {
         const modal = document.getElementById('imagePreviewModal');
+        const content = document.getElementById('previewContent');
         const image = document.getElementById('previewImage');
         
-        // Reset transformasi
-        image.style.transform = 'translate(0px, 0px) scale(1)';
+        content.classList.remove('content-show');
         
-        modal.classList.add('hidden');
-        document.body.style.overflow = ''; // Enable scrolling
+        setTimeout(() => {
+            modal.classList.remove('modal-open');
+            image.style.transform = 'translate(0px, 0px) scale(1)';
+            image.classList.remove('zoomed');
+            document.body.style.overflow = '';
+        }, 300);
     }
 
-    // Tambahkan event listener untuk setiap gambar
+    // Remove any existing click handlers from DOMContentLoaded
     document.addEventListener('DOMContentLoaded', function() {
-        const galleryItems = document.querySelectorAll('.gallery-item');
-        galleryItems.forEach(item => {
-            const image = item.querySelector('img');
-            const title = item.querySelector('h3').textContent;
-            const category = item.querySelector('.text-sm').textContent.split('•')[0].trim();
-            const date = item.querySelector('.text-sm').textContent.split('•')[1].trim();
-            const description = item.querySelector('.text-red-100').textContent;
-
-            // Tambahkan event click ke container gambar
-            item.querySelector('.image-container').addEventListener('click', () => {
-                showImagePreview(image.src, title, category, date, description);
+        // Only initialize necessary functionality
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
             });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            observer.observe(item);
         });
     });
 </script>
