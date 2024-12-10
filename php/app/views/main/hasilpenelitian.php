@@ -235,7 +235,7 @@ session_start();
         const fileExtension = fileUrl.split('.').pop().toLowerCase();
 
         if (fileExtension === 'pdf') {
-            previewContent.innerHTML = `<iframe src="<?=FILES;?>/${fileUrl}" class="w-full h-full"></iframe>`;
+            window.open('<?=FILES;?>/' + fileUrl, '_blank');
         } else {
             previewContent.innerHTML = `<div class="flex items-center justify-center h-full">
                 <p class="text-gray-500">Preview not available for this file type</p>
