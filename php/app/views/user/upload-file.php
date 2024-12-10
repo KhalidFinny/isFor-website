@@ -4,20 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload File - IsFor Internet of Things For Human Life's</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         /* Simplified Animations */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .fade-in {
@@ -42,7 +35,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
+    <?php include '../app/views/assets/components/UserDashboard/sidebar.php';?>
     <div class="flex-1 min-h-screen ml-64 bg-white">
         <main class="py-10 px-8">
             <!-- Swiss-inspired Header -->
@@ -55,7 +48,7 @@
             </div>
 
             <!-- Upload Form -->
-            <form action="<?= BASEURL; ?>/researchoutput/uploadFile" method="POST" enctype="multipart/form-data"
+            <form action="<?=BASEURL;?>/researchoutput/uploadFile" method="POST" enctype="multipart/form-data"
                   id="uploadForm" class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-12 gap-8">
                     <!-- Left Column -->
@@ -72,23 +65,19 @@
                                     <div class="absolute inset-0 flex flex-col items-center justify-center transform group-hover:-translate-y-2 transition-all duration-300">
                                         <div class="w-20 h-20 mb-6 rounded-full bg-red-50 flex items-center justify-center group-hover:bg-red-100 transition-all duration-300">
                                             <!-- File Icon (Changed from image icon) -->
-                                            <svg class="w-10 h-10 text-red-400" fill="none" viewBox="0 0 24 24"
-                                                 stroke="currentColor">
+                                            <svg class="w-10 h-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                       d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                             </svg>
                                         </div>
                                         <div class="space-y-3 pt-4">
                                             <!-- Preview Button -->
-                                            <button type="button"
-                                                    onclick="document.getElementById('file-upload').click()"
+                                            <button type="button" onclick="document.getElementById('file-upload').click()"
                                                     class="w-full px-6 py-4 bg-white text-red-600 border-2 border-red-200 rounded-xl
                                                            hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1
                                                            transition-all duration-300 flex items-center justify-center space-x-2">
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                                                     stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          stroke-width="2"
+                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                           d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                                 </svg>
                                                 <span>Pilih File</span>
@@ -102,10 +91,44 @@
                         </section>
 
                         <!-- Preview Section -->
-                        <div id="filePreview" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6">
+                        <div id="filePreview" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6 mt-8">
                             <h3 class="text-lg font-semibold text-red-800 mb-4">Preview File</h3>
-                            <div id="previewContent" class="space-y-4">
-                                <!-- Preview content will be inserted here -->
+                            <div class="bg-red-50 rounded-xl p-4">
+                                <div class="flex items-start space-x-4">
+                                    <!-- File Icon -->
+                                    <div class="flex-shrink-0">
+                                        <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- File Info -->
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-red-900" id="fileName">filename.pdf</p>
+                                        <p class="text-sm text-red-500" id="fileSize">0 MB</p>
+                                        
+                                        <!-- Progress Bar -->
+                                        <div class="mt-2 w-full bg-red-200 rounded-full h-2.5">
+                                            <div id="uploadProgress" 
+                                                 class="bg-red-500 h-2.5 rounded-full transition-all duration-300" 
+                                                 style="width: 0%">
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-red-400 mt-1" id="uploadStatus">Menunggu upload...</p>
+                                    </div>
+                                    
+                                    <!-- Remove Button -->
+                                    <button type="button" onclick="removeFile()" 
+                                            class="flex-shrink-0 text-red-400 hover:text-red-600 transition-colors">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,273 +211,227 @@
      class="hidden fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 translate-y-[-100%]">
 </div>
 
-<!--<script>-->
-<!--    // Image preview functionality-->
-<!--    document.getElementById('file-upload').addEventListener('change', function (e) {-->
-<!--        const file = e.target.files[0]; // Ambil file yang dipilih-->
-<!--        const filePreview = document.getElementById('filePreview'); // Kontainer preview-->
-<!--        const previewImage = document.getElementById('previewImage'); // Elemen gambar-->
-<!--        const previewText = document.getElementById('previewText'); // Elemen teks-->
-<!---->
-<!--        if (file) {-->
-<!--            const fileType = file.type;-->
-<!---->
-<!--            // Reset tampilan modal-->
-<!--            previewImage.classList.add('hidden');-->
-<!--            previewText.classList.add('hidden');-->
-<!--            filePreview.classList.remove('hidden');-->
-<!---->
-<!--            if (fileType.startsWith('image/')) {-->
-<!--                // Jika file adalah gambar-->
-<!--                const reader = new FileReader();-->
-<!--                reader.onload = function (e) {-->
-<!--                    previewImage.src = e.target.result;-->
-<!--                    previewImage.classList.remove('hidden'); // Tampilkan gambar-->
-<!--                };-->
-<!--                reader.readAsDataURL(file);-->
-<!--            } else {-->
-<!--                // Jika file bukan gambar-->
-<!--                previewText.textContent = `Nama file: ${file.name}`;-->
-<!--                previewText.classList.remove('hidden'); // Tampilkan teks-->
-<!--            }-->
-<!--        }-->
-<!--    });-->
-<!---->
-<!--    document.getElementById('uploadForm').addEventListener('submit', function (e) {-->
-<!--        e.preventDefault();-->
-<!---->
-<!--        const form = new FormData(this);-->
-<!--        const responseMessage = document.getElementById('responseMessage');-->
-<!--        let isValid = true;-->
-<!---->
-<!--        // Validasi field-->
-<!--        const fields = [-->
-<!--            {id: 'fileTitle', message: 'Judul file wajib diisi.'},-->
-<!--            {id: 'category', message: 'Kategori wajib dipilih.'},-->
-<!--            {id: 'description', message: 'Deskripsi wajib diisi.'},-->
-<!--            {id: 'file-upload', message: 'File wajib diunggah.'},-->
-<!--        ];-->
-<!---->
-<!--        // Reset peringatan-->
-<!--        fields.forEach(field => {-->
-<!--            const input = document.getElementById(field.id);-->
-<!--            const error = document.getElementById(`${field.id}-error`);-->
-<!--            if (error) error.textContent = ''; // Reset pesan error-->
-<!---->
-<!--            if (!form.get(field.id)) {-->
-<!--                isValid = false;-->
-<!--                if (error) {-->
-<!--                    error.textContent = field.message; // Tampilkan pesan error-->
-<!--                } else {-->
-<!--                    const errorMsg = document.createElement('p');-->
-<!--                    errorMsg.id = `${field.id}-error`;-->
-<!--                    errorMsg.textContent = field.message;-->
-<!--                    errorMsg.className = 'text-red-600 text-sm mt-1';-->
-<!--                    input.parentElement.appendChild(errorMsg);-->
-<!--                }-->
-<!--            }-->
-<!--        });-->
-<!---->
-<!--        if (!isValid) return; // Jangan kirim form jika ada error-->
-<!---->
-<!--        fetch('--><?php //=BASEURL;?>///researchoutput/uploadFile', {
-// method: 'POST',
-// body: form
-// })
-// .then(response => response.json())
-// .then(data => {
-// if (data.success) {
-// responseMessage.textContent = data.message;
-// responseMessage.className = 'text-green-600';
-// } else {
-// responseMessage.textContent = data.message;
-// responseMessage.className = 'text-red-600';
-// }
-// })
-// .catch(error => {
-// responseMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
-// responseMessage.className = 'text-red-600';
-// });
-// });
-//
-// const form = document.getElementById('uploadForm');
-// const confirmationModal = document.getElementById('confirmationModal');
-// const cancelButton = document.getElementById('cancelButton');
-// const confirmButton = document.getElementById('confirmButton');
-// const responseMessage = document.getElementById('responseMessage');
-//
-// form.addEventListener('submit', function (e) {
-// e.preventDefault();
-//
-// let isValid = true;
-//
-// // Validasi field
-// ['fileTitle', 'category', 'description', 'file-upload'].forEach(fieldId => {
-// const field = document.getElementById(fieldId);
-// const error = document.getElementById(`${fieldId}-error`);
-// if (error) error.remove(); // Hapus pesan error sebelumnya
-//
-// if (!field.value || field.value === '') {
-// isValid = false;
-// const errorMsg = document.createElement('p');
-// errorMsg.id = `${fieldId}-error`;
-// errorMsg.textContent = `${field.name || 'Field'} wajib diisi.`;
-// errorMsg.className = 'text-red-600 text-sm mt-1';
-// field.parentElement.appendChild(errorMsg);
-// }
-// });
-//
-// if (isValid) {
-// // Tampilkan modal jika validasi lolos
-// confirmationModal.classList.remove('hidden');
-// }
-// });
-//
-// // Jika pengguna membatalkan
-// cancelButton.addEventListener('click', () => {
-// confirmationModal.classList.add('hidden');
-// document.body.classList.remove('overflow-hidden');
-// });
-//
-// // Jika pengguna mengonfirmasi
-// confirmButton.addEventListener('click', () => {
-// confirmationModal.classList.add('hidden');
-// document.body.classList.remove('overflow-hidden');
-//
-// // Kirim data setelah konfirmasi
-// const formData = new FormData(form);
-//
-// fetch('<?php //=BASEURL;?>///researchoutput/uploadFile', {
-// method: 'POST',
-// body: formData,
-// })
-// .then(response => response.json())
-// .then(data => {
-// responseMessage.textContent = data.message;
-// responseMessage.className = data.success ? 'text-green-600' : 'text-red-600';
-//
-// if (data.success) {
-// form.reset(); // Reset form jika berhasil
-// }
-// })
-// .catch(error => {
-// responseMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
-// responseMessage.className = 'text-red-600';
-// });
-// });
-//
-// // Add this after your existing script
-// function showAlert(message, type = 'success') {
-// const alertElement = document.getElementById('alertMessage');
-// const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-// const icon = type === 'success'
-// ? `
-<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    //
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-    //
-</svg>
-`
-// : `
-<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    //
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-    //
-</svg>
-`;
-//
-// alertElement.className = `fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform
-transition-all duration-300 ${bgColor}`;
-// alertElement.innerHTML = `
-//
-<div class="p-4 flex items-center">
-    //
-    <div class="flex-shrink-0 text-white">
-        // ${icon}
-        //
-    </div>
-    //
-    <div class="ml-3 text-white font-medium">${message}</div>
-    //
-    <button onclick="closeAlert()" class="ml-auto text-white hover:text-gray-200">
-        //
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            //
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            //
-        </svg>
-        //
-    </button>
-    //
-</div>
-// `;
-//
-// alertElement.style.transform = 'translateY(0)';
-// alertElement.classList.remove('hidden');
-//
-// // Auto hide after 5 seconds
-// setTimeout(closeAlert, 5000);
-// }
-//
-// function closeAlert() {
-// const alertElement = document.getElementById('alertMessage');
-// alertElement.style.transform = 'translateY(-100%)';
-// setTimeout(() => alertElement.classList.add('hidden'), 300);
-// }
-//
-// // Update your modal show/hide logic
-// function showModal() {
-// const modal = document.getElementById('confirmationModal');
-// const modalContent = document.getElementById('modalContent');
-// modal.classList.remove('hidden');
-// setTimeout(() => {
-// modalContent.classList.remove('scale-95', 'opacity-0');
-// modalContent.classList.add('scale-100', 'opacity-100');
-// }, 50);
-// }
-//
-// function hideModal() {
-// const modal = document.getElementById('confirmationModal');
-// const modalContent = document.getElementById('modalContent');
-// modalContent.classList.remove('scale-100', 'opacity-100');
-// modalContent.classList.add('scale-95', 'opacity-0');
-// setTimeout(() => {
-// modal.classList.add('hidden');
-// }, 300);
-// }
-//
-// // Update your existing event listeners
-// form.addEventListener('submit', function(e) {
-// e.preventDefault();
-// if (validateForm()) {
-// showModal();
-// }
-// });
-//
-// cancelButton.addEventListener('click', hideModal);
-//
-// // Update your fetch success/error handling
-// confirmButton.addEventListener('click', () => {
-// hideModal();
-// const formData = new FormData(form);
-//
-// fetch('<?php //=BASEURL;?>///researchoutput/uploadFile', {
-// method: 'POST',
-// body: formData,
-// })
-// .then(response => response.json())
-// .then(data => {
-// if (data.success) {
-// showAlert(data.message, 'success');
-// form.reset();
-// } else {
-// showAlert(data.message, 'error');
-// }
-// })
-// .catch(error => {
-// showAlert('Terjadi kesalahan. Silakan coba lagi.', 'error');
-// });
-// });
-//</script>
+<script>
+    // File preview functionality
+    document.getElementById('file-upload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            updateFilePreview(file);
+        }
+    });
+
+    // Form submission and modal handling
+    const form = document.getElementById('uploadForm');
+    const modal = document.getElementById('confirmationModal');
+    const cancelButton = document.getElementById('cancelButton');
+    const confirmButton = document.getElementById('confirmButton');
+    const uploadButton = document.getElementById('uploadButton');
+
+    // Show modal on form submit
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate form fields
+        const fileTitle = document.getElementById('fileTitle').value.trim();
+        const category = document.getElementById('category').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const file = document.getElementById('file-upload').files[0];
+
+        if (!file) {
+            showAlert('Silakan pilih file untuk diunggah.', 'error');
+            return;
+        }
+        if (!fileTitle) {
+            showAlert('Silakan masukkan judul file.', 'error');
+            return;
+        }
+        if (!category) {
+            showAlert('Silakan pilih kategori.', 'error');
+            return;
+        }
+        if (!description) {
+            showAlert('Silakan masukkan deskripsi file.', 'error');
+            return;
+        }
+
+        // Show modal
+        modal.classList.remove('hidden');
+        const modalContent = document.getElementById('modalContent');
+        modalContent.classList.remove('scale-95', 'opacity-0');
+        modalContent.classList.add('scale-100', 'opacity-100');
+    });
+
+    // Cancel button closes modal
+    cancelButton.addEventListener('click', function() {
+        const modalContent = document.getElementById('modalContent');
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    });
+
+    // Confirm button submits the form
+    confirmButton.addEventListener('click', function() {
+        // Hide modal
+        modal.classList.add('hidden');
+        
+        // Submit form
+        const formData = new FormData(form);
+        const xhr = new XMLHttpRequest();
+        
+        // Show loading state
+        uploadButton.disabled = true;
+        uploadButton.innerHTML = 'Uploading...';
+        
+        // Rest of your upload logic...
+        // ... (keep the existing XMLHttpRequest code)
+    });
+
+    // File preview functions
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function updateFilePreview(file) {
+        const preview = document.getElementById('filePreview');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const uploadProgress = document.getElementById('uploadProgress');
+
+        preview.classList.remove('hidden');
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        uploadStatus.textContent = 'File siap untuk diunggah';
+        uploadProgress.style.width = '0%';
+    }
+
+    function removeFile() {
+        const fileInput = document.getElementById('file-upload');
+        const preview = document.getElementById('filePreview');
+        
+        fileInput.value = '';
+        preview.classList.add('hidden');
+    }
+
+    // Handle final upload
+    confirmButton.addEventListener('click', function() {
+        const formData = new FormData(form);
+        
+        // Hide modal with animation
+        const modalContent = document.getElementById('modalContent');
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+        
+        // Update button state
+        uploadButton.disabled = true;
+        uploadButton.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Uploading...
+        `;
+
+        // Create and configure XMLHttpRequest for upload with progress
+        const xhr = new XMLHttpRequest();
+        const uploadProgress = document.getElementById('uploadProgress');
+        const uploadStatus = document.getElementById('uploadStatus');
+        
+        xhr.upload.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+                const percentComplete = (e.loaded / e.total) * 100;
+                uploadProgress.style.width = percentComplete + '%';
+                uploadStatus.textContent = `Mengupload... ${Math.round(percentComplete)}%`;
+            }
+        });
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        uploadStatus.textContent = 'Upload berhasil!';
+                        uploadProgress.style.width = '100%';
+                        showAlert('File berhasil diunggah!', 'success');
+                        setTimeout(() => {
+                            window.location.href = '<?=BASEURL;?>/researchoutput';
+                        }, 2000);
+                    } else {
+                        uploadStatus.textContent = 'Upload gagal';
+                        showAlert(response.message || 'Gagal mengunggah file.', 'error');
+                    }
+                } catch (error) {
+                    uploadStatus.textContent = 'Upload gagal';
+                    showAlert('Terjadi kesalahan saat mengunggah.', 'error');
+                }
+            } else {
+                uploadStatus.textContent = 'Upload gagal';
+                showAlert('Terjadi kesalahan saat mengunggah.', 'error');
+            }
+            
+            // Reset upload button
+            uploadButton.disabled = false;
+            uploadButton.innerHTML = 'Upload File';
+        };
+
+        xhr.onerror = function() {
+            uploadStatus.textContent = 'Upload gagal';
+            showAlert('Terjadi kesalahan saat mengunggah.', 'error');
+            uploadButton.disabled = false;
+        };
+
+        // Send the request
+        xhr.open('POST', '<?=BASEURL;?>/researchoutput/uploadFile', true);
+        xhr.send(formData);
+    });
+
+    function showAlert(message, type = 'success') {
+        const alertElement = document.getElementById('alertMessage');
+        const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+        const icon = type === 'success'
+            ? `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+               </svg>`
+            : `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+               </svg>`;
+
+        alertElement.className = `fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 ${bgColor}`;
+        alertElement.innerHTML = `
+            <div class="p-4 flex items-center">
+                <div class="flex-shrink-0 text-white">
+                    ${icon}
+                </div>
+                <div class="ml-3 text-white font-medium">${message}</div>
+                <button onclick="closeAlert()" class="ml-auto text-white hover:text-gray-200">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        alertElement.style.transform = 'translateY(0)';
+        alertElement.classList.remove('hidden');
+
+        // Auto hide after 5 seconds
+        setTimeout(closeAlert, 5000);
+    }
+
+    function closeAlert() {
+        const alertElement = document.getElementById('alertMessage');
+        alertElement.style.transform = 'translateY(-100%)';
+        setTimeout(() => alertElement.classList.add('hidden'), 300);
+    }
+</script>
 </body>
 </html>
