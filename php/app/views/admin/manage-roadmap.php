@@ -592,7 +592,7 @@
                         location.reload();
                 },
                 error: function(response){
-                    alert('Gagal memperbarui status surat');
+                    alert('Gagal memperbarui status roadmap');
                 }
             });
         }

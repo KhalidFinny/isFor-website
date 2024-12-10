@@ -113,6 +113,7 @@ class Galleries extends Controller
 
     public function delete()
     {
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
@@ -126,5 +127,6 @@ class Galleries extends Controller
             echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
         }
         exit();
+
     }
 }

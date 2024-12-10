@@ -145,7 +145,7 @@ foreach ($topics as $index => $topic): ?>
                         </h3>
 
                         <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
-                            <button onclick="deleteImage(<?= $item['gallery_id']; ?>)"
+                            <button onclick="deleteImage(<?php echo $item['gallery_id']; ?>)"
                                     class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                     title="Delete">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

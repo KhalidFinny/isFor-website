@@ -34,7 +34,7 @@ class GalleryModel
     // Read all gallery entries
     public function getAll()
     {
-        $query = "SELECT * FROM " . $this->table;
+        $query = "SELECT * FROM " . $this->table . " ORDER BY created_at DESC";
         $this->db->query($query);
         return $this->db->resultSet();
     }

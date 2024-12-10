@@ -1,6 +1,6 @@
 <?php
 session_start();
-var_dump($data);
+//var_dump($data);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +12,7 @@ var_dump($data);
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .file-card {
             opacity: 0;
@@ -70,10 +71,10 @@ var_dump($data);
 </head>
 <body class="bg-white">
 <?php if (!isset($_SESSION['user_id'])): ?>
-    <?php include_once '../app/views/assets/components/navbar.php';?>
+    <?php include_once '../app/views/assets/components/navbar.php'; ?>
 <?php else: ?>
-    <?php include_once '../app/views/assets/components/navbarafterlogin.php';?>
-<?php endif;?>
+    <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
+<?php endif; ?>
 <section class="min-h-screen py-20 relative overflow-hidden">
     <div class="container mx-auto px-6 max-w-7xl">
         <!-- Header -->
@@ -90,12 +91,12 @@ var_dump($data);
         <!-- Topics Navigation -->
         <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
             <?php
-$topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
-foreach ($topics as $index => $topic): ?>
+            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
+            foreach ($topics as $index => $topic): ?>
                 <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
                     <?php echo $topic; ?>
                 </button>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </div>
 
         <!-- Files Grid -->
@@ -150,31 +151,31 @@ foreach ($topics as $index => $topic): ?>
                                 </button>
 
                                 <!-- Download Button -->
-                                <a href="<?= FILES . '/' . $item['file_url']; ?>" 
+                                <a href="<?= FILES . '/' . $item['file_url']; ?>"
                                    class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                    download>
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                     </svg>
                                 </a>
 
                                 <!-- Delete Button (Admin Only) -->
                                 <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
-                                    <button onclick="deleteFile(<?php echo $item['research_output_id']; ?>)"
+                                    <button onclick="deleteFile(<?= $item['research_output_id']; ?>)"
                                             class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                             title="Delete">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-        </svg>
-    </button>
-<?php endif;?>
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    </button>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                <?php endforeach;?>
-            <?php endif;?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </section>
@@ -253,23 +254,17 @@ foreach ($topics as $index => $topic): ?>
 
     function deleteFile(fileId) {
         if (confirm('Are you sure you want to delete this file?')) {
-            fetch(`<?=BASEURL?>/researchoutput/delete/${fileId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+            $.ajax({
+                url: '<?= BASEURL ?>/researchoutput/delete', // URL endpoint untuk delete
+                type: 'POST', // Menggunakan POST untuk aksi delete
+                data: {id: fileId}, // Data yang dikirimkan
+                success: function (response) {
                     window.location.reload();
-                } else {
-                    alert('Error deleting file');
+                    alert('File deleted successfully!');
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred: ' + error);
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error deleting file');
             });
         }
     }

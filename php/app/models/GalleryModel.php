@@ -88,8 +88,8 @@ class GalleryModel
     public function delete($id)
     {
         $query = "DELETE FROM " . $this->table . " WHERE gallery_id = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id);
-        return $stmt->execute();
+        $this->db->query($query);
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
     }
 }
