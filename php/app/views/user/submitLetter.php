@@ -157,5 +157,159 @@
             });
     }
 </script>
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal"
+     class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 z-50 fade-in"
+     style="backdrop-filter: blur(4px);">
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0"
+             id="modalContent">
+            <div class="p-6">
+                <div class="w-16 h-16 rounded-full bg-red-50 mx-auto mb-4 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-semibold text-center text-red-800 mb-2">Konfirmasi Pengajuan</h2>
+                <p class="text-gray-600 text-center mb-6">Apakah Anda yakin ingin mengajukan surat ini?</p>
+                <div class="flex justify-center space-x-3">
+                    <button id="cancelButton"
+                            class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                                   hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 transition-all duration-300">
+                        Batal
+                    </button>
+                    <button id="confirmButton"
+                            class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
+                                   transform hover:-translate-y-1 transition-all duration-300">
+                        Ajukan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert Messages -->
+<div id="alertMessage"
+     class="hidden fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 translate-y-[-100%]">
+</div>
+
+<script>
+// Form submission and modal handling
+const form = document.getElementById('letterForm');
+const modal = document.getElementById('confirmationModal');
+const cancelButton = document.getElementById('cancelButton');
+const confirmButton = document.getElementById('confirmButton');
+const submitButton = document.querySelector('button[type="submit"]');
+
+// Show modal on form submit
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validate form fields
+    const researchTitle = document.getElementById('researchTitle').value.trim();
+    const leadResearcher = document.getElementById('leadResearcher').value.trim();
+    const researchTopic = document.getElementById('researchTopic').value.trim();
+    const researchScheme = document.getElementById('researchScheme').value.trim();
+
+    if (!researchTitle) {
+        showAlert('Silakan masukkan judul penelitian.', 'error');
+        return;
+    }
+    if (!leadResearcher) {
+        showAlert('Silakan masukkan nama ketua peneliti.', 'error');
+        return;
+    }
+    if (!researchTopic) {
+        showAlert('Silakan masukkan topik riset.', 'error');
+        return;
+    }
+    if (!researchScheme) {
+        showAlert('Silakan pilih skema penelitian.', 'error');
+        return;
+    }
+
+    // Show modal
+    modal.classList.remove('hidden');
+    const modalContent = document.getElementById('modalContent');
+    modalContent.classList.remove('scale-95', 'opacity-0');
+    modalContent.classList.add('scale-100', 'opacity-100');
+});
+
+// Cancel button closes modal
+cancelButton.addEventListener('click', function() {
+    const modalContent = document.getElementById('modalContent');
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+});
+
+// Confirm button submits the form
+confirmButton.addEventListener('click', function() {
+    // Hide modal with animation
+    const modalContent = document.getElementById('modalContent');
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+
+    // Update button state
+    submitButton.disabled = true;
+    submitButton.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Mengirim...
+    `;
+
+    // Submit the form
+    form.submit();
+});
+
+function showAlert(message, type = 'success') {
+    const alertElement = document.getElementById('alertMessage');
+    const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+    const icon = type === 'success'
+        ? `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+           </svg>`
+        : `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+           </svg>`;
+
+    alertElement.className = `fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 ${bgColor}`;
+    alertElement.innerHTML = `
+        <div class="p-4 flex items-center">
+            <div class="flex-shrink-0 text-white">
+                ${icon}
+            </div>
+            <div class="ml-3 text-white font-medium">${message}</div>
+            <button onclick="closeAlert()" class="ml-auto text-white hover:text-gray-200">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    `;
+
+    alertElement.style.transform = 'translateY(0)';
+    alertElement.classList.remove('hidden');
+
+    // Auto hide after 5 seconds
+    setTimeout(closeAlert, 5000);
+}
+
+function closeAlert() {
+    const alertElement = document.getElementById('alertMessage');
+    alertElement.style.transform = 'translateY(-100%)';
+    setTimeout(() => alertElement.classList.add('hidden'), 300);
+}
+</script>
 </body>
 </html>
