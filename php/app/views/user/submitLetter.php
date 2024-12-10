@@ -158,62 +158,143 @@
     }
 </script>
 
-<!-- Confirmation Modal -->
-<div id="confirmationModal"
-     class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 z-50 fade-in"
-     style="backdrop-filter: blur(4px);">
-    <div class="fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0"
-             id="modalContent">
-            <div class="p-6">
-                <div class="w-16 h-16 rounded-full bg-red-50 mx-auto mb-4 flex items-center justify-center">
-                    <svg class="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+<!-- Container utama untuk preview surat -->
+<div id="letterPreview" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6 mt-8">
+    <!-- Judul bagian preview -->
+    <h3 class="text-lg font-semibold text-red-800 mb-4">Status Pengajuan Surat</h3>
+    
+    <!-- Wrapper untuk konten preview -->
+    <div class="bg-red-50 rounded-xl p-4">
+        <div class="flex items-start space-x-4">
+            <!-- Icon surat (bagian kiri) -->
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
                 </div>
-                <h2 class="text-2xl font-semibold text-center text-red-800 mb-2">Konfirmasi Pengajuan</h2>
-                <p class="text-gray-600 text-center mb-6">Apakah Anda yakin ingin mengajukan surat ini?</p>
-                <div class="flex justify-center space-x-3">
-                    <button id="cancelButton"
-                            class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
-                                   hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 transition-all duration-300">
-                        Batal
-                    </button>
-                    <button id="confirmButton"
-                            class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
-                                   transform hover:-translate-y-1 transition-all duration-300">
-                        Ajukan
-                    </button>
+            </div>
+            
+            <!-- Informasi progress (bagian kanan) -->
+            <div class="flex-1 min-w-0">
+                <!-- Judul preview surat -->
+                <p class="text-sm font-medium text-red-900" id="previewTitle">Mengirim Surat Penelitian</p>
+                
+                <!-- Progress bar -->
+                <div class="mt-2 w-full bg-red-200 rounded-full h-2.5">
+                    <div id="previewProgress" 
+                         class="bg-red-500 h-2.5 rounded-full transition-all duration-300" 
+                         style="width: 0%">
+                    </div>
                 </div>
+                <!-- Text status progress -->
+                <p class="text-xs text-red-400 mt-1" id="previewStatus">Menunggu pengiriman...</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Alert Messages -->
-<div id="alertMessage"
-     class="hidden fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 translate-y-[-100%]">
+<!-- Modal konfirmasi pengajuan surat -->
+<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <!-- Wrapper konten modal -->
+    <div id="modalContent" 
+         class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                bg-white rounded-2xl p-8 w-96 opacity-0 scale-95 
+                transition-all duration-300">
+        <!-- Konten modal -->
+        <div class="text-center">
+            <!-- Icon peringatan -->
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <!-- Judul modal -->
+            <h2 class="text-2xl font-semibold text-red-800 mb-2">Konfirmasi Pengajuan</h2>
+            <!-- Pesan konfirmasi -->
+            <p class="text-gray-600 mb-6">Apakah Anda yakin ingin mengajukan surat ini?</p>
+            <!-- Tombol-tombol aksi -->
+            <div class="flex justify-center space-x-3">
+                <!-- Tombol batal -->
+                <button id="cancelButton" 
+                        class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 
+                               transition-all duration-300">
+                    Batal
+                </button>
+                <!-- Tombol konfirmasi -->
+                <button id="confirmButton" 
+                        class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
+                               transform hover:-translate-y-1 transition-all duration-300">
+                    Ajukan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container untuk pesan alert -->
+<div id="alertMessage" class="hidden fixed top-4 right-4 max-w-md w-full">
+    <!-- Konten alert akan di-inject melalui JavaScript -->
+</div>
+
+<div id="submitProgress" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6 mt-8">
+    <h3 class="text-lg font-semibold text-red-800 mb-4">Status Pengiriman</h3>
+    <div class="bg-red-50 rounded-xl p-4">
+        <div class="flex items-start space-x-4">
+            <!-- Letter Icon -->
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Progress Info -->
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-red-900">Mengirim Surat</p>
+                
+                <!-- Progress Bar -->
+                <div class="mt-2 w-full bg-red-200 rounded-full h-2.5">
+                    <div id="progressBar" 
+                         class="bg-red-500 h-2.5 rounded-full transition-all duration-300" 
+                         style="width: 0%">
+                    </div>
+                </div>
+                <p class="text-xs text-red-400 mt-1" id="submitStatus">Menunggu pengiriman...</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-// Form submission and modal handling
-const form = document.getElementById('letterForm');
-const modal = document.getElementById('confirmationModal');
-const cancelButton = document.getElementById('cancelButton');
-const confirmButton = document.getElementById('confirmButton');
-const submitButton = document.querySelector('button[type="submit"]');
+// Inisialisasi variabel untuk mengakses elemen-elemen DOM
+const form = document.getElementById('letterForm');                    // Form utama pengajuan surat
+const modal = document.getElementById('confirmationModal');           // Modal konfirmasi
+const modalContent = document.getElementById('modalContent');         // Konten modal
+const cancelButton = document.getElementById('cancelButton');         // Tombol batal pada modal
+const confirmButton = document.getElementById('confirmButton');       // Tombol konfirmasi pada modal
+const submitButton = document.querySelector('button[type="submit"]'); // Tombol submit form
+const letterPreview = document.getElementById('letterPreview');       // Preview surat
+const previewProgress = document.getElementById('previewProgress');   // Progress bar preview
+const previewStatus = document.getElementById('previewStatus');       // Status text preview
+const previewTitle = document.getElementById('previewTitle');         // Judul preview
 
-// Show modal on form submit
+// Event listener untuk submit form
 form.addEventListener('submit', function(e) {
-    e.preventDefault();
+    e.preventDefault(); // Mencegah form melakukan submit langsung
     
-    // Validate form fields
+    // Validasi field-field yang diperlukan
     const researchTitle = document.getElementById('researchTitle').value.trim();
     const leadResearcher = document.getElementById('leadResearcher').value.trim();
     const researchTopic = document.getElementById('researchTopic').value.trim();
     const researchScheme = document.getElementById('researchScheme').value.trim();
 
+    // Pengecekan validasi untuk setiap field
     if (!researchTitle) {
         showAlert('Silakan masukkan judul penelitian.', 'error');
         return;
@@ -231,16 +312,15 @@ form.addEventListener('submit', function(e) {
         return;
     }
 
-    // Show modal
+    // Menampilkan modal konfirmasi
     modal.classList.remove('hidden');
-    const modalContent = document.getElementById('modalContent');
     modalContent.classList.remove('scale-95', 'opacity-0');
     modalContent.classList.add('scale-100', 'opacity-100');
 });
 
-// Cancel button closes modal
+// Event listener untuk tombol batal
 cancelButton.addEventListener('click', function() {
-    const modalContent = document.getElementById('modalContent');
+    // Animasi menutup modal
     modalContent.classList.remove('scale-100', 'opacity-100');
     modalContent.classList.add('scale-95', 'opacity-0');
     setTimeout(() => {
@@ -248,33 +328,78 @@ cancelButton.addEventListener('click', function() {
     }, 300);
 });
 
-// Confirm button submits the form
+// Event listener untuk tombol konfirmasi
 confirmButton.addEventListener('click', function() {
-    // Hide modal with animation
-    const modalContent = document.getElementById('modalContent');
+    // Menutup modal konfirmasi
     modalContent.classList.remove('scale-100', 'opacity-100');
     modalContent.classList.add('scale-95', 'opacity-0');
     setTimeout(() => {
         modal.classList.add('hidden');
     }, 300);
 
-    // Update button state
+    // Menampilkan preview pengajuan surat
+    letterPreview.classList.remove('hidden');
+    previewTitle.textContent = `Mengirim: ${document.getElementById('researchTitle').value}`;
+    
+    // Mengubah tampilan tombol submit menjadi loading
     submitButton.disabled = true;
     submitButton.innerHTML = `
-        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
         Mengirim...
     `;
 
-    // Submit the form
-    form.submit();
+    // Simulasi progress pengiriman
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += 5;
+        if (progress <= 90) {
+            previewProgress.style.width = progress + '%';
+            previewStatus.textContent = `Mengirim... ${progress}%`;
+        }
+    }, 100);
+
+    // Simulasi selesai pengiriman
+    setTimeout(() => {
+        clearInterval(progressInterval);
+        previewProgress.style.width = '100%';
+        previewStatus.textContent = 'Pengiriman selesai!';
+        
+        // Menampilkan pesan sukses
+        showAlert('Surat berhasil diajukan!', 'success');
+        
+        // Mengembalikan tampilan tombol submit
+        submitButton.disabled = false;
+        submitButton.innerHTML = `
+            <svg class="w-5 h-5 mr-2 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Ajukan Surat
+        `;
+        
+        // Reset form
+        form.reset();
+        
+        // Menyembunyikan preview setelah beberapa detik
+        setTimeout(() => {
+            letterPreview.classList.add('hidden');
+        }, 3000);
+    }, 2000);
 });
 
+/**
+ * Fungsi untuk menampilkan pesan alert
+ * @param {string} message - Pesan yang akan ditampilkan
+ * @param {string} type - Tipe alert ('success' atau 'error')
+ */
 function showAlert(message, type = 'success') {
     const alertElement = document.getElementById('alertMessage');
     const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+    
+    // Memilih icon berdasarkan tipe alert
     const icon = type === 'success'
         ? `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -283,6 +408,7 @@ function showAlert(message, type = 'success') {
                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
            </svg>`;
 
+    // Menyusun HTML alert
     alertElement.className = `fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 ${bgColor}`;
     alertElement.innerHTML = `
         <div class="p-4 flex items-center">
@@ -298,13 +424,17 @@ function showAlert(message, type = 'success') {
         </div>
     `;
 
+    // Menampilkan alert dengan animasi
     alertElement.style.transform = 'translateY(0)';
     alertElement.classList.remove('hidden');
 
-    // Auto hide after 5 seconds
+    // Otomatis sembunyikan alert setelah 5 detik
     setTimeout(closeAlert, 5000);
 }
 
+/**
+ * Fungsi untuk menutup alert
+ */
 function closeAlert() {
     const alertElement = document.getElementById('alertMessage');
     alertElement.style.transform = 'translateY(-100%)';
