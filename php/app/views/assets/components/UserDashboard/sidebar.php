@@ -93,19 +93,6 @@
                 Beranda
             </a>
         </div>
-
-        <!-- Logout Button -->
-        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100">
-            <form action="<?= BASEURL ?>/login/logout" method="POST">
-                <input type="hidden" name="action" value="logout">
-                <button type="submit" class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
-                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                    </svg>
-                    Keluar
-                </button>
-            </form>
-        </div>
     </div>
 </body>
 </html> 
