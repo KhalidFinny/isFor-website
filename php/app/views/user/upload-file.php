@@ -60,8 +60,7 @@
                             </div>
                             <div class="p-8">
                                 <div class="upload-zone group h-72 border-2 border-dashed border-red-200 rounded-xl relative">
-                                    <input type="file" name="file" id="file-upload" class="hidden"
-                                           accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.zip,.rar" required>
+                                    <input type="file" id="file-upload" name="file" class="hidden">
                                     <div class="absolute inset-0 flex flex-col items-center justify-center transform group-hover:-translate-y-2 transition-all duration-300">
                                         <div class="w-20 h-20 mb-6 rounded-full bg-red-50 flex items-center justify-center group-hover:bg-red-100 transition-all duration-300">
                                             <!-- File Icon (Changed from image icon) -->
@@ -174,33 +173,31 @@
 </div>
 
 <!-- Confirmation Modal -->
-<div id="confirmationModal"
-     class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 z-50 fade-in"
-     style="backdrop-filter: blur(4px);">
-    <div class="fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0"
-             id="modalContent">
-            <div class="p-6">
-                <div class="w-16 h-16 rounded-full bg-red-50 mx-auto mb-4 flex items-center justify-center">
-                    <svg class="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                </div>
-                <h2 class="text-2xl font-semibold text-center text-red-800 mb-2">Konfirmasi Upload</h2>
-                <p class="text-gray-600 text-center mb-6">Apakah Anda yakin ingin mengunggah file ini?</p>
-                <div class="flex justify-center space-x-3">
-                    <button id="cancelButton"
-                            class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
-                                   hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 transition-all duration-300">
-                        Batal
-                    </button>
-                    <button id="confirmButton"
-                            class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
-                                   transform hover:-translate-y-1 transition-all duration-300">
-                        Upload
-                    </button>
-                </div>
+<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div id="modalContent" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                                 bg-white rounded-2xl p-8 w-96 opacity-0 scale-95 
+                                 transition-all duration-300">
+        <div class="text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-semibold text-red-800 mb-2">Konfirmasi Upload</h2>
+            <p class="text-gray-600 mb-6">Apakah Anda yakin ingin mengunggah file ini?</p>
+            <div class="flex justify-center space-x-3">
+                <button id="cancelButton" 
+                        class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 
+                               transition-all duration-300">
+                    Batal
+                </button>
+                <button id="confirmButton" 
+                        class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
+                               transform hover:-translate-y-1 transition-all duration-300">
+                    Upload
+                </button>
             </div>
         </div>
     </div>
@@ -223,6 +220,7 @@
     // Form submission and modal handling
     const form = document.getElementById('uploadForm');
     const modal = document.getElementById('confirmationModal');
+    const modalContent = document.getElementById('modalContent');
     const cancelButton = document.getElementById('cancelButton');
     const confirmButton = document.getElementById('confirmButton');
     const uploadButton = document.getElementById('uploadButton');
@@ -254,48 +252,96 @@
             return;
         }
 
-        // Show modal
+        // Show modal with animation
         modal.classList.remove('hidden');
-        const modalContent = document.getElementById('modalContent');
-        modalContent.classList.remove('scale-95', 'opacity-0');
-        modalContent.classList.add('scale-100', 'opacity-100');
+        setTimeout(() => {
+            modalContent.classList.remove('opacity-0', 'scale-95');
+            modalContent.classList.add('opacity-100', 'scale-100');
+        }, 50);
     });
 
     // Cancel button closes modal
     cancelButton.addEventListener('click', function() {
-        const modalContent = document.getElementById('modalContent');
-        modalContent.classList.remove('scale-100', 'opacity-100');
-        modalContent.classList.add('scale-95', 'opacity-0');
+        modalContent.classList.remove('opacity-100', 'scale-100');
+        modalContent.classList.add('opacity-0', 'scale-95');
         setTimeout(() => {
             modal.classList.add('hidden');
         }, 300);
     });
 
-    // Confirm button submits the form
+    // Handle final upload
     confirmButton.addEventListener('click', function() {
-        // Hide modal
-        modal.classList.add('hidden');
-        
-        // Submit form
         const formData = new FormData(form);
-        const xhr = new XMLHttpRequest();
         
-        // Show loading state
+        // Hide modal with animation
+        modalContent.classList.remove('opacity-100', 'scale-100');
+        modalContent.classList.add('opacity-0', 'scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+        
+        // Update button state
         uploadButton.disabled = true;
-        uploadButton.innerHTML = 'Uploading...';
-        
-        // Rest of your upload logic...
-        // ... (keep the existing XMLHttpRequest code)
-    });
+        uploadButton.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Uploading...
+        `;
 
-    // File preview functions
-    function formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
+        // Create and configure XMLHttpRequest
+        const xhr = new XMLHttpRequest();
+        const uploadProgress = document.getElementById('uploadProgress');
+        const uploadStatus = document.getElementById('uploadStatus');
+        
+        xhr.upload.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+                const percentComplete = (e.loaded / e.total) * 100;
+                uploadProgress.style.width = percentComplete + '%';
+                uploadStatus.textContent = `Mengupload... ${Math.round(percentComplete)}%`;
+            }
+        });
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        uploadStatus.textContent = 'Upload berhasil!';
+                        uploadProgress.style.width = '100%';
+                        showAlert('File berhasil diunggah!', 'success');
+                        form.reset();
+                        removeFile();
+                    } else {
+                        uploadStatus.textContent = 'Upload gagal';
+                        showAlert(response.message || 'Gagal mengunggah file.', 'error');
+                    }
+                } catch (error) {
+                    uploadStatus.textContent = 'Upload gagal';
+                    showAlert('Terjadi kesalahan saat mengunggah.', 'error');
+                }
+            } else {
+                uploadStatus.textContent = 'Upload gagal';
+                showAlert('Terjadi kesalahan saat mengunggah.', 'error');
+            }
+            
+            // Reset upload button
+            uploadButton.disabled = false;
+            uploadButton.innerHTML = 'Upload File';
+        };
+
+        xhr.onerror = function() {
+            uploadStatus.textContent = 'Upload gagal';
+            showAlert('Terjadi kesalahan saat mengunggah.', 'error');
+            uploadButton.disabled = false;
+            uploadButton.innerHTML = 'Upload File';
+        };
+
+        // Send the request
+        xhr.open('POST', '<?=BASEURL;?>/researchoutput/uploadFile', true);
+        xhr.send(formData);
+    });
 
     function updateFilePreview(file) {
         const preview = document.getElementById('filePreview');
@@ -319,80 +365,13 @@
         preview.classList.add('hidden');
     }
 
-    // Handle final upload
-    confirmButton.addEventListener('click', function() {
-        const formData = new FormData(form);
-        
-        // Hide modal with animation
-        const modalContent = document.getElementById('modalContent');
-        modalContent.classList.remove('scale-100', 'opacity-100');
-        modalContent.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
-        
-        // Update button state
-        uploadButton.disabled = true;
-        uploadButton.innerHTML = `
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Uploading...
-        `;
-
-        // Create and configure XMLHttpRequest for upload with progress
-        const xhr = new XMLHttpRequest();
-        const uploadProgress = document.getElementById('uploadProgress');
-        const uploadStatus = document.getElementById('uploadStatus');
-        
-        xhr.upload.addEventListener('progress', function(e) {
-            if (e.lengthComputable) {
-                const percentComplete = (e.loaded / e.total) * 100;
-                uploadProgress.style.width = percentComplete + '%';
-                uploadStatus.textContent = `Mengupload... ${Math.round(percentComplete)}%`;
-            }
-        });
-
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                try {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        uploadStatus.textContent = 'Upload berhasil!';
-                        uploadProgress.style.width = '100%';
-                        showAlert('File berhasil diunggah!', 'success');
-                        setTimeout(() => {
-                            window.location.href = '<?=BASEURL;?>/researchoutput';
-                        }, 2000);
-                    } else {
-                        uploadStatus.textContent = 'Upload gagal';
-                        showAlert(response.message || 'Gagal mengunggah file.', 'error');
-                    }
-                } catch (error) {
-                    uploadStatus.textContent = 'Upload gagal';
-                    showAlert('Terjadi kesalahan saat mengunggah.', 'error');
-                }
-            } else {
-                uploadStatus.textContent = 'Upload gagal';
-                showAlert('Terjadi kesalahan saat mengunggah.', 'error');
-            }
-            
-            // Reset upload button
-            uploadButton.disabled = false;
-            uploadButton.innerHTML = 'Upload File';
-        };
-
-        xhr.onerror = function() {
-            uploadStatus.textContent = 'Upload gagal';
-            showAlert('Terjadi kesalahan saat mengunggah.', 'error');
-            uploadButton.disabled = false;
-        };
-
-        // Send the request
-        xhr.open('POST', '<?=BASEURL;?>/researchoutput/uploadFile', true);
-        xhr.send(formData);
-    });
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
 
     function showAlert(message, type = 'success') {
         const alertElement = document.getElementById('alertMessage');
