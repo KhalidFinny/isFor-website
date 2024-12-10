@@ -6,8 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757cfa962f84_pp4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757cfff719f2_file(2).png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757d127cb0c8_BxX4fsDCMAAzE3z.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757d1818681a_BxX4fsDCMAAzE3z.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757d1b7b956b_Logo1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757d217061d7_Logo1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6756c387bbdab.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_qwe.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +63,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "com.codeium.enabled": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/laragon/www/isFor-website/php/app/views/main",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -100,7 +106,7 @@
       <workItem from="1733719670891" duration="3782000" />
       <workItem from="1733729041224" duration="12946000" />
       <workItem from="1733750371443" duration="6495000" />
-      <workItem from="1733797499139" duration="12200000" />
+      <workItem from="1733797499139" duration="13237000" />
     </task>
     <servers />
   </component>
