@@ -96,19 +96,6 @@
                             <h1 class="text-4xl font-bold text-red-600">Pengguna</h1>
                         </div>
 
-                        <!-- New Date Time Display -->
-                        <div class="flex items-center space-x-6 bg-white px-6 py-3 rounded-xl border border-red-100">
-                            <div class="text-right">
-                                <div class="text-sm font-medium text-gray-500" id="current-time"></div>
-                                <div class="text-2xl font-light text-red-600" id="current-date"></div>
-                            </div>
-                            <div class="text-red-400">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                        </div>
-
                         <button onclick="showAddUserModal()"
                                 class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300 flex items-center space-x-2 btn-primary">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
