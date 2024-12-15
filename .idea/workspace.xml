@@ -5,15 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/php/app/models/GalleryModel-Temp.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/app/models/LettersModel-Temp.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/app/models/RoadmapsModel-Temp.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/app/models/UsersModel-Temp.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757cfa962f84_pp4.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757cfff719f2_file(2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757d127cb0c8_BxX4fsDCMAAzE3z.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757d1818681a_BxX4fsDCMAAzE3z.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757d1b7b956b_Logo1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757d217061d7_Logo1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6756c387bbdab.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_qwe.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/config/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67448fefb3a57.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67459eb0c97aa.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6756c368cf34c.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/AgendaModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/AgendaModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/RoadmapsModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/RoadmapsModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/UsersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/UsersModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/editUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,20 +69,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/laragon/www/isFor-website/php/app/views/main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/laragon/www/isFor-website/php/app/views/main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\laragon\www\isFor-website\php\app\views\main" />
@@ -106,11 +117,27 @@
       <workItem from="1733719670891" duration="3782000" />
       <workItem from="1733729041224" duration="12946000" />
       <workItem from="1733750371443" duration="6495000" />
-      <workItem from="1733797499139" duration="13237000" />
+      <workItem from="1733797499139" duration="14136000" />
+      <workItem from="1733812662113" duration="5778000" />
+      <workItem from="1733827344514" duration="7126000" />
+      <workItem from="1733875891070" duration="11995000" />
+      <workItem from="1733963584713" duration="4340000" />
+      <workItem from="1734225885526" duration="2029000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

@@ -144,7 +144,7 @@ class UsersModel
 
     public function isEmailExists($email, $userId = null)
     {
-        $query = "SELECT * FROM users WHERE email = :email AND (user_id != :user_id OR :user_id IS NULL)";
+        $query = "SELECT * FROM users WHERE email = :email AND user_id != :user_id";
         $this->db->query($query);
         $this->db->bind('email', $email);
         $this->db->bind('user_id', $userId);

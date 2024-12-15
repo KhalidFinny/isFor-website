@@ -188,12 +188,13 @@
                     </button>
                 </div>
             </form>
+            <div id="responseMessage" class="hidden"></div>
         </div>
     </main>
 </div>
 <script>
     document.getElementById('editUserForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Mencegah form dikirim secara default
+        event.preventDefault();
 
         const formData = new FormData(this);
 
@@ -203,19 +204,21 @@
         })
             .then(response => response.json())
             .then(data => {
+                const responseMessage = document.getElementById('responseMessage');
                 if (data.status === 'success') {
-                    alert(data.message); // Menampilkan pesan sukses
-                    window.location.href = '<?= BASEURL; ?>/User'; // Redirect ke halaman user
+                    responseMessage.textContent = data.message;
+                    responseMessage.classList.remove('hidden', 'error');
+                    responseMessage.classList.add('success');
                 } else {
-                    alert(data.message); // Menampilkan pesan error
+                    responseMessage.textContent = data.message;
+                    responseMessage.classList.remove('hidden', 'success');
+                    responseMessage.classList.add('error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Terjadi kesalahan pada server. Silakan coba lagi.');
             });
     });
-
 </script>
 </body>
 </html>

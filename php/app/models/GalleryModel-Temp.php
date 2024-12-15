@@ -13,7 +13,10 @@ class GalleryModel
     // Create a new gallery entry
     public function create($image, $category, $title, $uploaded_by, $description)
     {
-        $this->db->query('EXEC sp_CreateGallery :image, :category, :title, :uploaded_by, :description');
+        $query = "INSERT INTO " . $this->table . " (image, category, title, uploaded_by, description, created_at)
+              VALUES (:image, :category, :title, :uploaded_by, :description, GETDATE())";
+
+        $this->db->query($query);
         $this->db->bind(':image', $image);
         $this->db->bind(':category', $category);
         $this->db->bind(':title', $title);
@@ -31,16 +34,19 @@ class GalleryModel
     // Read all gallery entries
     public function getAll()
     {
-        $this->db->query('EXEC sp_GetAllGalleries');
+        $query = "SELECT * FROM " . $this->table . " ORDER BY created_at DESC";
+        $this->db->query($query);
         return $this->db->resultSet();
     }
 
     // Read a specific gallery entry by ID
     public function getImageById($id)
     {
-        $this->db->query('EXEC sp_GetGalleryById :id');
-        $this->db->bind(':id', $id);
-        return $this->db->single();
+        $query = "SELECT * FROM " . $this->table . " WHERE gallery_id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     // Update a gallery entry

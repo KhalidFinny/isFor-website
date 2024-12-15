@@ -8,51 +8,39 @@ class AgendaModel{
         $this->db = new Database;
     }
 
-    public function getAllAgenda(){
-        $this->db->query('SELECT *, ROW_NUMBER() OVER (ORDER BY agenda_id) AS number FROM agenda');
+    public function getAllAgenda() {
+        $this->db->query('EXEC sp_GetAllAgenda');
         return $this->db->resultSet();
     }
 
-    public function getAgendaById($id){
-        $this->db->query('SELECT * FROM ' . $this->table . ' WHERE agenda_id = :id');
-        $this->db->bind('id', $id);
+    public function getAgendaById($id) {
+        $this->db->query('EXEC sp_GetAgendaById :id');
+        $this->db->bind(':id', $id);
         return $this->db->single();
     }
 
-    public function addAgenda($data){
-        $query = "INSERT INTO agenda (title, description) VALUES (:title, :description)";
-
-        $this->db->query($query);
+    public function addAgenda($data) {
+        $this->db->query('EXEC sp_AddAgenda :title, :description');
         $this->db->bind(':title', $data['title']);
         $this->db->bind(':description', $data['description']);
-
         $this->db->execute();
 
         return $this->db->rowCount();
     }
 
-    public function editAgenda($data){
-        $query = "UPDATE agenda SET
-                    title = :title ,
-                    description = :description
-                    WHERE agenda_id = :id";
-
-        $this->db->query($query);
-        $this->db->bind(':title', $data['title']);
-        $this->db->bind(':description', $data['description']);
+    public function editAgenda($data) {
+        $this->db->query('EXEC sp_EditAgenda :id, :title, :description');
         $this->db->bind(':id', $data['agenda_id']);
-
+        $this->db->bind(':title', $data['title']);
+        $this->db->bind(':description', $data['description']);
         $this->db->execute();
 
         return $this->db->rowCount();
     }
 
-    public function deleteAgenda($id){
-        $query = "DELETE FROM agenda WHERE agenda_id = :id";
-
-        $this->db->query($query);
+    public function deleteAgenda($id) {
+        $this->db->query('EXEC sp_DeleteAgenda :id');
         $this->db->bind(':id', $id);
-
         $this->db->execute();
 
         return $this->db->rowCount();

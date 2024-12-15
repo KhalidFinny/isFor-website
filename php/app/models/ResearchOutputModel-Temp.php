@@ -112,23 +112,23 @@ class ResearchOutputModel
     }
 
     // Get research outputs by user
-//    public function getFilesByUser($userId)
-//    {
-//        $query = "SELECT * FROM " . $this->table . " WHERE uploaded_by = :uploaded_by ORDER BY uploaded_at DESC";
-//        $this->db->query($query);
-//        $this->db->bind(':uploaded_by', $userId);
-//        return $this->db->resultSet();
-//    }
-//
-//    // Get research outputs by user and status
-//    public function getFilesByUserAndStatus($userId, $status)
-//    {
-//        $query = "SELECT * FROM " . $this->table . " WHERE uploaded_by = :uploaded_by AND status = :status";
-//        $this->db->query($query);
-//        $this->db->bind(':uploaded_by', $userId);
-//        $this->db->bind(':status', $status);
-//        return $this->db->resultSet();
-//    }
+    public function getFilesByUser($userId)
+    {
+        $query = "SELECT * FROM " . $this->table . " WHERE uploaded_by = :uploaded_by ORDER BY uploaded_at DESC";
+        $this->db->query($query);
+        $this->db->bind(':uploaded_by', $userId);
+        return $this->db->resultSet();
+    }
+
+    // Get research outputs by user and status
+    public function getFilesByUserAndStatus($userId, $status)
+    {
+        $query = "SELECT * FROM " . $this->table . " WHERE uploaded_by = :uploaded_by AND status = :status";
+        $this->db->query($query);
+        $this->db->bind(':uploaded_by', $userId);
+        $this->db->bind(':status', $status);
+        return $this->db->resultSet();
+    }
 
     // Delete a research output
     public function delete($id)
@@ -138,29 +138,4 @@ class ResearchOutputModel
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
-
-    public function getFilesByUserAndStatus($userId, $status, $keyword = '')
-    {
-        $query = "SELECT * FROM " . $this->table . " 
-              WHERE uploaded_by = :uploaded_by 
-              AND status = :status 
-              AND (title LIKE :keyword OR category LIKE :keyword)";
-        $this->db->query($query);
-        $this->db->bind(':uploaded_by', $userId);
-        $this->db->bind(':status', $status);
-        $this->db->bind(':keyword', '%' . $keyword . '%');
-        return $this->db->resultSet();
-    }
-
-    public function getFilesByUser($userId, $keyword = '')
-    {
-        $query = "SELECT * FROM " . $this->table . " 
-              WHERE uploaded_by = :uploaded_by 
-              AND (title LIKE :keyword OR category LIKE :keyword)";
-        $this->db->query($query);
-        $this->db->bind(':uploaded_by', $userId);
-        $this->db->bind(':keyword', '%' . $keyword . '%');
-        return $this->db->resultSet();
-    }
-
 }

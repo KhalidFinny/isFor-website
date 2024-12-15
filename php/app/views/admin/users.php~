@@ -1,3 +1,6 @@
+<?php
+var_dump($data);
+?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
@@ -7,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -108,7 +112,6 @@
 <div class="flex">
     <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 
-<<<<<<< HEAD
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
             <!-- Header -->
@@ -118,42 +121,6 @@
                         <div class="flex items-center space-x-4 mb-4">
                             <span class="h-px w-12 bg-red-500"></span>
                             <span class="text-red-500 font-medium">Manajemen</span>
-=======
-        <div class="flex-1 min-h-screen ml-64">
-            <main class="py-10 px-8">
-                <!-- Header -->
-                <header class="max-w-7xl mx-auto mb-12 animate-fade-in">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="flex items-center space-x-4 mb-4">
-                                <span class="h-px w-12 bg-red-500"></span>
-                                <span class="text-red-500 font-medium">Manajemen</span>
-                            </div>
-                            <h1 class="text-4xl font-bold text-red-600">Pengguna</h1>
-                        </div>
-
-                        <button onclick="showAddUserModal()"
-                                class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300 flex items-center space-x-2 btn-primary">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            <span>Tambah Pengguna</span>
-                        </button>
-                    </div>
-                </header>
-
-                <!-- User List -->
-                <section class="bg-white rounded-2xl border border-red-100 overflow-hidden animate-slide-in">
-                    <div class="px-8 py-6 border-b border-red-100 flex justify-between items-center">
-                        <h2 class="text-2xl font-light text-red-500 tracking-tight">Daftar Pengguna</h2>
-                        <div class="relative">
-                            <input type="text"
-                                   placeholder="Cari pengguna..."
-                                   class="pl-11 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-600 placeholder-gray-400 w-64">
-                            <svg class="w-5 h-5 absolute left-4 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
->>>>>>> 88e91a49ff51791efab3081405b25423e27d0ccb
                         </div>
                         <h1 class="text-4xl font-bold text-red-600">Pengguna</h1>
                     </div>
@@ -303,7 +270,7 @@
             </button>
         </div>
 
-        <form action="<?= BASEURL; ?>/User/create" method="POST" enctype="multipart/form-data">
+        <form id="addUserForm" action="<?= BASEURL; ?>/User/create" method="POST" enctype="multipart/form-data">
             <div class="grid grid-cols-2 gap-8">
                 <!-- Left Column -->
                 <div class="space-y-6">
@@ -429,6 +396,71 @@
         const fileName = e.target.files[0]?.name || 'Pilih foto profil';
         document.getElementById('file-name').textContent = fileName;
     });
+
+    //document.getElementById('addUserForm').addEventListener('submit', function (event) {
+    //    event.preventDefault(); // Mencegah form dikirim secara default
+    //
+    //    const formData = new FormData(this);
+    //
+    //    fetch('<?php //= BASEURL; ?>///User/create', {
+    //        method: 'POST',
+    //        body: formData
+    //    })
+    //        .then(response => {
+    //            // Cek apakah respons adalah HTML atau JSON
+    //            if (response.ok) {
+    //                return response.json();  // Pastikan respons adalah JSON
+    //            } else {
+    //                throw new Error('Server error: ' + response.status);
+    //            }
+    //        })
+    //        .then(data => {
+    //            console.log(data);
+    //            if (data.status === 'success') {
+    //                alert(data.message); // Menampilkan pesan sukses
+    //                window.location.href = '<?php //= BASEURL; ?>///User'; // Redirect ke halaman user
+    //            } else {
+    //                alert(data.message); // Menampilkan pesan error
+    //            }
+    //        })
+    //        .catch(error => {
+    //            console.error('Error:', error);
+    //            alert('Terjadi kesalahan pada server. Silakan coba lagi.');
+    //        });
+    //});
+
+    //document.getElementById('addUserForm').addEventListener('submit', function (event) {
+    //    event.preventDefault();
+    //
+    //    const formData = new FormData(this);
+    //
+    //    fetch('<?php //= BASEURL; ?>///User/create', {
+    //        method: 'POST',
+    //        body: formData,
+    //    })
+    //        .then(response => response.json())
+    //        .then(data => {
+    //            if (data.status === 'success') {
+    //                alert(data.message);
+    //                window.location.href = '<?php //= BASEURL; ?>///User';
+    //            } else if (data.status === 'error') {
+    //                let errorMessages = '';
+    //
+    //                if (Array.isArray(data.messages)) {
+    //                    errorMessages = data.messages.join('\n');
+    //                } else {
+    //                    errorMessages = data.message;
+    //                }
+    //
+    //                alert(errorMessages);
+    //            }
+    //        })
+    //        .catch(error => {
+    //            console.error('Error:', error);
+    //            alert('Terjadi kesalahan pada server. Silakan coba lagi.');
+    //        });
+    //});
+
 </script>
 </body>
 </html>

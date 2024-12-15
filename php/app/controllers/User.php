@@ -41,6 +41,51 @@ class User extends Controller
         }
     }
 
+//    public function create()
+//    {
+//        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+//        $username = $_POST['username'];
+//        $userModel = $this->model('UsersModel');
+//        header('Content-Type: application/json');
+////        echo json_encode(array('error' => 'An error occurred'));;
+//
+//        if (!$email) {
+//            echo json_encode(['status' => 'error', 'message' => 'Email tidak valid.']);
+//            return;
+//        }
+//
+//        if ($userModel->isEmailExists($email)) {
+//            echo json_encode(['status' => 'error', 'message' => 'Email sudah digunakan.']);
+//            return;
+//        }
+//
+//        // Validasi username
+//        if ($userModel->isUsernameExists($username)) {
+//            echo json_encode(['status' => 'error', 'message' => 'Username tidak tersedia.']);
+//            return;
+//        }
+//
+//        // Proses foto profil
+//        $photo = $this->upload();
+//        if (!$photo) {
+//            echo json_encode(['status' => 'error', 'message' => 'Gagal mengunggah foto profil.']);
+//            return;
+//        }
+//
+//        try {
+//            $result = $userModel->addUser($email, $_POST, $photo);
+//            if ($result > 0) {
+//                echo json_encode(['status' => 'success', 'message' => 'Pengguna berhasil ditambahkan.']);
+//            } else {
+//                echo json_encode(['status' => 'error', 'message' => 'Gagal menambahkan pengguna.']);
+//            }
+//        } catch (Exception $e) {
+//            echo json_encode(['status' => 'error', 'message' => 'Kesalahan server: ' . $e->getMessage()]);
+//        }
+//
+//    }
+
+
     public function upload()
     {
         if (!isset($_FILES['profile_picture'])) {
@@ -108,33 +153,49 @@ class User extends Controller
         $oldPhoto = $_POST["oldImage"];
         $oldPass = $_POST["oldPass"];
         $newPass = $_POST["password"];
+        $username = $_POST['username'];
+        $userModel = $this->model('UsersModel');
 
-        if (!empty($newPass)) {
-            // Jika password baru diinputkan, hash password baru dan simpan
-            $password = password_hash($newPass, PASSWORD_DEFAULT);
-        } else {
-            // Jika password baru kosong, gunakan password lama
-            $password = $oldPass;
+        if (!$email) {
+            echo json_encode(['status' => 'error', 'message' => 'Email tidak valid.']);
+            return;
         }
+
+        if ($userModel->isEmailExists($email, $id)) {
+            echo json_encode(['status' => 'error', 'message' => 'email telah terdaftar. Silakan pilih email lain.']);
+            return;
+        }
+
+        if ($userModel->isUsernameExists($username, $id)) {
+            echo json_encode(['status' => 'error', 'message' => 'Username telah terdaftar. Silakan pilih username lain.']);
+            return;
+        }
+
+        $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
 
         if ($_FILES["profile_picture"]["error"] === 4) {
             $photo = $oldPhoto;
         } else {
             $photo = $this->upload();
-
-            $image_name = $this->model('UsersModel')->deleteImage($id);
-
+            $image_name = $userModel->deleteImage($id);
             if ($image_name['profile_picture'] && file_exists('../app/img/profile/' . $image_name['profile_picture'])) {
                 unlink('../app/img/profile/' . $image_name['profile_picture']);
             }
         }
 
-        if ($this->model('UsersModel')->editUser($email, $id, $_POST, $photo, $password) > 0) {
-            header('Location: ' . BASEURL . '/User');
-            echo "data berhasil diupdate";
-        }else{
-            echo "data tidak berhasil diupdate";
+        if ($userModel->editUser($email, $id, $_POST, $photo, $password) > 0) {
+            echo json_encode(['status' => 'success', 'message' => 'Data berhasil diperbarui.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Data tidak berhasil diperbarui.']);
         }
+    }
+
+    private function redirectWithError($error)
+    {
+        // Kirim kembali ke form edit dengan pesan error
+        $_SESSION['error'] = $error;
+        header('Location: ' . BASEURL . '/User/edit/' . $_POST['user_id']);
+        exit;
     }
 
     public function delete($id)
