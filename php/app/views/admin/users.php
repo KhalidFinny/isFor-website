@@ -184,34 +184,34 @@
                             </tr>
                             </thead>
                             <tbody class="divide-y divide-red-50">
-                            <?php foreach ($data['allUser'] as $allUser): ?>
+                            <?php foreach ($data['allUsersWithPagination'] as $allUsersWithPagination): ?>
                                 <tr class="table-row">
                                     <td class="px-8 py-5">
                                         <div class="flex items-center space-x-4">
                                             <div class="flex-shrink-0 h-10 w-10 rounded-lg overflow-hidden bg-red-50">
-                                                <?php if ($allUser['profile_picture'] == null): ?>
+                                                <?php if ($allUsersWithPagination['profile_picture'] == null): ?>
                                                     <img class="h-full w-full object-cover"
                                                          src="<?= ASSETS ?>/images/empty-user.png" alt="">
                                                 <?php else: ?>
                                                     <img class="h-full w-full object-cover"
-                                                         src="<?= PHOTOPROFILE . $allUser['profile_picture'] ?>" alt="">
+                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>" alt="">
                                                 <?php endif; ?>
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-red-600"><?= $allUser['name'] ?></p>
+                                                <p class="text-sm font-medium text-red-600"><?= $allUsersWithPagination['name'] ?></p>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-8 py-5">
-                                        <div class="text-sm text-red-500"><?= $allUser['email'] ?></div>
+                                        <div class="text-sm text-red-500"><?= $allUsersWithPagination['email'] ?></div>
                                     </td>
                                     <td class="px-8 py-5">
-                                        <?php if ($allUser['role_id'] == 1) { ?>
+                                        <?php if ($allUsersWithPagination['role_id'] == 1) { ?>
                                             <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600">
                                                         <span class="w-1 h-1 mr-1.5 rounded-full bg-red-500"></span>
                                                         Admin
                                                     </span>
-                                        <?php } elseif ($allUser['role_id'] == 2) { ?>
+                                        <?php } elseif ($allUsersWithPagination['role_id'] == 2) { ?>
                                             <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-600">
                                                         <span class="w-1 h-1 mr-1.5 rounded-full bg-blue-500"></span>
                                                         Peneliti
@@ -219,15 +219,15 @@
                                         <?php } ?>
                                     </td>
                                     <td class="px-8 py-5 text-sm space-x-3">
-                                        <a href="<?= BASEURL; ?>/User/editView/<?= $allUser['user_id'] ?>"
+                                        <a href="<?= BASEURL; ?>/User/editView/<?= $allUsersWithPagination['user_id'] ?>"
                                            class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
                                         </a>
-                                        <?php if ($allUser['user_id'] != $_SESSION['user_id']) { ?>
-                                            <a href="<?= BASEURL; ?>/User/Delete/<?= $allUser['user_id'] ?>"
+                                        <?php if ($allUsersWithPagination['user_id'] != $_SESSION['user_id']) { ?>
+                                            <a href="<?= BASEURL; ?>/User/Delete/<?= $allUsersWithPagination['user_id'] ?>"
                                                class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200"
                                                onclick="return confirm('Are you sure you want to delete this user?')">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -246,6 +246,41 @@
                     </div>
                 <?php endif; ?>
             </section>
+            <!-- Pagination -->
+            <div class="px-8 py-4 border-t border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-gray-500">
+                        Showing
+                        <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
+                        to
+                        <span class="font-medium">
+                <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']); ?>
+            </span>
+                        of <span class="font-medium"><?= $data['totalUsers']; ?></span> results
+                    </div>
+                    <div class="flex space-x-2">
+                        <!-- Tombol Previous -->
+                        <?php if ($data['currentPage'] > 1): ?>
+                            <a href="?page=<?= $data['currentPage'] - 1; ?>"
+                               class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200">
+                                Previous
+                            </a>
+                        <?php else: ?>
+                            <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Previous</span>
+                        <?php endif; ?>
+
+                        <!-- Tombol Next -->
+                        <?php if ($data['currentPage'] < $data['totalPages']): ?>
+                            <a href="?page=<?= $data['currentPage'] + 1; ?>"
+                               class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200">
+                                Next
+                            </a>
+                        <?php else: ?>
+                            <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Next</span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>

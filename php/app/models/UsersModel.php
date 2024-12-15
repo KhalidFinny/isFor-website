@@ -160,4 +160,25 @@ class UsersModel
         return $this->db->single() ? true : false;
     }
 
+    public function getUsersWithPagination($limit, $offset) {
+        $query = "SELECT user_id, name, username, email, profile_picture, role_id
+                  FROM isfor_database.dbo.users
+                  ORDER BY user_id ASC
+                  OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+
+        $this->db->query($query);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+
+        return $this->db->resultSet();
+    }
+
+    public function getTotalUsers() {
+        $query = "SELECT COUNT(1) AS total FROM isfor_database.dbo.users";
+
+        $this->db->query($query);
+
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
 }

@@ -5,22 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/database/isfor_database.bak" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/SELECT TOP (1000) [agenda_id].sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/SELECT TOP (1000) [user_id].sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/isfor_database.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/mysql_script.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/sql_server_script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database/sql_server_script.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel-Temp.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel-Temp.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel-Temp.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel-Temp.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/verifyLetters.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verifyLetters.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/DashboardAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/DashboardAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_test 3.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_test 3.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/UsersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/UsersModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/addUser.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +112,7 @@
       <workItem from="1733827344514" duration="7126000" />
       <workItem from="1733875891070" duration="11995000" />
       <workItem from="1733963584713" duration="4340000" />
-      <workItem from="1734225885526" duration="10830000" />
+      <workItem from="1734225885526" duration="13826000" />
     </task>
     <servers />
   </component>

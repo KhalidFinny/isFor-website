@@ -7,16 +7,31 @@ class User extends Controller
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
+
         if ($role == 1) {
-            $data['allUser'] = $this->model('UsersModel')->getUser();
-            // var_dump($users);
-            // die;
+            // Pagination setup
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini, default 1
+            $limit = 5; // Jumlah pengguna per halaman
+            $offset = ($page - 1) * $limit; // Hitung offset untuk query
+
+            $usersModel = $this->model('UsersModel');
+            $data['limit'] = $limit;
+            $data['allUsersWithPagination'] = $usersModel->getUsersWithPagination($limit, $offset);
+            $data['totalUsers'] = $usersModel->getTotalUsers(); // Total pengguna
+
+            // Hitung jumlah halaman
+            $data['currentPage'] = $page;
+            $data['totalPages'] = ceil($data['totalUsers'] / $limit);
+
+            // Kirim data ke view
             $this->saveLastVisitedPage();
             $this->view('admin/users', $data);
         } else {
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
+
+
 
     public function create()
     {
