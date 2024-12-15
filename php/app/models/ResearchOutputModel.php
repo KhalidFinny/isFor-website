@@ -92,7 +92,7 @@ class ResearchOutputModel
     }
 
     // Count research outputs by user
-    public function countByUser($userId)
+    public function countFilesByUser($userId)
     {
         $this->db->query('EXEC sp_CountResearchOutputsByUser :uploaded_by');
         $this->db->bind(':uploaded_by', $userId);
@@ -117,8 +117,41 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
+    public function getPaginatedFilesByUser($userId, $limit, $offset)
+    {
+        $this->db->query("EXEC sp_GetPaginatedFilesByUser :UserId, :Limit, :Offset");
+        $this->db->bind(':UserId', $userId, PDO::PARAM_INT);
+        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
 
-    // Delete a research output
+    public function getPaginatedFilesByUserAndStatus($userId, $status, $limit, $offset)
+    {
+        $this->db->query("EXEC sp_GetPaginatedFilesByUserAndStatus :UserId, :Status, :Limit, :Offset");
+        $this->db->bind(':UserId', $userId, PDO::PARAM_INT);
+        $this->db->bind(':Status', $status, PDO::PARAM_INT);
+        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getPendingFilesWithPagination($limit, $offset)
+    {
+        $this->db->query("EXEC sp_GetPendingFilesWithPagination :Limit, :Offset");
+        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalPendingFiles()
+    {
+        $this->db->query("EXEC sp_GetTotalPendingFiles");
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
+// Delete a research output
     public function delete($id)
     {
         $this->db->query('EXEC sp_DeleteResearchOutput :id');

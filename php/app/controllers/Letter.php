@@ -22,17 +22,30 @@ class Letter extends Controller{
         }
     }
 
-    public function verifyLetterview(){
+    public function verifyLetterview() {
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-        if($role == 1){
+
+        if ($role == 1) {
             $this->saveLastVisitedPage();
-            $data['allLetters'] = $this->model('LettersModel')->getAllLetter();
-            // var_dump($letter);
-            // exit;
+
+            // Pagination setup
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini, default 1
+            $limit = 4; // Jumlah surat per halaman
+            $offset = ($page - 1) * $limit; // Hitung offset untuk query
+
+            $lettersModel = $this->model('LettersModel');
+            $data['allLetters'] = $lettersModel->getPendingLettersWithPagination($limit, $offset); // Surat pada halaman ini
+            $totalLetters = $lettersModel->getTotalPendingLetters(); // Total surat pending
+
+            // Hitung jumlah halaman
+            $data['currentPage'] = $page;
+            $data['totalPages'] = ceil($totalLetters / $limit);
+
+            // Kirim data ke view
             $this->view('admin/verifyLetters', $data);
-        }else{
+        } else {
             header('Location: ' . $this->getLastVisitedPage());
         }
     }

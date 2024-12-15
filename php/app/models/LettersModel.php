@@ -129,6 +129,27 @@ class LettersModel
         return $this->db->single();
     }
 
+    public function getPendingLettersWithPagination($limit, $offset)
+    {
+        $query = "EXEC GetPendingLettersWithPagination @Limit = :limit, @Offset = :offset";
+
+        $this->db->query($query);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+
+        return $this->db->resultSet();
+    }
+
+    public function getTotalPendingLetters()
+    {
+        $query = "EXEC GetTotalPendingLetters";
+
+        $this->db->query($query);
+
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
 //    public function searchLetter($user_id, $keyword){
 //        $this->db->query('SELECT * FROM letters WHERE user_id = :user_id AND title LIKE :keyword OR date LIKE :keyword');
 //        $this->db->bind(':user_id', $user_id);

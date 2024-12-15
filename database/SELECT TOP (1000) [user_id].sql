@@ -1,8 +1,0 @@
-SELECT TOP (1000) [user_id]
-      ,[name]
-      ,[username]
-      ,[email]
-      ,[profile_picture]
-      ,[password]
-      ,[role_id]
-  FROM [isfor_database].[dbo].[users]

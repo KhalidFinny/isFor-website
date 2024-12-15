@@ -152,6 +152,38 @@ class LettersModel
         return $this->db->single();
     }
 
+    public function getPendingLettersWithPagination($limit, $offset) {
+        $query = "SELECT letter_id, title, file_url, status, user_id, [date] 
+                  FROM isfor_database.dbo.letters
+                  WHERE status = :status
+                  ORDER BY [date] DESC
+                  OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+
+        $this->db->query($query);
+        $this->db->bind(':status', 1, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+
+        return $this->db->resultSet();
+    }
+
+    /**
+     * Menghitung total surat dengan status pending (1).
+     *
+     * @return int Jumlah total surat pending.
+     */
+    public function getTotalPendingLetters() {
+        $query = "SELECT COUNT(1) AS total
+                  FROM isfor_database.dbo.letters
+                  WHERE status = :status";
+
+        $this->db->query($query);
+        $this->db->bind(':status', 1, PDO::PARAM_INT);
+
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
     public function searchLetter($user_id, $keyword)
     {
         $this->db->query('SELECT * FROM letters WHERE user_id = :user_id AND title LIKE :keyword OR date LIKE :keyword');

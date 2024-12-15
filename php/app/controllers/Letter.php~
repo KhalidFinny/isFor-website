@@ -22,17 +22,30 @@ class Letter extends Controller{
         }
     }
 
-    public function verifyLetterview(){
+    public function verifyLetterview() {
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-        if($role == 1){
+
+        if ($role == 1) {
             $this->saveLastVisitedPage();
-            $data['allLetters'] = $this->model('LettersModel')->getAllLetter();
-            // var_dump($letter);
-            // exit;
+
+            // Pagination setup
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini, default 1
+            $limit = 6; // Jumlah surat per halaman
+            $offset = ($page - 1) * $limit; // Hitung offset untuk query
+
+            $lettersModel = $this->model('LettersModel');
+            $data['allLetters'] = $lettersModel->getPendingLettersWithPagination($limit, $offset); // Surat pada halaman ini
+            $totalLetters = $lettersModel->getTotalPendingLetters(); // Total surat pending
+
+            // Hitung jumlah halaman
+            $data['currentPage'] = $page;
+            $data['totalPages'] = ceil($totalLetters / $limit);
+
+            // Kirim data ke view
             $this->view('admin/verifyLetters', $data);
-        }else{
+        } else {
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
@@ -156,14 +169,12 @@ class Letter extends Controller{
             // } else {
             //     echo json_encode(['success' => false, 'message' => 'Gagal memindahkan file']);
             // }
-
             echo json_encode(['success' => true, 'message' => 'Status berhasil diperbarui']);
-
         } else {
             echo json_encode(['success' => false, 'message' => 'Tidak ada perubahan status']);
         }
     }
-
+    
     // // function untuk merubah path file
     // public function changePathFile($status, $fileName){
     //     // Tentukan path sumber dan tujuan
@@ -174,7 +185,6 @@ class Letter extends Controller{
     //         $sourcePath = realpath(__DIR__ . '/../letters/pending/' . $fileName);
     //         $destPath = realpath(__DIR__ . '/../letters/reject/' . $fileName);
     //     }
-
     //     // Pastikan file ada sebelum mencoba untuk memindahkannya
     //     if (file_exists($sourcePath)) {
     //         if (copy($sourcePath, $destPath)) {

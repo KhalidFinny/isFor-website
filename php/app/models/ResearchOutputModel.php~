@@ -1,0 +1,157 @@
+<?php
+
+class ResearchOutputModel
+{
+    private $db;
+    private $table = 'research_outputs';
+
+    public function __construct()
+    {
+        $this->db = new Database;
+    }
+
+    // Create a new research output entry
+    public function create($file_url, $uploaded_by, $title, $category, $description, $status = 1)
+    {
+        $this->db->query('EXEC sp_CreateResearchOutput :file_url, :uploaded_by, :title, :category, :description, :status');
+        $this->db->bind(':file_url', $file_url);
+        $this->db->bind(':uploaded_by', $uploaded_by);
+        $this->db->bind(':title', $title);
+        $this->db->bind(':category', $category);
+        $this->db->bind(':description', $description);
+        $this->db->bind(':status', $status);
+
+        try {
+            $this->db->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    // Read all research outputs
+    public function getAll()
+    {
+        $this->db->query('EXEC sp_GetAllResearchOutputs');
+        return $this->db->resultSet();
+    }
+
+    // Get pending research outputs
+    public function getPendingFiles()
+    {
+        $this->db->query('EXEC sp_GetResearchOutputsByStatus :status');
+        $this->db->bind(':status', 1);
+        return $this->db->resultSet();
+    }
+
+    public function getVerifyFiles()
+    {
+        $this->db->query('EXEC sp_GetResearchOutputsByStatus :status');
+        $this->db->bind(':status', 2);
+        return $this->db->resultSet();
+    }
+
+    // Read a specific research output by ID
+    public function getById($id)
+    {
+        $this->db->query('EXEC sp_GetResearchOutputById :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+    public function update($id, $file_url, $title, $category, $status)
+    {
+        $this->db->query('EXEC sp_UpdateResearchOutput :id, :file_url, :title, :category, :status');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':file_url', $file_url);
+        $this->db->bind(':title', $title);
+        $this->db->bind(':category', $category);
+        $this->db->bind(':status', $status);
+
+        try {
+            $this->db->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    // Update status of a research output
+    public function updateStatus($id, $status)
+    {
+        $query = "UPDATE " . $this->table . " SET status = :status WHERE research_output_id = :id";
+        $this->db->query($query);
+        $this->db->bind(':status', $status);
+        $this->db->bind(':id', $id);
+        try {
+            $this->db->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    // Count research outputs by user
+    public function countFilesByUser($userId)
+    {
+        $this->db->query('EXEC sp_CountResearchOutputsByUser :uploaded_by');
+        $this->db->bind(':uploaded_by', $userId);
+        $result = $this->db->single();
+        return $result['total'];
+    }
+
+    // Get research outputs by user
+    public function getFilesByUser($userId)
+    {
+        $this->db->query('EXEC sp_GetResearchOutputsByUser :uploaded_by');
+        $this->db->bind(':uploaded_by', $userId);
+        return $this->db->resultSet();
+    }
+
+    // Get research outputs by user and status
+    public function getFilesByUserAndStatus($userId, $status)
+    {
+        $this->db->query('EXEC sp_GetResearchOutputsByUserAndStatus :uploaded_by, :status');
+        $this->db->bind(':uploaded_by', $userId);
+        $this->db->bind(':status', $status);
+        return $this->db->resultSet();
+    }
+
+    public function getPaginatedFilesByUser($userId, $limit, $offset) {
+        $this->db->query("EXEC sp_GetPaginatedFilesByUser :UserId, :Limit, :Offset");
+        $this->db->bind(':UserId', $userId, PDO::PARAM_INT);
+        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getPaginatedFilesByUserAndStatus($userId, $status, $limit, $offset) {
+        $this->db->query("EXEC sp_GetPaginatedFilesByUserAndStatus :UserId, :Status, :Limit, :Offset");
+        $this->db->bind(':UserId', $userId, PDO::PARAM_INT);
+        $this->db->bind(':Status', $status, PDO::PARAM_INT);
+        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getPendingFilesWithPagination($limit, $offset) {
+        $this->db->query("EXEC sp_GetPendingFilesWithPagination :Limit, :Offset");
+        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalPendingFiles() {
+        $this->db->query("EXEC sp_GetTotalPendingFiles");
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
+// Delete a research output
+    public function delete($id)
+    {
+        $this->db->query('EXEC sp_DeleteResearchOutput :id');
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
+}

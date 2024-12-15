@@ -130,6 +130,59 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
+    public function getPaginatedFilesByUser($userId, $limit, $offset)
+    {
+        $sql = "SELECT * FROM research_outputs WHERE uploaded_by = :userId ORDER BY uploaded_at DESC OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+        $this->db->query($sql);
+        $this->db->bind(':userId', $userId);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getPaginatedFilesByUserAndStatus($userId, $status, $limit, $offset)
+    {
+        $sql = "SELECT * FROM research_outputs WHERE uploaded_by = :userId AND status = :status ORDER BY uploaded_at DESC OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+        $this->db->query($sql);
+        $this->db->bind(':userId', $userId);
+        $this->db->bind(':status', $status);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getPendingFilesWithPagination($limit, $offset)
+    {
+        $limit = (int)$limit;
+        $offset = (int)$offset;
+        $query = "SELECT * 
+                  FROM research_outputs 
+                  WHERE status = :status 
+                  ORDER BY uploaded_at DESC 
+                  OFFSET :offset ROWS 
+                  FETCH NEXT :limit ROWS ONLY";
+
+        $this->db->query($query);
+        $this->db->bind(':status', 1, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+
+        return $this->db->resultSet();
+    }
+
+    public function getTotalPendingFiles()
+    {
+        $query = "SELECT COUNT(1) as total 
+                  FROM research_outputs 
+                  WHERE status = :status";
+
+        $this->db->query($query);
+        $this->db->bind(':status', 1, PDO::PARAM_INT);
+
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
     // Delete a research output
     public function delete($id)
     {

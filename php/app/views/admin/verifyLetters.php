@@ -7,7 +7,7 @@
  */
 
 // Filter surat yang belum diverifikasi (status = 1)
-$filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters'], function($letter) {
+$filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters'], function ($letter) {
     return $letter['status'] == 1;
 }) : [];
 ?>
@@ -16,7 +16,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
 <div class="flex min-h-screen bg-white">
     <!-- Sidebar admin -->
     <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
-    
+
     <!-- Konten utama -->
     <div class="flex-1 ml-64 page-content">
         <main class="p-8 max-w-[1600px] mx-auto">
@@ -38,7 +38,8 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                             <!-- Ikon dengan animasi ping -->
                             <div class="w-20 h-20 border-2 border-red-200 rounded-full flex items-center justify-center mb-6 relative">
                                 <div class="absolute inset-0 border-2 border-green-200 rounded-full animate-ping opacity-100"></div>
-                                <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor"
+                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                                           d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
@@ -54,7 +55,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                         <!-- Kartu surat dengan animasi hover -->
                         <div class="letter-card group relative bg-white border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:border-red-200"
                              data-letter-id="<?= $letter['letter_id']; ?>">
-                            
+
                             <!-- Badge status surat -->
                             <div class="absolute -top-2.5 right-6">
                                 <span class="status-badge inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">
@@ -68,7 +69,8 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                                 <!-- ID Surat -->
                                 <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                              d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
                                     </svg>
                                     <span class="font-mono">ID: <?= str_pad($letter['letter_id'], 4, '0', STR_PAD_LEFT); ?></span>
                                 </div>
@@ -97,13 +99,71 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
-            </div>
+            </div> <!-- Pagination -->
+            <?php if ($data['totalPages'] > 1): ?>
+                <nav aria-label="Page navigation" class="mt-10">
+                    <ul class="inline-flex items-center space-x-2">
+                        <!-- Tombol Previous -->
+                        <?php if ($data['currentPage'] > 1): ?>
+                            <li>
+                                <a href="?page=<?= $data['currentPage'] - 1; ?>"
+                                   class="flex items-center justify-center w-9 h-9 text-red-600 border border-red-300 rounded-md hover:bg-red-50">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M15 19l-7-7 7-7"/>
+                                    </svg>
+                                </a>
+                            </li>
+                        <?php else: ?>
+                            <li>
+                    <span class="flex items-center justify-center w-9 h-9 text-gray-400 border border-gray-200 rounded-md cursor-not-allowed">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </span>
+                            </li>
+                        <?php endif; ?>
+
+                        <!-- Nomor Halaman -->
+                        <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
+                            <li>
+                                <a href="?page=<?= $i; ?>"
+                                   class="flex items-center justify-center w-9 h-9 <?= $i == $data['currentPage'] ? 'bg-red-600 text-white' : 'text-red-600 border border-red-300 hover:bg-red-50' ?> rounded-md">
+                                    <?= $i; ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <!-- Tombol Next -->
+                        <?php if ($data['currentPage'] < $data['totalPages']): ?>
+                            <li>
+                                <a href="?page=<?= $data['currentPage'] + 1; ?>"
+                                   class="flex items-center justify-center w-9 h-9 text-red-600 border border-red-300 rounded-md hover:bg-red-50">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </li>
+                        <?php else: ?>
+                            <li>
+                    <span class="flex items-center justify-center w-9 h-9 text-gray-400 border border-gray-200 rounded-md cursor-not-allowed">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+            <?php endif; ?>
         </main>
     </div>
 </div>
 
 <!-- Modal konfirmasi -->
-<div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm opacity-0 invisible transition-all duration-300 z-50">
+<div id="confirmModal"
+     class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm opacity-0 invisible transition-all duration-300 z-50">
     <div class="bg-white rounded-3xl p-8 w-[420px] mx-4 shadow-2xl transform translate-y-8 transition-all duration-300">
         <!-- Elemen dekoratif atas -->
         <div class="absolute -top-1 left-8 right-8 h-2 bg-gradient-to-r from-red-500/20 via-red-500 to-red-500/20 rounded-full blur-sm"></div>
@@ -122,7 +182,8 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                 <button onclick="closeModal()"
                         class="text-gray-400 hover:text-red-600 transition-colors duration-300 transform hover:rotate-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                              d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
@@ -152,7 +213,8 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
 </div>
 
 <!-- Komponen alert -->
-<div id="alert" class="fixed top-4 right-4 transform translate-y-[-100%] opacity-0 transition-all duration-300 z-50" role="alert">
+<div id="alert" class="fixed top-4 right-4 transform translate-y-[-100%] opacity-0 transition-all duration-300 z-50"
+     role="alert">
     <div class="flex items-center p-4 min-w-[320px] rounded-xl shadow-lg border-l-4 alert-style">
         <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg alert-icon-style mr-3">
             <svg id="alertIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"></svg>
@@ -162,7 +224,8 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
             <p class="text-sm alert-message" id="alertMessage">Message here</p>
         </div>
         <button onclick="closeAlert()" class="flex-shrink-0 ml-4">
-            <svg class="w-4 h-4 text-gray-500 hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-gray-500 hover:text-gray-700" fill="none" stroke="currentColor"
+                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
             </svg>
         </button>
@@ -202,8 +265,12 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     }
 
     @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
     }
 
     /* Efek hover pada tombol */
@@ -225,11 +292,11 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
             url: '<?= BASEURL ?>/letter/getLetter',
             method: 'POST',
             dataType: 'json',
-            data: { id : id},
-            success: function(data){
+            data: {id: id},
+            success: function (data) {
                 window.open(data, '_blank');
             },
-            error: function(data){
+            error: function (data) {
                 alert('Gagal memuat surat');
             }
         });
@@ -267,17 +334,17 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
      * @param {number} status - Status baru (2 = terverifikasi, 3 = ditolak)
      */
     function updateLetterStatus(id, status) {
-        if(confirm("Apakah Anda yakin ingin mengupdate data dengan ID " + id + "?")){
+        if (confirm("Apakah Anda yakin ingin mengupdate data dengan ID " + id + "?")) {
             $.ajax({
                 url: '<?= BASEURL ?>/letter/updateStatusLetter',
                 method: 'POST',
                 dataType: 'json',
-                data: { id : id, status : status },
-                success: function(msg){
+                data: {id: id, status: status},
+                success: function (msg) {
                     // console.log(msg);
                     location.reload();
                 },
-                error: function(msg){
+                error: function (msg) {
                     alert('Gagal memperbarui status');
                 }
             });
@@ -287,7 +354,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     /**
      * Menambahkan animasi stagger pada kartu surat
      */
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const cards = document.querySelectorAll('.letter-card');
         cards.forEach((card, index) => {
             card.style.animationDelay = `${index * 0.1}s`;
