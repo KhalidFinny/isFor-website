@@ -112,6 +112,27 @@
                     </a>
                 </div>
             </div>
+            <div class="pt-4">
+                <span class="px-4 text-xs font-semibold text-red-500 uppercase tracking-wider">Riwayat</span>
+                <div class="mt-2 space-y-1">
+                    <a href="<?= BASEURL ?>/letter/letterHistoryView" 
+                       class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        <span class="font-medium">Riwayat Surat</span>
+                    </a>
+                    <a href="<?= BASEURL ?>/researchoutput/researchHistoryView" 
+                       class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                  d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        </svg>
+                        <span class="font-medium">Riwayat File</span>
+                    </a>
+                </div>
+            </div>
 
             <!-- Beranda Button -->
             <div class="absolute bottom-[88px] left-0 right-0 p-4 border-t border-gray-100">
