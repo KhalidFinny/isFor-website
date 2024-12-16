@@ -34,6 +34,7 @@ class User extends Controller
 
     public function create()
     {
+        session_start();
 
         $photo = $this->upload();
 
@@ -41,17 +42,44 @@ class User extends Controller
             return false;
         }
 
+        // var_dump($_POST);   
+        // var_dump($photo);
+        // exit;
+
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $name = $_POST['name'];
+        $username = $_POST['username'];
+
+        // Validasi apakah nama, username, dan email sudah ada
+        $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
+
+        if ($validationResult['name_exists']) {
+            $_SESSION['message'] = "nama sudah terdaftar.";
+            header('Location: ' . BASEURL . '/User');
+            return;
+        }
+
+        if ($validationResult['username_exists']) {
+            $_SESSION['message'] = "username sudah terdaftar.";
+            header('Location: ' . BASEURL . '/User');
+            return;
+        }
+
+        if ($validationResult['email_exists']) {
+            $_SESSION['message'] = "Email sudah terdaftar.";
+            header('Location: ' . BASEURL . '/User');
+            return;
+        }
 
         if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
-
+            $_SESSION['message'] = "tambah data berhasil";
             header('Location: ' . BASEURL . '/User');
-            echo "tambah data berhasil";
         } else {
-            echo
-            '<script/>
-                    alert("tambah data gagal");
-                </script>';
+            if (file_exists('../app/img/profile/' . $photo)) {
+                unlink('../app/img/profile/' . $photo);
+            }
+            $_SESSION['message'] = "tambah data berhasil";
+            header('Location: ' . BASEURL . '/User');
         }
     }
 

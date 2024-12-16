@@ -187,4 +187,28 @@ class UsersModel
         $result = $this->db->single();
         return $result ? (int)$result['Total'] : 0;
     }
+
+    // fungsi untuk memvalidasi apakah nama, username, dan email sudah ada di database
+    public function validateUser($name, $username, $email) {
+        // Query untuk SQL Server
+        $this->db->query("
+            SELECT 
+                SUM(CASE WHEN name = :name THEN 1 ELSE 0 END) AS name_count,
+                SUM(CASE WHEN username = :username THEN 1 ELSE 0 END) AS username_count,
+                SUM(CASE WHEN email = :email THEN 1 ELSE 0 END) AS email_count
+            FROM users
+        ");
+        $this->db->bind(':name', $name);
+        $this->db->bind(':username', $username);
+        $this->db->bind(':email', $email);
+    
+        $result = $this->db->single();
+    
+        // Mengembalikan hasil validasi
+        return [
+            'name_exists' => $result['name_count'] > 0,
+            'username_exists' => $result['username_count'] > 0,
+            'email_exists' => $result['email_count'] > 0
+        ];
+    }
 }
