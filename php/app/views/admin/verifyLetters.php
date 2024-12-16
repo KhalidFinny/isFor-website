@@ -20,6 +20,14 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     <!-- Konten utama -->
     <div class="flex-1 ml-64 page-content">
         <main class="p-8 max-w-[1600px] mx-auto">
+        <div class="max-w-7xl mx-auto mb-12">
+        <a href="<?=BASEURL?>/dashboardAdmin" class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span>Kembali</span>
+        </a>
+    </div>
             <!-- Header dengan desain Swiss -->
             <div class="max-w-7xl mx-auto mb-12 fade-in">
                 <div class="flex items-center space-x-4 mb-4">

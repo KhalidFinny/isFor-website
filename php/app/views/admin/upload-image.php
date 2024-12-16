@@ -110,9 +110,18 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
+    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php';?>
     <div class="flex-1 min-h-screen ml-64 bg-white">
         <main class="py-10 px-8">
+            <!-- Back Button -->
+            <div class="max-w-7xl mx-auto mb-12">
+        <a href="<?=BASEURL?>/dashboardAdmin" class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span>Kembali</span>
+        </a>
+    </div>
             <!-- Swiss-inspired Header (Matching manage-roadmap.php) -->
             <div class="max-w-7xl mx-auto mb-12 fade-in">
                 <div class="flex items-center space-x-4 mb-4">
@@ -123,7 +132,7 @@
             </div>
 
             <!-- Upload Form -->
-            <form action="<?= BASEURL; ?>/galleries/uploadImg" method="POST" enctype="multipart/form-data"
+            <form action="<?=BASEURL;?>/galleries/uploadImg" method="POST" enctype="multipart/form-data"
                   id="uploadForm" name="confirmUpload" class="max-w-7xl mx-auto"
                   onsubmit="return disableSubmitButton();">
                 <div class="grid grid-cols-12 gap-8">
@@ -237,32 +246,32 @@
 </div>
 
 <!-- Alert Container -->
-<div id="alertMessage" 
+<div id="alertMessage"
      class="fixed top-4 right-4 max-w-md w-full opacity-0 transform translate-y-[-100%] transition-all duration-300 ease-out pointer-events-none">
 </div>
 
 <!-- Add this modal HTML before the closing body tag -->
 <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-    <div id="modalContent" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                                 bg-white rounded-2xl p-8 w-96 opacity-0 scale-95 
+    <div id="modalContent" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                                 bg-white rounded-2xl p-8 w-96 opacity-0 scale-95
                                  transition-all duration-300">
         <div class="text-center">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                 </svg>
             </div>
             <h2 class="text-2xl font-semibold text-red-800 mb-2">Konfirmasi Upload</h2>
             <p class="text-gray-600 mb-6">Apakah Anda yakin ingin mengunggah gambar ini?</p>
             <div class="flex justify-center space-x-3">
-                <button id="cancelButton" 
+                <button id="cancelButton"
                         class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
-                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 
+                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1
                                transition-all duration-300">
                     Batal
                 </button>
-                <button id="confirmButton" 
+                <button id="confirmButton"
                         class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
                                transform hover:-translate-y-1 transition-all duration-300">
                     Upload
@@ -419,7 +428,7 @@
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             // Validate form fields
             const title = document.querySelector('input[name="imageTitle"]').value.trim();
             const category = document.querySelector('select[name="category"]').value.trim();
@@ -450,10 +459,10 @@
         // Handle confirmation button click
         document.getElementById('confirmButton').addEventListener('click', function() {
             const formData = new FormData(form);
-            
+
             // Hide modal
             confirmModal.classList.add('hidden');
-            
+
             // Show loading state
             uploadButton.disabled = true;
             uploadButton.innerHTML = `

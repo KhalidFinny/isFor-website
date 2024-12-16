@@ -112,15 +112,48 @@
 <div class="flex">
     <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 
-    <div class="flex-1 min-h-screen ml-64">
-        <main class="py-10 px-8">
-            <!-- Header -->
-            <header class="max-w-7xl mx-auto mb-12 animate-fade-in">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center space-x-4 mb-4">
-                            <span class="h-px w-12 bg-red-500"></span>
-                            <span class="text-red-500 font-medium">Manajemen</span>
+        <div class="flex-1 min-h-screen ml-64">
+            <main class="py-10 px-8">
+            <div class="max-w-7xl mx-auto mb-12">
+        <a href="<?=BASEURL?>/dashboardAdmin" class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span>Kembali</span>
+        </a>
+    </div>
+                <!-- Header -->
+                <header class="max-w-7xl mx-auto mb-12 animate-fade-in">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="flex items-center space-x-4 mb-4">
+                                <span class="h-px w-12 bg-red-500"></span>
+                                <span class="text-red-500 font-medium">Manajemen</span>
+                            </div>
+                            <h1 class="text-4xl font-bold text-red-600">Pengguna</h1>
+                        </div>
+
+                        <button onclick="showAddUserModal()"
+                                class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300 flex items-center space-x-2 btn-primary">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            <span>Tambah Pengguna</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- User List -->
+                <section class="bg-white rounded-2xl border border-red-100 overflow-hidden animate-slide-in">
+                    <div class="px-8 py-6 border-b border-red-100 flex justify-between items-center">
+                        <h2 class="text-2xl font-light text-red-500 tracking-tight">Daftar Pengguna</h2>
+                        <div class="relative">
+                            <input type="text"
+                                   placeholder="Cari pengguna..."
+                                   class="pl-11 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-600 placeholder-gray-400 w-64">
+                            <svg class="w-5 h-5 absolute left-4 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
                         </div>
                         <h1 class="text-4xl font-bold text-red-600">Pengguna</h1>
                     </div>
