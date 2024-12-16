@@ -92,4 +92,28 @@ class GalleryModel
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
+
+    public function getGalleriesWithPagination($limit, $offset)
+    {
+        $query = "SELECT gallery_id, [image], category, title, uploaded_by, created_at, description
+                  FROM isfor_database.dbo.galleries
+                  ORDER BY created_at DESC
+                  OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+
+        $this->db->query($query);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+
+        return $this->db->resultSet();
+    }
+
+    // Menghitung total data galleries
+    public function getTotalGalleries()
+    {
+        $query = "SELECT COUNT(1) AS total FROM isfor_database.dbo.galleries";
+
+        $this->db->query($query);
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
 }

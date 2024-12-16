@@ -138,10 +138,7 @@ class GalleryModel
 
     public function getGalleriesWithPagination($limit, $offset)
     {
-        $query = "SELECT gallery_id, [image], category, title, uploaded_by, created_at, description
-                  FROM isfor_database.dbo.galleries
-                  ORDER BY created_at DESC
-                  OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+        $query = "EXEC sp_GetGalleriesWithPagination @Limit = :limit, @Offset = :offset";
 
         $this->db->query($query);
         $this->db->bind(':limit', $limit, PDO::PARAM_INT);
@@ -150,13 +147,13 @@ class GalleryModel
         return $this->db->resultSet();
     }
 
-    // Menghitung total data galleries
     public function getTotalGalleries()
     {
-        $query = "SELECT COUNT(1) AS total FROM isfor_database.dbo.galleries";
+        $query = "EXEC sp_GetTotalGalleries";
 
         $this->db->query($query);
         $result = $this->db->single();
+
         return $result ? (int)$result['total'] : 0;
     }
 }

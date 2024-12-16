@@ -191,4 +191,29 @@ class ResearchOutputModel
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
+
+    public function getVerifiedResearchOutputs($limit, $offset)
+    {
+        $query = "SELECT research_output_id, file_url, uploaded_by, uploaded_at, title, category, status, description
+              FROM isfor_database.dbo.research_outputs
+              WHERE status = 2
+              ORDER BY uploaded_at DESC
+              OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+
+        $this->db->query($query);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+
+        return $this->db->resultSet();
+    }
+
+    public function getTotalVerifiedResearchOutputs()
+    {
+        $query = "SELECT COUNT(1) AS total FROM isfor_database.dbo.research_outputs WHERE status = 2";
+
+        $this->db->query($query);
+        $result = $this->db->single();
+
+        return $result ? (int)$result['total'] : 0;
+    }
 }

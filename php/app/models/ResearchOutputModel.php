@@ -10,7 +10,6 @@ class ResearchOutputModel
         $this->db = new Database;
     }
 
-    // Create a new research output entry
     public function create($file_url, $uploaded_by, $title, $category, $description, $status = 1)
     {
         $this->db->query('EXEC sp_CreateResearchOutput :file_url, :uploaded_by, :title, :category, :description, :status');
@@ -29,14 +28,12 @@ class ResearchOutputModel
         }
     }
 
-    // Read all research outputs
     public function getAll()
     {
         $this->db->query('EXEC sp_GetAllResearchOutputs');
         return $this->db->resultSet();
     }
 
-    // Get pending research outputs
     public function getPendingFiles()
     {
         $this->db->query('EXEC sp_GetResearchOutputsByStatus :status');
@@ -51,7 +48,6 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
-    // Read a specific research output by ID
     public function getById($id)
     {
         $this->db->query('EXEC sp_GetResearchOutputById :id');
@@ -76,7 +72,6 @@ class ResearchOutputModel
         }
     }
 
-    // Update status of a research output
     public function updateStatus($id, $status)
     {
         $query = "UPDATE " . $this->table . " SET status = :status WHERE research_output_id = :id";
@@ -91,7 +86,6 @@ class ResearchOutputModel
         }
     }
 
-    // Count research outputs by user
     public function countFilesByUser($userId)
     {
         $this->db->query('EXEC sp_CountResearchOutputsByUser :uploaded_by');
@@ -108,7 +102,6 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
-    // Get research outputs by user and status
     public function getFilesByUserAndStatus($userId, $status)
     {
         $this->db->query('EXEC sp_GetResearchOutputsByUserAndStatus :uploaded_by, :status');
@@ -151,22 +144,18 @@ class ResearchOutputModel
         return $result ? (int)$result['total'] : 0;
     }
 
-    public function getVerifiedResearchOutputs($limit, $offset) {
-        $query = "SELECT research_output_id, file_url, uploaded_by, uploaded_at, title, category, status, description
-              FROM isfor_database.dbo.research_outputs
-              WHERE status = 2
-              ORDER BY uploaded_at DESC
-              OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
-
+    public function getVerifiedResearchOutputs($limit, $offset)
+    {
+        $query = "EXEC sp_GetVerifiedResearchOutputs @Limit = :limit, @Offset = :offset";
         $this->db->query($query);
-        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         $this->db->bind(':limit', $limit, PDO::PARAM_INT);
-
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
-    public function getTotalVerifiedResearchOutputs() {
-        $query = "SELECT COUNT(1) AS total FROM isfor_database.dbo.research_outputs WHERE status = 2";
+    public function getTotalVerifiedResearchOutputs()
+    {
+        $query = "EXEC sp_GetTotalVerifiedResearchOutputs";
 
         $this->db->query($query);
         $result = $this->db->single();
@@ -174,8 +163,6 @@ class ResearchOutputModel
         return $result ? (int)$result['total'] : 0;
     }
 
-
-// Delete a research output
     public function delete($id)
     {
         $this->db->query('EXEC sp_DeleteResearchOutput :id');

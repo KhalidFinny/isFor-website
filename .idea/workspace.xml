@@ -6,15 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Galleries.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Galleries.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Home.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Home.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/isfor_database.bak" beforeDir="false" afterPath="$PROJECT_DIR$/database/isfor_database.bak" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/sql_server_db.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel-Temp.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel-Temp.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel-Temp.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel-Temp.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/UsersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/UsersModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/editUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +112,7 @@
       <workItem from="1733875891070" duration="11995000" />
       <workItem from="1733963584713" duration="4340000" />
       <workItem from="1734225885526" duration="14093000" />
-      <workItem from="1734282560212" duration="5170000" />
+      <workItem from="1734282560212" duration="5827000" />
     </task>
     <servers />
   </component>
