@@ -253,6 +253,8 @@ class ResearchOutput extends Controller
 
     public function filter()
     {
+        // echo json_encode($_POST);
+
         session_start();
         // Ambil `status` dari permintaan POST
         $status = isset($_POST['status']) ? $_POST['status'] : null;
@@ -265,13 +267,13 @@ class ResearchOutput extends Controller
                 $outputs = $model->getFilesByUser($userId);
                 break;
             case 1: // Data tertunda
-                $outputs = $model->getFilesByUserAndStatus($userId, 'pending');
+                $outputs = $model->getFilesByUserAndStatus($userId, '1');
                 break;
             case 2: // Data disetujui
-                $outputs = $model->getFilesByUserAndStatus($userId, 'approved');
+                $outputs = $model->getFilesByUserAndStatus($userId, '2');
                 break;
             case 3: // Data ditolak
-                $outputs = $model->getFilesByUserAndStatus($userId, 'rejected');
+                $outputs = $model->getFilesByUserAndStatus($userId, '3');
                 break;
             default:
                 echo json_encode(['error' => 'Invalid status']);

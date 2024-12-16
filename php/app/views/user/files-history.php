@@ -128,7 +128,7 @@
                         <div class="flex justify-between items-center">
                             <div class="relative flex items-center space-x-4">
                                 <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn active"
-                                        data-status="all" onclick="filter('all')">
+                                        data-status="all" onclick="filter('0')">
                                     Semua
                                 </button>
                                 <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
@@ -234,8 +234,9 @@
                                 </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
-                        <!-- Pagination -->
-                        <nav aria-label="Page navigation example">
+                    </div>
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation example" class="p-6">
                             <ul class="flex items-center -space-x-px h-8 text-sm">
                                 <li>
                                     <?php if ($data['currentPage'] > 1) : ?>
@@ -278,8 +279,6 @@
                                 </li>
                             </ul>
                         </nav>
-                    
-                    </div>
                 </div>
             </div>
         </main>
@@ -339,36 +338,82 @@
     }
 
     function filter(status) {
-        document.querySelectorAll('.filter-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const status = this.dataset.status;
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
+        $.ajax({
+            url: '<?= BASEURL ?>/ResearchOutput/filter',
+            method: 'POST',
+            dataType: 'json',
+            data: {status: status},
+            success: function (data) {
+                console.log('Success Response:', data);
 
-                fetch('ResearchOutput/filter', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: `status=${status}`
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        const container = document.getElementById('research-files');
-                        container.innerHTML = '';
+                const fileContainer = document.querySelector("#research-files");
+                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
 
-                        if (data.length > 0) {
-                            data.forEach(file => {
-                                container.innerHTML += `
-                            <div class="p-4 border border-red-200 rounded-lg">
-                                <h3 class="text-lg font-bold">${file.title}</h3>
-                                <p class="text-sm text-red-600">Status: ${file.status}</p>
-                            </div>`;
-                            });
-                        } else {
-                            container.innerHTML = '<p class="text-red-500">Tidak ada data yang ditemukan.</p>';
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
+                fileContainer.innerHTML = ''; // Bersihkan kontainer sebelum menambahkan konten baru
+                navElement.innerHTML = '';
+
+                data.forEach(file => {
+                    const fileHTML = `
+                    <div class="bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="p-3 bg-red-50 rounded-xl">
+                                <svg class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-red-900">${file.title}</h3>
+                                <p class="text-sm text-red-600">${file.category}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between mt-4">
+                            <!-- Status Badge -->
+                            ${file.status == 1 ? `
+                            <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-yellow-100 text-yellow-600">
+                                Pending
+                            </span>` : file.status == 2 ? `
+                            <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-green-100 text-green-600">
+                                Approved
+                            </span>` : file.status == 3 ? `
+                            <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-red-100 text-red-600">
+                                Rejected
+                            </span>` : `
+                            <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg">
+                                Unknown
+                            </span>`}
+
+                            <!-- Action Buttons -->
+                            <div class="flex space-x-2">
+                                <!-- Preview Button -->
+                                <button onclick="previewFile('${file.file_url ?? ''}')" class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    Preview
+                                </button>
+
+                                <!-- Download Button -->
+                                <a href="${file.file_url ?? '#'}" download="" class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                    </svg>
+                                    Download
+                                </a>
+                            </div>
+                        </div>
+                    </div>`;
+                    
+                    fileContainer.innerHTML += fileHTML; // Tambahkan konten ke DOM
+                });
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Error Status:', status);
+                console.error('Error Details:', error);
+                console.error('Response Text:', xhr.responseText);
+            }
         });
     }
 
@@ -380,10 +425,11 @@
             button.addEventListener('click', function () {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
-                filter(this.dataset.status);
+                // filter(this.dataset.status);
             });
         });
     });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
