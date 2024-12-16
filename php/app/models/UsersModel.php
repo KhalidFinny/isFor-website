@@ -138,18 +138,27 @@ class UsersModel
         $this->db->bind(':password', $password);
         $this->db->bind(':role_id', $data['role_id']);
         $this->db->execute();
-
         return $this->db->rowCount();
     }
 
     public function isEmailExists($email, $userId = null)
     {
-        $query = "SELECT * FROM users WHERE email = :email AND (user_id != :user_id OR :user_id IS NULL)";
-        $this->db->query($query);
-        $this->db->bind('email', $email);
-        $this->db->bind('user_id', $userId);
+        if ($userId === null) {
+            // Jika userId tidak diberikan, cukup cek berdasarkan email
+            $query = "SELECT * FROM users WHERE email = :email";
+            $this->db->query($query);
+            $this->db->bind('email', $email);
+        } else {
+            // Jika userId diberikan, tambahkan kondisi untuk mengecualikan user_id
+            $query = "SELECT * FROM users WHERE email = :email AND user_id != :user_id";
+            $this->db->query($query);
+            $this->db->bind('email', $email);
+            $this->db->bind('user_id', $userId);
+        }
+
         return $this->db->single() ? true : false;
     }
+
 
     public function isUsernameExists($username, $userId = null)
     {
@@ -160,25 +169,22 @@ class UsersModel
         return $this->db->single() ? true : false;
     }
 
-    public function getUsersWithPagination($limit, $offset) {
-        $query = "SELECT user_id, name, username, email, profile_picture, role_id
-                  FROM isfor_database.dbo.users
-                  ORDER BY user_id ASC
-                  OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+    public function getUsersWithPagination($limit, $offset)
+    {
+        $query = "EXEC GetUsersWithPagination :Limit, :Offset";
 
         $this->db->query($query);
-        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
-        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
 
         return $this->db->resultSet();
     }
 
-    public function getTotalUsers() {
-        $query = "SELECT COUNT(1) AS total FROM isfor_database.dbo.users";
-
+    public function getTotalUsers()
+    {
+        $query = "EXEC GetTotalUsers";
         $this->db->query($query);
-
         $result = $this->db->single();
-        return $result ? (int)$result['total'] : 0;
+        return $result ? (int)$result['Total'] : 0;
     }
 }

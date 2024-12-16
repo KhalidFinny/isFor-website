@@ -35,7 +35,17 @@ class Home extends Controller
 
     public function galeri()
     {
-        $data['galeri'] = $this->model('GalleryModel')->getAll();
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini (default 1)
+        $limit = 6; // Jumlah data per halaman
+        $offset = ($page - 1) * $limit; // Hitung offset
+
+        $galleriesModel = $this->model('GalleryModel');
+        $data['galleries'] = $galleriesModel->getGalleriesWithPagination($limit, $offset);
+        $data['totalGalleries'] = $galleriesModel->getTotalGalleries();
+        $data['limit'] = $limit;
+        $data['currentPage'] = $page;
+        $data['totalPages'] = ceil($data['totalGalleries'] / $limit); // Total halaman
+
         $this->view('main/galeriweb', $data);
     }
 
@@ -62,7 +72,17 @@ class Home extends Controller
     public function hasilPenelitian()
     {
         $researchModel = $this->model('ResearchOutputModel');
-        $data['researchOutputs'] = $researchModel->getVerifyFiles();
+//        $data['researchOutputs'] = $researchModel->getVerifyFiles();
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini
+        $limit = 6; // Jumlah data per halaman
+        $offset = ($page - 1) * $limit; // Offset untuk query
+
+        $researchOutputModel = $this->model('ResearchOutputModel');
+        $data['researchOutputs'] = $researchOutputModel->getVerifiedResearchOutputs($limit, $offset); // Data yang diverifikasi
+        $data['totalOutputs'] = $researchOutputModel->getTotalVerifiedResearchOutputs(); // Total data diverifikasi
+        $data['limit'] = $limit;
+        $data['currentPage'] = $page;
+        $data['totalPages'] = ceil($data['totalOutputs'] / $limit);
 
         // Jika ingin menambahkan pengolahan data, seperti menambahkan `original_name`:
         foreach ($data['researchOutputs'] as &$researchOutput) {
@@ -76,7 +96,9 @@ class Home extends Controller
 
         $this->view('main/hasilpenelitian', $data);
     }
-    public function archives(){
+
+    public function archives()
+    {
         $this->view('main/dokumen');
     }
 

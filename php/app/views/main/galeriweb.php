@@ -110,8 +110,14 @@ session_start();
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .gallery-item {
@@ -121,10 +127,10 @@ session_start();
 </head>
 <body class="bg-white">
 <?php if (!isset($_SESSION['user_id'])): ?>
-    <?php include_once '../app/views/assets/components/navbar.php';?>
+    <?php include_once '../app/views/assets/components/navbar.php'; ?>
 <?php else: ?>
-    <?php include_once '../app/views/assets/components/navbarafterlogin.php';?>
-<?php endif;?>
+    <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
+<?php endif; ?>
 <section class="min-h-screen py-20 relative overflow-hidden">
     <div class="container mx-auto px-6 max-w-7xl">
         <!-- Header -->
@@ -141,28 +147,28 @@ session_start();
         <!-- Topics Navigation -->
         <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
             <?php
-$topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
-foreach ($topics as $index => $topic): ?>
+            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
+            foreach ($topics as $index => $topic): ?>
                 <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
                     <?php echo $topic; ?>
                 </button>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </div>
 
         <!-- Gallery Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <?php foreach ($data['galeri'] as $index => $item): ?>
+            <?php foreach ($data['galleries'] as $index => $item): ?>
                 <div class="gallery-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
                     <div class="image-container cursor-pointer" onclick="showImagePreview(
-                        '<?=GALLERY;?>/files/<?php echo $item['image']; ?>', 
-                        '<?php echo htmlspecialchars($item['title'], ENT_QUOTES); ?>', 
-                        '<?php echo htmlspecialchars($item['category'], ENT_QUOTES); ?>', 
-                        '<?php echo date('d M Y', strtotime($item['created_at'])); ?>', 
-                        '<?php echo htmlspecialchars($item['description'], ENT_QUOTES); ?>'
-                    )">
+                            '<?= GALLERY; ?>/files/<?php echo $item['image']; ?>',
+                            '<?php echo htmlspecialchars($item['title'], ENT_QUOTES); ?>',
+                            '<?php echo htmlspecialchars($item['category'], ENT_QUOTES); ?>',
+                            '<?php echo date('d M Y', strtotime($item['created_at'])); ?>',
+                            '<?php echo htmlspecialchars($item['description'], ENT_QUOTES); ?>'
+                            )">
                         <div class="image-placeholder">
-                            <img src="<?=GALLERY;?>/files/<?php echo $item['image']; ?>"
-                                 alt="<?php echo htmlspecialchars($item['title'], ENT_QUOTES); ?>" 
+                            <img src="<?= GALLERY; ?>/files/<?php echo $item['image']; ?>"
+                                 alt="<?php echo htmlspecialchars($item['title'], ENT_QUOTES); ?>"
                                  class="w-full h-full object-cover">
                         </div>
                         <div class="image-overlay">
@@ -191,11 +197,55 @@ foreach ($topics as $index => $topic): ?>
                                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
                             </button>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </div>
                 </div>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </div>
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="flex items-center -space-x-px h-8 text-sm">
+                <li>
+                    <?php if ($data['currentPage'] > 1) : ?>
+                        <a href="?halaman=<?= $data['currentPage'] - 1 ?>"
+                           class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Previous</span>
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round"
+                                      stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                            </svg>
+                        </a>
+                    <?php endif; ?>
+                </li>
+                <?php for ($i = 1; $i <= $data['totalPages']; $i++) : ?>
+                    <?php if ($i == $data['currentPage']) : ?>
+                        <li>
+                            <a href="?page=<?= $i; ?>" aria-current="page"
+                               class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i; ?></a>
+                        </li>
+                    <?php else : ?>
+                        <li>
+                            <a href="?page=<?= $i; ?>"
+                               class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $i; ?></a>
+                        </li>
+                    <?php endif; ?>
+                <?php endfor; ?>
+                <li>
+                    <?php if ($data['currentPage'] < $data['totalPages']) : ?>
+                        <a href="?page=<?= $data['currentPage'] + 1 ?>"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Next</span>
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round"
+                                      stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                            </svg>
+                        </a>
+                    <?php endif; ?>
+                </li>
+            </ul>
+        </nav>
     </div>
 </section>
 
@@ -208,10 +258,11 @@ foreach ($topics as $index => $topic): ?>
 </div>
 
 <!-- Tambahkan modal preview di akhir body sebelum script -->
-<div id="imagePreviewModal" class="fixed inset-0 bg-black opacity-0 invisible transition-all duration-300 ease-out z-50">
+<div id="imagePreviewModal"
+     class="fixed inset-0 bg-black opacity-0 invisible transition-all duration-300 ease-out z-50">
     <div class="absolute inset-0 flex items-center justify-center p-4">
         <!-- Tombol close dengan animasi -->
-        <button onclick="closeImagePreview()" 
+        <button onclick="closeImagePreview()"
                 class="absolute top-4 right-4 text-white hover:text-red-500 z-50 transform hover:scale-110 transition-all duration-300">
             <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -223,8 +274,8 @@ foreach ($topics as $index => $topic): ?>
                     opacity-0 translate-y-4 transition-all duration-500 ease-out" id="previewContent">
             <!-- Container gambar dengan zoom -->
             <div class="flex-1 relative overflow-hidden rounded-2xl">
-                <img id="previewImage" 
-                     class="w-full h-auto max-h-[80vh] object-contain transform transition-all duration-300" 
+                <img id="previewImage"
+                     class="w-full h-auto max-h-[80vh] object-contain transform transition-all duration-300"
                      src="" alt="">
             </div>
 
@@ -279,12 +330,19 @@ foreach ($topics as $index => $topic): ?>
     function deleteImage(ImageId) {
         if (confirm('Are you sure you want to delete this file?')) {
             $.ajax({
-                url: '<?= BASEURL ?>/gallery/delete', // URL endpoint untuk delete
-                type: 'POST', // Menggunakan POST untuk aksi delete
-                data: {id: ImageId}, // Data yang dikirimkan
+                url: '<?= BASEURL ?>/gallery/delete',
+                type: 'POST',
+                data: {id: ImageId},
                 success: function (response) {
-                    window.location.reload();
-                    alert('File deleted successfully!');
+                    console.log(response); // Debug response dari server
+                    let result = JSON.parse(response);
+                    console.log(result); // Lihat detail debug
+                    if (result.dbDeleteSuccess && result.unlinkSuccess) {
+                        alert('File deleted successfully!');
+                        window.location.reload();
+                    } else {
+                        alert('Failed to delete file.');
+                    }
                 },
                 error: function (xhr, status, error) {
                     alert('An error occurred: ' + error);
@@ -329,7 +387,7 @@ foreach ($topics as $index => $topic): ?>
         let panning = false;
         let pointX = 0;
         let pointY = 0;
-        let start = { x: 0, y: 0 };
+        let start = {x: 0, y: 0};
 
         image.classList.add('zoom-active');
 
@@ -347,7 +405,7 @@ foreach ($topics as $index => $topic): ?>
             e.preventDefault();
             const xs = (e.clientX - pointX) / scale;
             const ys = (e.clientY - pointY) / scale;
-            
+
             if (e.deltaY < 0) {
                 scale *= 1.1;
                 image.classList.add('zoomed');
@@ -358,11 +416,11 @@ foreach ($topics as $index => $topic): ?>
                     image.classList.remove('zoomed');
                 }
             }
-            
+
             scale = Math.min(Math.max(1, scale), 4);
             pointX = e.clientX - xs * scale;
             pointY = e.clientY - ys * scale;
-            
+
             image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
         });
 
@@ -370,7 +428,7 @@ foreach ($topics as $index => $topic): ?>
         image.addEventListener('mousedown', (e) => {
             e.preventDefault();
             if (scale > 1) {
-                start = { x: e.clientX - pointX, y: e.clientY - pointY };
+                start = {x: e.clientX - pointX, y: e.clientY - pointY};
                 panning = true;
             }
         });
@@ -392,9 +450,9 @@ foreach ($topics as $index => $topic): ?>
         const modal = document.getElementById('imagePreviewModal');
         const content = document.getElementById('previewContent');
         const image = document.getElementById('previewImage');
-        
+
         content.classList.remove('content-show');
-        
+
         setTimeout(() => {
             modal.classList.remove('modal-open');
             image.style.transform = 'translate(0px, 0px) scale(1)';
@@ -404,7 +462,7 @@ foreach ($topics as $index => $topic): ?>
     }
 
     // Remove any existing click handlers from DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Only initialize necessary functionality
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {

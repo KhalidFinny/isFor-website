@@ -5,7 +5,7 @@ class Galleries extends Controller
 {
     public function index()
     {
-        $this->view("main/galeri");
+                $this->view("main/galeri");
     }
 
     public function uploadImgView()
@@ -111,19 +111,36 @@ class Galleries extends Controller
         }
     }
 
+//    public function delete()
+//    {
+//        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//            $id = $_POST['id'] ?? null;
+//
+//            if ($id && $this->model('GalleryModel')->delete($id) > 0) {
+//                echo json_encode(['success' => true]);
+//            } else {
+//                echo json_encode(['success' => false, 'message' => 'Failed to delete the file.']);
+//            }
+//        } else {
+//            http_response_code(405); // Method not allowed
+//            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+//        }
+//        exit();
+//    }
     public function delete()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
-            if ($id && $this->model('GalleryModel')->delete($id) > 0) {
-                echo json_encode(['success' => true]);
+            if ($id) {
+                $debug = $this->model('GalleryModel')->delete($id);
+                echo json_encode($debug);
             } else {
-                echo json_encode(['success' => false, 'message' => 'Failed to delete the file.']);
+                echo json_encode(['success' => false, 'message' => 'Invalid request.']);
             }
         } else {
-            http_response_code(405); // Method not allowed
-            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
         }
         exit();
     }

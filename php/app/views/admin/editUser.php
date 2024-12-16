@@ -1,3 +1,6 @@
+<?php
+var_dump($data);
+?>
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -111,6 +114,13 @@
             <div class="p-8 border-b border-red-100">
                 <h2 class="text-2xl font-light text-red-500">Formulir Edit Pengguna</h2>
             </div>
+
+<!--            --><?php //if (isset($_SESSION['flash'])): ?>
+<!--                <div class="alert alert---><?php //= strpos($_SESSION['flash'], 'berhasil') !== false ? 'success' : 'danger'; ?><!-- mb-4">-->
+<!--                    --><?php //= $_SESSION['flash']; ?>
+<!--                </div>-->
+<!--                --><?php //unset($_SESSION['flash']); ?>
+<!--            --><?php //endif; ?>
 
             <form id="editUserForm" action="<?= BASEURL; ?>/User/edit" method="POST" class="p-8"
                   enctype="multipart/form-data">

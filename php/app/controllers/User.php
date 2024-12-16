@@ -32,7 +32,6 @@ class User extends Controller
     }
 
 
-
     public function create()
     {
 
@@ -204,6 +203,64 @@ class User extends Controller
             echo json_encode(['status' => 'error', 'message' => 'Data tidak berhasil diperbarui.']);
         }
     }
+
+//    public function edit()
+//    {
+//        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+//        $id = $_POST['user_id'];
+//        $oldPhoto = $_POST["oldImage"];
+//        $oldPass = $_POST["oldPass"];
+//        $newPass = $_POST["password"];
+//        $username = $_POST['username'];
+//        $userModel = $this->model('UsersModel');
+//
+//        // Validasi Email
+//        if (!$email) {
+//            $_SESSION['flash'] = 'Email tidak valid.';
+//            header('Location: ' . BASEURL . '/User/edit/' . $id);
+//            exit;
+//        }
+//
+//        // Cek apakah email sudah digunakan
+//        if ($userModel->isEmailExists($email, $id)) {
+//            $_SESSION['flash'] = 'Email telah terdaftar. Silakan pilih email lain.';
+//            header('Location: ' . BASEURL . '/User/edit/' . $id);
+//            exit;
+//        }
+//
+//        // Cek apakah username sudah digunakan
+//        if ($userModel->isUsernameExists($username, $id)) {
+//            $_SESSION['flash'] = 'Username telah terdaftar. Silakan pilih username lain.';
+//            header('Location: ' . BASEURL . '/User/edit/' . $id);
+//            exit;
+//        }
+//
+//        // Proses password
+//        $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
+//
+//        // Proses foto
+//        if ($_FILES["profile_picture"]["error"] === 4) {
+//            $photo = $oldPhoto;
+//        } else {
+//            $photo = $this->upload();
+//            $image_name = $userModel->deleteImage($id);
+//            if ($image_name['profile_picture'] && file_exists('../app/img/profile/' . $image_name['profile_picture'])) {
+//                unlink('../app/img/profile/' . $image_name['profile_picture']);
+//            }
+//        }
+//
+//        // Simpan data
+//        if ($userModel->editUser($email, $id, $_POST, $photo, $password) > 0) {
+//            $_SESSION['flash'] = 'Data berhasil diperbarui.';
+//            header('Location: ' . BASEURL . '/User/index');
+//            exit;
+//        } else {
+//            $_SESSION['flash'] = 'Data tidak berhasil diperbarui.';
+//            header('Location: ' . BASEURL . '/User/edit/' . $id);
+//            exit;
+//        }
+//    }
+
 
     private function redirectWithError($error)
     {
