@@ -328,6 +328,23 @@ class ResearchOutput extends Controller
 //        exit();
 //    }
 
+    public function search() {
+        if (isset($_POST['keyword'])) {
+            $keyword = $_POST['keyword'];
+            $researchOutputModel = $this->model('ResearchOutputModel');
+
+            try {
+                $results = $researchOutputModel->searchResearchOutputs($keyword);
+
+                header('Content-Type: application/json');
+                echo json_encode($results);
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
+            }
+        }
+    }
+
     public function delete()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

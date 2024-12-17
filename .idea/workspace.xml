@@ -6,16 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/AgendaModel-Temp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel-Temp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel-Temp.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel-Temp.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/RoadmapsModel-Temp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/RoadmapsModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/RoadmapsModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/UsersModel-Temp.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/UsersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/UsersModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/editUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/letter-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/letter-history.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +119,7 @@
       <workItem from="1734225885526" duration="14093000" />
       <workItem from="1734282560212" duration="10957000" />
       <workItem from="1734406459122" duration="173000" />
-      <workItem from="1734410878678" duration="10727000" />
+      <workItem from="1734410878678" duration="17290000" />
     </task>
     <servers />
   </component>

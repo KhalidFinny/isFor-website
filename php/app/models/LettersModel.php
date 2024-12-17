@@ -171,6 +171,13 @@ class LettersModel
     }
 
 
+    public function searchLetters($keyword) {
+        $query = "EXEC sp_searchLetters @Keyword = :keyword";
+        $this->db->query($query);
+        $this->db->bind(':keyword', $keyword);
+        return $this->db->resultSet();
+    }
+
 //    public function searchLetter($user_id, $keyword){
 //        $this->db->query('SELECT * FROM letters WHERE user_id = :user_id AND title LIKE :keyword OR date LIKE :keyword');
 //        $this->db->bind(':user_id', $user_id);

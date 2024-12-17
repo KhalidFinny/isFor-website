@@ -229,11 +229,4 @@ class ResearchOutputModel
         $this->db->query("EXEC sp_countRejectedFiles");
         return $this->db->single()['total'];
     }
-
-    public function searchResearchOutputs($keyword) {
-        $query = "EXEC sp_searchFiles @Keyword = :keyword";
-        $this->db->query($query);
-        $this->db->bind(':keyword', $keyword);
-        return $this->db->resultSet();
-    }
 }

@@ -129,24 +129,25 @@
                         <div class="flex justify-between items-center">
                             <div class="relative flex items-center space-x-4">
                                 <!-- Animated Underline -->
-                                <div class="absolute bottom-0 h-0.5 bg-red-600 transition-all duration-300" id="activeIndicator"></div>
-                                
-                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn active" 
+                                <div class="absolute bottom-0 h-0.5 bg-red-600 transition-all duration-300"
+                                     id="activeIndicator"></div>
+
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn active"
                                         data-status="0"
                                         onclick="filter(0)">
                                     Semua
                                 </button>
-                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn" 
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
                                         data-status="2"
                                         onclick="filter(2)">
                                     Disetujui
                                 </button>
-                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn" 
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
                                         data-status="1"
                                         onclick="filter(1)">
                                     Tertunda
                                 </button>
-                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn" 
+                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
                                         data-status="3"
                                         onclick="filter(3)">
                                     Ditolak
@@ -299,7 +300,8 @@
 </div>
 
 <!-- Alert Container -->
-<div id="alertMessage" class="fixed top-0 right-0 m-8 transition-transform duration-300 transform translate-y-[-100%] hidden">
+<div id="alertMessage"
+     class="fixed top-0 right-0 m-8 transition-transform duration-300 transform translate-y-[-100%] hidden">
     <!-- Alert content will be injected here by showAlert() -->
 </div>
 
@@ -414,77 +416,17 @@
     const keyword = document.getElementById('keyword');
     let debounceTimeout;
 
-    keyword.addEventListener('keyup', function () {
-        // console.log(keyword.value)
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(function () {
-            $.ajax({
-                url: '<?= BASEURL ?>/letter/search',
-                method: 'POST',
-                dataType: 'json',
-                data: {keyword: keyword.value},
-                success: function (data) {
-                    // console.log('Success Response:', data);
-                    const letterContainer = document.querySelector(".letter-card table tbody");
-                    const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-                    const tableHeader = `
-                        <thead>
-                            <tr class="text-left text-sm font-medium text-gray-500">
-                                <th class="pb-4">Jenis Dokumen</th>
-                                <th class="pb-4">Tanggal</th>
-                                <th class="pb-4">Status</th>
-                                <th class="pb-4">Aksi</th>
-                            </tr>
-                        </thead>
-                    `;
-
-                    // Clear existing rows and add table header
-                    letterContainer.innerHTML = '';
-                    navElement.innerHTML = '';
-
-                    // Populate table rows with data
-                    data.forEach(letter => {
-                        let statusBadge = '';
-
-                        if (letter.status == 1) {
-                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-                        } else if (letter.status == 2) {
-                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
-                        } else {
-                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
-                        }
-
-                        const row = `
-                            <tr class="border-t border-gray-100">
-                                <td class="py-4">${letter.title}</td>
-                                <td class="py-4">${letter.date}</td>
-                                <td class="py-4">${statusBadge}</td>
-                                <td class="py-4">
-                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                                </td>
-                            </tr>
-                        `;
-                        letterContainer.innerHTML += row;
-                    });
-                },
-                error: function () {
-                    console.log('Error terjadi dalam request');
-                }
-            });
-        }, 500);
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const filterButtons = document.querySelectorAll('.filter-btn');
-        
+
         filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 // Remove active class from all buttons
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-                
+
                 // Add active class to clicked button
                 this.classList.add('active');
-                
+
                 // Call the existing filter function
                 filter(this.dataset.status);
             });
@@ -492,18 +434,18 @@
     });
 
     function showAlert(message, type = 'success') {
+
         const alertElement = document.getElementById('alertMessage');
         const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
         const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
         const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
-
         alertElement.innerHTML = `
             <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
                 <div class="flex-shrink-0 ${iconColor}">
-                    ${type === 'success' 
-                        ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-                        : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-                    }
+                    ${type === 'success'
+            ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+            : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+        }
                 </div>
                 <div class="ml-3 ${textColor} font-medium">${message}</div>
                 <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
@@ -515,18 +457,113 @@
         `;
 
         alertElement.style.transform = 'translateY(0)';
-        alertElement.classList.remove('hidden');
 
+        alertElement.classList.remove('hidden');
         // Auto hide after 5 seconds
+
         setTimeout(closeAlert, 5000);
     }
 
     function closeAlert() {
+
         const alertElement = document.getElementById('alertMessage');
         alertElement.style.transform = 'translateY(-100%)';
         setTimeout(() => alertElement.classList.add('hidden'), 300);
     }
 
+    $(document).ready(function () {
+        $('#keyword').on('keyup', function () {
+            let keyword = $(this).val(); // Ambil nilai input
+            let resultContainer = $('#resultContainer'); // Elemen untuk menampilkan hasil
+
+            $.ajax({
+                url: '<?= BASEURL; ?>/letters/search',
+                type: 'POST',
+                data: {keyword: keyword},
+                dataType: 'json',
+                success: function (data) {
+                    // Kosongkan elemen hasil
+                    resultContainer.empty();
+
+                    if (data.length > 0) {
+                        $.each(data, function (index, letter) {
+                            resultContainer.append(`
+                            <div class="p-2 border-b border-gray-200">
+                                <h4 class="text-lg font-medium text-gray-800">${letter.title}</h4>
+                                <p class="text-sm text-gray-500">Tanggal: ${letter.date}</p>
+                            </div>
+                        `);
+                        });
+                    } else {
+                        resultContainer.html('<p class="text-gray-500">Surat tidak ditemukan.</p>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+
+    //keyword.addEventListener('keyup', function () {
+    //    // console.log(keyword.value)
+    //    clearTimeout(debounceTimeout);
+    //    debounceTimeout = setTimeout(function () {
+    //        $.ajax({
+    //            url: '<?php //= BASEURL ?>///letter/search',
+    //            method: 'POST',
+    //            dataType: 'json',
+    //            data: {keyword: keyword.value},
+    //            success: function (data) {
+    //                // console.log('Success Response:', data);
+    //                const letterContainer = document.querySelector(".letter-card table tbody");
+    //                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+    //                const tableHeader = `
+    //                    <thead>
+    //                        <tr class="text-left text-sm font-medium text-gray-500">
+    //                            <th class="pb-4">Jenis Dokumen</th>
+    //                            <th class="pb-4">Tanggal</th>
+    //                            <th class="pb-4">Status</th>
+    //                            <th class="pb-4">Aksi</th>
+    //                        </tr>
+    //                    </thead>
+    //                `;
+    //
+    //                // Clear existing rows and add table header
+    //                letterContainer.innerHTML = '';
+    //                navElement.innerHTML = '';
+    //
+    //                // Populate table rows with data
+    //                data.forEach(letter => {
+    //                    let statusBadge = '';
+    //
+    //                    if (letter.status == 1) {
+    //                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
+    //                    } else if (letter.status == 2) {
+    //                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
+    //                    } else {
+    //                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
+    //                    }
+    //
+    //                    const row = `
+    //                        <tr class="border-t border-gray-100">
+    //                            <td class="py-4">${letter.title}</td>
+    //                            <td class="py-4">${letter.date}</td>
+    //                            <td class="py-4">${statusBadge}</td>
+    //                            <td class="py-4">
+    //                                <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+    //                            </td>
+    //                        </tr>
+    //                    `;
+    //                    letterContainer.innerHTML += row;
+    //                });
+    //            },
+    //            error: function () {
+    //                console.log('Error terjadi dalam request');
+    //            }
+    //        });
+    //    }, 500);
+    //});
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>

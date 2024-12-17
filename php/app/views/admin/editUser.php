@@ -115,12 +115,13 @@
                 <h2 class="text-2xl font-light text-red-500">Formulir Edit Pengguna</h2>
             </div>
 
-<!--            --><?php //if (isset($_SESSION['flash'])): ?>
-<!--                <div class="alert alert---><?php //= strpos($_SESSION['flash'], 'berhasil') !== false ? 'success' : 'danger'; ?><!-- mb-4">-->
-<!--                    --><?php //= $_SESSION['flash']; ?>
-<!--                </div>-->
-<!--                --><?php //unset($_SESSION['flash']); ?>
-<!--            --><?php //endif; ?>
+            <!--            --><?php //if (isset($_SESSION['flash'])): ?>
+            <!--                <div class="alert alert--->
+            <?php //= strpos($_SESSION['flash'], 'berhasil') !== false ? 'success' : 'danger'; ?><!-- mb-4">-->
+            <!--                    --><?php //= $_SESSION['flash']; ?>
+            <!--                </div>-->
+            <!--                --><?php //unset($_SESSION['flash']); ?>
+            <!--            --><?php //endif; ?>
 
             <form id="editUserForm" action="<?= BASEURL; ?>/User/edit" method="POST" class="p-8"
                   enctype="multipart/form-data">
@@ -202,30 +203,31 @@
     </main>
 </div>
 <script>
-    document.getElementById('editUserForm').addEventListener('submit', function (event) {
+    $('#editUserForm').on('submit', function (event) {
         event.preventDefault(); // Mencegah form dikirim secara default
 
         const formData = new FormData(this);
 
-        fetch('<?= BASEURL; ?>/User/edit', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
+        $.ajax({
+            url: '<?= BASEURL; ?>/User/edit',
+            type: 'POST',
+            data: formData,
+            processData: false, // Jangan memproses data menjadi string
+            contentType: false, // Jangan menetapkan tipe konten secara manual
+            success: function (data) {
                 if (data.status === 'success') {
                     alert(data.message); // Menampilkan pesan sukses
                     window.location.href = '<?= BASEURL; ?>/User'; // Redirect ke halaman user
                 } else {
                     alert(data.message); // Menampilkan pesan error
                 }
-            })
-            .catch(error => {
+            },
+            error: function (xhr, status, error) {
                 console.error('Error:', error);
-                alert('Terjadi kesalahan pada server. Silakan coba lagi.');
-            });
+                alert('Terjadi kesalahan saat mengirim data.');
+            }
+        });
     });
-
 </script>
 </body>
 </html>

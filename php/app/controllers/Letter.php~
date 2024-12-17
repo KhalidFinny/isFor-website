@@ -290,32 +290,14 @@ class Letter extends Controller
         echo json_encode($letters);
     }
 
+    public function search()
+    {
+        session_start();
+        $session = $_SESSION['user_id'];
+        $keyword = $_POST['keyword'];
 
-    public function search() {
-        if (isset($_POST['keyword'])) {
-            $keyword = $_POST['keyword'];
-
-            $lettersModel = $this->model('LettersModel');
-
-            try {
-                $results = $lettersModel->searchLetters($keyword);
-
-                header('Content-Type: application/json');
-                echo json_encode($results);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
-            }
-        }
+        $letters = $this->model('LettersModel')->searchLetter($session, $keyword);
+        // Lakukan pencarian berdasarkan keyword dan kirimkan hasilnya dalam format JSON
+        echo json_encode($letters);
     }
-//    public function search()
-//    {
-//        session_start();
-//        $session = $_SESSION['user_id'];
-//        $keyword = $_POST['keyword'];
-//
-//        $letters = $this->model('LettersModel')->searchLetter($session, $keyword);
-//        // Lakukan pencarian berdasarkan keyword dan kirimkan hasilnya dalam format JSON
-//        echo json_encode($letters);
-//    }
 }

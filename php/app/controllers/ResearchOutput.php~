@@ -160,7 +160,6 @@ class ResearchOutput extends Controller
         }
     }
 
-
     public function uploadFile()
     {
         $this->checkLogin();
@@ -328,6 +327,23 @@ class ResearchOutput extends Controller
 //        }
 //        exit();
 //    }
+
+    public function search() {
+        if (isset($_POST['keyword'])) {
+            $keyword = $_POST['keyword'];
+            $lettersModel = $this->model('LettersModel');
+
+            try {
+                $results = $lettersModel->searchResearchOutputs($keyword);
+
+                header('Content-Type: application/json');
+                echo json_encode($results);
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
+            }
+        }
+    }
 
     public function delete()
     {

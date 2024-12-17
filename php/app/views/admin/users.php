@@ -120,13 +120,15 @@ if (isset($_SESSION['message'])) {
         <main class="py-10 px-8">
             <!-- Back Button -->
             <div class="max-w-7xl mx-auto mb-12">
-        <a href="<?=BASEURL?>/dashboardAdmin" class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-            <span>Kembali</span>
-        </a>
-    </div>
+                <a href="<?= BASEURL ?>/dashboardAdmin"
+                   class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    <span>Kembali</span>
+                </a>
+            </div>
             <!-- Header -->
             <header class="max-w-7xl mx-auto mb-12 animate-fade-in">
                 <div class="flex items-center justify-between">
@@ -153,7 +155,7 @@ if (isset($_SESSION['message'])) {
                 <div class="px-8 py-6 border-b border-red-100 flex justify-between items-center">
                     <h2 class="text-2xl font-light text-red-500 tracking-tight">Daftar Pengguna</h2>
                     <div class="relative">
-                        <input type="text"
+                        <input type="text" id="searchUser"
                                placeholder="Cari pengguna..."
                                class="pl-11 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-600 placeholder-gray-400 w-64">
                         <svg class="w-5 h-5 absolute left-4 top-3 text-gray-400" fill="none" stroke="currentColor"
@@ -163,7 +165,9 @@ if (isset($_SESSION['message'])) {
                         </svg>
                     </div>
                 </div>
-
+                <div id="userList" class="mt-4">
+                    <!-- Hasil pencarian akan ditampilkan di sini -->
+                </div>
                 <?php if (empty($data)): ?>
                     <div class="text-center py-12">
                         <img src="<?= ASSETS; ?>/images/empty-user.png" alt="No Users" class="mx-auto h-40 opacity-50">
@@ -207,7 +211,8 @@ if (isset($_SESSION['message'])) {
                                                          src="<?= ASSETS ?>/images/empty-user.png" alt="">
                                                 <?php else: ?>
                                                     <img class="h-full w-full object-cover"
-                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>" alt="">
+                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>"
+                                                         alt="">
                                                 <?php endif; ?>
                                             </div>
                                             <div class="flex-1 min-w-0">
@@ -445,70 +450,41 @@ if (isset($_SESSION['message'])) {
         document.getElementById('file-name').textContent = fileName;
     });
 
-    //document.getElementById('addUserForm').addEventListener('submit', function (event) {
-    //    event.preventDefault(); // Mencegah form dikirim secara default
-    //
-    //    const formData = new FormData(this);
-    //
-    //    fetch('<?php //= BASEURL; ?>///User/create', {
-    //        method: 'POST',
-    //        body: formData
-    //    })
-    //        .then(response => {
-    //            // Cek apakah respons adalah HTML atau JSON
-    //            if (response.ok) {
-    //                return response.json();  // Pastikan respons adalah JSON
-    //            } else {
-    //                throw new Error('Server error: ' + response.status);
-    //            }
-    //        })
-    //        .then(data => {
-    //            console.log(data);
-    //            if (data.status === 'success') {
-    //                alert(data.message); // Menampilkan pesan sukses
-    //                window.location.href = '<?php //= BASEURL; ?>///User'; // Redirect ke halaman user
-    //            } else {
-    //                alert(data.message); // Menampilkan pesan error
-    //            }
-    //        })
-    //        .catch(error => {
-    //            console.error('Error:', error);
-    //            alert('Terjadi kesalahan pada server. Silakan coba lagi.');
-    //        });
-    //});
+    $(document).ready(function () {
+        $('#searchUser').on('keyup', function () {
+            let keyword = $(this).val(); // Ambil nilai input
+            let userList = $('#userList');
 
-    //document.getElementById('addUserForm').addEventListener('submit', function (event) {
-    //    event.preventDefault();
-    //
-    //    const formData = new FormData(this);
-    //
-    //    fetch('<?php //= BASEURL; ?>///User/create', {
-    //        method: 'POST',
-    //        body: formData,
-    //    })
-    //        .then(response => response.json())
-    //        .then(data => {
-    //            if (data.status === 'success') {
-    //                alert(data.message);
-    //                window.location.href = '<?php //= BASEURL; ?>///User';
-    //            } else if (data.status === 'error') {
-    //                let errorMessages = '';
-    //
-    //                if (Array.isArray(data.messages)) {
-    //                    errorMessages = data.messages.join('\n');
-    //                } else {
-    //                    errorMessages = data.message;
-    //                }
-    //
-    //                alert(errorMessages);
-    //            }
-    //        })
-    //        .catch(error => {
-    //            console.error('Error:', error);
-    //            alert('Terjadi kesalahan pada server. Silakan coba lagi.');
-    //        });
-    //});
+            $.ajax({
+                url: '<?= BASEURL; ?>/user/search',
+                type: 'POST',
+                data: {keyword: keyword},
+                dataType: 'json',
+                success: function (data) {
+                    // Kosongkan elemen hasil pencarian
+                    userList.empty();
+                    console.log(data);
 
+                    // Cek apakah ada hasil pencarian
+                    if (data.length > 0) {
+                        $.each(data, function (index, user) {
+                            userList.append(`
+                            <div class="p-2 border-b border-gray-200">
+                                <h4 class="text-lg font-medium text-gray-800">${user.name}</h4>
+                                <p class="text-sm text-gray-500">${user.email} (${user.username})</p>
+                            </div>
+                        `);
+                        });
+                    } else {
+                        userList.html('<p class="text-gray-500">Pengguna tidak ditemukan.</p>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>

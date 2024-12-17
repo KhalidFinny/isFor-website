@@ -172,7 +172,8 @@ class UsersModel
         return $result ? (int)$result['Total'] : 0;
     }
 
-    public function validateUser($name, $username, $email) {
+    public function validateUser($name, $username, $email)
+    {
         // Query untuk SQL Server
         $this->db->query("
             SELECT 
@@ -184,14 +185,22 @@ class UsersModel
         $this->db->bind(':name', $name);
         $this->db->bind(':username', $username);
         $this->db->bind(':email', $email);
-    
+
         $result = $this->db->single();
-    
+
         // Mengembalikan hasil validasi
         return [
             'name_exists' => $result['name_count'] > 0,
             'username_exists' => $result['username_count'] > 0,
             'email_exists' => $result['email_count'] > 0
         ];
+    }
+
+    public function searchUsers($keyword)
+    {
+        $query = "EXEC dbo.sp_searchUsers @Keyword = ?";
+        $this->db->query($query);
+        $this->db->bind(1, $keyword);
+        return $this->db->resultSet();
     }
 }
