@@ -5,21 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/php/app/views/admin/admin-files-history.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php/app/views/admin/admin-letter-history.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/config/config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/DashboardAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/DashboardAdmin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/helpers/SessionHelper.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/helpers/SessionHelper.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Home.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Home.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/editUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/AdminDashboard/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/AdminDashboard/sidebar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +57,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "last_opened_file_path": "C:/laragon/www/isFor-website/php/app/views/admin",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -123,7 +111,7 @@
       <workItem from="1734225885526" duration="14093000" />
       <workItem from="1734282560212" duration="10957000" />
       <workItem from="1734406459122" duration="173000" />
-      <workItem from="1734410878678" duration="8701000" />
+      <workItem from="1734410878678" duration="9205000" />
     </task>
     <servers />
   </component>
