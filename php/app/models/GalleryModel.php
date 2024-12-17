@@ -139,21 +139,17 @@ class GalleryModel
     public function getGalleriesWithPagination($limit, $offset)
     {
         $query = "EXEC sp_GetGalleriesWithPagination @Limit = :limit, @Offset = :offset";
-
         $this->db->query($query);
         $this->db->bind(':limit', $limit, PDO::PARAM_INT);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
-
         return $this->db->resultSet();
     }
 
     public function getTotalGalleries()
     {
         $query = "EXEC sp_GetTotalGalleries";
-
         $this->db->query($query);
         $result = $this->db->single();
-
         return $result ? (int)$result['total'] : 0;
     }
 }

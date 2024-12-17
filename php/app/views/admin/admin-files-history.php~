@@ -90,7 +90,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
+    <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
             <div class="max-w-7xl mx-auto">
@@ -131,18 +131,18 @@
                                         data-status="all" onclick="filter('0')">
                                     Semua
                                 </button>
-                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
-                                        data-status="1" onclick="filter(1)">
-                                    Tertunda
-                                </button>
-                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
-                                        data-status="2" onclick="filter(2)">
-                                    Disetujui
-                                </button>
-                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"
-                                        data-status="3" onclick="filter(3)">
-                                    Ditolak
-                                </button>
+<!--                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"-->
+<!--                                        data-status="1" onclick="filter(1)">-->
+<!--                                    Tertunda-->
+<!--                                </button>-->
+<!--                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"-->
+<!--                                        data-status="2" onclick="filter(2)">-->
+<!--                                    Disetujui-->
+<!--                                </button>-->
+<!--                                <button class="px-4 py-2 text-red-600 rounded-lg transition-colors relative filter-btn"-->
+<!--                                        data-status="3" onclick="filter(3)">-->
+<!--                                    Ditolak-->
+<!--                                </button>-->
                             </div>
                             <div class="relative">
                                 <input type="text" placeholder="Cari file..." id="keyword"

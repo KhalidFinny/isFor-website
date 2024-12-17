@@ -260,7 +260,7 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600 group-hover:text-gray-800">Pending Files</p>
-                            <p class="text-xl font-semibold text-yellow-600"><?= $data['pendingFiles']['total'] ?? 0 ?></p>
+                            <p class="text-xl font-semibold text-yellow-600"><?= $data['pendingFiles']?></p>
                         </div>
                     </div>
                 </div>
@@ -277,7 +277,7 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600 group-hover:text-gray-800">Rejected Items</p>
-                            <p class="text-xl font-semibold text-red-600">3</p>
+                            <p class="text-xl font-semibold text-red-600"><?= $data['totalRejected']; ?></p>
                         </div>
                     </div>
                 </div>

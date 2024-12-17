@@ -5,24 +5,28 @@ use Dompdf\Options;
 use GuzzleHttp\Psr7\Query;
 use Symfony\Component\VarDumper\VarDumper;
 
-class Letter extends Controller{
-    public function index(){
-        
+class Letter extends Controller
+{
+    public function index()
+    {
+
     }
 
-    public function addLetterView(){
+    public function addLetterView()
+    {
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-        if($role == 2){
+        if ($role == 2) {
             $this->saveLastVisitedPage();
             $this->view('user/submitLetter');
-        }else{
+        } else {
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
 
-    public function verifyLetterview() {
+    public function verifyLetterview()
+    {
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
@@ -51,7 +55,8 @@ class Letter extends Controller{
     }
 
     //untuk admin
-    public function getLetter() {
+    public function getLetter()
+    {
         $id = $_POST['id'];
         $letter = $this->model('LettersModel')->getLetterById($id);
 
@@ -60,8 +65,9 @@ class Letter extends Controller{
         echo json_encode($filePath);
     }
 
-    public function createLetter($preview = false){
-        
+    public function createLetter($preview = false)
+    {
+
         $researchTitle = $_POST["researchTitle"];
         $leadResearcher = $_POST["leadResearcher"];
         $researchScheme = $_POST["researchScheme"];
@@ -74,7 +80,7 @@ class Letter extends Controller{
         $options->setChroot(__DIR__);
         $dompdf = new Dompdf($options);
 
-        $html = file_get_contents( ASSETS . "/components/Doc/styleSurat.html");
+        $html = file_get_contents(ASSETS . "/components/Doc/styleSurat.html");
         $html = str_replace("{{ researchTitle }}", $researchTitle, $html);
         $html = str_replace("{{ leadResearcher }}", $leadResearcher, $html);
         $html = str_replace("{{ researchScheme }}", $researchScheme, $html);
@@ -100,9 +106,10 @@ class Letter extends Controller{
         $dompdf->stream($title);
     }
 
-    public function tgl_indo($tanggal){
-        $bulan = array (
-            1 =>   'Januari',
+    public function tgl_indo($tanggal)
+    {
+        $bulan = array(
+            1 => 'Januari',
             'Februari',
             'Maret',
             'April',
@@ -117,14 +124,16 @@ class Letter extends Controller{
         );
         $pecahkan = explode('-', $tanggal);
 
-        return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+        return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
 
-    public function previewLetter(){
+    public function previewLetter()
+    {
         $this->createLetter(true);
     }
 
-    public function sendLetter(){
+    public function sendLetter()
+    {
         $researchTitle = $_POST["researchTitle"];
         $pdf = $this->createLetter(false);
 
@@ -148,21 +157,22 @@ class Letter extends Controller{
         }
     }
 
-    public function updateStatusLetter(){
+    public function updateStatusLetter()
+    {
         $id = $_POST['id'];
         $status = $_POST['status'];
-    
+
         $affectedRows = $this->model('LettersModel')->updateStatusLetter($id, $status);
         if ($affectedRows > 0) {
             // Ambil nama file berdasarkan ID
             $fileName = $this->model('LettersModel')->getLetterById($id);
-            
+
             // Validasi fileName
             if (!$fileName) {
                 echo json_encode(['success' => false, 'message' => 'File tidak ditemukan']);
                 return;
             }
-            
+
             // $pathUpdate = $this->changePathFile($status, $fileName);
             // if ($pathUpdate) {
             //     echo json_encode(['success' => true, 'message' => 'Status diperbarui dan file berhasil dipindahkan']);
@@ -174,7 +184,7 @@ class Letter extends Controller{
             echo json_encode(['success' => false, 'message' => 'Tidak ada perubahan status']);
         }
     }
-    
+
     // // function untuk merubah path file
     // public function changePathFile($status, $fileName){
     //     // Tentukan path sumber dan tujuan
@@ -199,29 +209,61 @@ class Letter extends Controller{
     //     }
     // }
 
-    public function letterHistoryView(){
+    public function letterHistoryView()
+    {
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-        if($role == 2){
+        if ($role == 2) {
             $this->saveLastVisitedPage();
             $jumlahDataperhalaman = 3;
             $jumlahData = count($this->model('LettersModel')->getLetterByUserId($_SESSION['user_id']));
             $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-            $halamanAktif = ( isset($_GET["halaman"]) ) ? $_GET["halaman"] : 1;
+            $halamanAktif = (isset($_GET["halaman"])) ? $_GET["halaman"] : 1;
             $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-            
+
             $data['jumlahHalaman'] = $jumlahHalaman;
             $data['halamanAktif'] = $halamanAktif;
             $data['letter'] = $this->model('LettersModel')->countAllLeterbyUserId($_SESSION['user_id']);
             $data['allLetters'] = $this->model('LettersModel')->getLetterByUserIdPaginate($_SESSION['user_id'], $awalData, $jumlahDataperhalaman);
             $this->view('user/letter-history', $data);
-        }else{
+        } else {
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
 
-    public function filter(){
+    public function adminLetterHistoryView()
+    {
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
+
+        $jumlahDataperhalaman = 3;
+        $halamanAktif = (isset($_GET["halaman"])) ? (int)$_GET["halaman"] : 1;
+        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+
+        $lettersModel = $this->model('LettersModel');
+
+        if ($role == 1) {
+            $jumlahData = $lettersModel->countAllLetters();
+            $data['allLetters'] = $lettersModel->getAllLettersPaginate($awalData, $jumlahDataperhalaman);
+        } else {
+            header('Location: ' . $this->getLastVisitedPage());
+            exit;
+        }
+
+        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
+
+        $data['jumlahHalaman'] = $jumlahHalaman;
+        $data['halamanAktif'] = $halamanAktif;
+        $data['totalLetters'] = $jumlahData;
+
+        $this->view('admin/admin-letter-history', $data);
+    }
+
+
+    public function filter()
+    {
         session_start();
         $status = $_POST['status'];
         $userId = $_SESSION['user_id']; // Mengambil user ID dari sesi
@@ -248,7 +290,8 @@ class Letter extends Controller{
         echo json_encode($letters);
     }
 
-    public function search(){
+    public function search()
+    {
         session_start();
         $session = $_SESSION['user_id'];
         $keyword = $_POST['keyword'];

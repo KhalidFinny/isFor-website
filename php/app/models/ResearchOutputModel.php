@@ -169,4 +169,45 @@ class ResearchOutputModel
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
+
+    public function countAllFiles()
+    {
+        $this->db->query("SELECT COUNT(*) AS total FROM research_outputs");
+        return $this->db->single()['total'];
+    }
+
+    public function getAllPaginatedFiles($itemsPerPage, $offset)
+    {
+        $this->db->query("SELECT * FROM research_outputs ORDER BY uploaded_at DESC OFFSET :offset ROWS FETCH NEXT :items ROWS ONLY");
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':items', $itemsPerPage, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function countAllFilesByStatus($status)
+    {
+        $this->db->query("SELECT COUNT(*) AS total FROM research_outputs WHERE status = :status");
+        $this->db->bind(':status', $status, PDO::PARAM_INT);
+        return $this->db->single()['total'];
+    }
+
+    public function getAllPaginatedFilesByStatus($status, $itemsPerPage, $offset)
+    {
+        $this->db->query("SELECT * FROM research_outputs WHERE status = :status ORDER BY uploaded_at DESC OFFSET :offset ROWS FETCH NEXT :items ROWS ONLY");
+        $this->db->bind(':status', $status, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':items', $itemsPerPage, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function countPendingFiles() {
+        $this->db->query("SELECT COUNT(*) as total FROM research_outputs WHERE status = 1");
+        return $this->db->single()['total'];
+    }
+
+    public function countRejectedFiles() {
+        $this->db->query("SELECT COUNT(*) as total FROM research_outputs WHERE status = 3");
+        return $this->db->single()['total'];
+    }
+
 }

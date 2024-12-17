@@ -150,6 +150,25 @@ class LettersModel
         return $result ? (int)$result['total'] : 0;
     }
 
+    public function countAllLetters()
+    {
+        $this->db->query("SELECT COUNT(*) AS total FROM letters");
+        return $this->db->single()['total'];
+    }
+
+    public function getAllLettersPaginate($offset, $limit)
+    {
+        $this->db->query("SELECT * FROM letters ORDER BY [date] DESC OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY");
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function countRejectedLetters() {
+        $this->db->query("SELECT COUNT(*) as total FROM letters WHERE status = 3");
+        return $this->db->single()['total'];
+    }
+
 //    public function searchLetter($user_id, $keyword){
 //        $this->db->query('SELECT * FROM letters WHERE user_id = :user_id AND title LIKE :keyword OR date LIKE :keyword');
 //        $this->db->bind(':user_id', $user_id);

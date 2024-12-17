@@ -136,7 +136,8 @@ class GalleryModel
         return $debug['dbDeleteSuccess'];
     }
 
-    public function getGalleriesWithPagination($limit, $offset) {
+    public function getGalleriesWithPagination($limit, $offset)
+    {
         $query = "EXEC sp_GetGalleriesWithPagination @Limit = :limit, @Offset = :offset";
 
         $this->db->query($query);
@@ -146,13 +147,13 @@ class GalleryModel
         return $this->db->resultSet();
     }
 
-    // Menghitung total data galleries
     public function getTotalGalleries()
     {
-        $query = "SELECT COUNT(1) AS total FROM isfor_database.dbo.galleries";
+        $query = "EXEC sp_GetTotalGalleries";
 
         $this->db->query($query);
         $result = $this->db->single();
+
         return $result ? (int)$result['total'] : 0;
     }
 }

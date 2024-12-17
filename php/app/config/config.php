@@ -12,13 +12,13 @@ define('FILES', 'http://localhost/IsFor-website/php/app/files/research_output');
 // define('DB_USER', '');
 // define('DB_PASS', '');
 // define('DB_NAME', 'isfor_database');
-//
-//define('DB_HOST', '192.168.65.103');
-//define('DB_USER', 'sa');
-//define('DB_PASS', 'MySecureDB#456');
-//define('DB_NAME', 'isfor_database');
 
-define('DB_HOST', 'MSI\MSSQLSERVER02');
-define('DB_USER', '');
-define('DB_PASS', '');
+define('DB_HOST', '10.144.201.247');
+define('DB_USER', 'sa');
+define('DB_PASS', 'MySecureDB#456');
 define('DB_NAME', 'isfor_database');
+
+//define('DB_HOST', 'MSI\MSSQLSERVER02');
+//define('DB_USER', '');
+//define('DB_PASS', '');
+//define('DB_NAME', 'isfor_database');

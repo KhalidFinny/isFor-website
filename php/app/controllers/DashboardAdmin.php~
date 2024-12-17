@@ -10,7 +10,7 @@ class DashboardAdmin extends Controller{
             $data['no'] = 1;
             $data['user'] = $this->model('UsersModel')->getUserByUsername($_SESSION['username']);
             $data['pending'] = $this->model('LettersModel')->countPending();
-            $data['pendingFiles'] = $this->model('ResearchOutputModel')->countPendingFiles();
+            $data['pendingFiles'] = $this->model('ResearchOutputsModel')->countPendingFiles();
             $data['verify'] = $this->model('LettersModel')->countVerify();
             $data['rejectedLetters'] = $this->model('LettersModel')->countRejectedLetters();
             $data['rejectedFiles'] = $this->model('ResearchOutputModel')->countRejectedFiles();

@@ -115,7 +115,7 @@
             <div class="pt-2">
                 <span class="px-4 text-xs font-semibold text-red-500 uppercase tracking-wider">Riwayat</span>
                 <div class="mt-2 space-y-1">
-                    <a href="<?= BASEURL ?>/letter/letterHistoryView" 
+                    <a href="<?= BASEURL ?>/letter/adminLetterHistoryView"
                        class="flex items-center px-4 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
@@ -123,7 +123,7 @@
                         </svg>
                         <span class="font-medium">Riwayat Surat</span>
                     </a>
-                    <a href="<?= BASEURL ?>/researchoutput/researchHistoryView" 
+                    <a href="<?= BASEURL ?>/researchoutput/adminHistoryView"
                        class="flex items-center px-4 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 

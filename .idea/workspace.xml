@@ -5,13 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/php/app/views/admin/admin-files-history.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/app/views/admin/admin-letter-history.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/isfor_database.bak" beforeDir="false" afterPath="$PROJECT_DIR$/database/isfor_database.bak" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/sql_server_db.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel-Temp.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel-Temp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/config/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/DashboardAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/DashboardAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/helpers/SessionHelper.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/helpers/SessionHelper.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel-Temp.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel-Temp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/editUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/AdminDashboard/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/AdminDashboard/sidebar.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,22 +64,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/laragon/www/isFor-website/database&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/laragon/www/isFor-website/php/app/views/admin",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\isFor-website\php\app\views\admin" />
       <recent name="C:\laragon\www\isFor-website\database" />
       <recent name="C:\laragon\www\isFor-website\php\app\views\main" />
     </key>
@@ -112,7 +121,9 @@
       <workItem from="1733875891070" duration="11995000" />
       <workItem from="1733963584713" duration="4340000" />
       <workItem from="1734225885526" duration="14093000" />
-      <workItem from="1734282560212" duration="5827000" />
+      <workItem from="1734282560212" duration="10957000" />
+      <workItem from="1734406459122" duration="173000" />
+      <workItem from="1734410878678" duration="8701000" />
     </task>
     <servers />
   </component>

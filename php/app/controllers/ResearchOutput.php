@@ -65,7 +65,6 @@ class ResearchOutput extends Controller
         }
     }
 
-
     private function getOriginalFileName($fileNameWithExt)
     {
         $metaDir = __DIR__ . '/../files/meta/';
@@ -125,6 +124,41 @@ class ResearchOutput extends Controller
         }
     }
 
+    public function adminHistoryView($status = 'all')
+    {
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
+
+        if ($role == 1) {
+            $this->saveLastVisitedPage();
+            $researchOutputModel = $this->model('ResearchOutputModel');
+            $itemsPerPage = 6;
+            $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $offset = ($currentPage - 1) * $itemsPerPage;
+
+            if ($status === 'all') {
+                $totalFiles = $researchOutputModel->countAllFiles();
+                $files = $researchOutputModel->getAllPaginatedFiles($itemsPerPage, $offset);
+            } else {
+                $totalFiles = $researchOutputModel->countAllFilesByStatus($status);
+                $files = $researchOutputModel->getAllPaginatedFilesByStatus($status, $itemsPerPage, $offset);
+            }
+
+            $totalPages = ceil($totalFiles / $itemsPerPage);
+
+            $this->view('admin/admin-files-history', [
+                'totalFiles' => $totalFiles,
+                'files' => $files,
+                'selectedStatus' => $status,
+                'currentPage' => $currentPage,
+                'totalPages' => $totalPages,
+            ]);
+        } else {
+            // Redirect untuk non-admin
+            header('Location: ' . $this->getLastVisitedPage());
+        }
+    }
 
     public function uploadFile()
     {

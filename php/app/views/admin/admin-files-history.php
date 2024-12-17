@@ -90,7 +90,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
+    <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
             <div class="max-w-7xl mx-auto">

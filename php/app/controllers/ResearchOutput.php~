@@ -33,7 +33,7 @@ class ResearchOutput extends Controller
 
             // Ambil parameter halaman dari URL, default ke halaman 1
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-            $limit = 6; // Jumlah data per halaman
+            $limit = 4; // Jumlah data per halaman
             $offset = ($page - 1) * $limit; // Hitung offset berdasarkan halaman saat ini
 
             // Dapatkan total jumlah file pending
@@ -64,7 +64,6 @@ class ResearchOutput extends Controller
             exit;
         }
     }
-
 
     private function getOriginalFileName($fileNameWithExt)
     {
@@ -121,6 +120,42 @@ class ResearchOutput extends Controller
                 'totalPages' => $totalPages,
             ]);
         } else {
+            header('Location: ' . $this->getLastVisitedPage());
+        }
+    }
+
+    public function adminHistoryView($status = 'all')
+    {
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
+
+        if ($role == 1) {
+            $this->saveLastVisitedPage();
+            $researchOutputModel = $this->model('ResearchOutputModel');
+            $itemsPerPage = 6;
+            $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $offset = ($currentPage - 1) * $itemsPerPage;
+
+            if ($status === 'all') {
+                $totalFiles = $researchOutputModel->countAllFiles();
+                $files = $researchOutputModel->getAllPaginatedFiles($itemsPerPage, $offset);
+            } else {
+                $totalFiles = $researchOutputModel->countAllFilesByStatus($status);
+                $files = $researchOutputModel->getAllPaginatedFilesByStatus($status, $itemsPerPage, $offset);
+            }
+
+            $totalPages = ceil($totalFiles / $itemsPerPage);
+
+            $this->view('admin/admin-files-history', [
+                'totalFiles' => $totalFiles,
+                'files' => $files,
+                'selectedStatus' => $status,
+                'currentPage' => $currentPage,
+                'totalPages' => $totalPages,
+            ]);
+        } else {
+            // Redirect untuk non-admin
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
@@ -253,6 +288,8 @@ class ResearchOutput extends Controller
 
     public function filter()
     {
+        // echo json_encode($_POST);
+
         session_start();
         // Ambil `status` dari permintaan POST
         $status = isset($_POST['status']) ? $_POST['status'] : null;
@@ -265,13 +302,13 @@ class ResearchOutput extends Controller
                 $outputs = $model->getFilesByUser($userId);
                 break;
             case 1: // Data tertunda
-                $outputs = $model->getFilesByUserAndStatus($userId, 'pending');
+                $outputs = $model->getFilesByUserAndStatus($userId, '1');
                 break;
             case 2: // Data disetujui
-                $outputs = $model->getFilesByUserAndStatus($userId, 'approved');
+                $outputs = $model->getFilesByUserAndStatus($userId, '2');
                 break;
             case 3: // Data ditolak
-                $outputs = $model->getFilesByUserAndStatus($userId, 'rejected');
+                $outputs = $model->getFilesByUserAndStatus($userId, '3');
                 break;
             default:
                 echo json_encode(['error' => 'Invalid status']);
