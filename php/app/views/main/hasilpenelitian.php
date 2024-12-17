@@ -93,14 +93,14 @@ session_start();
             <?php
             $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
             foreach ($topics as $index => $topic): ?>
-                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
+                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>" onclick="filter(<?php echo $index; ?>)">
                     <?php echo $topic; ?>
                 </button>
             <?php endforeach; ?>
         </div>
 
         <!-- Files Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="files-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php if (isset($data['researchOutputs']) && !empty($data['researchOutputs'])): ?>
                 <?php foreach ($data['researchOutputs'] as $item): ?>
                     <div class="file-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
@@ -312,6 +312,89 @@ session_start();
             });
         }
     }
+
+    function filter(status) {
+        $.ajax({
+            url: '<?= BASEURL ?>/home/filterHasilPenelitian',
+            method: 'POST',
+            dataType: 'json',
+            data: {status: status},
+            success: function (data) {
+                console.log('Success Response:', data);
+
+                const fileContainer = document.querySelector(".files-container");
+                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+
+                fileContainer.innerHTML = '';
+                navElement.innerHTML = '';
+
+                data.forEach(file => {
+                    const fileHTML = `
+                        <div class="file-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 visible">
+                        <!-- Category Badge -->
+                        <div class="px-6 py-4 border-b border-gray-100">
+                            <span class="inline-block px-3 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-full">
+                                ${file.category}
+                            </span>
+                        </div>
+
+                        <!-- File Info -->
+                        <div class="p-6">
+                            <div class="flex items-start gap-4">
+                                <!-- File Icon -->
+                                <div class="text-gray-400">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+
+                                <!-- Title and Description -->
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900 mb-1">${file.title}</h3>
+                                    <p class="text-sm text-gray-500 mb-2">${file.description}</p>
+                                    <span class="text-xs text-gray-400">
+                                        Uploaded on ${new Date(file.uploaded_at).toLocaleDateString('id-ID', {
+                                            day: '2-digit', month: 'short', year: 'numeric'
+                                        })}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex justify-end gap-2 mt-4 pt-4 border-t border-gray-100">
+                                <!-- Preview Button -->
+                                <button onclick="previewFile('${file.file_url}')"
+                                        class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Preview">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+
+                                <!-- Download Button -->
+                                <a href="${file.file_url}" class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" download>
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                fileContainer.insertAdjacentHTML('beforeend', fileHTML);
+                });
+                
+            },
+            error: function (xhr, status, error) {
+                console.error('Error Status:', status);
+                console.error('Error Details:', error);
+                console.error('Response Text:', xhr.responseText);
+            }
+        });
+    }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

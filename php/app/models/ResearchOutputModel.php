@@ -169,4 +169,22 @@ class ResearchOutputModel
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
+
+    public function getresearchDIPASWA()
+    {
+        $this->db->query("SELECT * FROM research_outputs WHERE category LIKE 'DIPA SWADANA'");
+        return $this->db->resultSet();
+    }
+
+    public function getresearchDIPAPNBP()
+    {
+        $this->db->query("SELECT * FROM research_outputs WHERE category LIKE 'DIPA PNBP'");
+        return $this->db->resultSet();
+    }
+
+    public function getresearchTesis()
+    {
+        $this->db->query("SELECT * FROM research_outputs WHERE category LIKE 'Tesis Magister'");
+        return $this->db->resultSet();
+    }
 }

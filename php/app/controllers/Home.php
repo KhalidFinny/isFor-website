@@ -97,6 +97,33 @@ class Home extends Controller
         $this->view('main/hasilpenelitian', $data);
     }
 
+    public function filterHasilPenelitian(){
+
+        
+        $status = $_POST['status'];
+
+        switch ($status) {
+            case 0: // Semua hasil penelitian
+                $hasil = $this->model('ResearchOutputModel')->getAll();
+                break;
+            case 1: // DIPA SWADANA
+                $hasil = $this->model('ResearchOutputModel')->getresearchDIPASWA();
+                break;
+            case 2: // DIPA PNBP
+                $hasil = $this->model('ResearchOutputModel')->getresearchDIPAPNBP();
+                break;
+            case 3: // Tesis Magister
+                $hasil = $this->model('ResearchOutputModel')->getresearchTesis();
+                break;
+            default:
+                echo json_encode(['error' => 'Invalid status']);
+                return;
+        }
+
+        // error_log(json_encode($letters)); // Debug output
+        echo json_encode($hasil);
+    }
+
     public function archives()
     {
         $this->view('main/dokumen');
