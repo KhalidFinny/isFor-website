@@ -49,13 +49,12 @@ class RoadmapsModel
         return $this->db->rowCount();
     }
 
-
     public function getRoadmapByPeriode($year_start, $year_end)
     {
-        $query = "SELECT * FROM roadmaps WHERE year_start = :year_start AND year_end = :year_end";
+        $query = "EXEC sp_getRoadmapByPeriode @year_start = :year_start, @year_end = :year_end";
         $this->db->query($query);
-        $this->db->bind(':year_start', $year_start);
-        $this->db->bind(':year_end', $year_end);
+        $this->db->bind(':year_start', $year_start, PDO::PARAM_INT);
+        $this->db->bind(':year_end', $year_end, PDO::PARAM_INT);
         $this->db->execute();
         return $this->db->resultSet();
     }

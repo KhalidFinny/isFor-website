@@ -28,6 +28,23 @@ class ResearchOutputModel
         }
     }
 
+    public function update($id, $file_url, $title, $category, $status)
+    {
+        $this->db->query('EXEC sp_UpdateResearchOutput :id, :file_url, :title, :category, :status');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':file_url', $file_url);
+        $this->db->bind(':title', $title);
+        $this->db->bind(':category', $category);
+        $this->db->bind(':status', $status);
+
+        try {
+            $this->db->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function getAll()
     {
         $this->db->query('EXEC sp_GetAllResearchOutputs');
@@ -55,29 +72,12 @@ class ResearchOutputModel
         return $this->db->single();
     }
 
-    public function update($id, $file_url, $title, $category, $status)
-    {
-        $this->db->query('EXEC sp_UpdateResearchOutput :id, :file_url, :title, :category, :status');
-        $this->db->bind(':id', $id);
-        $this->db->bind(':file_url', $file_url);
-        $this->db->bind(':title', $title);
-        $this->db->bind(':category', $category);
-        $this->db->bind(':status', $status);
-
-        try {
-            $this->db->execute();
-            return true;
-        } catch (PDOException $e) {
-            return false;
-        }
-    }
-
     public function updateStatus($id, $status)
     {
-        $query = "UPDATE " . $this->table . " SET status = :status WHERE research_output_id = :id";
+        $query = "EXEC sp_updateStatus @id = :id, @status = :status";
         $this->db->query($query);
-        $this->db->bind(':status', $status);
-        $this->db->bind(':id', $id);
+        $this->db->bind(':id', $id, PDO::PARAM_INT);
+        $this->db->bind(':status', $status, PDO::PARAM_INT);
         try {
             $this->db->execute();
             return true;
@@ -170,61 +170,63 @@ class ResearchOutputModel
         return $this->db->execute();
     }
 
-    public function getresearchDIPASWA()
+    public function getResearchDIPASWA()
     {
-        $this->db->query("SELECT * FROM research_outputs WHERE category LIKE 'DIPA SWADANA'");
+        $this->db->query("EXEC sp_getResearchDIPASWA");
         return $this->db->resultSet();
     }
 
-    public function getresearchDIPAPNBP()
+    public function getResearchDIPAPNBP()
     {
-        $this->db->query("SELECT * FROM research_outputs WHERE category LIKE 'DIPA PNBP'");
+        $this->db->query("EXEC sp_getResearchDIPAPNBP");
         return $this->db->resultSet();
     }
 
-    public function getresearchTesis()
+    public function getResearchTesis()
     {
-        $this->db->query("SELECT * FROM research_outputs WHERE category LIKE 'Tesis Magister'");
+        $this->db->query("EXEC sp_getResearchTesis");
         return $this->db->resultSet();
     }
 
     public function countAllFiles()
     {
-        $this->db->query("SELECT COUNT(*) AS total FROM research_outputs");
+        $this->db->query("EXEC sp_countAllFiles");
         return $this->db->single()['total'];
     }
 
     public function getAllPaginatedFiles($itemsPerPage, $offset)
     {
-        $this->db->query("SELECT * FROM research_outputs ORDER BY uploaded_at DESC OFFSET :offset ROWS FETCH NEXT :items ROWS ONLY");
+        $this->db->query("EXEC sp_getAllPaginatedFiles @itemsPerPage = :itemsPerPage, @offset = :offset");
+        $this->db->bind(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
-        $this->db->bind(':items', $itemsPerPage, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function countAllFilesByStatus($status)
     {
-        $this->db->query("SELECT COUNT(*) AS total FROM research_outputs WHERE status = :status");
+        $this->db->query("EXEC sp_countAllFilesByStatus @status = :status");
         $this->db->bind(':status', $status, PDO::PARAM_INT);
         return $this->db->single()['total'];
     }
 
     public function getAllPaginatedFilesByStatus($status, $itemsPerPage, $offset)
     {
-        $this->db->query("SELECT * FROM research_outputs WHERE status = :status ORDER BY uploaded_at DESC OFFSET :offset ROWS FETCH NEXT :items ROWS ONLY");
+        $this->db->query("EXEC sp_getAllPaginatedFilesByStatus @status = :status, @itemsPerPage = :items, @offset = :offset");
         $this->db->bind(':status', $status, PDO::PARAM_INT);
-        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         $this->db->bind(':items', $itemsPerPage, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
-    public function countPendingFiles() {
-        $this->db->query("SELECT COUNT(*) as total FROM research_outputs WHERE status = 1");
+    public function countPendingFiles()
+    {
+        $this->db->query("EXEC sp_countPendingFiles");
         return $this->db->single()['total'];
     }
 
-    public function countRejectedFiles() {
-        $this->db->query("SELECT COUNT(*) as total FROM research_outputs WHERE status = 3");
+    public function countRejectedFiles()
+    {
+        $this->db->query("EXEC sp_countRejectedFiles");
         return $this->db->single()['total'];
     }
 }

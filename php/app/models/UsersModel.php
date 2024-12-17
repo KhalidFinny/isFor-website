@@ -55,21 +55,6 @@ class UsersModel
         return $this->db->resultSet();
     }
 
-    // fungsi menambah user
-//CREATE PROCEDURE AddUser
-//@name NVARCHAR(100),
-//@username NVARCHAR(100),
-//@password NVARCHAR(255),
-//@profile_picture NVARCHAR(255),
-//@role_id INT,
-//@user_email NVARCHAR(255)
-//AS
-//BEGIN
-//SET NOCOUNT ON;
-//
-//INSERT INTO users (name, username, password, email, profile_picture, role_id)
-//VALUES (@name, @username, @password, @user_email, @profile_picture, @role_id);
-//END;
     public function addUser($email, $data, $photo)
     {
         $this->db->query('EXEC AddUser @name = :name, @username = :username, @password = :password, 
@@ -89,7 +74,6 @@ class UsersModel
             return false;
         }
     }
-
 
     //fungsi mencari user berdasarkan username
     public function getUserByUsername($username)
@@ -188,7 +172,6 @@ class UsersModel
         return $result ? (int)$result['Total'] : 0;
     }
 
-    // fungsi untuk memvalidasi apakah nama, username, dan email sudah ada di database
     public function validateUser($name, $username, $email) {
         // Query untuk SQL Server
         $this->db->query("
