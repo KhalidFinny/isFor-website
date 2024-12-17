@@ -18,7 +18,7 @@
         </div>
 
         <!-- Navigation -->
-        <nav class="p-4 space-y-1">
+        <div class="p-4 space-y-1 overflow-y-auto h-[calc(100vh-64px)]">
             <!-- Main Dashboard -->
             <a href="<?=BASEURL?>/dashboardAdmin"
                class="flex items-center px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
@@ -145,7 +145,7 @@
                     Beranda
                 </a>
             </div>
-        </nav>
+        </div>
     </div>
 </body>
 </html>
