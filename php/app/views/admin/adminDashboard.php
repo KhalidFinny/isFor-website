@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
           rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -260,7 +261,7 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600 group-hover:text-gray-800">Pending Files</p>
-                            <p class="text-xl font-semibold text-yellow-600"><?= $data['pendingFiles']?></p>
+                            <p class="text-xl font-semibold text-yellow-600"><?= $data['pendingFiles'] ?></p>
                         </div>
                     </div>
                 </div>
@@ -295,7 +296,7 @@
                         <h2 class="text-2xl font-light text-red-500 tracking-tight">Recent Users</h2>
                         <div class="relative">
                             <input type="text"
-                                   placeholder="Search users..."
+                                   placeholder="Search users..." id="searchUser"
                                    class="pl-11 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-600 placeholder-gray-400 w-64"
                             >
                             <svg class="w-5 h-5 absolute left-4 top-3 text-gray-400" fill="none" stroke="currentColor"
@@ -305,6 +306,7 @@
                             </svg>
                         </div>
                     </div>
+                    <div id="userList" class="mt-4"></div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full">
                             <thead>
@@ -338,7 +340,8 @@
                                                          src="<?= ASSETS ?>/images/empty-user.png" alt="">
                                                 <?php else: ?>
                                                     <img class="h-full w-full object-cover"
-                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>" alt="">
+                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>"
+                                                         alt="">
                                                 <?php endif; ?>
                                             </div>
                                             <div class="flex-1 min-w-0">
@@ -478,6 +481,42 @@
     // Initialize DateTime
     updateDateTime();
     setInterval(updateDateTime, 1000);
+
+    $(document).ready(function () {
+        $('#searchUser').on('keyup', function () {
+            let keyword = $(this).val(); // Ambil nilai input
+            let userList = $('#userList');
+
+            $.ajax({
+                url: '<?= BASEURL; ?>/user/search',
+                type: 'POST',
+                data: {keyword: keyword},
+                dataType: 'json',
+                success: function (data) {
+                    // Kosongkan elemen hasil pencarian
+                    userList.empty();
+                    console.log(data);
+
+                    // Cek apakah ada hasil pencarian
+                    if (data.length > 0) {
+                        $.each(data, function (index, user) {
+                            userList.append(`
+                            <div class="p-2 border-b border-gray-200">
+                                <h4 class="text-lg font-medium text-gray-800">${user.name}</h4>
+                                <p class="text-sm text-gray-500">${user.email} (${user.username})</p>
+                            </div>
+                        `);
+                        });
+                    } else {
+                        userList.html('<p class="text-gray-500">Pengguna tidak ditemukan.</p>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>

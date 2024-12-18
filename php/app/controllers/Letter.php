@@ -185,53 +185,6 @@ class Letter extends Controller
         }
     }
 
-    // // function untuk merubah path file
-    // public function changePathFile($status, $fileName){
-    //     // Tentukan path sumber dan tujuan
-    //     if ($status == 2) {  // Status Verified
-    //         $sourcePath = realpath(__DIR__ . '/../letters/pending/' . $fileName);
-    //         $destPath = realpath(__DIR__ . '/../letters/verified/' . $fileName);
-    //     } else if ($status == 3) {  // Status Rejected
-    //         $sourcePath = realpath(__DIR__ . '/../letters/pending/' . $fileName);
-    //         $destPath = realpath(__DIR__ . '/../letters/reject/' . $fileName);
-    //     }
-    //     // Pastikan file ada sebelum mencoba untuk memindahkannya
-    //     if (file_exists($sourcePath)) {
-    //         if (copy($sourcePath, $destPath)) {
-    //             return true;  // Cukup mengembalikan true atau false
-    //         } else {
-    //             // Jika gagal memindahkan file
-    //             return false;
-    //         }
-    //     } else {
-    //         // Jika file sumber tidak ditemukan
-    //         return false;
-    //     }
-    // }
-
-    public function letterHistoryView()
-    {
-        $this->checkLogin();
-        $role = $this->checkRole();
-        $this->checkSessionTimeOut();
-        if ($role == 2) {
-            $this->saveLastVisitedPage();
-            $jumlahDataperhalaman = 3;
-            $jumlahData = count($this->model('LettersModel')->getLetterByUserId($_SESSION['user_id']));
-            $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-            $halamanAktif = (isset($_GET["halaman"])) ? $_GET["halaman"] : 1;
-            $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-
-            $data['jumlahHalaman'] = $jumlahHalaman;
-            $data['halamanAktif'] = $halamanAktif;
-            $data['letter'] = $this->model('LettersModel')->countAllLeterbyUserId($_SESSION['user_id']);
-            $data['allLetters'] = $this->model('LettersModel')->getLetterByUserIdPaginate($_SESSION['user_id'], $awalData, $jumlahDataperhalaman);
-            $this->view('user/letter-history', $data);
-        } else {
-            header('Location: ' . $this->getLastVisitedPage());
-        }
-    }
-
     public function adminLetterHistoryView()
     {
         $this->checkLogin();
@@ -260,7 +213,6 @@ class Letter extends Controller
 
         $this->view('admin/admin-letter-history', $data);
     }
-
 
     public function filter()
     {
@@ -291,7 +243,8 @@ class Letter extends Controller
     }
 
 
-    public function search() {
+    public function search()
+    {
         if (isset($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
 
@@ -308,14 +261,76 @@ class Letter extends Controller
             }
         }
     }
-//    public function search()
-//    {
-//        session_start();
-//        $session = $_SESSION['user_id'];
-//        $keyword = $_POST['keyword'];
-//
-//        $letters = $this->model('LettersModel')->searchLetter($session, $keyword);
-//        // Lakukan pencarian berdasarkan keyword dan kirimkan hasilnya dalam format JSON
-//        echo json_encode($letters);
-//    }
+
+
+    public function letterHistoryView()
+    {
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
+        if ($role == 2) {
+            $this->saveLastVisitedPage();
+            $jumlahDataperhalaman = 3;
+            $jumlahData = count($this->model('LettersModel')->getLetterByUserId($_SESSION['user_id']));
+            $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
+            $halamanAktif = (isset($_GET["halaman"])) ? $_GET["halaman"] : 1;
+            $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+
+            $data['user_id'] = $_SESSION['user_id'];
+            $data['jumlahHalaman'] = $jumlahHalaman;
+            $data['halamanAktif'] = $halamanAktif;
+            $data['letter'] = $this->model('LettersModel')->countAllLeterbyUserId($_SESSION['user_id']);
+            $data['allLetters'] = $this->model('LettersModel')->getLetterByUserIdPaginate($_SESSION['user_id'], $awalData, $jumlahDataperhalaman);
+            $this->view('user/letter-history', $data);
+        } else {
+            header('Location: ' . $this->getLastVisitedPage());
+        }
+    }
+
+    public function searchByUserId()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+//            $_SESSION['user_id'] = 2;
+//            $_SESSION['username'] = 'user';
+//            session_write_close();
+            echo 'Session ID: ' . session_id();
+        }
+        echo 'Session Save Path: ' . ini_get('session.save_path');
+
+
+        var_dump($_SESSION);
+        var_dump($_COOKIE);
+        header('Content-Type: application/json');
+
+        echo json_encode([
+            'session_id' => session_id(),
+            'session_data' => $_SESSION,
+            'cookies' => $_COOKIE
+        ]);
+
+        if (!isset($_SESSION['user_id'])) {
+            echo json_encode(['error' => 'User tidak terautentikasi.']);
+            exit;
+        }
+
+        if (isset($_POST['keyword'])) {
+            $keyword = $_POST['keyword'];
+            $user_id = $_SESSION['user_id']; // Ambil user_id dari sesi
+
+            $lettersModel = $this->model('LettersModel');
+
+            try {
+                $results = $lettersModel->searchLettersByUserId($keyword, $user_id);
+
+                header('Content-Type: application/json');
+                echo json_encode($results);
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
+            }
+        } else {
+            echo json_encode(['error' => 'Keyword tidak ditemukan.']);
+        }
+    }
 }

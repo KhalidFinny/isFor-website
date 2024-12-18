@@ -437,31 +437,28 @@
         $(document).ready(function () {
             $('#keyword').on('keyup', function () {
                 let keyword = $(this).val(); // Ambil nilai input
-                let resultsDiv = $('#results');
+                let resultContainer = $('#resultContainer'); // Elemen untuk menampilkan hasil
 
                 $.ajax({
-                    url: '<?= BASEURL; ?>/letter/search',
+                    url: '<?= BASEURL; ?>/letters/search',
                     type: 'POST',
                     data: {keyword: keyword},
                     dataType: 'json',
                     success: function (data) {
-                        // Kosongkan elemen hasil pencarian
-                        resultsDiv.empty();
-                        console.log(data);
+                        // Kosongkan elemen hasil
+                        resultContainer.empty();
 
-                        // Cek apakah ada hasil pencarian
                         if (data.length > 0) {
-                            $.each(data, function (index, item) {
-                                resultsDiv.append(`
+                            $.each(data, function (index, letter) {
+                                resultContainer.append(`
                             <div class="p-2 border-b border-gray-200">
-                                <h4 class="text-lg font-medium text-gray-800">${item.title}</h4>
-                                <p class="text-sm text-gray-500">${item.category} - ${item.uploaded_at}</p>
-                                <a href="${item.file_url}" class="text-red-500 underline">Download File</a>
+                                <h4 class="text-lg font-medium text-gray-800">${letter.title}</h4>
+                                <p class="text-sm text-gray-500">Tanggal: ${letter.date}</p>
                             </div>
                         `);
                             });
                         } else {
-                            resultsDiv.html('<p class="text-gray-500">Hasil tidak ditemukan.</p>');
+                            resultContainer.html('<p class="text-gray-500">Surat tidak ditemukan.</p>');
                         }
                     },
                     error: function (xhr, status, error) {
@@ -470,7 +467,6 @@
                 });
             });
         });
-
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>

@@ -529,6 +529,39 @@
         setTimeout(() => alertElement.classList.add('hidden'), 300);
     }
 
+    $(document).ready(function () {
+        $('#keyword').on('keyup', function () {
+            let keyword = $(this).val(); // Ambil nilai input
+            let resultContainer = $('#resultContainer'); // Elemen untuk menampilkan hasil
+
+            $.ajax({
+                url: '<?= BASEURL; ?>/letters/search',
+                type: 'POST',
+                data: {keyword: keyword},
+                dataType: 'json',
+                success: function (data) {
+                    // Kosongkan elemen hasil
+                    resultContainer.empty();
+
+                    if (data.length > 0) {
+                        $.each(data, function (index, letter) {
+                            resultContainer.append(`
+                            <div class="p-2 border-b border-gray-200">
+                                <h4 class="text-lg font-medium text-gray-800">${letter.title}</h4>
+                                <p class="text-sm text-gray-500">Tanggal: ${letter.date}</p>
+                            </div>
+                        `);
+                        });
+                    } else {
+                        resultContainer.html('<p class="text-gray-500">Surat tidak ditemukan.</p>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>

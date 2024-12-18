@@ -171,12 +171,44 @@ class LettersModel
     }
 
 
-    public function searchLetters($keyword) {
+    public function searchLetters($keyword)
+    {
         $query = "EXEC sp_searchLetters @Keyword = :keyword";
         $this->db->query($query);
         $this->db->bind(':keyword', $keyword);
         return $this->db->resultSet();
     }
+
+    public function searchLettersByUserId($keyword, $user_id) {
+        try {
+            $query = "SELECT * 
+                  FROM letters 
+                  WHERE (title LIKE ? OR file_url LIKE ?) 
+                  AND user_id = ?";
+
+            $this->db->query($query);
+            $this->db->bind(1, '%' . $keyword . '%', PDO::PARAM_STR);
+            $this->db->bind(2, '%' . $keyword . '%', PDO::PARAM_STR);
+            $this->db->bind(3, $user_id, PDO::PARAM_INT);
+
+            // Log query dan parameter
+            error_log("Query: $query");
+            error_log("Keyword: %$keyword%");
+            error_log("User ID: $user_id");
+
+            $results = $this->db->resultSet();
+            if (empty($results)) {
+                error_log('Tidak ada hasil ditemukan.');
+                return [];
+            }
+
+            return $results;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
 
 //    public function searchLetter($user_id, $keyword){
 //        $this->db->query('SELECT * FROM letters WHERE user_id = :user_id AND title LIKE :keyword OR date LIKE :keyword');

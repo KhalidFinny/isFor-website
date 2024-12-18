@@ -6,16 +6,32 @@
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Galleries.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Galleries.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Home.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Home.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/675e6a640f908.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/675e6a8608a73.pdf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/675e6ade06e3e.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/675e6aee8bc66.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/675e6b03ecca2.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/meta/675e6b1bea1ac.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/675e6a640f908.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/675e6a8608a73.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/675e6ade06e3e.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/675e6aee8bc66.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/675e6b03ecca2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/675e6b1bea1ac.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757db3ec35f0_penelitian-2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757ea5b6f5ce_admin.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6757faa22ffca_67564f8e5743d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/67585eba57c23_admin.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/675fb345316ae_penelitian-2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/675fb35526f6c_kucing.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/675fb3620b16d_admin.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/675fb36f33b22_admin.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/UsersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/UsersModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/editUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/letter-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/letter-history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,20 +76,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/laragon/www/isFor-website/php/app/views/admin",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/laragon/www/isFor-website/php/app/views/admin&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\laragon\www\isFor-website\php\app\views\admin" />
@@ -119,7 +135,11 @@
       <workItem from="1734225885526" duration="14093000" />
       <workItem from="1734282560212" duration="10957000" />
       <workItem from="1734406459122" duration="173000" />
-      <workItem from="1734410878678" duration="17290000" />
+      <workItem from="1734410878678" duration="17429000" />
+      <workItem from="1734442470687" duration="1391000" />
+      <workItem from="1734449338708" duration="7275000" />
+      <workItem from="1734504224259" duration="4477000" />
+      <workItem from="1734513515471" duration="7365000" />
     </task>
     <servers />
   </component>

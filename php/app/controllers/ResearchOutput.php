@@ -272,7 +272,7 @@ class ResearchOutput extends Controller
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
 
-        if ($role == 1) { // Pastikan hanya admin yang bisa menolak
+        if ($role == 1) {
             $model = $this->model("ResearchOutputModel");
             if ($model->updateStatus($id, 3)) { // Status 3 untuk rejected
                 echo json_encode(['success' => true, 'message' => 'Image rejected successfully.']);
@@ -318,17 +318,8 @@ class ResearchOutput extends Controller
         echo json_encode($outputs);
     }
 
-//    public function delete($id)
-//    {
-//        if ($this->model('ResearchOutputModel')->delete($id) > 0) {
-//            echo json_encode(['success' => true]);
-//        } else {
-//            echo json_encode(['success' => false, 'message' => 'Failed to delete the image.']);
-//        }
-//        exit();
-//    }
-
-    public function search() {
+    public function search()
+    {
         if (isset($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
             $researchOutputModel = $this->model('ResearchOutputModel');
@@ -350,16 +341,28 @@ class ResearchOutput extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
-            if ($id && $this->model('ResearchOutputModel')->delete($id) > 0) {
-                echo json_encode(['success' => true]);
+            if ($id) {
+                $result = $this->model('ResearchOutputModel')->delete($id);
+
+                if ($result['dbDeleteSuccess']) {
+                    if ($result['unlinkFileSuccess'] && $result['unlinkMetaSuccess']) {
+                        echo json_encode(['success' => true, 'message' => 'File dan metadata berhasil dihapus.']);
+                    } else {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'File berhasil dihapus dari database, tetapi ada kesalahan saat menghapus file atau metadata.',
+                        ]);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Gagal menghapus data dari database.']);
+                }
             } else {
-                echo json_encode(['success' => false, 'message' => 'Failed to delete the file.']);
+                echo json_encode(['success' => false, 'message' => 'ID tidak valid.']);
             }
         } else {
             http_response_code(405); // Method not allowed
-            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+            echo json_encode(['success' => false, 'message' => 'Metode tidak valid.']);
         }
         exit();
     }
-
 }

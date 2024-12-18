@@ -68,72 +68,35 @@ class GalleryModel
         return $this->db->resultSet();
     }
 
-//    public function delete($id)
-//    {
-//        $this->db->query('EXEC sp_DeleteGallery :id');
-//        $this->db->bind(':id', $id);
-//        return $this->db->execute();
-//    }
-//    public function delete($id)
-//    {
-//        $query = "DELETE FROM " . $this->table . " WHERE gallery_id = :id";
-//        $this->db->query($query);
-//        $this->db->bind(':id', $id);
-//        return $this->db->execute();
-//    }
-//    public function delete($id)
-//    {
-//        // Ambil nama file berdasarkan ID dari database
-//        $queryGetImage = "SELECT image FROM " . $this->table . " WHERE gallery_id = :id";
-//        $this->db->query($queryGetImage);
-//        $this->db->bind(':id', $id);
-//        $imageName = $this->db->single()['image'];
-//
-//        // Lokasi file gambar di server (sesuaikan dengan lokasi uploadImg)
-//        $uploadDir = __DIR__ . '/../img/gallery/files/';
-//        $filePath = $uploadDir . $imageName;
-//
-//        // Hapus file fisik jika ada
-//        if (file_exists($filePath)) {
-//            unlink($filePath);
-//        }
-//
-//        // Hapus data dari database
-//        $queryDelete = "DELETE FROM " . $this->table . " WHERE gallery_id = :id";
-//        $this->db->query($queryDelete);
-//        $this->db->bind(':id', $id);
-//        return $this->db->execute();
-//    }
     public function delete($id)
     {
         $queryGetImage = "SELECT image FROM " . $this->table . " WHERE gallery_id = :id";
         $this->db->query($queryGetImage);
         $this->db->bind(':id', $id);
-        $imageName = $this->db->single()['image'];
+        $result = $this->db->single();
 
+        if (!$result) {
+            return false;
+        }
+
+        $imageName = $result['image'];
         $uploadDir = __DIR__ . '/../img/gallery/files/';
         $filePath = $uploadDir . $imageName;
 
-        $debug = [
-            'filePath' => $filePath,
-            'fileExists' => file_exists($filePath),
-        ];
-
+        $unlinkSuccess = false;
         if (file_exists($filePath)) {
-            $debug['unlinkSuccess'] = unlink($filePath);
-        } else {
-            $debug['unlinkSuccess'] = false;
+            $unlinkSuccess = unlink($filePath);
         }
 
         $queryDelete = "DELETE FROM " . $this->table . " WHERE gallery_id = :id";
         $this->db->query($queryDelete);
         $this->db->bind(':id', $id);
-        $debug['dbDeleteSuccess'] = $this->db->execute();
+        $this->db->execute();
 
-        // Tulis hasil debug ke log file
-        file_put_contents(__DIR__ . '/../debug.log', print_r($debug, true), FILE_APPEND);
-
-        return $debug['dbDeleteSuccess'];
+        return [
+            'dbDeleteSuccess' => $this->db->rowCount() > 0,
+            'unlinkSuccess' => $unlinkSuccess,
+        ];
     }
 
     public function getGalleriesWithPagination($limit, $offset)
@@ -153,19 +116,22 @@ class GalleryModel
         return $result ? (int)$result['total'] : 0;
     }
 
-    public function getGaleryDIPASWA(){
+    public function getGaleryDIPASWA()
+    {
         $query = " SELECT * FROM galleries WHERE category LIKE 'DIPA SWADANA'";
         $this->db->query($query);
         return $this->db->resultSet();
     }
 
-    public function getGaleryDIPAPNBP(){
+    public function getGaleryDIPAPNBP()
+    {
         $query = " SELECT * FROM galleries WHERE category LIKE 'DIPA PNBP'";
         $this->db->query($query);
         return $this->db->resultSet();
     }
-    
-    public function getGaleryTesis(){
+
+    public function getGaleryTesis()
+    {
         $query = " SELECT * FROM galleries WHERE category LIKE 'Tesis Magister'";
         $this->db->query($query);
         return $this->db->resultSet();

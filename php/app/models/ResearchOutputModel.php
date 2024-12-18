@@ -163,11 +163,66 @@ class ResearchOutputModel
         return $result ? (int)$result['total'] : 0;
     }
 
+//    public function delete($id)
+//    {
+//        $this->db->query('EXEC sp_DeleteResearchOutput :id');
+//        $this->db->bind(':id', $id);
+//        return $this->db->execute();
+//    }
     public function delete($id)
     {
-        $this->db->query('EXEC sp_DeleteResearchOutput :id');
+        // Query untuk mendapatkan file URL
+        $queryGetFile = "SELECT file_url FROM research_outputs WHERE research_output_id = :id";
+        $this->db->query($queryGetFile);
         $this->db->bind(':id', $id);
-        return $this->db->execute();
+        $result = $this->db->single();
+
+        // Jika data tidak ditemukan
+        if (!$result) {
+            return ['dbDeleteSuccess' => false, 'unlinkFileSuccess' => false, 'unlinkMetaSuccess' => false];
+        }
+
+        // Ambil nama file
+        $fileUrl = $result['file_url'];
+        $uploadDir = __DIR__ . '/../files/research_output/';
+        $metaDir = __DIR__ . '/../files/meta/';
+        $filePath = $uploadDir . $fileUrl;
+        $metaFilePath = $metaDir . $fileUrl . '.meta';
+
+        // Hapus file dan metadata
+        $unlinkFileSuccess = false;
+        $unlinkMetaSuccess = false;
+
+        if (file_exists($filePath)) {
+            $unlinkFileSuccess = unlink($filePath);
+        }
+
+        if (file_exists($metaFilePath)) {
+            $unlinkMetaSuccess = unlink($metaFilePath);
+        }
+
+        // Hapus data dari database dengan try-catch
+        try {
+            $queryDelete = "DELETE FROM research_outputs WHERE research_output_id = :id";
+            $this->db->query($queryDelete);
+            $this->db->bind(':id', $id);
+            $dbDeleteSuccess = $this->db->execute();
+
+            // Cek jumlah baris yang terpengaruh
+            $affectedRows = $this->db->rowCount();
+
+            return [
+                'dbDeleteSuccess' => $affectedRows > 0,
+                'unlinkFileSuccess' => $unlinkFileSuccess,
+                'unlinkMetaSuccess' => $unlinkMetaSuccess,
+            ];
+        } catch (Exception $e) {
+            return [
+                'dbDeleteSuccess' => false,
+                'unlinkFileSuccess' => $unlinkFileSuccess,
+                'unlinkMetaSuccess' => $unlinkMetaSuccess,
+            ];
+        }
     }
 
     public function getResearchDIPASWA()
