@@ -1,10 +1,10 @@
 <?php
 
-
 class Galleries extends Controller
 {
     public function index()
     {
+        $this->view("main/galeri");
         $this->view("main/galeri");
     }
 
@@ -80,7 +80,6 @@ class Galleries extends Controller
                                 $title,
                                 $_SESSION['user_id'],
                                 $description
-
                             );
 
                             if ($uploadSuccess) {
@@ -111,6 +110,7 @@ class Galleries extends Controller
         }
     }
 
+    public function delete()
 //    public function delete()
 //    {
 //        if ($_SERVER['REQUEST_METHOD'] === 'POST') {

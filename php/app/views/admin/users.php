@@ -14,7 +14,6 @@ if (isset($_SESSION['message'])) {
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -114,13 +113,13 @@ if (isset($_SESSION['message'])) {
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
+    <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php';?>
 
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
             <!-- Back Button -->
             <div class="max-w-7xl mx-auto mb-12">
-                <a href="<?= BASEURL ?>/dashboardAdmin"
+                <a href="<?=BASEURL?>/dashboardAdmin"
                    class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -170,7 +169,7 @@ if (isset($_SESSION['message'])) {
                 </div>
                 <?php if (empty($data)): ?>
                     <div class="text-center py-12">
-                        <img src="<?= ASSETS; ?>/images/empty-user.png" alt="No Users" class="mx-auto h-40 opacity-50">
+                        <img src="<?=ASSETS;?>/images/empty-user.png" alt="No Users" class="mx-auto h-40 opacity-50">
                         <p class="mt-4 text-lg text-gray-900">Belum ada pengguna</p>
                         <p class="text-sm text-gray-500">Mulai dengan menambahkan pengguna baru</p>
                     </div>
@@ -207,45 +206,46 @@ if (isset($_SESSION['message'])) {
                                         <div class="flex items-center space-x-4">
                                             <div class="flex-shrink-0 h-10 w-10 rounded-lg overflow-hidden bg-red-50">
                                                 <?php if ($allUsersWithPagination['profile_picture'] == null): ?>
-                                                    <img class="h-full w-full object-cover"
-                                                         src="<?= ASSETS ?>/images/empty-user.png" alt="">
+                                                    <svg class="h-full w-full object-cover" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z" fill="#ef4444"/>
+                                                    </svg>
                                                 <?php else: ?>
                                                     <img class="h-full w-full object-cover"
-                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>"
+                                                         src="<?=PHOTOPROFILE . $allUsersWithPagination['profile_picture']?>"
                                                          alt="">
-                                                <?php endif; ?>
+                                                <?php endif;?>
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-red-600"><?= $allUsersWithPagination['name'] ?></p>
+                                                <p class="text-sm font-medium text-red-600"><?=$allUsersWithPagination['name']?></p>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-8 py-5">
-                                        <div class="text-sm text-red-500"><?= $allUsersWithPagination['email'] ?></div>
+                                        <div class="text-sm text-red-500"><?=$allUsersWithPagination['email']?></div>
                                     </td>
                                     <td class="px-8 py-5">
-                                        <?php if ($allUsersWithPagination['role_id'] == 1) { ?>
+                                        <?php if ($allUsersWithPagination['role_id'] == 1) {?>
                                             <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600">
                                                         <span class="w-1 h-1 mr-1.5 rounded-full bg-red-500"></span>
                                                         Admin
                                                     </span>
-                                        <?php } elseif ($allUsersWithPagination['role_id'] == 2) { ?>
+                                        <?php } elseif ($allUsersWithPagination['role_id'] == 2) {?>
                                             <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-600">
                                                         <span class="w-1 h-1 mr-1.5 rounded-full bg-blue-500"></span>
                                                         Peneliti
                                                     </span>
-                                        <?php } ?>
+                                        <?php }?>
                                     </td>
                                     <td class="px-8 py-5 text-sm space-x-3">
-                                        <a href="<?= BASEURL; ?>/User/editView/<?= $allUsersWithPagination['user_id'] ?>"
+                                        <a href="<?=BASEURL;?>/User/editView/<?=$allUsersWithPagination['user_id']?>"
                                            class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
                                         </a>
-                                        <?php if ($allUsersWithPagination['user_id'] != $_SESSION['user_id']) { ?>
-                                            <a href="<?= BASEURL; ?>/User/Delete/<?= $allUsersWithPagination['user_id'] ?>"
+                                        <?php if ($allUsersWithPagination['user_id'] != $_SESSION['user_id']) {?>
+                                            <a href="<?=BASEURL;?>/User/Delete/<?=$allUsersWithPagination['user_id']?>"
                                                class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200"
                                                onclick="return confirm('Are you sure you want to delete this user?')">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -255,47 +255,58 @@ if (isset($_SESSION['message'])) {
                                                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
                                             </a>
-                                        <?php } ?>
+                                        <?php }?>
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php endforeach;?>
                             </tbody>
                         </table>
                     </div>
-                <?php endif; ?>
+                <?php endif;?>
             </section>
             <!-- Pagination -->
             <div class="px-8 py-4 border-t border-gray-100">
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-500">
                         Showing
-                        <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
+                        <span class="font-medium"><?=($data['currentPage'] - 1) * $data['limit'] + 1;?></span>
                         to
                         <span class="font-medium">
-                <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']); ?>
-            </span>
-                        of <span class="font-medium"><?= $data['totalUsers']; ?></span> results
+                            <?=min($data['currentPage'] * $data['limit'], $data['totalUsers'])?>
+                        </span>
+                        of
+                        <span class="font-medium"><?=$data['totalUsers']?></span>
+                        results
                     </div>
-                    <div class="flex space-x-2">
-                        <!-- Tombol Previous -->
+                    <div class="flex items-center space-x-2">
                         <?php if ($data['currentPage'] > 1): ?>
-                            <a href="?page=<?= $data['currentPage'] - 1; ?>"
-                               class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200">
-                                Previous
+                            <a href="<?=BASEURL?>/User/index/<?=$data['currentPage'] - 1?>"
+                               class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                          d="M15 19l-7-7 7-7"/>
+                                </svg>
                             </a>
-                        <?php else: ?>
-                            <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Previous</span>
-                        <?php endif; ?>
+                        <?php endif;?>
+                        <?php if ($data['currentPage'] < $data['totalPages']): ?>
+                            <a href="<?=BASEURL?>/User/index/<?=$data['currentPage'] + 1?>"
+                               class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                          d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        <?php endif;?>
 
                         <!-- Tombol Next -->
                         <?php if ($data['currentPage'] < $data['totalPages']): ?>
-                            <a href="?page=<?= $data['currentPage'] + 1; ?>"
+                            <a href="?page=<?=$data['currentPage'] + 1;?>"
                                class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200">
                                 Next
                             </a>
                         <?php else: ?>
                             <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Next</span>
-                        <?php endif; ?>
+                        <?php endif;?>
                     </div>
                 </div>
             </div>
@@ -323,7 +334,7 @@ if (isset($_SESSION['message'])) {
             </button>
         </div>
 
-        <form id="addUserForm" action="<?= BASEURL; ?>/User/create" method="POST" enctype="multipart/form-data">
+        <form id="addUserForm" action="<?=BASEURL;?>/User/create" method="POST" enctype="multipart/form-data">
             <div class="grid grid-cols-2 gap-8">
                 <!-- Left Column -->
                 <div class="space-y-6">
@@ -456,7 +467,7 @@ if (isset($_SESSION['message'])) {
             let userList = $('#userList');
 
             $.ajax({
-                url: '<?= BASEURL; ?>/user/search',
+                url: '<?=BASEURL;?>/user/search',
                 type: 'POST',
                 data: {keyword: keyword},
                 dataType: 'json',
