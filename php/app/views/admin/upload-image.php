@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Gambar - Modern Design</title>
+    <title>Upload Gambar</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -15,7 +15,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Simplified Animations */
+        /* Animasi Fade In */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -31,6 +31,7 @@
             animation: fadeIn 0.4s ease-out forwards;
         }
 
+        /* Zona Upload */
         .upload-zone {
             background-size: 40px 40px;
             background-image: radial-gradient(circle, #fee2e2 1px, transparent 1px);
@@ -41,6 +42,7 @@
             background-color: #FEF2F2;
         }
 
+        /* Input Form */
         .form-input {
             transition: all 0.3s ease;
         }
@@ -50,16 +52,14 @@
             transform: translateY(-2px);
         }
 
+        /* Grid Preview Gambar */
         .preview-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
         }
 
-        .fade-up {
-            animation: fadeUp 0.4s ease-out forwards;
-        }
-
+        /* Animasi Fade Up */
         @keyframes fadeUp {
             from {
                 opacity: 0;
@@ -71,10 +71,11 @@
             }
         }
 
-        .preview-image {
-            animation: scaleIn 0.3s ease-out forwards;
+        .fade-up {
+            animation: fadeUp 0.4s ease-out forwards;
         }
 
+        /* Animasi Scale In */
         @keyframes scaleIn {
             from {
                 opacity: 0;
@@ -86,6 +87,11 @@
             }
         }
 
+        .preview-image {
+            animation: scaleIn 0.3s ease-out forwards;
+        }
+
+        /* Form Control */
         .form-control {
             transition: all 0.3s ease;
         }
@@ -95,6 +101,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
+        /* Animasi Alert */
         .alert-show {
             opacity: 1 !important;
             transform: translateY(0) !important;
@@ -113,7 +120,7 @@
     <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php';?>
     <div class="flex-1 min-h-screen ml-64 bg-white">
         <main class="py-10 px-8">
-            <!-- Back Button -->
+            <!-- Tombol Kembali -->
             <div class="max-w-7xl mx-auto mb-12">
         <a href="<?=BASEURL?>/dashboardAdmin" class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,7 +129,7 @@
             <span>Kembali</span>
         </a>
     </div>
-            <!-- Swiss-inspired Header (Matching manage-roadmap.php) -->
+            <!-- Header Swiss-inspired (Sesuai dengan manage-roadmap.php) -->
             <div class="max-w-7xl mx-auto mb-12 fade-in">
                 <div class="flex items-center space-x-4 mb-4">
                     <span class="h-px w-12 bg-red-600"></span>
@@ -131,14 +138,14 @@
                 <h1 class="text-5xl font-bold text-red-900 mb-2">Upload Gambar</h1>
             </div>
 
-            <!-- Upload Form -->
+            <!-- Form Upload -->
             <form action="<?=BASEURL;?>/galleries/uploadImg" method="POST" enctype="multipart/form-data"
                   id="uploadForm" name="confirmUpload" class="max-w-7xl mx-auto"
                   onsubmit="return disableSubmitButton();">
                 <div class="grid grid-cols-12 gap-8">
-                    <!-- Left Column -->
+                    <!-- Kolom Kiri -->
                     <div class="col-span-8">
-                        <!-- Upload Section -->
+                        <!-- Bagian Upload -->
                         <section class="bg-white rounded-2xl border-2 border-red-100 overflow-hidden fade-in mb-8">
                             <div class="p-6 border-b border-red-100">
                                 <h2 class="text-xl font-semibold text-red-800">Area Unggah</h2>
@@ -171,19 +178,19 @@
                             </div>
                         </section>
 
-                        <!-- Preview Grid -->
+                        <!-- Grid Preview -->
                         <div id="imagePreview" class="grid grid-cols-3 gap-4">
-                            <!-- Preview images will be inserted here -->
+                            <!-- Gambar preview akan dimasukkan di sini -->
                         </div>
                     </div>
 
-                    <!-- Right Column -->
+                    <!-- Kolom Kanan -->
                     <div class="col-span-4">
                         <div class="sticky top-8 bg-white rounded-2xl p-8 border-2 border-red-100 space-y-6">
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-600">Topik Penelitian</label>
                                 <select name="category" required
-                                        class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300 hover:bg-red-50">  
+                                        class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300 hover:bg-red-50">
                                     <option value="">Pilih Skema Penelitian</option>
                                     <option value="DIPA SWADANA">DIPA SWADANA</option>
                                     <option value="DIPA PNBP">DIPA PNBP</option>
@@ -245,12 +252,12 @@
     </div>
 </div>
 
-<!-- Alert Container -->
+<!-- Container Alert -->
 <div id="alertMessage"
      class="fixed top-4 right-4 max-w-md w-full opacity-0 transform translate-y-[-100%] transition-all duration-300 ease-out pointer-events-none">
 </div>
 
-<!-- Add this modal HTML before the closing body tag -->
+<!-- Modal Konfirmasi -->
 <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
     <div id="modalContent" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                                  bg-white rounded-2xl p-8 w-96 opacity-0 scale-95
@@ -280,31 +287,31 @@
         </div>
     </div>
 </div>
-
 <script>
-    $(document).ready(function () {
-        const $form = $('#uploadForm');
-        const $fileInput = $('#fileInput');
-        const $uploadButton = $('#uploadButton');
-        const $confirmModal = $('#confirmModal');
-        const $cancelButton = $('#cancelButton');
-        const $confirmUploadButton = $('#confirmUploadButton');
-        const $previewContainer = $('#imagePreview');
-        const $dropZone = $('.upload-zone');
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const uploadButton = document.getElementById('uploadButton');
+        const confirmModal = document.getElementById('confirmModal');
+        const cancelButton = document.getElementById('cancelButton');
+        const confirmUploadButton = document.getElementById('confirmUploadButton');
+        const previewContainer = document.getElementById('imagePreview');
+        const dropZone = document.querySelector('.upload-zone');
 
         // Event listeners
-        $fileInput.on('change', handleFileSelect);
-        $uploadButton.on('click', handleUploadButtonClick);
-        $cancelButton.on('click', () => $confirmModal.addClass('hidden'));
-        $confirmUploadButton.on('click', submitForm);
+        fileInput.addEventListener('change', handleFileSelect);
+        uploadButton.addEventListener('click', handleUploadButtonClick);
+        cancelButton.addEventListener('click', () => confirmModal.classList.add('hidden'));
+        confirmUploadButton.addEventListener('click', submitForm);
 
         // Drag and drop event listeners
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            $dropZone.on(eventName, preventDefaults);
+            dropZone.addEventListener(eventName, preventDefaults);
         });
-        $dropZone.on('dragenter dragover', highlight);
-        $dropZone.on('dragleave drop', unhighlight);
-        $dropZone.on('drop', handleDrop);
+        dropZone.addEventListener('dragenter', highlight);
+        dropZone.addEventListener('dragover', highlight);
+        dropZone.addEventListener('dragleave', unhighlight);
+        dropZone.addEventListener('drop', handleDrop);
 
         function preventDefaults(e) {
             e.preventDefault();
@@ -312,16 +319,16 @@
         }
 
         function highlight() {
-            $dropZone.addClass('border-red-500 bg-red-50');
+            dropZone.classList.add('border-red-500', 'bg-red-50');
         }
 
         function unhighlight() {
-            $dropZone.removeClass('border-red-500 bg-red-50');
+            dropZone.classList.remove('border-red-500', 'bg-red-50');
         }
 
         function handleDrop(e) {
             unhighlight();
-            const files = e.originalEvent.dataTransfer.files;
+            const files = e.dataTransfer.files;
             handleFiles(files);
         }
 
@@ -330,13 +337,13 @@
         }
 
         function handleFiles(files) {
-            $previewContainer.empty(); // Clear existing previews
-            $.each(files, (i, file) => {
+            previewContainer.innerHTML = ''; // Clear existing previews
+            Array.from(files).forEach(file => {
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         const preview = createPreviewElement(e.target.result, file.name);
-                        $previewContainer.append(preview);
+                        previewContainer.appendChild(preview);
                     };
                     reader.readAsDataURL(file);
                 }
@@ -344,96 +351,24 @@
         }
 
         function createPreviewElement(src, filename) {
-            const $div = $('<div>', {class: 'preview-image relative rounded-lg overflow-hidden'});
-            $div.html(`
-            <img src="${src}" alt="${filename}" class="w-full h-48 object-cover">
-            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <p class="text-white text-sm px-4 text-center">${filename}</p>
-            </div>
-        `);
-            return $div;
+            const div = document.createElement('div');
+            div.className = 'preview-image relative rounded-lg overflow-hidden';
+            div.innerHTML = `
+                <img src="${src}" alt="${filename}" class="w-full h-48 object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <p class="text-white text-sm px-4 text-center">${filename}</p>
+                </div>
+            `;
+            return div;
         }
 
         function handleUploadButtonClick(e) {
             e.preventDefault();
 
-            const title = $('input[name="imageTitle"]').val().trim();
-            const category = $('select[name="category"]').val().trim();
-            const description = $('textarea[name="description"]').val().trim();
-            const file = $fileInput[0].files[0];
-
-            if (!file) {
-                alert('Silakan pilih file gambar untuk diunggah.');
-                return;
-            }
-            if (!title) {
-                alert('Silakan masukkan judul gambar.');
-                return;
-            }
-            if (!category) {
-                alert('Silakan pilih kategori.');
-                return;
-            }
-            if (!description) {
-                alert('Silakan masukkan deskripsi gambar.');
-                return;
-            }
-
-            $confirmModal.removeClass('hidden');
-        }
-
-        function submitForm() {
-            const formData = new FormData();
-            const image = $fileInput[0].files[0];
-            const title = $('input[name="imageTitle"]').val().trim();
-            const category = $('select[name="category"]').val().trim();
-            const description = $('textarea[name="description"]').val().trim();
-
-            formData.append('image', image);
-            formData.append('imageTitle', title);
-            formData.append('category', category);
-            formData.append('description', description);
-            formData.append('confirmUpload', 'true');
-
-            $uploadButton.prop('disabled', true).text('Uploading...');
-
-            $.ajax({
-                url: '<?=BASEURL;?>/galleries/uploadImg',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    console.log(data);
-                    alert('Upload berhasil!');
-                    window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
-
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan saat mengunggah.');
-                },
-                complete: function () {
-                    $uploadButton.prop('disabled', false).text('Upload Gambar');
-                }
-            });
-        }
-    });
-
-    // Update the form submission handling
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('uploadForm');
-        const uploadButton = document.getElementById('uploadButton');
-        const confirmModal = document.getElementById('confirmModal');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Validate form fields
             const title = document.querySelector('input[name="imageTitle"]').value.trim();
             const category = document.querySelector('select[name="category"]').value.trim();
             const description = document.querySelector('textarea[name="description"]').value.trim();
-            const file = document.querySelector('input[type="file"]').files[0];
+            const file = fileInput.files[0];
 
             if (!file) {
                 showAlert('Silakan pilih file gambar untuk diunggah.', 'error');
@@ -452,18 +387,22 @@
                 return;
             }
 
-            // Show confirmation modal
             confirmModal.classList.remove('hidden');
-        });
+        }
 
-        // Handle confirmation button click
-        document.getElementById('confirmButton').addEventListener('click', function() {
+        function submitForm() {
             const formData = new FormData(form);
+            const image = fileInput.files[0];
+            const title = document.querySelector('input[name="imageTitle"]').value.trim();
+            const category = document.querySelector('select[name="category"]').value.trim();
+            const description = document.querySelector('textarea[name="description"]').value.trim();
 
-            // Hide modal
-            confirmModal.classList.add('hidden');
+            formData.append('image', image);
+            formData.append('imageTitle', title);
+            formData.append('category', category);
+            formData.append('description', description);
+            formData.append('confirmUpload', 'true');
 
-            // Show loading state
             uploadButton.disabled = true;
             uploadButton.innerHTML = `
                 <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -487,10 +426,7 @@
                 if (data.success) {
                     showAlert('Gambar berhasil diunggah!', 'success');
                     form.reset();
-                    if (document.getElementById('imagePreview')) {
-                        document.getElementById('imagePreview').innerHTML = '';
-                    }
-                    // Optional: redirect after successful upload
+                    previewContainer.innerHTML = '';
                     setTimeout(() => {
                         window.location.href = '<?=BASEURL;?>/galleries/uploadImgView';
                     }, 2000);
@@ -506,17 +442,13 @@
                 uploadButton.disabled = false;
                 uploadButton.innerHTML = 'Upload Gambar';
             });
-        });
-
-        // Handle cancel button click
-        document.getElementById('cancelButton').addEventListener('click', function() {
-            confirmModal.classList.add('hidden');
-        });
+        }
     });
 
     function showAlert(message, type = 'success') {
-        const alertMessage = document.getElementById('alertMessage');
+        const alertElement = document.getElementById('alertMessage');
         const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+
         const icon = type === 'success'
             ? `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -525,36 +457,31 @@
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                </svg>`;
 
-        alertMessage.innerHTML = `
-            <div class="shadow-lg rounded-2xl overflow-hidden ${bgColor}">
-                <div class="p-4 flex items-center">
-                    <div class="flex-shrink-0 text-white">
-                        ${icon}
-                    </div>
-                    <div class="ml-3 text-white font-medium">${message}</div>
-                    <button onclick="closeAlert()" class="ml-auto text-white hover:text-gray-200">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
+        alertElement.className = `fixed top-4 right-4 max-w-md w-full shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 ${bgColor}`;
+        alertElement.innerHTML = `
+            <div class="p-4 flex items-center">
+                <div class="flex-shrink-0 text-white">
+                    ${icon}
                 </div>
+                <div class="ml-3 text-white font-medium">${message}</div>
+                <button onclick="closeAlert()" class="ml-auto text-white hover:text-gray-200">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
         `;
 
-        alertMessage.classList.remove('hidden', 'alert-hide');
-        void alertMessage.offsetWidth; // Force reflow
-        alertMessage.classList.add('alert-show');
+        alertElement.style.transform = 'translateY(0)';
+        alertElement.classList.remove('hidden');
 
         setTimeout(closeAlert, 5000);
     }
 
     function closeAlert() {
-        const alertMessage = document.getElementById('alertMessage');
-        alertMessage.classList.remove('alert-show');
-        alertMessage.classList.add('alert-hide');
-        setTimeout(() => {
-            alertMessage.classList.add('hidden');
-        }, 300);
+        const alertElement = document.getElementById('alertMessage');
+        alertElement.style.transform = 'translateY(-100%)';
+        setTimeout(() => alertElement.classList.add('hidden'), 300);
     }
 </script>
 </body>
