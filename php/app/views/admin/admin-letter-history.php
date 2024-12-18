@@ -352,7 +352,7 @@
 
     function filter(status) {
         $.ajax({
-            url: '<?= BASEURL ?>/letter/filter',
+            url: '<?= BASEURL ?>/letter/filterAdmin',
             method: 'POST',
             dataType: 'json',
             data: {status: status},

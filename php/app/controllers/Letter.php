@@ -190,13 +190,10 @@ class Letter extends Controller
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-
         $jumlahDataperhalaman = 3;
         $halamanAktif = (isset($_GET["halaman"])) ? (int)$_GET["halaman"] : 1;
         $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-
         $lettersModel = $this->model('LettersModel');
-
         if ($role == 1) {
             $jumlahData = $lettersModel->countAllLetters();
             $data['allLetters'] = $lettersModel->getAllLettersPaginate($awalData, $jumlahDataperhalaman);
@@ -204,13 +201,10 @@ class Letter extends Controller
             header('Location: ' . $this->getLastVisitedPage());
             exit;
         }
-
         $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-
         $data['jumlahHalaman'] = $jumlahHalaman;
         $data['halamanAktif'] = $halamanAktif;
         $data['totalLetters'] = $jumlahData;
-
         $this->view('admin/admin-letter-history', $data);
     }
 
@@ -218,19 +212,18 @@ class Letter extends Controller
     {
         session_start();
         $status = $_POST['status'];
-        $userId = $_SESSION['user_id']; // Mengambil user ID dari sesi
-
+        $userId = $_SESSION['user_id'];
         switch ($status) {
-            case 0: // Semua surat
+            case 0:
                 $letters = $this->model('LettersModel')->getLetterByUserId($userId);
                 break;
-            case 1: // Surat tertunda
+            case 1:
                 $letters = $this->model('LettersModel')->getLetterByUserIdPending($userId);
                 break;
-            case 2: // Surat disetujui
+            case 2:
                 $letters = $this->model('LettersModel')->getLetterByUserIdVerify($userId);
                 break;
-            case 3: // Surat ditolak
+            case 3:
                 $letters = $this->model('LettersModel')->getLetterByUserIdReject($userId);
                 break;
             default:
@@ -242,6 +235,29 @@ class Letter extends Controller
         echo json_encode($letters);
     }
 
+    public function filterAdmin()
+    {
+        $status = $_POST['status'];
+
+        switch ($status) {
+            case 0:
+                $letters = $this->model('LettersModel')->getAllLetters();
+                break;
+            case 1:
+                $letters = $this->model('LettersModel')->getLettersByStatus($status); // Pending
+                break;
+            case 2:
+                $letters = $this->model('LettersModel')->getLettersByStatus($status); // Verified
+                break;
+            case 3:
+                $letters = $this->model('LettersModel')->getLettersByStatus($status); // Rejected
+                break;
+            default:
+                echo json_encode(['error' => 'Invalid status']);
+                return;
+        }
+        echo json_encode($letters);
+    }
 
     public function search()
     {

@@ -291,4 +291,17 @@ class ResearchOutputModel
         $this->db->bind(':keyword', $keyword);
         return $this->db->resultSet();
     }
+
+    public function getAllFiles()
+    {
+        $this->db->query("SELECT * FROM " . $this->table);
+        return $this->db->resultSet();
+    }
+
+    public function getFilesByStatus($status)
+    {
+        $this->db->query("SELECT * FROM " . $this->table . " WHERE status = :status");
+        $this->db->bind(':status', $status);
+        return $this->db->resultSet();
+    }
 }

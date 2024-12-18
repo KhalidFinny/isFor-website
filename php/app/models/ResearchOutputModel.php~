@@ -169,19 +169,8 @@ class ResearchOutputModel
 //        $this->db->bind(':id', $id);
 //        return $this->db->execute();
 //    }
-
     public function delete($id)
     {
-        $logFile = __DIR__ . '/../debug.log';
-
-        // Fungsi untuk menulis log
-        $writeLog = function ($message) use ($logFile) {
-            file_put_contents($logFile, date('[Y-m-d H:i:s] ') . $message . PHP_EOL, FILE_APPEND);
-        };
-
-        // Log ID yang diterima
-        $writeLog("Delete request received for ID: $id");
-
         // Query untuk mendapatkan file URL
         $queryGetFile = "SELECT file_url FROM research_outputs WHERE research_output_id = :id";
         $this->db->query($queryGetFile);
@@ -190,7 +179,6 @@ class ResearchOutputModel
 
         // Jika data tidak ditemukan
         if (!$result) {
-            $writeLog("Error: No record found for ID: $id");
             return ['dbDeleteSuccess' => false, 'unlinkFileSuccess' => false, 'unlinkMetaSuccess' => false];
         }
 
@@ -201,26 +189,16 @@ class ResearchOutputModel
         $filePath = $uploadDir . $fileUrl;
         $metaFilePath = $metaDir . $fileUrl . '.meta';
 
-        // Log file paths
-        $writeLog("File Path: $filePath");
-        $writeLog("Meta File Path: $metaFilePath");
-
         // Hapus file dan metadata
         $unlinkFileSuccess = false;
         $unlinkMetaSuccess = false;
 
         if (file_exists($filePath)) {
             $unlinkFileSuccess = unlink($filePath);
-            $writeLog("File delete status for $filePath: " . ($unlinkFileSuccess ? "Success" : "Failed"));
-        } else {
-            $writeLog("File not found: $filePath");
         }
 
         if (file_exists($metaFilePath)) {
             $unlinkMetaSuccess = unlink($metaFilePath);
-            $writeLog("Meta file delete status for $metaFilePath: " . ($unlinkMetaSuccess ? "Success" : "Failed"));
-        } else {
-            $writeLog("Meta file not found: $metaFilePath");
         }
 
         // Hapus data dari database dengan try-catch
@@ -232,11 +210,6 @@ class ResearchOutputModel
 
             // Cek jumlah baris yang terpengaruh
             $affectedRows = $this->db->rowCount();
-            if ($affectedRows > 0) {
-                $writeLog("Database delete status for ID: $id: Success");
-            } else {
-                $writeLog("Database delete status for ID: $id: No rows affected (Success but no changes).");
-            }
 
             return [
                 'dbDeleteSuccess' => $affectedRows > 0,
@@ -244,8 +217,6 @@ class ResearchOutputModel
                 'unlinkMetaSuccess' => $unlinkMetaSuccess,
             ];
         } catch (Exception $e) {
-            // Log exception error
-            $writeLog("Error during database delete: " . $e->getMessage());
             return [
                 'dbDeleteSuccess' => false,
                 'unlinkFileSuccess' => $unlinkFileSuccess,
@@ -253,9 +224,6 @@ class ResearchOutputModel
             ];
         }
     }
-
-
-
 
     public function getResearchDIPASWA()
     {
@@ -321,6 +289,19 @@ class ResearchOutputModel
         $query = "EXEC sp_searchFiles @Keyword = :keyword";
         $this->db->query($query);
         $this->db->bind(':keyword', $keyword);
+        return $this->db->resultSet();
+    }
+
+    public function getFiles()
+    {
+        $this->db->query("SELECT * FROM " . $this->table);
+        return $this->db->resultSet();
+    }
+
+    public function getFilesByStatus($status)
+    {
+        $this->db->query("SELECT * FROM " . $this->table . " WHERE status = :status");
+        $this->db->bind(':status', $status);
         return $this->db->resultSet();
     }
 }
