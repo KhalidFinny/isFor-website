@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/controllers/Galleries.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Galleries.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/admin-letter-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/admin-letter-history.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/letter-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/letter-history.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +113,7 @@
       <workItem from="1734442470687" duration="1391000" />
       <workItem from="1734449338708" duration="7275000" />
       <workItem from="1734504224259" duration="4477000" />
-      <workItem from="1734513515471" duration="10546000" />
+      <workItem from="1734513515471" duration="10853000" />
     </task>
     <servers />
   </component>
