@@ -261,7 +261,7 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600 group-hover:text-gray-800">Pending Files</p>
-                            <p class="text-xl font-semibold text-yellow-600"><?= $data['pendingFiles'] ?></p>
+                            <p class="text-xl font-semibold text-yellow-600"><?= $data['pendingFiles']?></p>
                         </div>
                     </div>
                 </div>
@@ -340,8 +340,7 @@
                                                          src="<?= ASSETS ?>/images/empty-user.png" alt="">
                                                 <?php else: ?>
                                                     <img class="h-full w-full object-cover"
-                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>"
-                                                         alt="">
+                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>" alt="">
                                                 <?php endif; ?>
                                             </div>
                                             <div class="flex-1 min-w-0">

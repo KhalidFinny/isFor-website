@@ -87,7 +87,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
+    <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
@@ -416,6 +416,66 @@
     const keyword = document.getElementById('keyword');
     let debounceTimeout;
 
+    keyword.addEventListener('keyup', function () {
+        // console.log(keyword.value)
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(function () {
+            $.ajax({
+                url: '<?= BASEURL ?>/letter/search',
+                method: 'POST',
+                dataType: 'json',
+                data: {keyword: keyword.value},
+                success: function (data) {
+                    // console.log('Success Response:', data);
+                    const letterContainer = document.querySelector(".letter-card table tbody");
+                    const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+                    const tableHeader = `
+                        <thead>
+                            <tr class="text-left text-sm font-medium text-gray-500">
+                                <th class="pb-4">Jenis Dokumen</th>
+                                <th class="pb-4">Tanggal</th>
+                                <th class="pb-4">Status</th>
+                                <th class="pb-4">Aksi</th>
+                            </tr>
+                        </thead>
+                    `;
+
+                    // Clear existing rows and add table header
+                    letterContainer.innerHTML = '';
+                    navElement.innerHTML = '';
+
+                    // Populate table rows with data
+                    data.forEach(letter => {
+                        let statusBadge = '';
+
+                        if (letter.status == 1) {
+                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
+                        } else if (letter.status == 2) {
+                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
+                        } else {
+                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
+                        }
+
+                        const row = `
+                            <tr class="border-t border-gray-100">
+                                <td class="py-4">${letter.title}</td>
+                                <td class="py-4">${letter.date}</td>
+                                <td class="py-4">${statusBadge}</td>
+                                <td class="py-4">
+                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                                </td>
+                            </tr>
+                        `;
+                        letterContainer.innerHTML += row;
+                    });
+                },
+                error: function () {
+                    console.log('Error terjadi dalam request');
+                }
+            });
+        }, 500);
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const filterButtons = document.querySelectorAll('.filter-btn');
 
@@ -434,11 +494,11 @@
     });
 
     function showAlert(message, type = 'success') {
-
         const alertElement = document.getElementById('alertMessage');
         const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
         const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
         const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
+
         alertElement.innerHTML = `
             <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
                 <div class="flex-shrink-0 ${iconColor}">
@@ -457,15 +517,13 @@
         `;
 
         alertElement.style.transform = 'translateY(0)';
-
         alertElement.classList.remove('hidden');
-        // Auto hide after 5 seconds
 
+        // Auto hide after 5 seconds
         setTimeout(closeAlert, 5000);
     }
 
     function closeAlert() {
-
         const alertElement = document.getElementById('alertMessage');
         alertElement.style.transform = 'translateY(-100%)';
         setTimeout(() => alertElement.classList.add('hidden'), 300);
@@ -504,66 +562,6 @@
             });
         });
     });
-
-    //keyword.addEventListener('keyup', function () {
-    //    // console.log(keyword.value)
-    //    clearTimeout(debounceTimeout);
-    //    debounceTimeout = setTimeout(function () {
-    //        $.ajax({
-    //            url: '<?php //= BASEURL ?>///letter/search',
-    //            method: 'POST',
-    //            dataType: 'json',
-    //            data: {keyword: keyword.value},
-    //            success: function (data) {
-    //                // console.log('Success Response:', data);
-    //                const letterContainer = document.querySelector(".letter-card table tbody");
-    //                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-    //                const tableHeader = `
-    //                    <thead>
-    //                        <tr class="text-left text-sm font-medium text-gray-500">
-    //                            <th class="pb-4">Jenis Dokumen</th>
-    //                            <th class="pb-4">Tanggal</th>
-    //                            <th class="pb-4">Status</th>
-    //                            <th class="pb-4">Aksi</th>
-    //                        </tr>
-    //                    </thead>
-    //                `;
-    //
-    //                // Clear existing rows and add table header
-    //                letterContainer.innerHTML = '';
-    //                navElement.innerHTML = '';
-    //
-    //                // Populate table rows with data
-    //                data.forEach(letter => {
-    //                    let statusBadge = '';
-    //
-    //                    if (letter.status == 1) {
-    //                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-    //                    } else if (letter.status == 2) {
-    //                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
-    //                    } else {
-    //                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
-    //                    }
-    //
-    //                    const row = `
-    //                        <tr class="border-t border-gray-100">
-    //                            <td class="py-4">${letter.title}</td>
-    //                            <td class="py-4">${letter.date}</td>
-    //                            <td class="py-4">${statusBadge}</td>
-    //                            <td class="py-4">
-    //                                <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-    //                            </td>
-    //                        </tr>
-    //                    `;
-    //                    letterContainer.innerHTML += row;
-    //                });
-    //            },
-    //            error: function () {
-    //                console.log('Error terjadi dalam request');
-    //            }
-    //        });
-    //    }, 500);
-    //});
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>

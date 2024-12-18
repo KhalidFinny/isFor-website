@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .fade-in {
             animation: fadeIn 0.5s ease-out forwards;
@@ -156,6 +157,8 @@
                         </div>
                     </div>
 
+                    <!-- Search Results test search -->
+                    <div id="results" class="mt-4"></div>
                     <!-- Files Grid -->
                     <div id="research-files" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <?php if (empty($data['files'])) : ?>
@@ -431,7 +434,42 @@
             });
         });
 
+        $(document).ready(function () {
+            $('#keyword').on('keyup', function () {
+                let keyword = $(this).val(); // Ambil nilai input
+                let resultsDiv = $('#results');
+
+                $.ajax({
+                    url: '<?= BASEURL; ?>/researchoutput/search',
+                    type: 'POST',
+                    data: {keyword: keyword},
+                    dataType: 'json',
+                    success: function (data) {
+                        // Kosongkan elemen hasil pencarian
+                        resultsDiv.empty();
+                        console.log(data);
+
+                        // Cek apakah ada hasil pencarian
+                        if (data.length > 0) {
+                            $.each(data, function (index, item) {
+                                resultsDiv.append(`
+                            <div class="p-2 border-b border-gray-200">
+                                <h4 class="text-lg font-medium text-gray-800">${item.title}</h4>
+                                <p class="text-sm text-gray-500">${item.category} - ${item.uploaded_at}</p>
+                                <a href="${item.file_url}" class="text-red-500 underline">Download File</a>
+                            </div>
+                        `);
+                            });
+                        } else {
+                            resultsDiv.html('<p class="text-gray-500">Hasil tidak ditemukan.</p>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
