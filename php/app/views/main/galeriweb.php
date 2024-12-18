@@ -149,14 +149,14 @@ session_start();
             <?php
             $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
             foreach ($topics as $index => $topic): ?>
-                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>">
+                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>" onclick="filter(<?php echo $index; ?>)">
                     <?php echo $topic; ?>
                 </button>
             <?php endforeach; ?>
         </div>
 
         <!-- Gallery Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="container-galleries grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php foreach ($data['galleries'] as $index => $item): ?>
                 <div class="gallery-item group" style="animation-delay: <?php echo $index * 0.1; ?>s">
                     <div class="image-container cursor-pointer" onclick="showImagePreview(
@@ -480,6 +480,81 @@ session_start();
             observer.observe(item);
         });
     });
+
+    function filter(status) {
+        $.ajax({
+            url: '<?= BASEURL ?>/home/filterGaleri',
+            method: 'POST',
+            dataType: 'json',
+            data: {status: status},
+            success: function (data) {
+                console.log('Success Response:', data);
+
+                const galleryContainer = document.querySelector(".container-galleries");
+                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+
+                galleryContainer.innerHTML = '';
+                navElement.innerHTML = '';
+
+                data.forEach(galery => {
+                    // Format tanggal menggunakan JavaScript
+                const formattedDate = new Date(galery.created_at).toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                });
+
+                // Escaping data untuk menghindari error parsing
+                const title = galery.title.replace(/'/g, "\\'");
+                const category = galery.category.replace(/'/g, "\\'");
+                const description = galery.description.replace(/'/g, "\\'");
+
+                // Template HTML
+                const fileHTML = `
+                    <div class="gallery-item group visible" style="animation-delay: 0.1s">
+                        <div class="image-container cursor-pointer" onclick="showImagePreview(
+                                '<?= GALLERY; ?>/files/${galery.image}',
+                                '${title}',
+                                '${category}',
+                                '${formattedDate}',
+                                '${description}'
+                            )">
+                            <div class="image-placeholder">
+                                <img src="<?= GALLERY; ?>/files/${galery.image}" alt="${title}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="image-overlay">
+                                <span class="text-xl font-bold text-white mb-2">
+                                    ${category} · ${formattedDate}
+                                </span>
+                                <h3 class="text-xl font-bold text-white mb-3">
+                                    ${title}
+                                </h3>
+                                <p class="text-red-100 text-sm leading-relaxed">
+                                    ${description}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
+                                ${title}
+                            </h3>
+                        </div>
+                    </div>
+                `;
+
+                // Tambahkan HTML ke kontainer
+                galleryContainer.insertAdjacentHTML('beforeend', fileHTML);
+                });
+                
+            },
+            error: function (xhr, status, error) {
+                console.error('Error Status:', status);
+                console.error('Error Details:', error);
+                console.error('Response Text:', xhr.responseText);
+            }
+        });
+    }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
