@@ -331,10 +331,10 @@ class ResearchOutput extends Controller
     public function search() {
         if (isset($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
-            $lettersModel = $this->model('LettersModel');
+            $researchOutputModel = $this->model('ResearchOutputModel');
 
             try {
-                $results = $lettersModel->searchResearchOutputs($keyword);
+                $results = $researchOutputModel->searchResearchOutputs($keyword);
 
                 header('Content-Type: application/json');
                 echo json_encode($results);
@@ -350,16 +350,28 @@ class ResearchOutput extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
-            if ($id && $this->model('ResearchOutputModel')->delete($id) > 0) {
-                echo json_encode(['success' => true]);
+            if ($id) {
+                $result = $this->model('ResearchOutputModel')->delete($id);
+
+                if ($result['dbDeleteSuccess']) {
+                    if ($result['unlinkFileSuccess'] && $result['unlinkMetaSuccess']) {
+                        echo json_encode(['success' => true, 'message' => 'File dan metadata berhasil dihapus.']);
+                    } else {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'File berhasil dihapus dari database, tetapi ada kesalahan saat menghapus file atau metadata.',
+                        ]);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Gagal menghapus data dari database.']);
+                }
             } else {
-                echo json_encode(['success' => false, 'message' => 'Failed to delete the file.']);
+                echo json_encode(['success' => false, 'message' => 'ID tidak valid.']);
             }
         } else {
             http_response_code(405); // Method not allowed
-            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+            echo json_encode(['success' => false, 'message' => 'Metode tidak valid.']);
         }
         exit();
     }
-
 }

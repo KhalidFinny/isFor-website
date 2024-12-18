@@ -35,31 +35,24 @@ class Home extends Controller
 
     public function galeri()
     {
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini (default 1)
-        $limit = 6; // Jumlah data per halaman
-        $offset = ($page - 1) * $limit; // Hitung offset
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 6;
+        $offset = ($page - 1) * $limit;
 
         $galleriesModel = $this->model('GalleryModel');
         $data['galleries'] = $galleriesModel->getGalleriesWithPagination($limit, $offset);
         $data['totalGalleries'] = $galleriesModel->getTotalGalleries();
         $data['limit'] = $limit;
         $data['currentPage'] = $page;
-        $data['totalPages'] = ceil($data['totalGalleries'] / $limit); // Total halaman
+        $data['totalPages'] = ceil($data['totalGalleries'] / $limit);
 
         $this->view('main/galeriweb', $data);
     }
-
-//    public function hasilPenelitian(){
-//        $data['researchoutput'] = $this->model('ResearchOutputModel')->getAll();
-//        $this->view('main/hasilpenelitian', $data);
-//    }
 
     public function getOriginalFileName($fileNameWithExt)
     {
         $metaDir = __DIR__ . '/../files/meta/';
         $metaFilePath = $metaDir . $fileNameWithExt . '.meta';
-
-        // Debugging jalur metadata (opsional)
         error_log("Accessing Metadata: $metaFilePath");
 
         if (file_exists($metaFilePath)) {
@@ -97,9 +90,8 @@ class Home extends Controller
         $this->view('main/hasilpenelitian', $data);
     }
 
-    public function filterHasilPenelitian(){
-
-        
+    public function filterHasilPenelitian()
+    {
         $status = $_POST['status'];
 
         switch ($status) {
@@ -124,10 +116,11 @@ class Home extends Controller
         echo json_encode($hasil);
     }
 
-    public function filterGaleri(){
+    public function filterGaleri()
+    {
 
         // echo json_encode($_POST);
-        
+
         $status = $_POST['status'];
 
         switch ($status) {
@@ -147,8 +140,6 @@ class Home extends Controller
                 echo json_encode(['error' => 'Invalid status']);
                 return;
         }
-
-        // error_log(json_encode($letters)); // Debug output
         echo json_encode($hasil);
     }
 

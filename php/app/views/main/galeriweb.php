@@ -149,7 +149,8 @@ session_start();
             <?php
             $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
             foreach ($topics as $index => $topic): ?>
-                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>" onclick="filter(<?php echo $index; ?>)">
+                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>"
+                        onclick="filter(<?php echo $index; ?>)">
                     <?php echo $topic; ?>
                 </button>
             <?php endforeach; ?>
@@ -326,22 +327,21 @@ session_start();
         });
     });
 
-
     function deleteImage(ImageId) {
         if (confirm('Are you sure you want to delete this file?')) {
             $.ajax({
-                url: '<?= BASEURL ?>/gallery/delete',
+                url: '<?= BASEURL ?>/galleries/deleteImage',
                 type: 'POST',
-                data: {id: ImageId},
+                data: {gallery_id: ImageId},
                 success: function (response) {
                     console.log(response); // Debug response dari server
                     let result = JSON.parse(response);
                     console.log(result); // Lihat detail debug
-                    if (result.dbDeleteSuccess && result.unlinkSuccess) {
-                        alert('File deleted successfully!');
+                    if (result.success) {
+                        alert(result.message);
                         window.location.reload();
                     } else {
-                        alert('Failed to delete file.');
+                        alert(result.message);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -498,19 +498,19 @@ session_start();
 
                 data.forEach(galery => {
                     // Format tanggal menggunakan JavaScript
-                const formattedDate = new Date(galery.created_at).toLocaleDateString('id-ID', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric',
-                });
+                    const formattedDate = new Date(galery.created_at).toLocaleDateString('id-ID', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                    });
 
-                // Escaping data untuk menghindari error parsing
-                const title = galery.title.replace(/'/g, "\\'");
-                const category = galery.category.replace(/'/g, "\\'");
-                const description = galery.description.replace(/'/g, "\\'");
+                    // Escaping data untuk menghindari error parsing
+                    const title = galery.title.replace(/'/g, "\\'");
+                    const category = galery.category.replace(/'/g, "\\'");
+                    const description = galery.description.replace(/'/g, "\\'");
 
-                // Template HTML
-                const fileHTML = `
+                    // Template HTML
+                    const fileHTML = `
                     <div class="gallery-item group visible" style="animation-delay: 0.1s">
                         <div class="image-container cursor-pointer" onclick="showImagePreview(
                                 '<?= GALLERY; ?>/files/${galery.image}',
@@ -542,10 +542,10 @@ session_start();
                     </div>
                 `;
 
-                // Tambahkan HTML ke kontainer
-                galleryContainer.insertAdjacentHTML('beforeend', fileHTML);
+                    // Tambahkan HTML ke kontainer
+                    galleryContainer.insertAdjacentHTML('beforeend', fileHTML);
                 });
-                
+
             },
             error: function (xhr, status, error) {
                 console.error('Error Status:', status);

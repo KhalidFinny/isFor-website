@@ -1,0 +1,12 @@
+[2024-12-18 12:29:38] Delete request received for ID: 12
+[2024-12-18 12:29:38] File Path: C:\laragon\www\isFor-website\php\app\models/../files/research_output/675e6aee8bc66.jpg
+[2024-12-18 12:29:38] Meta File Path: C:\laragon\www\isFor-website\php\app\models/../files/meta/675e6aee8bc66.jpg.meta
+[2024-12-18 12:29:38] File delete status for C:\laragon\www\isFor-website\php\app\models/../files/research_output/675e6aee8bc66.jpg: Success
+[2024-12-18 12:29:38] Meta file delete status for C:\laragon\www\isFor-website\php\app\models/../files/meta/675e6aee8bc66.jpg.meta: Success
+[2024-12-18 12:29:38] Database delete status for ID: 12: Failed
+[2024-12-18 12:32:16] Delete request received for ID: 13
+[2024-12-18 12:32:16] File Path: C:\laragon\www\isFor-website\php\app\models/../files/research_output/675e6b03ecca2.jpg
+[2024-12-18 12:32:16] Meta File Path: C:\laragon\www\isFor-website\php\app\models/../files/meta/675e6b03ecca2.jpg.meta
+[2024-12-18 12:32:16] File delete status for C:\laragon\www\isFor-website\php\app\models/../files/research_output/675e6b03ecca2.jpg: Success
+[2024-12-18 12:32:16] Meta file delete status for C:\laragon\www\isFor-website\php\app\models/../files/meta/675e6b03ecca2.jpg.meta: Success
+[2024-12-18 12:32:16] Database delete status for ID: 13: Success
