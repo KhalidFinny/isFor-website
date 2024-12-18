@@ -152,4 +152,22 @@ class GalleryModel
         $result = $this->db->single();
         return $result ? (int)$result['total'] : 0;
     }
+
+    public function getGaleryDIPASWA(){
+        $query = " SELECT * FROM galleries WHERE category LIKE 'DIPA SWADANA'";
+        $this->db->query($query);
+        return $this->db->resultSet();
+    }
+
+    public function getGaleryDIPAPNBP(){
+        $query = " SELECT * FROM galleries WHERE category LIKE 'DIPA PNBP'";
+        $this->db->query($query);
+        return $this->db->resultSet();
+    }
+    
+    public function getGaleryTesis(){
+        $query = " SELECT * FROM galleries WHERE category LIKE 'Tesis Magister'";
+        $this->db->query($query);
+        return $this->db->resultSet();
+    }
 }

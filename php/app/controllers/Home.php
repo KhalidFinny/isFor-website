@@ -124,6 +124,34 @@ class Home extends Controller
         echo json_encode($hasil);
     }
 
+    public function filterGaleri(){
+
+        // echo json_encode($_POST);
+        
+        $status = $_POST['status'];
+
+        switch ($status) {
+            case 0: // Semua hasil penelitian
+                $hasil = $this->model('GalleryModel')->getAll();
+                break;
+            case 1: // DIPA SWADANA
+                $hasil = $this->model('GalleryModel')->getGaleryDIPASWA();
+                break;
+            case 2: // DIPA PNBP
+                $hasil = $this->model('GalleryModel')->getGaleryDIPAPNBP();
+                break;
+            case 3: // Tesis Magister
+                $hasil = $this->model('GalleryModel')->getGaleryTesis();
+                break;
+            default:
+                echo json_encode(['error' => 'Invalid status']);
+                return;
+        }
+
+        // error_log(json_encode($letters)); // Debug output
+        echo json_encode($hasil);
+    }
+
     public function archives()
     {
         $this->view('main/dokumen');
