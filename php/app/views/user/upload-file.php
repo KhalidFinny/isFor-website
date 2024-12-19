@@ -138,14 +138,14 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-600">Judul File</label>
                                 <input type="text" id="fileTitle" name="fileTitle" required
-                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
+                                       class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
                                        placeholder="Masukkan judul file">
                             </div>
 
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-600">Skema Penelitian</label>
                                 <select id="category" name="category" required
-                                        class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">
+                                        class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300 hover:bg-red-50">
                                     <option value="">Pilih Skema Penelitian</option>
                                     <option value="DIPA SWADANA">DIPA SWADANA</option>
                                     <option value="DIPA PNBP">DIPA PNBP</option>
@@ -156,7 +156,7 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-600">Deskripsi</label>
                                 <textarea id="description" name="description" required
-                                          class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300 h-32"
+                                          class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300 h-32"
                                           placeholder="Masukkan deskripsi file"></textarea>
                             </div>
 
