@@ -5,13 +5,62 @@
  * Menampilkan dan mengelola surat yang membutuhkan verifikasi
  * Mendukung preview surat, verifikasi, dan penolakan
  */
+//var_dump($data);
 
 // Filter surat yang belum diverifikasi (status = 1)
 $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters'], function ($letter) {
     return $letter['status'] == 1;
 }) : [];
+
 ?>
 
+<style>
+    /* Animasi kartu surat */
+    .letter-card {
+        transform: translateY(20px);
+        opacity: 0;
+        animation: cardAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* Efek hover pada kartu */
+    .letter-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Animasi kemunculan kartu */
+    @keyframes cardAppear {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Animasi badge status */
+    .status-badge span {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+
+    /* Efek hover pada tombol */
+    .btn-hover-effect {
+        position: relative;
+        overflow: hidden;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Layout utama dengan sidebar -->
 <div class="flex min-h-screen bg-white">
     <!-- Sidebar admin -->
@@ -240,54 +289,6 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     </div>
 </div>
 
-<!-- Styles untuk animasi dan efek -->
-<style>
-    /* Animasi kartu surat */
-    .letter-card {
-        transform: translateY(20px);
-        opacity: 0;
-        animation: cardAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    /* Efek hover pada kartu */
-    .letter-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Animasi kemunculan kartu */
-    @keyframes cardAppear {
-        0% {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Animasi badge status */
-    .status-badge span {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.5;
-        }
-    }
-
-    /* Efek hover pada tombol */
-    .btn-hover-effect {
-        position: relative;
-        overflow: hidden;
-    }
-</style>
-
 <!-- Script untuk interaktivitas -->
 <script>
     /**
@@ -369,6 +370,5 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
         });
     });
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

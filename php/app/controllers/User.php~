@@ -92,8 +92,9 @@ class User extends Controller
             echo "Tidak ada file yang diunggah.";
             return false;
         }
-        var_dump($_FILES);
-
+        
+//        var_dump($_FILES);
+        file_put_contents('debug.log', print_r($_FILES, true));
         $nameFile = $_FILES['profile_picture']['name'];
         $sizeFile = $_FILES['profile_picture']['size'];
         $error = $_FILES['profile_picture']['error'];
@@ -148,46 +149,51 @@ class User extends Controller
 
     public function edit()
     {
-        $input = json_decode(file_get_contents('php://input'), true); // Decode JSON input
-        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $id = $_POST['user_id'];
-        $oldPhoto = $_POST["oldImage"];
-        $oldPass = $_POST["oldPass"];
-        $newPass = $_POST["password"];
-        $username = $_POST['username'];
-        $userModel = $this->model('UsersModel');
+        // Memeriksa jika form dikirim dengan metode POST dan menangani data JSON serta file upload
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+            $id = $_POST['user_id'] ?? null;
+            $oldPhoto = $_POST["oldImage"] ?? '';
+            $oldPass = $_POST["oldPass"] ?? '';
+            $newPass = $_POST["password"] ?? '';
+            $username = $_POST['username'] ?? '';
 
-        if (!$email) {
-            echo json_encode(['status' => 'error', 'message' => 'Email tidak valid.']);
-            return;
-        }
+            $userModel = $this->model('UsersModel');
 
-        if ($userModel->isEmailExists($email, $id)) {
-            echo json_encode(['status' => 'error', 'message' => 'email telah terdaftar. Silakan pilih email lain.']);
-            return;
-        }
-
-        if ($userModel->isUsernameExists($username, $id)) {
-            echo json_encode(['status' => 'error', 'message' => 'Username telah terdaftar. Silakan pilih username lain.']);
-            return;
-        }
-
-        $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
-
-        if ($_FILES["profile_picture"]["error"] === 4) {
-            $photo = $oldPhoto;
-        } else {
-            $photo = $this->upload();
-            $image_name = $userModel->deleteImage($id);
-            if ($image_name['profile_picture'] && file_exists('../app/img/profile/' . $image_name['profile_picture'])) {
-                unlink('../app/img/profile/' . $image_name['profile_picture']);
+            if (!$email || !$id || !$username) {
+                echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap atau email tidak valid.']);
+                return;
             }
-        }
 
-        if ($userModel->editUser($email, $id, $_POST, $photo, $password) > 0) {
-            echo json_encode(['status' => 'success', 'message' => 'Data berhasil diperbarui.']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Data tidak berhasil diperbarui.']);
+            if ($userModel->isEmailExists($email, $id)) {
+                echo json_encode(['status' => 'error', 'message' => 'Email telah terdaftar.']);
+                return;
+            }
+
+            if ($userModel->isUsernameExists($username, $id)) {
+                echo json_encode(['status' => 'error', 'message' => 'Username telah terdaftar.']);
+                return;
+            }
+
+            $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
+
+            // Proses upload gambar jika ada
+            if (isset($_FILES["profile_picture"]) && $_FILES["profile_picture"]["error"] === UPLOAD_ERR_OK) {
+                $photo = $this->upload();
+            } else {
+                $photo = $oldPhoto;
+            }
+
+            // Simpan data perubahan
+            if ($userModel->editUser($email, $id, $_POST, $photo, $password) > 0) {
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Data berhasil diperbarui.',
+                    'profile_picture' => basename($photo)
+                ]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Data tidak berhasil diperbarui.']);
+            }
         }
     }
 

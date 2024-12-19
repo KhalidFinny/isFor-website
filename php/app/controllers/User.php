@@ -38,9 +38,9 @@ class User extends Controller
 
         $photo = $this->upload();
 
-        // if (!$photo) {
-        //     return false;
-        // }
+        if (!$photo) {
+            return false;
+        }
 
         // var_dump($_POST);
         // var_dump($photo);
@@ -49,52 +49,61 @@ class User extends Controller
         $name = $_POST['name'];
         $username = $_POST['username'];
 
-        // Validasi data pengguna (nama, username, email)
-        $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
+        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
+            // Validasi apakah nama, username, dan email sudah ada
+            $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
 
-        if ($validationResult['name_exists']) {
-            $_SESSION['message'] = "Nama sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
+            if ($validationResult['name_exists']) {
+                $_SESSION['message'] = "nama sudah terdaftar.";
+                header('Location: ' . BASEURL . '/User');
+                return;
+            }
+            if ($validationResult['username_exists']) {
+                $_SESSION['message'] = "username sudah terdaftar.";
+                header('Location: ' . BASEURL . '/User');
+                return;
+            }
+            if ($validationResult['email_exists']) {
+                $_SESSION['message'] = "Email sudah terdaftar.";
+                header('Location: ' . BASEURL . '/User');
+                return;
+            }
+            if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
+                $_SESSION['message'] = "tambah data berhasil";
+                header('Location: ' . BASEURL . '/User');
+                echo "tambah data berhasil";
+            } else {
+                echo
+                '<script/>
+                    alert("tambah data gagal");
+                </script>';
+                if (file_exists('../app/img/profile/' . $photo)) {
+                    unlink('../app/img/profile/' . $photo);
+                }
+                $_SESSION['message'] = "tambah data berhasil";
+                header('Location: ' . BASEURL . '/User');
+            }
         }
-        if ($validationResult['username_exists']) {
-            $_SESSION['message'] = "Username sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
-        }
-        if ($validationResult['email_exists']) {
-            $_SESSION['message'] = "Email sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
-        }
-
-        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) == 0) {
-            $_SESSION['message'] = "Tambah data berhasil.";
-        } else {
-            $_SESSION['message'] = "Tambah data gagal.";
-        }
-
-        // var_dump($_SESSION['message']);
-        header('Location: ' . BASEURL . '/User');
     }
 
     public function upload()
     {
-        // var_dump($_FILES);
+        if (!isset($_FILES['profile_picture'])) {
+            echo "Tidak ada file yang diunggah.";
+            return false;
+        }
 
+//        var_dump($_FILES);
+//        file_put_contents('debug.log', print_r($_FILES, true));
         $nameFile = $_FILES['profile_picture']['name'];
         $sizeFile = $_FILES['profile_picture']['size'];
         $error = $_FILES['profile_picture']['error'];
         $tmpName = $_FILES['profile_picture']['tmp_name'];
 
         //cek apakah tidak ada gambar yang diupload
-        // if ($error == 4) {
-        //     echo "pilih gambar terlebih dahulu";
-        //     return false;
-        // }
-
-        if (!isset($nameFile) || $error === 4) {
-            return null; // Tidak ada file yang diunggah
+        if ($error == 4) {
+            echo "pilih gambar terlebih dahulu";
+            return false;
         }
 
         //cek yang diupload adalah gambar
@@ -121,7 +130,6 @@ class User extends Controller
 
         move_uploaded_file($tmpName, '../app/img/profile/' . $newFileName);
 
-
         return $newFileName;
     }
 
@@ -141,52 +149,53 @@ class User extends Controller
 
     public function edit()
     {
-        $input = json_decode(file_get_contents('php://input'), true);
+        // Memeriksa jika form dikirim dengan metode POST dan menangani data JSON serta file upload
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+            $id = $_POST['user_id'] ?? null;
+            $oldPhoto = $_POST["oldImage"] ?? '';
+            $oldPass = $_POST["oldPass"] ?? '';
+            $newPass = $_POST["password"] ?? '';
+            $username = $_POST['username'] ?? '';
 
-        // Ambil data dari input JSON
-        $email = isset($input['email']) ? filter_var($input['email'], FILTER_VALIDATE_EMAIL) : null;
-        $id = $input['user_id'] ?? null;
-        $oldPhoto = $input['oldImage'] ?? null;
-        $oldPass = $input['oldPass'] ?? null;
-        $newPass = $input['password'] ?? null;
-        $username = $input['username'] ?? null;
+            $userModel = $this->model('UsersModel');
 
-        if (!$email || !$id || !$username) {
-            echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap.']);
-            return;
-        }
-
-        $userModel = $this->model('UsersModel');
-
-        if ($userModel->isEmailExists($email, $id)) {
-            echo json_encode(['status' => 'error', 'message' => 'Email telah terdaftar. Silakan pilih email lain.']);
-            return;
-        }
-
-        if ($userModel->isUsernameExists($username, $id)) {
-            echo json_encode(['status' => 'error', 'message' => 'Username telah terdaftar. Silakan pilih username lain.']);
-            return;
-        }
-
-        $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
-
-        if (isset($_FILES["profile_picture"]) && $_FILES["profile_picture"]["error"] === 0) {
-            $photo = $this->upload();
-            $image_name = $userModel->deleteImage($id);
-            if ($image_name['profile_picture'] && file_exists('../app/img/profile/' . $image_name['profile_picture'])) {
-                unlink('../app/img/profile/' . $image_name['profile_picture']);
+            if (!$email || !$id || !$username) {
+                echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap atau email tidak valid.']);
+                return;
             }
-        } else {
-            $photo = $oldPhoto;
-        }
 
-        if ($userModel->editUser($email, $id, $input, $photo, $password) > 0) {
-            echo json_encode(['status' => 'success', 'message' => 'Data berhasil diperbarui.']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Data tidak berhasil diperbarui.']);
+            if ($userModel->isEmailExists($email, $id)) {
+                echo json_encode(['status' => 'error', 'message' => 'Email telah terdaftar.']);
+                return;
+            }
+
+            if ($userModel->isUsernameExists($username, $id)) {
+                echo json_encode(['status' => 'error', 'message' => 'Username telah terdaftar.']);
+                return;
+            }
+
+            $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
+
+            // Proses upload gambar jika ada
+            if (isset($_FILES["profile_picture"]) && $_FILES["profile_picture"]["error"] === UPLOAD_ERR_OK) {
+                $photo = $this->upload();
+            } else {
+                $photo = $oldPhoto;
+            }
+
+            // Simpan data perubahan
+            if ($userModel->editUser($email, $id, $_POST, $photo, $password) > 0) {
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Data berhasil diperbarui.',
+                    'profile_picture' => basename($photo)
+                ]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Data tidak berhasil diperbarui.']);
+            }
         }
     }
-
 
     private function redirectWithError($error)
     {

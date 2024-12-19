@@ -115,14 +115,6 @@ var_dump($data);
                 <h2 class="text-2xl font-light text-red-500">Formulir Edit Pengguna</h2>
             </div>
 
-            <!--            --><?php //if (isset($_SESSION['flash'])): ?>
-            <!--                <div class="alert alert--->
-            <?php //= strpos($_SESSION['flash'], 'berhasil') !== false ? 'success' : 'danger'; ?><!-- mb-4">-->
-            <!--                    --><?php //= $_SESSION['flash']; ?>
-            <!--                </div>-->
-            <!--                --><?php //unset($_SESSION['flash']); ?>
-            <!--            --><?php //endif; ?>
-
             <form id="editUserForm" action="<?= BASEURL; ?>/User/edit" method="POST" class="p-8"
                   enctype="multipart/form-data">
                 <!-- Hidden inputs -->
@@ -179,7 +171,8 @@ var_dump($data);
                                      alt="Profile Picture"
                                      class="w-16 h-16 rounded-full object-cover border-2 border-red-100">
                                 <input type="file" name="profile_picture"
-                                       class="input-modern flex-1 px-4 py-3 border-2 border-red-100 rounded-xl">
+                                       class="input-modern flex-1 px-4 py-3 border-2 border-red-100 rounded-xl"
+                                       accept="image/*">
                             </div>
                         </div>
                     </div>
@@ -203,30 +196,64 @@ var_dump($data);
     </main>
 </div>
 <script>
-    $('#editUserForm').on('submit', function (event) {
-        event.preventDefault(); // Mencegah form dikirim secara default
+    function edit(formSelector, successCallback, errorCallback) {
+        const formElement = $(formSelector)[0];
+        const formData = new FormData(formElement);
 
-        const formData = new FormData(this);
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
 
         $.ajax({
-            url: '<?= BASEURL; ?>/User/edit',
+            url: '<?= BASEURL; ?>/User/edit',  // URL endpoint
             type: 'POST',
             data: formData,
-            processData: false, // Jangan memproses data menjadi string
-            contentType: false, // Jangan menetapkan tipe konten secara manual
+            processData: false,
+            contentType: false,
             success: function (data) {
-                console.log('Success Response:', data);
-                if (data.status === 'success') {
-                    alert(data.message); // Menampilkan pesan sukses
-                    window.location.href = '<?= BASEURL; ?>/User'; // Redirect ke halaman user
-                } else {
-                    alert(data.message); // Menampilkan pesan error
+                console.log('Raw Response:', data);
+                try {
+                    const parsedData = JSON.parse(data);
+                    console.log('Parsed Response:', parsedData);
+                    if (parsedData.status === 'success') {
+                        if (typeof successCallback === 'function') {
+                            successCallback(parsedData);
+                        }
+                    } else {
+                        if (typeof errorCallback === 'function') {
+                            errorCallback(parsedData);
+                        } else {
+                            alert(parsedData.message);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error parsing response:', error);
+                    alert('Terjadi kesalahan saat memproses respons.');
                 }
             },
             error: function (xhr, status, error) {
                 console.error('Error:', error);
                 alert('Terjadi kesalahan saat mengirim data.');
             }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#editUserForm').on('submit', function (event) {
+            event.preventDefault();
+
+            edit('#editUserForm',
+                function onSuccess(parsedData) {
+                    alert(parsedData.message);
+                    console.log('New Profile Picture:', parsedData.profile_picture);
+                    // Update gambar baru di UI
+                    $('#profilePic').attr('src', '../app/img/profile/' + parsedData.profile_picture);
+                    window.location.href = '<?= BASEURL; ?>/User';
+                },
+                function onError(parsedData) {
+                    alert(parsedData.message);
+                }
+            );
         });
     });
 </script>

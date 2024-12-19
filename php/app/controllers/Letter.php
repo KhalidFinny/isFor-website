@@ -35,9 +35,9 @@ class Letter extends Controller
             $this->saveLastVisitedPage();
 
             // Pagination setup
-            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini, default 1
-            $limit = 4; // Jumlah surat per halaman
-            $offset = ($page - 1) * $limit; // Hitung offset untuk query
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $limit = 4;
+            $offset = ($page - 1) * $limit;
 
             $lettersModel = $this->model('LettersModel');
             $data['allLetters'] = $lettersModel->getPendingLettersWithPagination($limit, $offset); // Surat pada halaman ini
@@ -47,7 +47,6 @@ class Letter extends Controller
             $data['currentPage'] = $page;
             $data['totalPages'] = ceil($totalLetters / $limit);
 
-            // Kirim data ke view
             $this->view('admin/verifyLetters', $data);
         } else {
             header('Location: ' . $this->getLastVisitedPage());

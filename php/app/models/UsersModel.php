@@ -110,27 +110,20 @@ class UsersModel
     }
 
 
+    //fungsi mengedit user
     public function editUser($email, $id, $data, $photo, $password)
     {
-        $name = $data['name'] ?? null;
-        $role_id = $data['role_id'] ?? null;
-
-        if (!$name || !$role_id) {
-            throw new Exception('Name atau Role ID tidak ada dalam data yang dikirim.');
-        }
-
         $this->db->query('EXEC sp_EditUser :user_id, :name, :username, :email, :profile_picture, :password, :role_id');
         $this->db->bind(':user_id', $id);
-        $this->db->bind(':name', $name);
+        $this->db->bind(':name', $data['name']);
         $this->db->bind(':username', $data['username']);
         $this->db->bind(':email', $email);
         $this->db->bind(':profile_picture', $photo);
         $this->db->bind(':password', $password);
-        $this->db->bind(':role_id', $role_id);
+        $this->db->bind(':role_id', $data['role_id']);
         $this->db->execute();
         return $this->db->rowCount();
     }
-
 
     public function isEmailExists($email, $userId = null)
     {
