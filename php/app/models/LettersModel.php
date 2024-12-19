@@ -209,6 +209,19 @@ class LettersModel
         }
     }
 
+    public function getAllLetters()
+    {
+        $this->db->query("SELECT * FROM letters");
+        return $this->db->resultSet();
+    }
+
+    // Get letters by status (for admin)
+    public function getLettersByStatus($status)
+    {
+        $this->db->query("SELECT * FROM letters WHERE status = :status");
+        $this->db->bind(':status', $status);
+        return $this->db->resultSet();
+    }
 
 //    public function searchLetter($user_id, $keyword){
 //        $this->db->query('SELECT * FROM letters WHERE user_id = :user_id AND title LIKE :keyword OR date LIKE :keyword');

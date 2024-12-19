@@ -110,7 +110,6 @@ class Galleries extends Controller
         }
     }
 
-    public function delete()
 //    public function delete()
 //    {
 //        if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -343,7 +343,7 @@
 
     function filter(status) {
         $.ajax({
-            url: '<?= BASEURL ?>/ResearchOutput/filter',
+            url: '<?= BASEURL ?>/ResearchOutput/filterAdmin',
             method: 'POST',
             dataType: 'json',
             data: {status: status},

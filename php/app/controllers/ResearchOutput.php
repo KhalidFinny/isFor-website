@@ -336,6 +336,31 @@ class ResearchOutput extends Controller
         }
     }
 
+
+    public function filterAdmin()
+    {
+        $status = $_POST['status'];
+
+        switch ($status) {
+            case 0:
+                $files = $this->model('ResearchOutputModel')->getAllFiles();
+                break;
+            case 1:
+                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Pending
+                break;
+            case 2:
+                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Verified
+                break;
+            case 3:
+                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Rejected
+                break;
+            default:
+                echo json_encode(['error' => 'Invalid status']);
+                return;
+        }
+        echo json_encode($files);
+    }
+
     public function delete()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

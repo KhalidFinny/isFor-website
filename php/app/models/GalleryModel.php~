@@ -70,37 +70,34 @@ class GalleryModel
 
     public function delete($id)
     {
-        // Query untuk mendapatkan nama file gambar berdasarkan gallery_id
         $queryGetImage = "SELECT image FROM " . $this->table . " WHERE gallery_id = :id";
         $this->db->query($queryGetImage);
         $this->db->bind(':id', $id);
         $result = $this->db->single();
 
-        // Jika data tidak ditemukan, return false
         if (!$result) {
             return false;
         }
 
-        // Ambil nama file gambar
         $imageName = $result['image'];
         $uploadDir = __DIR__ . '/../img/gallery/files/';
         $filePath = $uploadDir . $imageName;
 
-        // Hapus file jika ada
+        $unlinkSuccess = false;
         if (file_exists($filePath)) {
-            unlink($filePath);
+            $unlinkSuccess = unlink($filePath);
         }
 
-        // Query untuk menghapus data dari database
         $queryDelete = "DELETE FROM " . $this->table . " WHERE gallery_id = :id";
         $this->db->query($queryDelete);
         $this->db->bind(':id', $id);
         $this->db->execute();
 
-        // Return true jika ada baris yang terhapus
-        return $this->db->rowCount() > 0;
+        return [
+            'dbDeleteSuccess' => $this->db->rowCount() > 0,
+            'unlinkSuccess' => $unlinkSuccess,
+        ];
     }
-
 
     public function getGalleriesWithPagination($limit, $offset)
     {
@@ -137,6 +134,19 @@ class GalleryModel
     {
         $query = " SELECT * FROM galleries WHERE category LIKE 'Tesis Magister'";
         $this->db->query($query);
+        return $this->db->resultSet();
+    }
+
+    public function getFiles()
+    {
+        $this->db->query("SELECT * FROM " . $this->table);
+        return $this->db->resultSet();
+    }
+
+    public function getFilesByStatus($status)
+    {
+        $this->db->query("SELECT * FROM " . $this->table . " WHERE status = :status");
+        $this->db->bind(':status', $status);
         return $this->db->resultSet();
     }
 }
