@@ -1,5 +1,5 @@
 <?php
-//var_dump($data);
+var_dump($data);
 ?>
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
@@ -215,6 +215,7 @@
             processData: false, // Jangan memproses data menjadi string
             contentType: false, // Jangan menetapkan tipe konten secara manual
             success: function (data) {
+                console.log('Success Response:', data);
                 if (data.status === 'success') {
                     alert(data.message); // Menampilkan pesan sukses
                     window.location.href = '<?= BASEURL; ?>/User'; // Redirect ke halaman user

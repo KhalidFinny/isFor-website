@@ -294,49 +294,16 @@ session_start();
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Intersection Observer for fade-in animation
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        // Topic button interactions
-        const topicButtons = document.querySelectorAll('.topic-button');
-        topicButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                topicButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-            });
-        });
-
-        // Gallery item zoom functionality
-        const galleryItems = document.querySelectorAll('.gallery-item');
-        galleryItems.forEach(item => {
-            observer.observe(item);
-            item.addEventListener('click', () => {
-                item.classList.toggle('zoomed');
-            });
-        });
-    });
 
     function deleteImage(ImageId) {
         if (confirm('Are you sure you want to delete this file?')) {
             $.ajax({
-                url: '<?= BASEURL ?>/home/deleteImage',
+                url: '<?= BASEURL ?>/galleries/deleteImage',
                 type: 'POST',
+                dataType: 'json',
                 data: {gallery_id: ImageId},
                 success: function (response) {
-                    console.log(response); // Debug response dari server
                     let result = JSON.parse(response);
-                    console.log(result); // Lihat detail debug
                     if (result.success) {
                         alert(result.message);
                         window.location.reload();
@@ -351,81 +318,80 @@ session_start();
         }
     }
 
-    // Fungsi untuk menampilkan preview gambar
     function showImagePreview(imageUrl, title, category, date, description) {
-        const modal = document.getElementById('imagePreviewModal');
-        const content = document.getElementById('previewContent');
-        const image = document.getElementById('previewImage');
-        const titleEl = document.getElementById('previewTitle');
-        const categoryEl = document.getElementById('previewCategory');
-        const dateEl = document.getElementById('previewDate');
-        const descriptionEl = document.getElementById('previewDescription');
+        const $modal = $('#imagePreviewModal');
+        const $content = $('#previewContent');
+        const $image = $('#previewImage');
+        const $titleEl = $('#previewTitle');
+        const $categoryEl = $('#previewCategory');
+        const $dateEl = $('#previewDate');
+        const $descriptionEl = $('#previewDescription');
 
-        // Set content
-        image.src = imageUrl;
-        titleEl.textContent = title;
-        categoryEl.textContent = category;
-        dateEl.textContent = date;
-        descriptionEl.textContent = description;
+        // Set content menggunakan jQuery
+        $image.attr('src', imageUrl);
+        $titleEl.text(title);
+        $categoryEl.text(category);
+        $dateEl.text(date);
+        $descriptionEl.text(description);
 
         // Show modal with animation
-        modal.classList.add('modal-open');
+        $modal.addClass('modal-open');
         setTimeout(() => {
-            content.classList.add('content-show');
+            $content.addClass('content-show');
         }, 100);
 
         // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+        $('body').css('overflow', 'hidden');
 
         // Initialize zoom functionality
-        initializeZoom(image);
+        initializeZoom($image[0]);
     }
 
-    // Separate zoom functionality into its own function
-    function initializeZoom(image) {
+    function initializeZoom($image) {
         let scale = 1;
         let panning = false;
         let pointX = 0;
         let pointY = 0;
         let start = {x: 0, y: 0};
 
-        image.classList.add('zoom-active');
+        // Tambahkan kelas zoom-active
+        $image.addClass('zoom-active');
 
-        // Double click to reset zoom
-        image.addEventListener('dblclick', () => {
+        // Double click untuk reset zoom
+        $image.on('dblclick', () => {
             scale = 1;
             pointX = 0;
             pointY = 0;
-            image.style.transform = `translate(0px, 0px) scale(1)`;
-            image.classList.remove('zoomed');
+            $image.css('transform', `translate(0px, 0px) scale(1)`);
+            $image.removeClass('zoomed');
         });
 
-        // Mouse wheel zoom
-        image.addEventListener('wheel', (e) => {
+        // Mouse wheel untuk zoom
+        $image.on('wheel', (e) => {
             e.preventDefault();
-            const xs = (e.clientX - pointX) / scale;
-            const ys = (e.clientY - pointY) / scale;
+            const xs = (e.originalEvent.clientX - pointX) / scale;
+            const ys = (e.originalEvent.clientY - pointY) / scale;
 
-            if (e.deltaY < 0) {
+            if (e.originalEvent.deltaY < 0) {
                 scale *= 1.1;
-                image.classList.add('zoomed');
+                $image.addClass('zoomed');
             } else {
                 scale /= 1.1;
                 if (scale <= 1) {
                     scale = 1;
-                    image.classList.remove('zoomed');
+                    $image.removeClass('zoomed');
                 }
             }
 
             scale = Math.min(Math.max(1, scale), 4);
-            pointX = e.clientX - xs * scale;
-            pointY = e.clientY - ys * scale;
+            pointX = e.originalEvent.clientX - xs * scale;
+            pointY = e.originalEvent.clientY - ys * scale;
 
-            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+            $image.css('transform', `translate(${pointX}px, ${pointY}px) scale(${scale})`);
         });
 
         // Pan functionality
-        image.addEventListener('mousedown', (e) => {
+        $image.on('mousedown', (e) => {
             e.preventDefault();
             if (scale > 1) {
                 start = {x: e.clientX - pointX, y: e.clientY - pointY};
@@ -433,53 +399,35 @@ session_start();
             }
         });
 
-        image.addEventListener('mousemove', (e) => {
+        $(document).on('mousemove', (e) => {
             e.preventDefault();
             if (!panning) return;
             pointX = e.clientX - start.x;
             pointY = e.clientY - start.y;
-            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+            $image.css('transform', `translate(${pointX}px, ${pointY}px) scale(${scale})`);
         });
 
-        image.addEventListener('mouseup', () => panning = false);
-        image.addEventListener('mouseleave', () => panning = false);
+        $(document).on('mouseup mouseleave', () => {
+            panning = false;
+        });
     }
 
-    // Make sure closeImagePreview is defined
     function closeImagePreview() {
-        const modal = document.getElementById('imagePreviewModal');
-        const content = document.getElementById('previewContent');
-        const image = document.getElementById('previewImage');
+        const $modal = $('#imagePreviewModal');
+        const $content = $('#previewContent');
+        const $image = $('#previewImage');
 
-        content.classList.remove('content-show');
+        // Hapus kelas 'content-show' dengan animasi
+        $content.removeClass('content-show');
 
+        // Tunggu animasi selesai sebelum menutup modal
         setTimeout(() => {
-            modal.classList.remove('modal-open');
-            image.style.transform = 'translate(0px, 0px) scale(1)';
-            image.classList.remove('zoomed');
-            document.body.style.overflow = '';
+            $modal.removeClass('modal-open');
+            $image.css('transform', 'translate(0px, 0px) scale(1)');
+            $image.removeClass('zoomed');
+            $('body').css('overflow', '');
         }, 300);
     }
-
-    // Remove any existing click handlers from DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', function () {
-        // Only initialize necessary functionality
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            observer.observe(item);
-        });
-    });
 
     function filter(status) {
         $.ajax({
@@ -490,12 +438,14 @@ session_start();
             success: function (data) {
                 console.log('Success Response:', data);
 
-                const galleryContainer = document.querySelector(".container-galleries");
-                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+                const $galleryContainer = $(".container-galleries");
+                const $navElement = $('nav[aria-label="Page navigation example"]');
 
-                galleryContainer.innerHTML = '';
-                navElement.innerHTML = '';
+                // Kosongkan kontainer dan navigasi
+                $galleryContainer.empty();
+                $navElement.empty();
 
+                // Iterasi data dan tambahkan elemen ke DOM
                 data.forEach(galery => {
                     // Format tanggal menggunakan JavaScript
                     const formattedDate = new Date(galery.created_at).toLocaleDateString('id-ID', {
@@ -542,10 +492,9 @@ session_start();
                     </div>
                 `;
 
-                    // Tambahkan HTML ke kontainer
-                    galleryContainer.insertAdjacentHTML('beforeend', fileHTML);
+                    // Tambahkan HTML ke kontainer menggunakan jQuery
+                    $galleryContainer.append(fileHTML);
                 });
-
             },
             error: function (xhr, status, error) {
                 console.error('Error Status:', status);
@@ -554,7 +503,39 @@ session_start();
             }
         });
     }
+
+    $(document).ready(function () {
+        // Intersection Observer for fade-in animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        $(entry.target).addClass('visible');
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        // Topic button interactions
+        const $topicButtons = $('.topic-button');
+        $topicButtons.on('click', function () {
+            $topicButtons.removeClass('active');
+            $(this).addClass('active');
+        });
+
+        // Gallery item zoom functionality
+        const $galleryItems = $('.gallery-item');
+        $galleryItems.each(function () {
+            observer.observe(this); // Pass raw DOM element to the observer
+        });
+
+        $galleryItems.on('click', function () {
+            $(this).toggleClass('zoomed');
+        });
+    });
+
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

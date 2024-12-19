@@ -11,7 +11,6 @@ session_start();
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .file-card {
@@ -93,7 +92,8 @@ session_start();
             <?php
             $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
             foreach ($topics as $index => $topic): ?>
-                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>" onclick="filter(<?php echo $index; ?>)">
+                <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>"
+                        onclick="filter(<?php echo $index; ?>)">
                     <?php echo $topic; ?>
                 </button>
             <?php endforeach; ?>
@@ -242,69 +242,39 @@ session_start();
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        const topicButtons = document.querySelectorAll('.topic-button');
-        topicButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                topicButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-            });
-        });
-
-        const fileCards = document.querySelectorAll('.file-card');
-        fileCards.forEach(item => {
-            observer.observe(item);
-
-            item.addEventListener('click', () => {
-                item.classList.toggle('zoomed');
-            });
-        });
-    });
 
     function previewFile(fileUrl) {
-        const modal = document.getElementById('previewModal');
-        const previewContent = document.getElementById('previewContent');
+        const modal = $('#previewModal');
+        const previewContent = $('#previewContent');
         const fileExtension = fileUrl.split('.').pop().toLowerCase();
 
         if (fileExtension === 'pdf') {
             window.open('<?=FILES;?>/' + fileUrl, '_blank');
         } else {
-            previewContent.innerHTML = `<div class="flex items-center justify-center h-full">
-                <p class="text-gray-500">Preview not available for this file type</p>
-            </div>`;
+            previewContent.html(`
+                <div class="flex items-center justify-center h-full">
+                    <p class="text-gray-500">Preview not available for this file type</p>
+                </div>`
+            );
         }
 
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        modal.removeClass('hidden').addClass('flex');
     }
 
     function closePreview() {
-        const modal = document.getElementById('previewModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
+        const modal = $('#previewModal');
+        modal.addClass('hidden').removeClass('flex');
     }
 
     function deleteFile(fileId) {
         if (confirm('Are you sure you want to delete this file?')) {
             $.ajax({
-                url: '<?= BASEURL ?>/researchoutput/delete', // URL endpoint untuk delete
-                type: 'POST', // Menggunakan POST untuk aksi delete
-                data: {id: fileId}, // Data yang dikirimkan
+                url: '<?= BASEURL ?>/researchoutput/delete',
+                type: 'POST',
+                data: {id: fileId},
                 success: function (response) {
-                    window.location.reload();
                     alert('File deleted successfully!');
+                    window.location.reload();
                 },
                 error: function (xhr, status, error) {
                     alert('An error occurred: ' + error);
@@ -322,11 +292,11 @@ session_start();
             success: function (data) {
                 console.log('Success Response:', data);
 
-                const fileContainer = document.querySelector(".files-container");
-                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+                const fileContainer = $('.files-container');
+                const navElement = $('nav[aria-label="Page navigation example"]');
 
-                fileContainer.innerHTML = '';
-                navElement.innerHTML = '';
+                fileContainer.empty();
+                navElement.empty();
 
                 data.forEach(file => {
                     const fileHTML = `
@@ -354,8 +324,8 @@ session_start();
                                     <p class="text-sm text-gray-500 mb-2">${file.description}</p>
                                     <span class="text-xs text-gray-400">
                                         Uploaded on ${new Date(file.uploaded_at).toLocaleDateString('id-ID', {
-                                            day: '2-digit', month: 'short', year: 'numeric'
-                                        })}
+                        day: '2-digit', month: 'short', year: 'numeric'
+                    })}
                                     </span>
                                 </div>
                             </div>
@@ -383,9 +353,9 @@ session_start();
                     </div>
                 `;
 
-                fileContainer.insertAdjacentHTML('beforeend', fileHTML);
+                    fileContainer.append(fileHTML);
                 });
-                
+
             },
             error: function (xhr, status, error) {
                 console.error('Error Status:', status);
@@ -394,7 +364,35 @@ session_start();
             }
         });
     }
+
+    $(document).ready(function () {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        $(entry.target).addClass('visible');
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        const topicButtons = $('.topic-button');
+        topicButtons.on('click', function () {
+            topicButtons.removeClass('active');
+            $(this).addClass('active');
+        });
+
+        const fileCards = $('.file-card');
+        fileCards.each(function () {
+            observer.observe(this);
+
+            $(this).on('click', function () {
+                $(this).toggleClass('zoomed');
+            });
+        });
+    });
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

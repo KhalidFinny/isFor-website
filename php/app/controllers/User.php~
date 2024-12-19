@@ -148,25 +148,22 @@ class User extends Controller
 
     public function edit()
     {
-        $input = json_decode(file_get_contents('php://input'), true);
+        $input = json_decode(file_get_contents('php://input'), true); // Decode JSON input
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $id = $_POST['user_id'];
+        $oldPhoto = $_POST["oldImage"];
+        $oldPass = $_POST["oldPass"];
+        $newPass = $_POST["password"];
+        $username = $_POST['username'];
+        $userModel = $this->model('UsersModel');
 
-        // Ambil data dari input JSON
-        $email = isset($input['email']) ? filter_var($input['email'], FILTER_VALIDATE_EMAIL) : null;
-        $id = $input['user_id'] ?? null;
-        $oldPhoto = $input['oldImage'] ?? null;
-        $oldPass = $input['oldPass'] ?? null;
-        $newPass = $input['password'] ?? null;
-        $username = $input['username'] ?? null;
-
-        if (!$email || !$id || !$username) {
-            echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap.']);
+        if (!$email) {
+            echo json_encode(['status' => 'error', 'message' => 'Email tidak valid.']);
             return;
         }
 
-        $userModel = $this->model('UsersModel');
-
         if ($userModel->isEmailExists($email, $id)) {
-            echo json_encode(['status' => 'error', 'message' => 'Email telah terdaftar. Silakan pilih email lain.']);
+            echo json_encode(['status' => 'error', 'message' => 'email telah terdaftar. Silakan pilih email lain.']);
             return;
         }
 
@@ -177,23 +174,22 @@ class User extends Controller
 
         $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
 
-        if (isset($_FILES["profile_picture"]) && $_FILES["profile_picture"]["error"] === 0) {
+        if ($_FILES["profile_picture"]["error"] === 4) {
+            $photo = $oldPhoto;
+        } else {
             $photo = $this->upload();
             $image_name = $userModel->deleteImage($id);
             if ($image_name['profile_picture'] && file_exists('../app/img/profile/' . $image_name['profile_picture'])) {
                 unlink('../app/img/profile/' . $image_name['profile_picture']);
             }
-        } else {
-            $photo = $oldPhoto;
         }
 
-        if ($userModel->editUser($email, $id, $input, $photo, $password) > 0) {
+        if ($userModel->editUser($email, $id, $_POST, $photo, $password) > 0) {
             echo json_encode(['status' => 'success', 'message' => 'Data berhasil diperbarui.']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Data tidak berhasil diperbarui.']);
         }
     }
-
 
     private function redirectWithError($error)
     {
