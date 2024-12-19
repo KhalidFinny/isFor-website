@@ -201,7 +201,7 @@
                             <?php echo ($data['user']['role_id'] == 1) ? 'Administrator' : 'Researcher'; ?>
                         </p>
                     </div>
-                    <div class="h-10 w-10 rounded-lg overflow-hidden bg-gray-100">
+                    <div class="h-10 w-10 rounded-full overflow-hidden bg-gray-100">
                         <?php if ($data['user']['profile_picture'] == null): ?>
                             <img class="h-full w-full object-cover"
                                  src="<?= ASSETS ?>/images/empty-user.png" alt="Profile">
@@ -334,7 +334,7 @@
                                 <tr class="group hover:bg-gray-50/50 transition-all duration-200">
                                     <td class="px-8 py-5">
                                         <div class="flex items-center space-x-4">
-                                            <div class="flex-shrink-0 h-10 w-10 rounded-lg overflow-hidden bg-gray-100">
+                                            <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-gray-100">
                                                 <?php if ($allUsersWithPagination['profile_picture'] == null): ?>
                                                     <img class="h-full w-full object-cover"
                                                          src="<?= ASSETS ?>/images/empty-user.png" alt="">

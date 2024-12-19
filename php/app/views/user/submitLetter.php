@@ -27,7 +27,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
+    <?php include '../app/views/assets/components/UserDashboard/sidebar.php';?>
     <div class="flex-1 min-h-screen ml-64 bg-white">
         <main class="py-10 px-8">
             <!-- Swiss-inspired Header -->
@@ -40,7 +40,7 @@
             </div>
 
             <!-- Form Section -->
-            <form action="<?= BASEURL ?>/letter/sendletter" method="POST" id="letterForm" class="max-w-7xl mx-auto">
+            <form action="<?=BASEURL?>/letter/sendletter" method="POST" id="letterForm" class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-12 gap-8">
                     <!-- Left Column -->
                     <div class="col-span-8">
@@ -53,7 +53,7 @@
                                 <div class="space-y-2">
                                     <label class="block text-sm font-medium text-gray-600">Judul Penelitian</label>
                                     <input type="text" id="researchTitle" name="researchTitle" required
-                                           class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
+                                           class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
                                            placeholder="Masukkan judul penelitian">
                                 </div>
 
@@ -61,7 +61,7 @@
                                 <div class="space-y-2">
                                     <label class="block text-sm font-medium text-gray-600">Ketua Peneliti</label>
                                     <input type="text" id="leadResearcher" name="leadResearcher" required
-                                           class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
+                                           class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
                                            placeholder="Nama ketua peneliti">
                                 </div>
 
@@ -69,7 +69,7 @@
                                 <div class="space-y-2">
                                     <label class="block text-sm font-medium text-gray-600">Topik Riset</label>
                                     <input type="text" id="researchTopic" name="researchTopic" required
-                                           class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
+                                           class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300"
                                            placeholder="Masukkan topik riset">
                                 </div>
                             </div>
@@ -79,14 +79,14 @@
                     <!-- Right Column -->
                     <div class="col-span-4">
                         <div class="sticky top-8 bg-white rounded-2xl p-8 border-2 border-red-100 space-y-6">
-                            <input type="hidden" name="user_id" value="<?= $_SESSION["user_id"] ?>">
+                            <input type="hidden" name="user_id" value="<?=$_SESSION["user_id"]?>">
                             <input type="hidden" name="letterType" value="research_recommendation">
 
                             <!-- Research Scheme -->
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-600">Skema Penelitian</label>
                                 <select id="researchScheme" name="researchScheme" required
-                                        class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">
+                                        class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300 hover:bg-red-50">
                                     <option value="">Pilih Skema Penelitian</option>
                                     <option value="DIPA SWADANA">DIPA SWADANA</option>
                                     <option value="DIPA PNBP">DIPA PNBP</option>
@@ -99,20 +99,20 @@
                                 <label class="block text-sm font-medium text-gray-600">Pusat Riset</label>
                                 <input type="text" id="researchCenter" name="researchCenter"
                                        value="Pusat Riset iSFor" readonly
-                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl text-gray-500">
+                                       class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl text-gray-500">
                             </div>
 
                             <!-- Action Buttons -->
                             <div class="space-y-3 pt-4">
                                 <!-- Preview Button -->
                                 <button type="button" onclick="previewLetter()"
-                                        class="w-full px-6 py-4 bg-white text-red-600 border-2 border-red-200 rounded-xl 
-                                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 
+                                        class="w-full px-6 py-4 bg-white text-red-600 border-2 border-red-200 rounded-xl
+                                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1
                                                transition-all duration-300 flex items-center justify-center space-x-2">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
                                     <span>Preview Surat</span>
@@ -120,11 +120,11 @@
 
                                 <!-- Submit Button -->
                                 <button type="submit"
-                                        class="w-full px-6 py-4 bg-red-500 text-white rounded-xl 
-                                               hover:bg-red-600 transform hover:-translate-y-1 
+                                        class="w-full px-6 py-4 bg-red-500 text-white rounded-xl
+                                               hover:bg-red-600 transform hover:-translate-y-1
                                                transition-all duration-300 flex items-center justify-center space-x-2">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                     <span>Ajukan Surat</span>
@@ -142,7 +142,7 @@
     function previewLetter() {
         const formData = new FormData(document.getElementById('letterForm'));
 
-        fetch('<?= BASEURL ?>/letter/previewletter', {
+        fetch('<?=BASEURL?>/letter/previewletter', {
             method: 'POST',
             body: formData
         })
@@ -162,7 +162,7 @@
 <div id="letterPreview" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6 mt-8">
     <!-- Judul bagian preview -->
     <h3 class="text-lg font-semibold text-red-800 mb-4">Status Pengajuan Surat</h3>
-    
+
     <!-- Wrapper untuk konten preview -->
     <div class="bg-red-50 rounded-xl p-4">
         <div class="flex items-start space-x-4">
@@ -170,21 +170,21 @@
             <div class="flex-shrink-0">
                 <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
                     <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
                 </div>
             </div>
-            
+
             <!-- Informasi progress (bagian kanan) -->
             <div class="flex-1 min-w-0">
                 <!-- Judul preview surat -->
                 <p class="text-sm font-medium text-red-900" id="previewTitle">Mengirim Surat Penelitian</p>
-                
+
                 <!-- Progress bar -->
                 <div class="mt-2 w-full bg-red-200 rounded-full h-2.5">
-                    <div id="previewProgress" 
-                         class="bg-red-500 h-2.5 rounded-full transition-all duration-300" 
+                    <div id="previewProgress"
+                         class="bg-red-500 h-2.5 rounded-full transition-all duration-300"
                          style="width: 0%">
                     </div>
                 </div>
@@ -198,16 +198,16 @@
 <!-- Modal konfirmasi pengajuan surat -->
 <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
     <!-- Wrapper konten modal -->
-    <div id="modalContent" 
-         class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                bg-white rounded-2xl p-8 w-96 opacity-0 scale-95 
+    <div id="modalContent"
+         class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                bg-white rounded-2xl p-8 w-96 opacity-0 scale-95
                 transition-all duration-300">
         <!-- Konten modal -->
         <div class="text-center">
             <!-- Icon peringatan -->
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                 </svg>
             </div>
@@ -218,14 +218,14 @@
             <!-- Tombol-tombol aksi -->
             <div class="flex justify-center space-x-3">
                 <!-- Tombol batal -->
-                <button id="cancelButton" 
+                <button id="cancelButton"
                         class="px-6 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl
-                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1 
+                               hover:bg-red-50 hover:border-red-300 transform hover:-translate-y-1
                                transition-all duration-300">
                     Batal
                 </button>
                 <!-- Tombol konfirmasi -->
-                <button id="confirmButton" 
+                <button id="confirmButton"
                         class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600
                                transform hover:-translate-y-1 transition-all duration-300">
                     Ajukan
@@ -248,20 +248,20 @@
             <div class="flex-shrink-0">
                 <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
                     <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
                 </div>
             </div>
-            
+
             <!-- Progress Info -->
             <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-red-900">Mengirim Surat</p>
-                
+
                 <!-- Progress Bar -->
                 <div class="mt-2 w-full bg-red-200 rounded-full h-2.5">
-                    <div id="progressBar" 
-                         class="bg-red-500 h-2.5 rounded-full transition-all duration-300" 
+                    <div id="progressBar"
+                         class="bg-red-500 h-2.5 rounded-full transition-all duration-300"
                          style="width: 0%">
                     </div>
                 </div>
@@ -287,7 +287,7 @@ const previewTitle = document.getElementById('previewTitle');         // Judul p
 // Event listener untuk submit form
 form.addEventListener('submit', function(e) {
     e.preventDefault(); // Mencegah form melakukan submit langsung
-    
+
     // Validasi field-field yang diperlukan
     const researchTitle = document.getElementById('researchTitle').value.trim();
     const leadResearcher = document.getElementById('leadResearcher').value.trim();
@@ -340,7 +340,7 @@ confirmButton.addEventListener('click', function() {
     // Menampilkan preview pengajuan surat
     letterPreview.classList.remove('hidden');
     previewTitle.textContent = `Mengirim: ${document.getElementById('researchTitle').value}`;
-    
+
     // Mengubah tampilan tombol submit menjadi loading
     submitButton.disabled = true;
     submitButton.innerHTML = `
@@ -353,7 +353,7 @@ confirmButton.addEventListener('click', function() {
 
     // Actually submit the form
     const formData = new FormData(form);
-    fetch('<?= BASEURL ?>/letter/sendletter', {
+    fetch('<?=BASEURL?>/letter/sendletter', {
         method: 'POST',
         body: formData
     })
@@ -379,13 +379,13 @@ confirmButton.addEventListener('click', function() {
             clearInterval(progressInterval);
             previewProgress.style.width = '100%';
             previewStatus.textContent = 'Pengiriman selesai!';
-            
+
             // Menampilkan pesan sukses
             showAlert('Surat berhasil diajukan!', 'success');
-            
+
             // Redirect to dashboard after successful submission
             setTimeout(() => {
-                window.location.href = '<?= BASEURL ?>/dashboardUser';
+                window.location.href = '<?=BASEURL?>/dashboardUser';
             }, 2000);
         }, 2000);
     })
@@ -395,7 +395,7 @@ confirmButton.addEventListener('click', function() {
         submitButton.disabled = false;
         submitButton.innerHTML = `
             <svg class="w-5 h-5 mr-2 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             Ajukan Surat
@@ -411,7 +411,7 @@ confirmButton.addEventListener('click', function() {
 function showAlert(message, type = 'success') {
     const alertElement = document.getElementById('alertMessage');
     const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-    
+
     // Memilih icon berdasarkan tipe alert
     const icon = type === 'success'
         ? `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
