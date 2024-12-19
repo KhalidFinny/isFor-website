@@ -190,7 +190,7 @@ class Letter extends Controller
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-        $jumlahDataperhalaman = 3;
+        $jumlahDataperhalaman = 4;
         $halamanAktif = (isset($_GET["halaman"])) ? (int)$_GET["halaman"] : 1;
         $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
         $lettersModel = $this->model('LettersModel');
@@ -286,7 +286,7 @@ class Letter extends Controller
         $this->checkSessionTimeOut();
         if ($role == 2) {
             $this->saveLastVisitedPage();
-            $jumlahDataperhalaman = 3;
+            $jumlahDataperhalaman = 4;
             $jumlahData = count($this->model('LettersModel')->getLetterByUserId($_SESSION['user_id']));
             $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
             $halamanAktif = (isset($_GET["halaman"])) ? $_GET["halaman"] : 1;

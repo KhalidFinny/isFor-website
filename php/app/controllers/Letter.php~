@@ -190,7 +190,7 @@ class Letter extends Controller
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-        $jumlahDataperhalaman = 3;
+        $jumlahDataperhalaman = 4;
         $halamanAktif = (isset($_GET["halaman"])) ? (int)$_GET["halaman"] : 1;
         $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
         $lettersModel = $this->model('LettersModel');
@@ -237,23 +237,20 @@ class Letter extends Controller
 
     public function filterAdmin()
     {
-        session_start();
         $status = $_POST['status'];
-        $userId = $_SESSION['user_id'];
-        $role = $_SESSION['role'];
 
-        switch ($role == 'admin') {
+        switch ($status) {
             case 0:
                 $letters = $this->model('LettersModel')->getAllLetters();
                 break;
             case 1:
-                $letters = $this->model('LettersModel')->getLettersByStatus(1); // Pending
+                $letters = $this->model('LettersModel')->getLettersByStatus($status); // Pending
                 break;
             case 2:
-                $letters = $this->model('LettersModel')->getLettersByStatus(2); // Verified
+                $letters = $this->model('LettersModel')->getLettersByStatus($status); // Verified
                 break;
             case 3:
-                $letters = $this->model('LettersModel')->getLettersByStatus(3); // Rejected
+                $letters = $this->model('LettersModel')->getLettersByStatus($status); // Rejected
                 break;
             default:
                 echo json_encode(['error' => 'Invalid status']);

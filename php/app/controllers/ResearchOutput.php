@@ -287,26 +287,22 @@ class ResearchOutput extends Controller
 
     public function filter()
     {
-        // echo json_encode($_POST);
-
         session_start();
-        // Ambil `status` dari permintaan POST
-        $status = isset($_POST['status']) ? $_POST['status'] : null;
-        $userId = $_SESSION['user_id']; // Ambil user ID dari sesi
+        $status = $_POST['status'] ?? null;
+        $userId = $_SESSION['user_id'];
 
-        // Filter data berdasarkan status
-        $model = $this->model('ResearchOutputModel'); // Sesuaikan nama model
+        $model = $this->model('ResearchOutputModel');
         switch ($status) {
-            case 0: // Semua data
+            case 0:
                 $outputs = $model->getFilesByUser($userId);
                 break;
-            case 1: // Data tertunda
+            case 1:
                 $outputs = $model->getFilesByUserAndStatus($userId, '1');
                 break;
-            case 2: // Data disetujui
+            case 2:
                 $outputs = $model->getFilesByUserAndStatus($userId, '2');
                 break;
-            case 3: // Data ditolak
+            case 3:
                 $outputs = $model->getFilesByUserAndStatus($userId, '3');
                 break;
             default:
@@ -322,13 +318,23 @@ class ResearchOutput extends Controller
     {
         if (isset($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
+            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+            $itemsPerPage = 6; // Jumlah item per halaman
+            $offset = ($page - 1) * $itemsPerPage;
+
             $researchOutputModel = $this->model('ResearchOutputModel');
 
             try {
-                $results = $researchOutputModel->searchResearchOutputs($keyword);
+                $results = $researchOutputModel->searchResearchOutputs($keyword, $itemsPerPage, $offset);
+                $totalResults = $researchOutputModel->countSearchResults($keyword);
+                $totalPages = ceil($totalResults / $itemsPerPage);
 
                 header('Content-Type: application/json');
-                echo json_encode($results);
+                echo json_encode([
+                    'results' => $results,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $page,
+                ]);
             } catch (Exception $e) {
                 error_log($e->getMessage());
                 echo json_encode(['error' => 'Terjadi kesalahan di server.']);

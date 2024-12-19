@@ -553,7 +553,12 @@
                         `);
                         });
                     } else {
-                        resultContainer.html('<p class="text-gray-500">Surat tidak ditemukan.</p>');
+                        resultContainer.html(`
+                        <div class="col-span-full text-center py-12">
+                            <h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3>
+                            <p class="text-red-600">Coba kata kunci lainnya.</p>
+                        </div>
+                    `);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -562,6 +567,7 @@
             });
         });
     });
+
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>

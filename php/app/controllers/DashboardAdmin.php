@@ -1,11 +1,13 @@
 <?php
 
-class DashboardAdmin extends Controller{
-    public function index(){
+class DashboardAdmin extends Controller
+{
+    public function index()
+    {
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-        if($role == 1){
+        if ($role == 1) {
             $this->saveLastVisitedPage();
             $data['no'] = 1;
             $data['user'] = $this->model('UsersModel')->getUserByUsername($_SESSION['username']);
@@ -15,8 +17,6 @@ class DashboardAdmin extends Controller{
             $data['rejectedLetters'] = $this->model('LettersModel')->countRejectedLetters();
             $data['rejectedFiles'] = $this->model('ResearchOutputModel')->countRejectedFiles();
             $data['totalRejected'] = $data['rejectedLetters'] + $data['rejectedFiles'];
-
-            // Pagination setup
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini, default 1
             $limit = 5; // Jumlah pengguna per halaman
             $data['limit'] = $limit;
@@ -28,7 +28,7 @@ class DashboardAdmin extends Controller{
             $data['currentPage'] = $page;
             $data['totalPages'] = ceil($data['totalUsers'] / $limit);
             $this->view('admin/adminDashboard', $data);
-        }else{
+        } else {
             header('Location: ' . $this->getLastVisitedPage());
         }
     }

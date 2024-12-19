@@ -285,11 +285,22 @@ class ResearchOutputModel
         return $this->db->single()['total'];
     }
 
-    public function searchResearchOutputs($keyword) {
-        $query = "EXEC sp_searchFiles @Keyword = :keyword";
+    public function searchResearchOutputs($keyword, $limit, $offset)
+    {
+        $query = "EXEC sp_searchFiles @Keyword = :keyword, @Limit = :limit, @Offset = :offset";
         $this->db->query($query);
         $this->db->bind(':keyword', $keyword);
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
         return $this->db->resultSet();
+    }
+
+    public function countSearchResults($keyword)
+    {
+        $query = "EXEC sp_countSearchFiles @Keyword = :keyword";
+        $this->db->query($query);
+        $this->db->bind(':keyword', $keyword);
+        return $this->db->single()['total'];
     }
 
     public function getAllFiles()
