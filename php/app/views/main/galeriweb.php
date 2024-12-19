@@ -147,7 +147,7 @@ session_start();
         <!-- Topics Navigation -->
         <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
             <?php
-            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
+            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister', 'Berita'];
             foreach ($topics as $index => $topic): ?>
                 <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>"
                         onclick="filter(<?php echo $index; ?>)">
@@ -250,6 +250,13 @@ session_start();
     </div>
 </section>
 
+<!-- Add this modal HTML at the end of your body -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+    <div class="relative max-w-4xl w-full">
+        <button id="closeModal" class="absolute top-2 right-2 text-white text-2xl">&times;</button>
+        <img id="modalImage" class="w-full h-auto rounded-lg shadow-lg" src="" alt="Preview">
+    </div>
+</div>
 <!-- Add this modal HTML at the end of your body -->
 <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
     <div class="relative max-w-4xl w-full">
@@ -538,23 +545,28 @@ session_start();
                             <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
                                 ${title}
                             </h3>
+                            <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
+                                <button onclick="deleteImage(${galery.gallery_id})"
+                                        class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Delete">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            <?php endif; ?>
                         </div>
                     </div>
-                `;
+                    `;
 
-                    // Tambahkan HTML ke kontainer
-                    galleryContainer.insertAdjacentHTML('beforeend', fileHTML);
+                    galleryContainer.innerHTML += fileHTML;
                 });
-
             },
             error: function (xhr, status, error) {
-                console.error('Error Status:', status);
-                console.error('Error Details:', error);
-                console.error('Response Text:', xhr.responseText);
+                alert('An error occurred: ' + error);
             }
         });
     }
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
