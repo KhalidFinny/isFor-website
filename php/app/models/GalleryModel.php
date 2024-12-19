@@ -136,4 +136,11 @@ class GalleryModel
         $this->db->query($query);
         return $this->db->resultSet();
     }
+
+    public function getGaleryBerita()
+    {
+        $query = " SELECT * FROM galleries WHERE category LIKE 'Berita'";
+        $this->db->query($query);
+        return $this->db->resultSet();
+    }
 }

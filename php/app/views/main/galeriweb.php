@@ -147,7 +147,7 @@ session_start();
         <!-- Topics Navigation -->
         <div class="flex gap-8 mb-16 overflow-x-auto pb-4 -mx-6 px-6">
             <?php
-            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister'];
+            $topics = ['Semua', 'DIPA SWADANA', 'DIPA PNBP', 'Tesis Magister', 'Berita'];
             foreach ($topics as $index => $topic): ?>
                 <button class="topic-button px-4 py-2 text-gray-600 hover:text-red-600 font-medium transition-all whitespace-nowrap <?php echo $index === 0 ? 'active' : ''; ?>"
                         onclick="filter(<?php echo $index; ?>)">
@@ -257,6 +257,13 @@ session_start();
         <img id="modalImage" class="w-full h-auto rounded-lg shadow-lg" src="" alt="Preview">
     </div>
 </div>
+<!-- Add this modal HTML at the end of your body -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+    <div class="relative max-w-4xl w-full">
+        <button id="closeModal" class="absolute top-2 right-2 text-white text-2xl">&times;</button>
+        <img id="modalImage" class="w-full h-auto rounded-lg shadow-lg" src="" alt="Preview">
+    </div>
+</div>
 
 <!-- Tambahkan modal preview di akhir body sebelum script -->
 <div id="imagePreviewModal"
@@ -294,20 +301,54 @@ session_start();
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Intersection Observer for fade-in animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        // Topic button interactions
+        const topicButtons = document.querySelectorAll('.topic-button');
+        topicButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                topicButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Gallery item zoom functionality
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
+            observer.observe(item);
+            item.addEventListener('click', () => {
+                item.classList.toggle('zoomed');
+            });
+        });
+    });
 
     function deleteImage(ImageId) {
         if (confirm('Are you sure you want to delete this file?')) {
             $.ajax({
                 url: '<?= BASEURL ?>/galleries/deleteImage',
                 type: 'POST',
-                dataType: 'json', // Respons langsung di-parse sebagai JSON
-                data: { gallery_id: ImageId },
+                data: {gallery_id: ImageId},
                 success: function (response) {
-                    if (response.success) {
-                        alert(response.message);
+                    console.log(response); // Debug response dari server
+                    let result = JSON.parse(response);
+                    console.log(result); // Lihat detail debug
+                    if (result.success) {
+                        alert(result.message);
                         window.location.reload();
                     } else {
-                        alert(response.message);
+                        alert(result.message);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -317,80 +358,81 @@ session_start();
         }
     }
 
+    // Fungsi untuk menampilkan preview gambar
     function showImagePreview(imageUrl, title, category, date, description) {
-        const $modal = $('#imagePreviewModal');
-        const $content = $('#previewContent');
-        const $image = $('#previewImage');
-        const $titleEl = $('#previewTitle');
-        const $categoryEl = $('#previewCategory');
-        const $dateEl = $('#previewDate');
-        const $descriptionEl = $('#previewDescription');
+        const modal = document.getElementById('imagePreviewModal');
+        const content = document.getElementById('previewContent');
+        const image = document.getElementById('previewImage');
+        const titleEl = document.getElementById('previewTitle');
+        const categoryEl = document.getElementById('previewCategory');
+        const dateEl = document.getElementById('previewDate');
+        const descriptionEl = document.getElementById('previewDescription');
 
-        // Set content menggunakan jQuery
-        $image.attr('src', imageUrl);
-        $titleEl.text(title);
-        $categoryEl.text(category);
-        $dateEl.text(date);
-        $descriptionEl.text(description);
+        // Set content
+        image.src = imageUrl;
+        titleEl.textContent = title;
+        categoryEl.textContent = category;
+        dateEl.textContent = date;
+        descriptionEl.textContent = description;
 
         // Show modal with animation
-        $modal.addClass('modal-open');
+        modal.classList.add('modal-open');
         setTimeout(() => {
-            $content.addClass('content-show');
+            content.classList.add('content-show');
         }, 100);
 
         // Prevent body scroll
-        $('body').css('overflow', 'hidden');
+        document.body.style.overflow = 'hidden';
 
         // Initialize zoom functionality
-        initializeZoom($image[0]);
+        initializeZoom(image);
     }
 
-    function initializeZoom($image) {
+    // Separate zoom functionality into its own function
+    function initializeZoom(image) {
         let scale = 1;
         let panning = false;
         let pointX = 0;
         let pointY = 0;
         let start = {x: 0, y: 0};
 
-        // Tambahkan kelas zoom-active
-        $image.addClass('zoom-active');
+        image.classList.add('zoom-active');
 
-        // Double click untuk reset zoom
-        $image.on('dblclick', () => {
+        // Double click to reset zoom
+        image.addEventListener('dblclick', () => {
             scale = 1;
             pointX = 0;
             pointY = 0;
-            $image.css('transform', `translate(0px, 0px) scale(1)`);
-            $image.removeClass('zoomed');
+            image.style.transform = `translate(0px, 0px) scale(1)`;
+            image.classList.remove('zoomed');
         });
 
-        // Mouse wheel untuk zoom
-        $image.on('wheel', (e) => {
+        // Mouse wheel zoom
+        image.addEventListener('wheel', (e) => {
             e.preventDefault();
-            const xs = (e.originalEvent.clientX - pointX) / scale;
-            const ys = (e.originalEvent.clientY - pointY) / scale;
+            const xs = (e.clientX - pointX) / scale;
+            const ys = (e.clientY - pointY) / scale;
 
-            if (e.originalEvent.deltaY < 0) {
+            if (e.deltaY < 0) {
                 scale *= 1.1;
-                $image.addClass('zoomed');
+                image.classList.add('zoomed');
             } else {
                 scale /= 1.1;
                 if (scale <= 1) {
                     scale = 1;
-                    $image.removeClass('zoomed');
+                    image.classList.remove('zoomed');
                 }
             }
 
             scale = Math.min(Math.max(1, scale), 4);
-            pointX = e.originalEvent.clientX - xs * scale;
-            pointY = e.originalEvent.clientY - ys * scale;
+            pointX = e.clientX - xs * scale;
+            pointY = e.clientY - ys * scale;
 
-            $image.css('transform', `translate(${pointX}px, ${pointY}px) scale(${scale})`);
+            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
         });
 
         // Pan functionality
-        $image.on('mousedown', (e) => {
+        image.addEventListener('mousedown', (e) => {
             e.preventDefault();
             if (scale > 1) {
                 start = {x: e.clientX - pointX, y: e.clientY - pointY};
@@ -398,35 +440,53 @@ session_start();
             }
         });
 
-        $(document).on('mousemove', (e) => {
+        image.addEventListener('mousemove', (e) => {
             e.preventDefault();
             if (!panning) return;
             pointX = e.clientX - start.x;
             pointY = e.clientY - start.y;
-            $image.css('transform', `translate(${pointX}px, ${pointY}px) scale(${scale})`);
+            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
         });
 
-        $(document).on('mouseup mouseleave', () => {
-            panning = false;
-        });
+        image.addEventListener('mouseup', () => panning = false);
+        image.addEventListener('mouseleave', () => panning = false);
     }
 
+    // Make sure closeImagePreview is defined
     function closeImagePreview() {
-        const $modal = $('#imagePreviewModal');
-        const $content = $('#previewContent');
-        const $image = $('#previewImage');
+        const modal = document.getElementById('imagePreviewModal');
+        const content = document.getElementById('previewContent');
+        const image = document.getElementById('previewImage');
 
-        // Hapus kelas 'content-show' dengan animasi
-        $content.removeClass('content-show');
+        content.classList.remove('content-show');
 
-        // Tunggu animasi selesai sebelum menutup modal
         setTimeout(() => {
-            $modal.removeClass('modal-open');
-            $image.css('transform', 'translate(0px, 0px) scale(1)');
-            $image.removeClass('zoomed');
-            $('body').css('overflow', '');
+            modal.classList.remove('modal-open');
+            image.style.transform = 'translate(0px, 0px) scale(1)';
+            image.classList.remove('zoomed');
+            document.body.style.overflow = '';
         }, 300);
     }
+
+    // Remove any existing click handlers from DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', function () {
+        // Only initialize necessary functionality
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            observer.observe(item);
+        });
+    });
 
     function filter(status) {
         $.ajax({
@@ -437,14 +497,12 @@ session_start();
             success: function (data) {
                 console.log('Success Response:', data);
 
-                const $galleryContainer = $(".container-galleries");
-                const $navElement = $('nav[aria-label="Page navigation example"]');
+                const galleryContainer = document.querySelector(".container-galleries");
+                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
 
-                // Kosongkan kontainer dan navigasi
-                $galleryContainer.empty();
-                $navElement.empty();
+                galleryContainer.innerHTML = '';
+                navElement.innerHTML = '';
 
-                // Iterasi data dan tambahkan elemen ke DOM
                 data.forEach(galery => {
                     // Format tanggal menggunakan JavaScript
                     const formattedDate = new Date(galery.created_at).toLocaleDateString('id-ID', {
@@ -487,54 +545,28 @@ session_start();
                             <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
                                 ${title}
                             </h3>
+                            <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
+                                <button onclick="deleteImage(${galery.gallery_id})"
+                                        class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Delete">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            <?php endif; ?>
                         </div>
                     </div>
-                `;
+                    `;
 
-                    // Tambahkan HTML ke kontainer menggunakan jQuery
-                    $galleryContainer.append(fileHTML);
+                    galleryContainer.innerHTML += fileHTML;
                 });
             },
             error: function (xhr, status, error) {
-                console.error('Error Status:', status);
-                console.error('Error Details:', error);
-                console.error('Response Text:', xhr.responseText);
+                alert('An error occurred: ' + error);
             }
         });
     }
-
-    $(document).ready(function () {
-        // Intersection Observer for fade-in animation
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        $(entry.target).addClass('visible');
-                    }, index * 100);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        // Topic button interactions
-        const $topicButtons = $('.topic-button');
-        $topicButtons.on('click', function () {
-            $topicButtons.removeClass('active');
-            $(this).addClass('active');
-        });
-
-        // Gallery item zoom functionality
-        const $galleryItems = $('.gallery-item');
-        $galleryItems.each(function () {
-            observer.observe(this); // Pass raw DOM element to the observer
-        });
-
-        $galleryItems.on('click', function () {
-            $(this).toggleClass('zoomed');
-        });
-    });
-
 </script>
 </body>
 </html>

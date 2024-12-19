@@ -188,13 +188,14 @@
                     <div class="col-span-4">
                         <div class="sticky top-8 bg-white rounded-2xl p-8 border-2 border-red-100 space-y-6">
                             <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-600">Topik Penelitian</label>
+                                <label class="block text-sm font-medium text-gray-600">Kategori</label>
                                 <select name="category" required
                                         class="w-full px-4 py-3 bg-white border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300 hover:bg-red-50">
-                                    <option value="">Pilih Skema Penelitian</option>
+                                    <option value="">Pilih Kategori</option>
                                     <option value="DIPA SWADANA">DIPA SWADANA</option>
                                     <option value="DIPA PNBP">DIPA PNBP</option>
                                     <option value="Tesis Magister">Tesis Magister</option>
+                                    <option value="Berita">Berita</option>
                                 </select>
 <!--                                --><?php //echo '<select name="category" required class="w-full px-4 py-3 bg-gray-50 border-2 border-red-50 rounded-xl focus:border-red-300 focus:ring-0 transition-all duration-300">';
 //                                echo '<option value="">Pilih Skema Penelitian</option>';

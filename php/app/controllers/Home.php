@@ -136,6 +136,9 @@ class Home extends Controller
             case 3: // Tesis Magister
                 $hasil = $this->model('GalleryModel')->getGaleryTesis();
                 break;
+            case 4: // Berita
+                $hasil = $this->model('GalleryModel')->getGaleryBerita();
+                break;
             default:
                 echo json_encode(['error' => 'Invalid status']);
                 return;

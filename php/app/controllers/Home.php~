@@ -140,33 +140,8 @@ class Home extends Controller
                 echo json_encode(['error' => 'Invalid status']);
                 return;
         }
-
-        // error_log(json_encode($letters)); // Debug output
         echo json_encode($hasil);
     }
-
-//    public function deleteImage()
-//    {
-//        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//            $id = $_POST['gallery_id'] ?? null;
-//
-//            if ($id) {
-//                $result = $this->model('GalleryModel')->delete($id);
-//
-//                if ($result) {
-//                    echo json_encode(['success' => true, 'message' => 'File deleted successfully.']);
-//                } else {
-//                    echo json_encode(['success' => false, 'message' => 'Failed to delete file.']);
-//                }
-//            } else {
-//                echo json_encode(['success' => false, 'message' => 'Invalid request.']);
-//            }
-//        } else {
-//            http_response_code(405);
-//            echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
-//        }
-//        exit();
-//    }
 
     public function archives()
     {
