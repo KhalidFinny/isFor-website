@@ -196,12 +196,10 @@ var_dump($data);
     </main>
 </div>
 <script>
-    // Method edit untuk menangani pengiriman form
     function edit(formSelector, successCallback, errorCallback) {
         const formElement = $(formSelector)[0];
-        const formData = new FormData(formElement); // Ambil data dari form
+        const formData = new FormData(formElement);
 
-        // Debugging: Tampilkan data dalam FormData
         for (let pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
         }
@@ -210,20 +208,20 @@ var_dump($data);
             url: '<?= BASEURL; ?>/User/edit',  // URL endpoint
             type: 'POST',
             data: formData,
-            processData: false, // Jangan memproses data menjadi string
-            contentType: false, // Jangan menetapkan tipe konten secara manual
+            processData: false,
+            contentType: false,
             success: function (data) {
-                console.log('Raw Response:', data); // Debugging: Tampilkan respons mentah
+                console.log('Raw Response:', data);
                 try {
-                    const parsedData = JSON.parse(data); // Parsing data jika belum dalam format JSON
-                    console.log('Parsed Response:', parsedData); // Tampilkan data yang sudah diparse
+                    const parsedData = JSON.parse(data);
+                    console.log('Parsed Response:', parsedData);
                     if (parsedData.status === 'success') {
                         if (typeof successCallback === 'function') {
-                            successCallback(parsedData); // Panggil callback sukses
+                            successCallback(parsedData);
                         }
                     } else {
                         if (typeof errorCallback === 'function') {
-                            errorCallback(parsedData); 
+                            errorCallback(parsedData);
                         } else {
                             alert(parsedData.message);
                         }
@@ -258,8 +256,6 @@ var_dump($data);
             );
         });
     });
-
-
 </script>
 </body>
 </html>

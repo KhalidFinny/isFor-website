@@ -306,7 +306,6 @@
                             </svg>
                         </div>
                     </div>
-                    <div id="userList" class="mt-4"></div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full">
                             <thead>
@@ -484,7 +483,7 @@
             $.ajax({
                 url: '<?= BASEURL; ?>/user/search',
                 type: 'POST',
-                data: { keyword: keyword },
+                data: {keyword: keyword},
                 dataType: 'json',
                 success: function (data) {
                     userTableBody.empty(); // Clear previous table rows

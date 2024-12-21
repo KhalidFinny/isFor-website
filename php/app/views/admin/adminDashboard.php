@@ -477,74 +477,93 @@
             timeElement.text(formattedTime);
         }
 
-        // Function to handle user search
-        function searchUsers(keyword) {
-            const userTableBody = $('table tbody'); // Target the table's <tbody>
+        // Initialize date and time updates
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        function fetchUsers(keyword, pageNumber) {
             $.ajax({
-                url: '<?= BASEURL; ?>/user/search',
-                type: 'POST',
-                data: {keyword: keyword},
+                url: '<?= BASEURL; ?>/user/search', // URL endpoint
+                type: 'POST', // Metode HTTP
+                data: {
+                    keyword: keyword,
+                    pageNumber: pageNumber,
+                    pageSize: pageSize
+                },
                 dataType: 'json',
                 success: function (data) {
-                    userTableBody.empty(); // Clear previous table rows
+                    console.log(data);
+                    // Kosongkan elemen tabel dan pagination sebelum memperbarui
+                    tableBody.empty();
+                    pagination.empty();
 
-                    if (data.length > 0) {
-                        $.each(data, function (index, user) {
-                            const roleBadge = user.role_id === 1
-                                ? `<span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600">
-                                    <span class="w-1 h-1 mr-1.5 rounded-full bg-red-500"></span> Admin
-                                   </span>`
-                                : `<span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-600">
-                                    <span class="w-1 h-1 mr-1.5 rounded-full bg-blue-500"></span> Researcher
-                                   </span>`;
+                    // Periksa apakah ada data
+                    if (data.data.length > 0) {
+                        // Tambahkan baris data pengguna ke tabel
+                        $.each(data.data, function (index, user) {
+                            let roleClass = user.role_id === 1 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600';
+                            let roleLabel = user.role_id === 1 ? 'Admin' : 'Peneliti';
 
-                            const profilePicture = user.profile_picture
-                                ? `<?= PHOTOPROFILE; ?>${user.profile_picture}`
-                                : `<?= ASSETS; ?>/images/empty-user.png`;
-
-                            const deleteAction = user.user_id !== <?= $_SESSION['user_id']; ?>
-                                ? `<a href="<?= BASEURL; ?>/User/Delete/${user.user_id}" class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200" onclick="return confirm('Apakah yakin untuk dihapus?')">
-                                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                       </svg>
-                                   </a>`
-                                : '';
-
-                            userTableBody.append(`
-                                <tr class="group hover:bg-gray-50/50 transition-all duration-200">
-                                    <td class="px-8 py-5">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-                                                <img class="h-full w-full object-cover" src="${profilePicture}" alt="">
-                                            </div>
-                                            <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-gray-900">${user.name}</p>
-                                                <p class="text-sm text-gray-500">${user.email}</p>
-                                            </div>
+                            tableBody.append(`
+                            <tr class="table-row">
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-red-50">
+                                            ${user.profile_picture
+                                ? `<img class="h-full w-full object-cover rounded-full" src="<?= PHOTOPROFILE ?>${user.profile_picture}" alt="">`
+                                : `<svg class="h-full w-full object-cover rounded-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z" fill="#ef4444"/>
+                                </svg>`}
                                         </div>
-                                    </td>
-                                    <td class="px-8 py-5">${roleBadge}</td>
-                                    <td class="px-8 py-5 text-sm space-x-3">
-                                        <a href="<?= BASEURL; ?>/User/editView/${user.user_id}" class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                        </a>
-                                        ${deleteAction}
-                                    </td>
-                                </tr>
-                            `);
-                        });
-                    } else {
-                        userTableBody.append(`
-                            <tr>
-                                <td colspan="3" class="px-8 py-5 text-center text-gray-500">
-                                    Pengguna tidak ditemukan.
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-red-600">${user.name}</p>
+                                        </div>
+                                    </div>
                                 </td>
+                                <td class="px-8 py-5">
+                                    <div class="text-sm text-red-500">${user.email}</div>
+                                </td>
+                                <td class="px-8 py-5">
+                                    <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium ${roleClass}">
+                                        <span class="w-1 h-1 mr-1.5 rounded-full bg-${roleLabel === 'Admin' ? 'red-500' : 'blue-500'}"></span>
+                                        ${roleLabel}
+                                    </span>
+                                </td>
+                                <td class="px-8 py-5 text-sm space-x-3">
+                                    <a href="<?= BASEURL; ?>/User/editView/${user.user_id}" class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="<?= BASEURL; ?>/User/Delete/${user.user_id}" class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200" onclick="return confirm('Are you sure you want to delete this user?')">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                      </svg>
+                                    </a>
+                                </td>
+
                             </tr>
                         `);
+                        });
+
+                        // Tambahkan tombol pagination
+                        let totalPages = Math.ceil(data.totalCount / pageSize);
+                        if (totalPages > 1) {
+                            for (let i = 1; i <= totalPages; i++) {
+                                pagination.append(`
+                                <button class="px-4 py-2 text-sm ${i === currentPage ? 'text-red-600' : 'text-gray-500 hover:text-red-600'}" data-page="${i}">
+                                    ${i}
+                                </button>
+                            `);
+                            }
+                            pagination.off('click').on('click', 'button', function () {
+                                currentPage = parseInt($(this).data('page'));
+                                fetchUsers(keyword, currentPage);
+                            });
+                        }
+                    } else {
+                        // Jika tidak ada data
+                        tableBody.html('<tr><td colspan="4" class="text-center py-5 text-gray-500">Pengguna tidak ditemukan.</td></tr>');
                     }
                 },
                 error: function (xhr, status, error) {
@@ -553,15 +572,15 @@
             });
         }
 
-        // Initialize date and time updates
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-
-        // Event listener for user search input
+        // Event listener untuk input pencarian
         $('#searchUser').on('keyup', function () {
-            const keyword = $(this).val(); // Get input value
-            searchUsers(keyword); // Call search function
+            let keyword = $(this).val(); // Ambil nilai input
+            currentPage = 1; // Reset ke halaman pertama
+            fetchUsers(keyword, currentPage);
         });
+
+        // Inisialisasi tabel dengan data default
+        fetchUsers('', currentPage);
     });
 </script>
 </body>

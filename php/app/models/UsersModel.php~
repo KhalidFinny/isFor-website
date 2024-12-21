@@ -196,17 +196,30 @@ class UsersModel
         ];
     }
 
-    public function searchUsers($keyword, $pageNumber, $pageSize)
-    {
-        $query = "EXEC dbo.sp_searchUsers @Keyword = ?, @PageNumber = ?, @PageSize = ?";
+    public function searchUsers($keyword, $pageNumber, $pageSize) {
+        $offset = ($pageNumber - 1) * $pageSize;
+
+        $query = "SELECT * FROM users
+              WHERE name LIKE :keyword OR email LIKE :keyword
+              ORDER BY id
+              OFFSET :offset ROWS FETCH NEXT :pageSize ROWS ONLY";
+
         $this->db->query($query);
-        $this->db->bind(1, $keyword);
-        $this->db->bind(2, $pageNumber);
-        $this->db->bind(3, $pageSize);
-        return [
-            'data' => $this->db->resultSet(),
-            'totalCount' => $this->db->single()['TotalCount'] ?? 0
-        ];
+        $this->db->bind(':keyword', "%$keyword%");
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':pageSize', $pageSize, PDO::PARAM_INT);
+
+        $results['data'] = $this->db->resultSet();
+
+        // Hitung total jumlah data (tanpa pagination)
+        $countQuery = "SELECT COUNT(*) AS totalCount FROM users
+                   WHERE name LIKE :keyword OR email LIKE :keyword";
+        $this->db->query($countQuery);
+        $this->db->bind(':keyword', "%$keyword%");
+        $results['totalCount'] = $this->db->single()['totalCount'];
+
+        return $results;
     }
+
 
 }

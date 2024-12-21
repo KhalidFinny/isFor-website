@@ -110,23 +110,6 @@ class Galleries extends Controller
         }
     }
 
-//    public function delete()
-//    {
-//        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//            $id = $_POST['id'] ?? null;
-//
-//            if ($id && $this->model('GalleryModel')->delete($id) > 0) {
-//                echo json_encode(['success' => true]);
-//            } else {
-//                echo json_encode(['success' => false, 'message' => 'Failed to delete the file.']);
-//            }
-//        } else {
-//            http_response_code(405); // Method not allowed
-//            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
-//        }
-//        exit();
-//    }
-
     public function deleteImage()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
