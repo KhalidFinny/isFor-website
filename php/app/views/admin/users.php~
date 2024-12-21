@@ -295,6 +295,7 @@
                         <span class="font-medium">
                                 <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']) ?>
                             </span>
+<<<<<<< HEAD
                         of
                         <span class="font-medium"><?= $data['totalUsers'] ?></span>
                         results
@@ -318,6 +319,33 @@
                         <?php else: ?>
                             <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Next</span>
                         <?php endif; ?>
+=======
+                            of
+                            <span class="font-medium"><?= $data['totalUsers'] ?></span>
+                            results
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <!-- button -->
+                            <?php if ($data['currentPage'] > 1): ?>
+                                <a href="?page=<?= $data['currentPage'] - 1;?>"
+                                    class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </a>
+                            <?php endif; ?>
+                            <?php if ($data['currentPage'] < $data['totalPages']): ?>
+                                <a href="?page=<?= $data['currentPage'] + 1;?>"
+                                    class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+>>>>>>> 990517a3c748a59769901a8aa039db85a359401b
                     </div>
                 </div>
             </div>
@@ -545,54 +573,19 @@
 
                         // Tambahkan tombol pagination
                         let totalPages = Math.ceil(data.totalCount / pageSize);
-                        if (currentPage > 1) {
-                            paginationDiv.append(`
-            <a href="javascript:void(0);"
-               class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200"
-               data-page="${currentPage - 1}">
-                Previous
-            </a>
-        `);
-                        } else {
-                            paginationDiv.append(`
-            <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Previous</span>
-        `);
-                        }
-
-                        // Tombol Pagination (angka halaman)
-                        for (let i = 1; i <= totalPages; i++) {
-                            paginationDiv.append(`
-            <button class="px-4 py-2 text-sm ${i === currentPage ? 'text-red-600' : 'text-gray-500 hover:text-red-600'}"
-                    data-page="${i}">
-                ${i}
-            </button>
-        `);
-                        }
-
-                        // Tombol Next
-                        if (currentPage < totalPages) {
-                            paginationDiv.append(`
-            <a href="javascript:void(0);"
-               class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200"
-               data-page="${currentPage + 1}">
-                Next
-            </a>
-        `);
-                        } else {
-                            paginationDiv.append(`
-            <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Next</span>
-        `);
-                        }
-
-                        // Tambahkan event listener ke tombol pagination
-                        paginationDiv.off('click').on('click', 'a, button', function () {
-                            const selectedPage = parseInt($(this).data('page'));
-                            if (!isNaN(selectedPage)) {
-                                currentPage = selectedPage;
-                                fetchUsers(keyword, currentPage);
+                        if (totalPages > 1) {
+                            for (let i = 1; i <= totalPages; i++) {
+                                pagination.append(`
+                                <button class="px-4 py-2 text-sm ${i === currentPage ? 'text-red-600' : 'text-gray-500 hover:text-red-600'}" data-page="${i}">
+                                    ${i}
+                                </button>
+                            `);
                             }
-                        });
-
+                            pagination.off('click').on('click', 'button', function () {
+                                currentPage = parseInt($(this).data('page'));
+                                fetchUsers(keyword, currentPage);
+                            });
+                        }
                     } else {
                         // Jika tidak ada data
                         tableBody.html('<tr><td colspan="4" class="text-center py-5 text-gray-500">Pengguna tidak ditemukan.</td></tr>');
