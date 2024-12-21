@@ -205,6 +205,7 @@ class Letter extends Controller
         $data['halamanAktif'] = $halamanAktif;
         $data['totalLetters'] = $jumlahData;
         $this->view('admin/admin-letter-history', $data);
+        
     }
 
     public function filter()
