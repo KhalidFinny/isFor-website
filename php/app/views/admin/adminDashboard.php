@@ -400,29 +400,31 @@
                                 <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
                                 to
                                 <span class="font-medium">
-                <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']); ?>
-            </span>
-                                of <span class="font-medium"><?= $data['totalUsers']; ?></span> results
+                                    <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']) ?>
+                                </span>
+                                of
+                                <span class="font-medium"><?= $data['totalUsers'] ?></span>
+                                results
                             </div>
-                            <div class="flex space-x-2">
-                                <!-- Tombol Previous -->
+                            <div class="flex items-center space-x-2">
+                                <!-- button -->
                                 <?php if ($data['currentPage'] > 1): ?>
-                                    <a href="?page=<?= $data['currentPage'] - 1; ?>"
-                                       class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200">
-                                        Previous
+                                    <a href="?page=<?= $data['currentPage'] - 1;?>"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M15 19l-7-7 7-7" />
+                                        </svg>
                                     </a>
-                                <?php else: ?>
-                                    <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Previous</span>
                                 <?php endif; ?>
-
-                                <!-- Tombol Next -->
                                 <?php if ($data['currentPage'] < $data['totalPages']): ?>
-                                    <a href="?page=<?= $data['currentPage'] + 1; ?>"
-                                       class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200">
-                                        Next
+                                    <a href="?page=<?= $data['currentPage'] + 1;?>"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9 5l7 7-7 7" />
+                                        </svg>
                                     </a>
-                                <?php else: ?>
-                                    <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Next</span>
                                 <?php endif; ?>
                             </div>
                         </div>
