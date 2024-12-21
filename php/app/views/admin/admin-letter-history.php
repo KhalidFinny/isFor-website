@@ -350,67 +350,128 @@
         observer.observe(el);
     });
 
-    function filter(status) {
-        $.ajax({
-            url: '<?= BASEURL ?>/letter/filterAdmin',
-            method: 'POST',
-            dataType: 'json',
-            data: {status: status},
-            success: function (data) {
-                // console.log('Success Response:', data);
-                const letterContainer = document.querySelector(".letter-card table tbody");
-                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-                const tableHeader = `
-                        <thead>
-                            <tr class="text-left text-sm font-medium text-gray-500">
-                                <th class="pb-4">Jenis Dokumen</th>
-                                <th class="pb-4">Tanggal</th>
-                                <th class="pb-4">Status</th>
-                                <th class="pb-4">Aksi</th>
-                            </tr>
-                        </thead>
+    function filter(status, currentPage = 1) {
+    console.log('Filter called with status:', status, 'and page:', currentPage);
+    $.ajax({
+        url: '<?= BASEURL ?>/letter/filterAdmin',
+        method: 'POST',
+        dataType: 'json',
+        data: {status: status, halamanAktif: currentPage}, // Kirim halamanAktif
+        success: function (data) {
+            console.log('Success Response:', data);
+            const letterContainer = document.querySelector(".letter-card table tbody");
+            const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+            const tableHeader = `
+                    <thead>
+                        <tr class="text-left text-sm font-medium text-gray-500">
+                            <th class="pb-4">Jenis Dokumen</th>
+                            <th class="pb-4">Tanggal</th>
+                            <th class="pb-4">Status</th>
+                            <th class="pb-4">Aksi</th>
+                        </tr>
+                    </thead>
+                `;
+
+            // Clear existing rows and add table header
+            letterContainer.innerHTML = '';
+            navElement.innerHTML = '';
+
+            // Populate table rows with data
+            data.letters.forEach(letter => {
+                console.log(letter.status);
+
+                let statusBadge = '';
+
+                if (letter.status == 1) {
+                    statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
+                } else if (letter.status == 2) {
+                    statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
+                } else {
+                    statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
+                }
+
+                const row = `
+                        <tr class="border-t border-gray-100">
+                            <td class="py-4">${letter.title}</td>
+                            <td class="py-4">${letter.date}</td>
+                            <td class="py-4">${statusBadge}</td>
+                            <td class="py-4">
+                                <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                            </td>
+                        </tr>
                     `;
+                letterContainer.innerHTML += row;
+            });
 
-                // Clear existing rows and add table header
-                letterContainer.innerHTML = '';
-                navElement.innerHTML = '';
-
-                // Populate table rows with data
-                data.forEach(letter => {
-                    console.log(letter.status);
-
-                    let statusBadge = '';
-
-                    if (letter.status == 1) {
-                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-                    } else if (letter.status == 2) {
-                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
-                    } else {
-                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
-                    }
-
-                    // console.log(statusBadge);
-                    const row = `
-                            <tr class="border-t border-gray-100">
-                                <td class="py-4">${letter.title}</td>
-                                <td class="py-4">${letter.date}</td>
-                                <td class="py-4">${statusBadge}</td>
-                                <td class="py-4">
-                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                                </td>
-                            </tr>
-                        `;
-                    letterContainer.innerHTML += row;
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error('Error Status:', status);
-                console.error('Error Details:', error);
-                console.error('Response Text:', xhr.responseText);
-                alert('Gagal');
+            if (navElement) {
+                generatePagination(navElement, data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
             }
-        });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error Status:', status);
+            console.error('Error Details:', error);
+            console.error('Response Text:', xhr.responseText);
+        }
+    });
+}
+
+
+    function generatePagination(navElement, currentPage, totalPages, status) {
+    const ul = document.createElement('ul');
+    ul.className = 'flex items-center -space-x-px h-8 text-sm';
+
+    // Previous button
+    if (currentPage > 1) {
+        const prevLi = `
+            <li>
+                <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
+                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                    <span class="sr-only">Previous</span>
+                    <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                    </svg>
+                </a>
+            </li>
+        `;
+        ul.innerHTML += prevLi;
     }
+
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
+        const pageLi = `
+            <li>
+                <a href="javascript:void(0)" onclick="filter(${status}, ${i})"
+                    class="flex items-center justify-center px-3 h-8 leading-tight ${activeClass} border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    ${i}
+                </a>
+            </li>
+        `;
+        ul.innerHTML += pageLi;
+    }
+
+    // Next button
+    if (currentPage < totalPages) {
+        const nextLi = `
+            <li>
+                <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                    <span class="sr-only">Next</span>
+                    <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                </a>
+            </li>
+        `;
+        ul.innerHTML += nextLi;
+    }
+
+    navElement.appendChild(ul);
+}
 
     //live search ajax
     const keyword = document.getElementById('keyword');

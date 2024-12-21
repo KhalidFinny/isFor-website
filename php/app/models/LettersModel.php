@@ -216,11 +216,28 @@ class LettersModel
     }
 
     // Get letters by status (for admin)
-    public function getLettersByStatus($status)
-    {
-        $this->db->query("SELECT * FROM letters WHERE status = :status");
+    public function getLettersByStatus($status, $awalData, $jumlahDataPerhalaman){
+        // Bangun query SQL dengan OFFSET dan FETCH
+        $query = "
+            SELECT * 
+            FROM letters 
+            WHERE status = :status 
+            ORDER BY [date] DESC 
+            OFFSET $awalData ROWS 
+            FETCH NEXT $jumlahDataPerhalaman ROWS ONLY
+        ";
+
+        $this->db->query($query);
         $this->db->bind(':status', $status);
         return $this->db->resultSet();
+    }
+
+    public function countAllLettersByStatus($status){
+        // Hitung jumlah total data berdasarkan status
+        $query = "SELECT COUNT(*) AS total FROM letters WHERE status = :status";
+        $this->db->query($query);
+        $this->db->bind(':status', $status);
+        return $this->db->single();
     }
 
 //    public function searchLetter($user_id, $keyword){
