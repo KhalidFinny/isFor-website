@@ -38,9 +38,9 @@ class User extends Controller
 
         $photo = $this->upload();
 
-        if (!$photo) {
-            return false;
-        }
+        // if (!$photo) {
+        //     return false;
+        // }
 
         // var_dump($_POST);
         // var_dump($photo);
@@ -49,61 +49,52 @@ class User extends Controller
         $name = $_POST['name'];
         $username = $_POST['username'];
 
-        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
-            // Validasi apakah nama, username, dan email sudah ada
-            $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
+        // Validasi data pengguna (nama, username, email)
+        $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
 
-            if ($validationResult['name_exists']) {
-                $_SESSION['message'] = "nama sudah terdaftar.";
-                header('Location: ' . BASEURL . '/User');
-                return;
-            }
-            if ($validationResult['username_exists']) {
-                $_SESSION['message'] = "username sudah terdaftar.";
-                header('Location: ' . BASEURL . '/User');
-                return;
-            }
-            if ($validationResult['email_exists']) {
-                $_SESSION['message'] = "Email sudah terdaftar.";
-                header('Location: ' . BASEURL . '/User');
-                return;
-            }
-            if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
-                $_SESSION['message'] = "tambah data berhasil";
-                header('Location: ' . BASEURL . '/User');
-                echo "tambah data berhasil";
-            } else {
-                echo
-                '<script/>
-                    alert("tambah data gagal");
-                </script>';
-                if (file_exists('../app/img/profile/' . $photo)) {
-                    unlink('../app/img/profile/' . $photo);
-                }
-                $_SESSION['message'] = "tambah data berhasil";
-                header('Location: ' . BASEURL . '/User');
-            }
+        if ($validationResult['name_exists']) {
+            $_SESSION['message'] = "Nama sudah terdaftar.";
+            header('Location: ' . BASEURL . '/User');
+            return false;
         }
+        if ($validationResult['username_exists']) {
+            $_SESSION['message'] = "Username sudah terdaftar.";
+            header('Location: ' . BASEURL . '/User');
+            return false;
+        }
+        if ($validationResult['email_exists']) {
+            $_SESSION['message'] = "Email sudah terdaftar.";
+            header('Location: ' . BASEURL . '/User');
+            return false;
+        }
+
+        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) == 0) {
+            $_SESSION['message'] = "Tambah data berhasil.";
+        } else {
+            $_SESSION['message'] = "Tambah data gagal.";
+        }
+
+        // var_dump($_SESSION['message']);
+        header('Location: ' . BASEURL . '/User');
     }
 
     public function upload()
     {
-        if (!isset($_FILES['profile_picture'])) {
-            echo "Tidak ada file yang diunggah.";
-            return false;
-        }
+        // var_dump($_FILES);
 
-//        var_dump($_FILES);
-//        file_put_contents('debug.log', print_r($_FILES, true));
         $nameFile = $_FILES['profile_picture']['name'];
         $sizeFile = $_FILES['profile_picture']['size'];
         $error = $_FILES['profile_picture']['error'];
         $tmpName = $_FILES['profile_picture']['tmp_name'];
 
         //cek apakah tidak ada gambar yang diupload
-        if ($error == 4) {
-            echo "pilih gambar terlebih dahulu";
-            return false;
+        // if ($error == 4) {
+        //     echo "pilih gambar terlebih dahulu";
+        //     return false;
+        // }
+
+        if (!isset($nameFile) || $error === 4) {
+            return null; // Tidak ada file yang diunggah
         }
 
         //cek yang diupload adalah gambar
@@ -129,6 +120,7 @@ class User extends Controller
         $newFileName .= $extensionImage;
 
         move_uploaded_file($tmpName, '../app/img/profile/' . $newFileName);
+
 
         return $newFileName;
     }
