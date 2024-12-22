@@ -324,5 +324,12 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
+    public function getNameById($userId) {
+        $query = "SELECT name FROM users WHERE user_id = :user_id";
+        $this->db->query($query);
+        $this->db->bind(':user_id', $userId, PDO::PARAM_INT);
+        return $this->db->single()['name'] ?? null;
+    }
+
 }
 

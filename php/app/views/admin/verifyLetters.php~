@@ -174,7 +174,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     </div>
 </div>
 
-<!-- Modal konfirmasi -->
+<!-- Modal Konfirmasi -->
 <div id="confirmModal"
      class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm opacity-0 invisible transition-all duration-300 z-50">
     <div class="bg-white rounded-3xl p-8 w-[420px] mx-4 shadow-2xl transform translate-y-8 transition-all duration-300">
@@ -260,34 +260,82 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
         });
     }
 
+    let currentAction, currentId, currentStatus;
+
+    function openModal(id, status, action) {
+        currentId = id;
+        currentStatus = status;
+        currentAction = action;
+
+        const actionMessage = action === "verifikasi" ?
+            "memverifikasi surat dengan ID " :
+            "menolak surat dengan ID ";
+
+        // Perbarui pesan modal
+        $('#confirmModal p').text("Apakah Anda yakin ingin " + actionMessage + id + "?");
+        $('#confirmModal').removeClass('opacity-0 invisible').addClass('opacity-100 visible');
+    }
+
+    function closeModal() {
+        $('#confirmModal').removeClass('opacity-100 visible').addClass('opacity-0 invisible');
+    }
+
+    $('#confirmButton').on('click', function () {
+        // Lakukan AJAX setelah tombol konfirmasi ditekan
+        $.ajax({
+            url: '<?= BASEURL ?>/letter/updateStatusLetter',
+            method: 'POST',
+            dataType: 'json',
+            data: {id: currentId, status: currentStatus},
+            success: function () {
+                closeModal();
+                showAlert('success', 'Berhasil', `Surat berhasil ${currentAction}`);
+                location.reload();
+            },
+            error: function () {
+                closeModal();
+                showAlert('error', 'Gagal', 'Gagal memperbarui status');
+            }
+        });
+    });
+
+    $('#cancelButton').on('click', closeModal);
+
+    function showAlert(type, title, message) {
+        const alertStyles = {
+            success: {
+                style: 'bg-green-500 text-white border-green-600',
+                icon: '<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>'
+            },
+            error: {
+                style: 'bg-red-500 text-white border-red-600',
+                icon: '<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>'
+            }
+        };
+
+        $('#alert')
+            .removeClass()
+            .addClass(`fixed top-4 right-4 translate-y-0 opacity-100 transition-all duration-300 z-50 alert-style ${alertStyles[type].style}`);
+        $('#alertIcon').html(alertStyles[type].icon);
+        $('.alert-title').text(title);
+        $('#alertMessage').text(message);
+
+        setTimeout(closeAlert, 3000);
+    }
+
+    function closeAlert() {
+        $('#alert').removeClass('translate-y-0 opacity-100').addClass('translate-y-[-100%] opacity-0');
+    }
+
+    // Integrasikan ke tombol verifikasi dan penolakan
     function verifyLetter(id) {
-        updateLetterStatus(id, 2, "verifikasi");
+        openModal(id, 2, "verifikasi");
     }
 
     function rejectLetter(id) {
-        updateLetterStatus(id, 3, "hapus");
+        openModal(id, 3, "hapus");
     }
 
-    function updateLetterStatus(id, status, action) {
-        let actionMessage = action === "verifikasi" ?
-            "memverifikasi surat dengan ID " :
-            "menolak  surat dengan ID ";
-
-        if (confirm("Apakah Anda yakin ingin " + actionMessage + id + "?")) {
-            $.ajax({
-                url: '<?= BASEURL ?>/letter/updateStatusLetter',
-                method: 'POST',
-                dataType: 'json',
-                data: {id: id, status: status},
-                success: function () {
-                    location.reload();
-                },
-                error: function (msg) {
-                    alert('Gagal memperbarui status');
-                }
-            });
-        }
-    }
 
     $(document).ready(function () {
         $('.letter-card').each(function (index) {

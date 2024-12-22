@@ -57,7 +57,7 @@ class ResearchOutput extends Controller
                 }
 
                 // Tambahkan data nama pengguna berdasarkan uploaded_by (user_id)
-                $file['name'] = $researchModel->getNameById($file['uploaded_by']);
+                $file['name'] = $this->getNameById($file['uploaded_by']);
 
                 // Menambahkan ID Research Output (ID file)
                 $file['research_output_id'] = $file['research_output_id']; // Pastikan kolom research_output_id ada dalam data
