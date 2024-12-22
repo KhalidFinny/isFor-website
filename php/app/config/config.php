@@ -7,6 +7,8 @@ define('ASSETS', 'http://localhost/IsFor-website/php/app/views/assets');
 define('LETTER', 'http://localhost/IsFor-website/php/app/letters');
 define('GALLERY', 'http://localhost/IsFor-website/php/app/img/gallery');
 define('FILES', 'http://localhost/IsFor-website/php/app/files/research_output');
+define('CSS', 'http://localhost/IsFor-website/php/app/views/assets/css');
+define('JS', 'http://localhost/IsFor-website/php/app/views/assets/js');
 
 define('DB_HOST', '10.144.201.247');
 define('DB_USER', 'sa');

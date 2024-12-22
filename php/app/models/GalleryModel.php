@@ -143,4 +143,52 @@ class GalleryModel
         $this->db->query($query);
         return $this->db->resultSet();
     }
+
+    public function getGaleryByCategory($category, $page, $limit)
+    {
+        $offset = ($page - 1) * $limit;
+        $query = "
+        SELECT * 
+        FROM galleries 
+        WHERE category LIKE :category
+        ORDER BY gallery_id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;
+    ";
+        $this->db->query($query);
+        $this->db->bind(':category', $category);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalGalleriesByCategory($category)
+    {
+        $query = "SELECT COUNT(*) as total FROM galleries WHERE category LIKE :category";
+        $this->db->query($query);
+        $this->db->bind(':category', $category);
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
+    public function getAllPaginateGallery($page, $limit)
+    {
+        $offset = ($page - 1) * $limit;
+
+        // Query data paginasi
+        $this->db->query('
+        SELECT * 
+        FROM galleries
+        ORDER BY created_at DESC
+        OFFSET :offset ROWS
+        FETCH NEXT :limit ROWS ONLY;
+    ');
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $data = $this->db->resultSet();
+
+        // Query total record
+        $this->db->query('SELECT COUNT(*) AS Total FROM galleries;');
+        $total = $this->db->single();
+
+        return ['data' => $data, 'total' => $total['Total']];
+    }
 }

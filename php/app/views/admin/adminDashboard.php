@@ -1,3 +1,6 @@
+<?php
+//var_dump($data);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -203,8 +206,16 @@
                     </div>
                     <div class="h-10 w-10 rounded-full overflow-hidden bg-gray-100">
                         <?php if ($data['user']['profile_picture'] == null): ?>
-                            <img class="h-full w-full object-cover"
-                                 src="<?= ASSETS ?>/images/empty-user.png" alt="Profile">
+                            <div
+                                    class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-red-50">
+                                <svg class="h-full w-full object-cover rounded-full"
+                                     viewBox="0 0 24 24" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                            d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z"
+                                            fill="#ef4444"/>
+                                </svg>
+                            </div>
                         <?php else: ?>
                             <img class="h-full w-full object-cover"
                                  src="<?= PHOTOPROFILE . $data['user']['profile_picture'] ?>" alt="Profile">
@@ -335,8 +346,16 @@
                                         <div class="flex items-center space-x-4">
                                             <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-gray-100">
                                                 <?php if ($allUsersWithPagination['profile_picture'] == null): ?>
-                                                    <img class="h-full w-full object-cover"
-                                                         src="<?= ASSETS ?>/images/empty-user.png" alt="">
+                                                    <div
+                                                            class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-red-50">
+                                                        <svg class="h-full w-full object-cover rounded-full"
+                                                             viewBox="0 0 24 24" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                    d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z"
+                                                                    fill="#ef4444"/>
+                                                        </svg>
+                                                    </div>
                                                 <?php else: ?>
                                                     <img class="h-full w-full object-cover"
                                                          src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>"
@@ -409,20 +428,20 @@
                             <div class="flex items-center space-x-2">
                                 <!-- button -->
                                 <?php if ($data['currentPage'] > 1): ?>
-                                    <a href="?page=<?= $data['currentPage'] - 1;?>"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
+                                    <a href="?page=<?= $data['currentPage'] - 1; ?>"
+                                       class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M15 19l-7-7 7-7" />
+                                                  d="M15 19l-7-7 7-7"/>
                                         </svg>
                                     </a>
                                 <?php endif; ?>
                                 <?php if ($data['currentPage'] < $data['totalPages']): ?>
-                                    <a href="?page=<?= $data['currentPage'] + 1;?>"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
+                                    <a href="?page=<?= $data['currentPage'] + 1; ?>"
+                                       class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M9 5l7 7-7 7" />
+                                                  d="M9 5l7 7-7 7"/>
                                         </svg>
                                     </a>
                                 <?php endif; ?>

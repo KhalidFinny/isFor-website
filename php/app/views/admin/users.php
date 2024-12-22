@@ -4,6 +4,7 @@
 //    echo "<script>alert('$message');</script>";
 //    unset($_SESSION['message']);
 //}
+//var_dump($data);
 ?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
@@ -489,17 +490,12 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
-                    // Kosongkan elemen tabel dan pagination sebelum memperbarui
                     tableBody.empty();
                     pagination.empty();
-
-                    // Periksa apakah ada data
                     if (data.data.length > 0) {
-                        // Tambahkan baris data pengguna ke tabel
                         $.each(data.data, function (index, user) {
-                            let roleClass = user.role_id === 1 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600';
-                            let roleLabel = user.role_id === 1 ? 'Admin' : 'Peneliti';
+                            let roleClass = user.role_id === "1" ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600';
+                            let roleLabel = user.role_id === "1" ? 'Admin' : 'Peneliti';
 
                             tableBody.append(`
                             <tr class="table-row">
@@ -542,8 +538,6 @@
                             </tr>
                         `);
                         });
-
-                        // Tambahkan tombol pagination
                         let totalPages = Math.ceil(data.totalCount / pageSize);
                         if (totalPages > 1) {
                             for (let i = 1; i <= totalPages; i++) {
@@ -559,7 +553,6 @@
                             });
                         }
                     } else {
-                        // Jika tidak ada data
                         tableBody.html('<tr><td colspan="4" class="text-center py-5 text-gray-500">Pengguna tidak ditemukan.</td></tr>');
                     }
                 },
@@ -569,14 +562,11 @@
             });
         }
 
-        // Event listener untuk input pencarian
         $('#searchUser').on('keyup', function () {
-            let keyword = $(this).val(); // Ambil nilai input
-            currentPage = 1; // Reset ke halaman pertama
+            let keyword = $(this).val();
+            currentPage = 1;
             fetchUsers(keyword, currentPage);
         });
-
-        // Inisialisasi tabel dengan data default
         fetchUsers('', currentPage);
     });
 

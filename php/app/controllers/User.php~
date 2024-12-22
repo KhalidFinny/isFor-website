@@ -9,13 +9,14 @@ class User extends Controller
         $this->checkSessionTimeOut();
 
         if ($role == 1) {
-            $usersModel = $this->model('UsersModel');
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $limit = 5;
             $offset = ($page - 1) * $limit;
+
+            $usersModel = $this->model('UsersModel');
             $data['limit'] = $limit;
             $data['allUsersWithPagination'] = $usersModel->getUsersWithPagination($limit, $offset);
-            $data['totalUsers'] = $usersModel->getTotalUsers();
+            $data['totalUsers'] = $usersModel->getTotalUsers(); // Total pengguna
             $data['currentPage'] = $page;
             $data['totalPages'] = ceil($data['totalUsers'] / $limit);
             $this->saveLastVisitedPage();
@@ -25,104 +26,91 @@ class User extends Controller
         }
     }
 
+
     public function create()
     {
         session_start();
 
         $photo = $this->upload();
 
-<<<<<<< HEAD
-=======
-        // if (!$photo) {
-        //     return false;
-        // }
+        if (!$photo) {
+            return false;
+        }
 
         // var_dump($_POST);
         // var_dump($photo);
         // exit;
->>>>>>> 990517a3c748a59769901a8aa039db85a359401b
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $name = $_POST['name'];
         $username = $_POST['username'];
 
-<<<<<<< HEAD
-=======
-        // Validasi data pengguna (nama, username, email)
->>>>>>> 990517a3c748a59769901a8aa039db85a359401b
-        $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
+        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
+            // Validasi apakah nama, username, dan email sudah ada
+            $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
 
-        if ($validationResult['name_exists']) {
-            $_SESSION['message'] = "Nama sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
-        }
-        if ($validationResult['username_exists']) {
-            $_SESSION['message'] = "Username sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
-        }
-        if ($validationResult['email_exists']) {
-            $_SESSION['message'] = "Email sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
-        }
+            if ($validationResult['name_exists']) {
+                $_SESSION['message'] = "Nama sudah terdaftar.";
+                header('Location: ' . BASEURL . '/User');
+                return false;
+            }
+            if ($validationResult['username_exists']) {
+                $_SESSION['message'] = "Username sudah terdaftar.";
+                header('Location: ' . BASEURL . '/User');
+                return false;
+            }
+            if ($validationResult['email_exists']) {
+                $_SESSION['message'] = "Email sudah terdaftar.";
+                header('Location: ' . BASEURL . '/User');
+                return false;
+            }
 
-        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) == 0) {
-            $_SESSION['message'] = "Tambah data berhasil.";
-        } else {
-            $_SESSION['message'] = "Tambah data gagal.";
-        }
+            if ($this->model('UsersModel')->addUser($email, $_POST, $photo) == 0) {
+                $_SESSION['message'] = "Tambah data berhasil.";
+            } else {
+                $_SESSION['message'] = "Tambah data gagal.";
+            }
 
-<<<<<<< HEAD
-=======
-        // var_dump($_SESSION['message']);
->>>>>>> 990517a3c748a59769901a8aa039db85a359401b
-        header('Location: ' . BASEURL . '/User');
+            // var_dump($_SESSION['message']);
+            header('Location: ' . BASEURL . '/User');
+        }
     }
 
     public function upload()
     {
-        // var_dump($_FILES);
-
+     //        var_dump($_FILES);
+//        file_put_contents('debug.log', print_r($_FILES, true));
         $nameFile = $_FILES['profile_picture']['name'];
         $sizeFile = $_FILES['profile_picture']['size'];
         $error = $_FILES['profile_picture']['error'];
         $tmpName = $_FILES['profile_picture']['tmp_name'];
 
-<<<<<<< HEAD
-        if ($error == 4) {
-            echo "pilih gambar terlebih dahulu";
-            return false;
-=======
-        //cek apakah tidak ada gambar yang diupload
-        // if ($error == 4) {
-        //     echo "pilih gambar terlebih dahulu";
-        //     return false;
-        // }
-
         if (!isset($nameFile) || $error === 4) {
             return null; // Tidak ada file yang diunggah
->>>>>>> 990517a3c748a59769901a8aa039db85a359401b
         }
 
+        //cek yang diupload adalah gambar
         $extensionImageValid = ['jpg', 'jpeg', 'png'];
         $extensionImage = explode('.', $nameFile);
         $extensionImage = strtolower(end($extensionImage));
+
         if (!in_array($extensionImage, $extensionImageValid)) {
             echo "yang anda upload bukan gambar";
             return false;
         }
 
+        //cek jika ukurannya terlalu besar
         if ($sizeFile > 5000000) {
             echo "ukuran gambar terlalu besar";
             return false;
         }
 
+        //lolos pengecekan, gambar siap diupload
+        // generate nama file baru
         $newFileName = uniqid();
         $newFileName .= '.';
         $newFileName .= $extensionImage;
-        move_uploaded_file($tmpName, '../app/img/profile/' . $newFileName);
 
+        move_uploaded_file($tmpName, '../app/img/profile/' . $newFileName);
 
         return $newFileName;
     }
@@ -245,6 +233,23 @@ class User extends Controller
                 echo json_encode(['error' => 'Terjadi kesalahan di server.']);
             }
         }
+    }
+
+    public function sortByName($order = 'ASC')
+    {
+        // Validasi input order hanya boleh ASC atau DESC
+        $allowedOrders = ['ASC', 'DESC'];
+        $order = strtoupper($order);
+        if (!in_array($order, $allowedOrders)) {
+            $order = 'ASC';
+        }
+
+        // Ambil data dari model dengan sorting
+        $usersModel = $this->model('UsersModel');
+        $data['allUsersWithPagination'] = $usersModel->getUsersSortedByName($order);
+
+        // Kirim data ke view
+        $this->view('users/index', $data);
     }
 
 }

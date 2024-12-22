@@ -33,8 +33,10 @@
                 <div class="flex justify-between items-center h-16">
                     <!-- Logo Section -->
                     <div class="flex-shrink-0 flex items-center space-x-3">
-                        <img src="<?= ASSETS; ?>/images/Logo1.webp" alt="IsFor Logo" class="h-9 w-auto" />
-                        <span class="text-l font-semibold text-green-600">Internet of Things For Human Life's</span>
+                        <a href="<?=BASEURL?>" class="flex-shrink-0 flex items-center space-x-3">
+                            <img src="<?=ASSETS;?>/images/Logo1.webp" alt="IsFor Logo" class="h-9 w-auto"/>
+                            <span class="text-l font-semibold text-green-600">Internet of Things For Human Life's</span>
+                        </a>
                     </div>
                     <div class="hidden lg:flex lg:items-center">
                         <div class="flex items-center space-x-6" id="nav-items"></div>

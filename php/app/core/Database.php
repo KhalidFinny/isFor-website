@@ -66,4 +66,9 @@ class Database {
     public function rowCount() {
         return $this->stmt->rowCount();
     }
+
+    public function nextRowset() {
+        return $this->stmt->nextRowset();
+    }
+
 }

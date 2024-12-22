@@ -123,7 +123,7 @@ class Home extends Controller
                 'limit' => $limit,
                 'totalPages' => ceil($total / $limit),
             ];
-            file_put_contents($logFile, "Response: " . print_r($result, true) . "\n", FILE_APPEND);
+            file_put_contents($logFile, "Response: " . print_r($response, true) . "\n", FILE_APPEND);
         } else {
             $error = "Invalid status logic reached.\n";
             file_put_contents($logFile, $error, FILE_APPEND);
