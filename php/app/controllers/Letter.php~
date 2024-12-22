@@ -45,7 +45,7 @@ class Letter extends Controller
 
             // Tambahkan nama pengguna ke setiap surat
             foreach ($data['allLetters'] as &$letter) {
-                $letter['name'] = $lettersModel->getNameById($letter['user_id']);
+                $letter['username'] = $lettersModel->getUserNameById($letter['user_id']);
             }
 
             // Hitung jumlah halaman

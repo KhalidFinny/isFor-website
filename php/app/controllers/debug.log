@@ -416,3 +416,290 @@ Response: Array
     [totalPages] => 1
 )
 
+Request received at 2024-12-22 15:17:19
+POST Data: Array
+(
+    [status] => 1
+    [page] => 1
+)
+
+Response: Array
+(
+    [total] => 1
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [gallery_id] => 37
+                    [image] => 676810e5ad956_WhatsApp Image 2024-12-21 at 11.40.24_0dfef059.jpg
+                    [category] => DIPA SWADANA
+                    [title] => 123
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-22 20:15:17.717
+                    [description] => test
+                )
+
+        )
+
+    [page] => 1
+    [limit] => 3
+    [totalPages] => 1
+)
+
+Request received at 2024-12-22 15:17:20
+POST Data: Array
+(
+    [status] => 2
+    [page] => 1
+)
+
+Response: Array
+(
+    [total] => 0
+    [data] => Array
+        (
+        )
+
+    [page] => 1
+    [limit] => 3
+    [totalPages] => 0
+)
+
+Request received at 2024-12-22 15:17:22
+POST Data: Array
+(
+    [status] => 0
+    [page] => 1
+)
+
+Response: Array
+(
+    [total] => 10
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [gallery_id] => 37
+                    [image] => 676810e5ad956_WhatsApp Image 2024-12-21 at 11.40.24_0dfef059.jpg
+                    [category] => DIPA SWADANA
+                    [title] => 123
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-22 20:15:17.717
+                    [description] => test
+                )
+
+            [1] => Array
+                (
+                    [gallery_id] => 36
+                    [image] => 6766d23015569_pp.jpg
+                    [category] => Berita
+                    [title] => 1erew
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:35:28.077
+                    [description] => dsc
+                )
+
+            [2] => Array
+                (
+                    [gallery_id] => 35
+                    [image] => 6766d22219b30_WhatsApp Image 2024-12-21 at 11.40.24_0dfef059.jpg
+                    [category] => Tesis Magister
+                    [title] => 121`1
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:35:14.133
+                    [description] => 1321
+                )
+
+        )
+
+    [page] => 1
+    [limit] => 3
+    [totalPages] => 4
+)
+
+Request received at 2024-12-22 15:17:24
+POST Data: Array
+(
+    [status] => 0
+    [page] => 2
+)
+
+Response: Array
+(
+    [total] => 10
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [gallery_id] => 34
+                    [image] => 6766d1f750ba0_WhatsApp Image 2024-12-21 at 11.40.24_0dfef059.jpg
+                    [category] => Berita
+                    [title] => 1111
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:34:31.333
+                    [description] => 1232
+                )
+
+            [1] => Array
+                (
+                    [gallery_id] => 33
+                    [image] => 6766d1cc2b696_test2.jpg
+                    [category] => Berita
+                    [title] => 123
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:33:48.183
+                    [description] => 123
+                )
+
+            [2] => Array
+                (
+                    [gallery_id] => 32
+                    [image] => 6766d1bba9854_kucing.jpg
+                    [category] => Berita
+                    [title] => 1231
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:33:31.693
+                    [description] => 123
+                )
+
+        )
+
+    [page] => 2
+    [limit] => 3
+    [totalPages] => 4
+)
+
+Request received at 2024-12-22 15:17:26
+POST Data: Array
+(
+    [status] => 0
+    [page] => 3
+)
+
+Response: Array
+(
+    [total] => 10
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [gallery_id] => 31
+                    [image] => 6766d1aae0d63_admin.jpg
+                    [category] => Berita
+                    [title] => sdsd
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:33:14.953
+                    [description] => 123
+                )
+
+            [1] => Array
+                (
+                    [gallery_id] => 30
+                    [image] => 6766d19815ab4_WhatsApp Image 2024-12-21 at 11.40.24_0dfef059.jpg
+                    [category] => Berita
+                    [title] => test
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:32:56.107
+                    [description] => mantab
+                )
+
+            [2] => Array
+                (
+                    [gallery_id] => 29
+                    [image] => 676422bfbb6e2_WhatsApp Image 2024-12-19 at 13.30.20_3b1aaeb3.jpg
+                    [category] => Berita
+                    [title] => Test
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-19 20:42:23.783
+                    [description] => Test 123
+                )
+
+        )
+
+    [page] => 3
+    [limit] => 3
+    [totalPages] => 4
+)
+
+Request received at 2024-12-22 15:17:27
+POST Data: Array
+(
+    [status] => 0
+    [page] => 4
+)
+
+Response: Array
+(
+    [total] => 10
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [gallery_id] => 27
+                    [image] => 6763a42a8ba88_admin.jpg
+                    [category] => Tesis Magister
+                    [title] => Test 4
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-19 11:42:18.580
+                    [description] => 12345
+                )
+
+        )
+
+    [page] => 4
+    [limit] => 3
+    [totalPages] => 4
+)
+
+Request received at 2024-12-22 15:17:30
+POST Data: Array
+(
+    [status] => 0
+    [page] => 1
+)
+
+Response: Array
+(
+    [total] => 10
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [gallery_id] => 37
+                    [image] => 676810e5ad956_WhatsApp Image 2024-12-21 at 11.40.24_0dfef059.jpg
+                    [category] => DIPA SWADANA
+                    [title] => 123
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-22 20:15:17.717
+                    [description] => test
+                )
+
+            [1] => Array
+                (
+                    [gallery_id] => 36
+                    [image] => 6766d23015569_pp.jpg
+                    [category] => Berita
+                    [title] => 1erew
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:35:28.077
+                    [description] => dsc
+                )
+
+            [2] => Array
+                (
+                    [gallery_id] => 35
+                    [image] => 6766d22219b30_WhatsApp Image 2024-12-21 at 11.40.24_0dfef059.jpg
+                    [category] => Tesis Magister
+                    [title] => 121`1
+                    [uploaded_by] => 1
+                    [created_at] => 2024-12-21 21:35:14.133
+                    [description] => 1321
+                )
+
+        )
+
+    [page] => 1
+    [limit] => 3
+    [totalPages] => 4
+)
+

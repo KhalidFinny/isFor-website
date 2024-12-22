@@ -1,5 +1,5 @@
 <?php
-//var_dump($data);
+var_dump($data);
 ?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
@@ -215,61 +215,17 @@
             <?php if ($data['totalPages'] > 1): ?>
                 <nav aria-label="Page navigation" class="mt-10">
                     <ul class="inline-flex items-center space-x-2">
-                        <!-- Tombol Previous -->
-                        <?php if ($data['page'] > 1): ?>
-                            <li>
-                                <a href="?page=<?= $data['page'] - 1; ?>"
-                                   class="flex items-center justify-center w-9 h-9 text-red-600 border border-red-300 rounded-md hover:bg-red-50">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M15 19l-7-7 7-7"/>
-                                    </svg>
-                                </a>
-                            </li>
-                        <?php else: ?>
-                            <li>
-                    <span class="flex items-center justify-center w-9 h-9 text-gray-400 border border-gray-200 rounded-md cursor-not-allowed">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                        </svg>
-                    </span>
-                            </li>
-                        <?php endif; ?>
-
                         <!-- Nomor Halaman -->
                         <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
                             <li>
                                 <a href="?page=<?= $i; ?>"
-                                   class="flex items-center justify-center w-9 h-9 <?= $i == $data['page'] ? 'bg-red-600 text-white' : 'text-red-600 border border-red-300 hover:bg-red-50' ?> rounded-md">
+                                   class="flex items-center justify-center w-9 h-9 <?= $i == $data['currentPage'] ? 'border border-red-500 text-red-400' : 'text-red-400 border duration-300 hover:border-red-300' ?> rounded-md">
                                     <?= $i; ?>
                                 </a>
                             </li>
                         <?php endfor; ?>
-
-                        <!-- Tombol Next -->
-                        <?php if ($data['page'] < $data['totalPages']): ?>
-                            <li>
-                                <a href="?page=<?= $data['page'] + 1; ?>"
-                                   class="flex items-center justify-center w-9 h-9 text-red-600 border border-red-300 rounded-md hover:bg-red-50">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M9 5l7 7-7 7"/>
-                                    </svg>
-                                </a>
-                            </li>
-                        <?php else: ?>
-                            <li>
-                    <span class="flex items-center justify-center w-9 h-9 text-gray-400 border border-gray-200 rounded-md cursor-not-allowed">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </span>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
-                </nav>
+                    </nav>
             <?php endif; ?>
-
         </main>
     </div>
 </div>

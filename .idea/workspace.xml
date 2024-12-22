@@ -5,94 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/php/app/views/assets/js/gallery_web.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/config/config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Home.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Home.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/core/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/core/Database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6739fbe52d88e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673aaa98227d3.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673aaaa806c87.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673aab3666754.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673b0df684106.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673c125726487.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673c159204ac3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673c15d3468f7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673d29ba642eb.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673d2f9df27f3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673d3c24847c4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/673fce6ccabaf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/674166a51ffdd.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67447b58b8869.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/674c0d0ce6fb0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/674c1cdf36bb7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/674d1f2aad6a8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67510e9465cf3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6756566fda1d0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67584f6a0b0c1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6758527d8f570.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/675853afe2dbc.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/675853d2a540d.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/675853faad79e.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6758e10834453.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6758e1356d189.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6759398deafb1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67593a927e8e2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6759849750349.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/675985d883af2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/675989c2eec81.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67598a78a8e04.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67598a944d1e0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/675a2fc94e91a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/675a3020e1165.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67613bbd41892.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67613bed3aae2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676173f2d18cb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67617489981b9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6761749eddcba.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6761764fd77aa.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676176bb29686.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676176cc2b3ed.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676176e63aa62.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676177171ca0a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67617743801cb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676178124a581.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676178bc9b631.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67617ae0c92b3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67617cb7c715d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67617e8b0e1cb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6762bb1082997_business-accounting 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6762bdc3da0c8_employee-analyzes-profit-growth 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6762befab3e62_business-accounting 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6762bf6629417_employee-analyzes-profit-growth 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6762c08deac75_business-accounting 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6762c268baaef_employee-analyzes-profit-growth 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6762c2926b425_file.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6763ba78af91f.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676403e09ad9d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676403fc1e2e0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6764043bc88f8.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676404fddf92f.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6764052331407.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676405bada8bd.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676406000dcfa.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6764060c1bd98.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67640611b18fc.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6764065d85489.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/676406eba4419.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67640a079658f.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67640aff0ce3d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67640c8757f11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67640d89e30b6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/67664fe72a6b8.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/profile/6766779872e80.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/admin-letter-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/admin-letter-history.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/users.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/navbarafterlogin.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/navbarafterlogin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/js/config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/user/userDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/userDashboard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/verifyLetters.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verifyLetters.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +69,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "last_opened_file_path": "C:/laragon/www/isFor-website/php/app/views/admin",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -215,7 +134,7 @@
       <workItem from="1734631382133" duration="1263000" />
       <workItem from="1734757841891" duration="9680000" />
       <workItem from="1734771370789" duration="6448000" />
-      <workItem from="1734839981192" duration="11895000" />
+      <workItem from="1734839981192" duration="14922000" />
     </task>
     <servers />
   </component>
