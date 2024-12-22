@@ -1,17 +1,8 @@
 <?php
-/**
- * Halaman Verifikasi Surat
- * ------------------------------
- * Menampilkan dan mengelola surat yang membutuhkan verifikasi
- * Mendukung preview surat, verifikasi, dan penolakan
- */
-//var_dump($data);
-
-// Filter surat yang belum diverifikasi (status = 1)
 $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters'], function ($letter) {
     return $letter['status'] == 1;
 }) : [];
-var_dump($data);
+//var_dump($data);
 ?>
 
 <style>
@@ -69,14 +60,16 @@ var_dump($data);
     <!-- Konten utama -->
     <div class="flex-1 ml-64 page-content">
         <main class="p-8 max-w-[1600px] mx-auto">
-        <div class="max-w-7xl mx-auto mb-12">
-        <a href="<?=BASEURL?>/dashboardAdmin" class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-            <span>Kembali</span>
-        </a>
-    </div>
+            <div class="max-w-7xl mx-auto mb-12">
+                <a href="<?= BASEURL ?>/dashboardAdmin"
+                   class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    <span>Kembali</span>
+                </a>
+            </div>
             <!-- Header dengan desain Swiss -->
             <div class="max-w-7xl mx-auto mb-12 fade-in">
                 <div class="flex items-center space-x-4 mb-4">
@@ -175,7 +168,7 @@ var_dump($data);
                                 </a>
                             </li>
                         <?php endfor; ?>
-                    </nav>
+                </nav>
             <?php endif; ?>
         </main>
     </div>
@@ -213,7 +206,6 @@ var_dump($data);
                 <p class="text-gray-600">Apakah Anda yakin ingin melanjutkan?</p>
             </div>
 
-            <!-- Tombol aksi -->
             <div class="flex justify-end items-center gap-3">
                 <button id="cancelButton"
                         class="px-6 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 bg-gray-100/80 hover:bg-gray-100 rounded-xl transition-all duration-300">
@@ -252,14 +244,8 @@ var_dump($data);
     </div>
 </div>
 
-<!-- Script untuk interaktivitas -->
 <script>
-    /**
-     * Menampilkan detail surat dalam modal
-     * @param {number} id - ID surat yang akan ditampilkan
-     */
     function viewLetter(id) {
-        // Implementasi view letter
         $.ajax({
             url: '<?= BASEURL ?>/letter/getLetter',
             method: 'POST',
@@ -274,46 +260,26 @@ var_dump($data);
         });
     }
 
-    /**
-     * Menampilkan konfirmasi sebelum verifikasi surat
-     * @param {number} id - ID surat yang akan diverifikasi
-     */
     function verifyLetter(id) {
-        updateLetterStatus(id, 2);
-        // showCustomConfirm(function(confirm) {
-        //     if (confirm) {
-
-        //     }
-        // });
+        updateLetterStatus(id, 2, "verifikasi");
     }
 
-    /**
-     * Menampilkan konfirmasi sebelum penolakan surat
-     * @param {number} id - ID surat yang akan ditolak
-     */
     function rejectLetter(id) {
-        updateLetterStatus(id, 3);
-        // showCustomConfirm(function(confirm) {
-        //     if (confirm) {
-
-        //     }
-        // });
+        updateLetterStatus(id, 3, "hapus");
     }
 
-    /**
-     * Mengupdate status surat dengan animasi
-     * @param {number} id - ID surat yang akan diupdate
-     * @param {number} status - Status baru (2 = terverifikasi, 3 = ditolak)
-     */
-    function updateLetterStatus(id, status) {
-        if (confirm("Apakah Anda yakin ingin mengupdate data dengan ID " + id + "?")) {
+    function updateLetterStatus(id, status, action) {
+        let actionMessage = action === "verifikasi" ?
+            "memverifikasi surat dengan ID " :
+            "menolak  surat dengan ID ";
+
+        if (confirm("Apakah Anda yakin ingin " + actionMessage + id + "?")) {
             $.ajax({
                 url: '<?= BASEURL ?>/letter/updateStatusLetter',
                 method: 'POST',
                 dataType: 'json',
                 data: {id: id, status: status},
-                success: function (msg) {
-                    // console.log(msg);
+                success: function () {
                     location.reload();
                 },
                 error: function (msg) {
@@ -323,13 +289,9 @@ var_dump($data);
         }
     }
 
-    /**
-     * Menambahkan animasi stagger pada kartu surat
-     */
-    document.addEventListener('DOMContentLoaded', function () {
-        const cards = document.querySelectorAll('.letter-card');
-        cards.forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
+    $(document).ready(function () {
+        $('.letter-card').each(function (index) {
+            $(this).css('animation-delay', `${index * 0.1}s`);
         });
     });
 </script>
