@@ -12,61 +12,7 @@ session_start();
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .file-card {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .file-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .file-icon {
-            width: 64px;
-            height: 64px;
-            transition: all 0.3s ease;
-        }
-
-        .action-button {
-            transform: translateY(10px);
-            opacity: 0;
-            transition: all 0.2s ease;
-        }
-
-        .file-card:hover .action-button {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .topic-button {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .topic-button::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #eb2563;
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-
-        .topic-button:hover::after,
-        .topic-button.active::after {
-            width: 100%;
-        }
-
-        .topic-button.active {
-            color: #eb2563;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= CSS; ?>/hasil-penelitian.css">
 </head>
 <body class="bg-white">
 <?php if (!isset($_SESSION['user_id'])): ?>

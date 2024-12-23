@@ -298,135 +298,112 @@
                 <div class="bg-white rounded-lg overflow-hidden">
                     <div class="px-8 py-6 flex justify-between items-center border-b border-gray-100">
                         <h2 class="text-2xl font-light text-red-500 tracking-tight">Recent Users</h2>
-                        <div class="relative">
-                            <input type="text"
-                                   placeholder="Search users..." id="searchUser"
-                                   class="pl-11 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-600 placeholder-gray-400 w-64"
-                            >
-                            <svg class="w-5 h-5 absolute left-4 top-3 text-gray-400" fill="none" stroke="currentColor"
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                        </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full">
-                            <thead>
-                            <tr>
-                                <th scope="col" class="px-8 py-5 text-left">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Name</span>
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
-                                             viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                  d="M19 9l-7 7-7-7"/>
-                                        </svg>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-8 py-5 text-left">
-                                    <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Role</span>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-50">
-                            <?php foreach ($data['allUsersWithPagination'] as $allUsersWithPagination): ?>
-                                <tr class="group hover:bg-gray-50/50 transition-all duration-200">
-                                    <td class="px-8 py-5">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-                                                <?php if ($allUsersWithPagination['profile_picture'] == null): ?>
-                                                    <div
-                                                            class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-red-50">
-                                                        <svg class="h-full w-full object-cover rounded-full"
-                                                             viewBox="0 0 24 24" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                    d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z"
-                                                                    fill="#ef4444"/>
-                                                        </svg>
-                                                    </div>
-                                                <?php else: ?>
-                                                    <img class="h-full w-full object-cover"
-                                                         src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>"
-                                                         alt="">
-                                                <?php endif; ?>
-                                            </div>
-                                            <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-gray-900">
-                                                    <?= $allUsersWithPagination['name'] ?>
-                                                </p>
-                                                <p class="text-sm text-gray-500">
-                                                    <?= $allUsersWithPagination['email'] ?>
-                                                </p>
-                                            </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="px-8 py-5 text-left">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Name</span>
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                         viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                              d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </div>
+                            </th>
+                            <th scope="col" class="px-8 py-5 text-left">
+                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Role</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                        <?php foreach ($data['allUsersWithPagination'] as $allUsersWithPagination): ?>
+                            <tr class="group hover:bg-gray-50/50 transition-all duration-200">
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-gray-100">
+                                            <?php if ($allUsersWithPagination['profile_picture'] == null): ?>
+                                                <div
+                                                        class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-red-50">
+                                                    <svg class="h-full w-full object-cover rounded-full"
+                                                         viewBox="0 0 24 24" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z"
+                                                                fill="#ef4444"/>
+                                                    </svg>
+                                                </div>
+                                            <?php else: ?>
+                                                <img class="h-full w-full object-cover"
+                                                     src="<?= PHOTOPROFILE . $allUsersWithPagination['profile_picture'] ?>"
+                                                     alt="">
+                                            <?php endif; ?>
                                         </div>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <?php if ($allUsersWithPagination['role_id'] == 1) { ?>
-                                            <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900">
+                                                <?= $allUsersWithPagination['name'] ?>
+                                            </p>
+                                            <p class="text-sm text-gray-500">
+                                                <?= $allUsersWithPagination['email'] ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5">
+                                    <?php if ($allUsersWithPagination['role_id'] == 1) { ?>
+                                        <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600">
                                                     <span class="w-1 h-1 mr-1.5 rounded-full bg-red-500"></span>
                                                     Admin
                                                 </span>
-                                        <?php } elseif ($allUsersWithPagination['role_id'] == 2) { ?>
-                                            <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-600">
+                                    <?php } elseif ($allUsersWithPagination['role_id'] == 2) { ?>
+                                        <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-600">
                                                     <span class="w-1 h-1 mr-1.5 rounded-full bg-blue-500"></span>
                                                     Researcher
                                                 </span>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Pagination -->
-                    <div class="px-8 py-4 border-t border-gray-100">
-                        <div class="flex items-center justify-between">
-                            <div class="text-sm text-gray-500">
-                                Showing
-                                <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
-                                to
-                                <span class="font-medium">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div class="px-8 py-4 border-t border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-500">
+                            Showing
+                            <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
+                            to
+                            <span class="font-medium">
                                     <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']) ?>
                                 </span>
-                                of
-                                <span class="font-medium"><?= $data['totalUsers'] ?></span>
-                                results
+                            of
+                            <span class="font-medium"><?= $data['totalUsers'] ?></span>
+                            results
+                        </div>
+                        <div class="flex items-center space-x-2" id="pagination">
+                            <!-- Page indicator -->
+                            <div class="text-sm text-gray-500">
+                                Page <span class="font-medium"><?= $data['currentPage']; ?></span> of <span
+                                        class="font-medium"><?= $data['totalPages']; ?></span>
                             </div>
-                            <div class="flex items-center space-x-2" id="pagination">
-                                <!-- Page indicator -->
-                                <div class="text-sm text-gray-500">
-                                    Page <span class="font-medium"><?= $data['currentPage']; ?></span> of <span
-                                            class="font-medium"><?= $data['totalPages']; ?></span>
-                                </div>
-                                <!-- Pagination numbers -->
-                                <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
-                                    <a href="?page=<?= $i; ?>"
-                                       class="px-4 py-2 text-sm font-medium rounded-lg <?= $i == $data['currentPage'] ? 'border border-red-400  text-red-500' : 'bg-white text-red-500 duration-300 hover:bg-red-100'; ?>">
-                                        <?= $i; ?>
-                                    </a>
-                                <?php endfor; ?>
-                            </div>
+                            <!-- Pagination numbers -->
+                            <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
+                                <a href="?page=<?= $i; ?>"
+                                   class="px-4 py-2 text-sm font-medium rounded-lg <?= $i == $data['currentPage'] ? 'border border-red-400  text-red-500' : 'bg-white text-red-500 duration-300 hover:bg-red-100'; ?>">
+                                    <?= $i; ?>
+                                </a>
+                            <?php endfor; ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </main>
 </div>
-</div>
-</div>
-</main>
-</div>
-
-<script>
-    const userData = <?php echo json_encode($userData); ?>;
-
-    document.getElementById('username').textContent = userData.username;
-    document.getElementById('userRole').textContent = userData.role;
-    document.getElementById('userAvatar').src = userData.avatar;
-</script>
-
 <script>
     $(document).ready(function () {
         // Function to update date and time
@@ -466,94 +443,6 @@
         // Initialize date and time updates
         updateDateTime();
         setInterval(updateDateTime, 1000);
-
-        function fetchUsers(keyword, pageNumber) {
-            $.ajax({
-                url: '<?= BASEURL; ?>/user/search', // URL endpoint
-                type: 'POST', // Metode HTTP
-                data: {
-                    keyword: keyword,
-                    pageNumber: pageNumber,
-                    pageSize: pageSize
-                },
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    // Kosongkan elemen tabel dan pagination sebelum memperbarui
-                    tableBody.empty();
-                    pagination.empty();
-
-                    // Periksa apakah ada data
-                    if (data.data.length > 0) {
-                        // Tambahkan baris data pengguna ke tabel
-                        $.each(data.data, function (index, user) {
-                            let roleClass = user.role_id === 1 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600';
-                            let roleLabel = user.role_id === 1 ? 'Admin' : 'Peneliti';
-
-                            tableBody.append(`
-                            <tr class="table-row">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-red-50">
-                                            ${user.profile_picture
-                                ? `<img class="h-full w-full object-cover rounded-full" src="<?= PHOTOPROFILE ?>${user.profile_picture}" alt="">`
-                                : `<svg class="h-full w-full object-cover rounded-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z" fill="#ef4444"/>
-                                </svg>`}
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-red-600">${user.name}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5">
-                                    <div class="text-sm text-red-500">${user.email}</div>
-                                </td>
-                                <td class="px-8 py-5">
-                                    <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium ${roleClass}">
-                                        <span class="w-1 h-1 mr-1.5 rounded-full bg-${roleLabel === 'Admin' ? 'red-500' : 'blue-500'}"></span>
-                                        ${roleLabel}
-                                    </span>
-                                </td>
-                            </tr>
-                        `);
-                        });
-
-                        // Tambahkan tombol pagination
-                        let totalPages = Math.ceil(data.totalCount / pageSize);
-                        if (totalPages > 1) {
-                            for (let i = 1; i <= totalPages; i++) {
-                                pagination.append(`
-                                <button class="px-4 py-2 text-sm ${i === currentPage ? 'text-red-600' : 'text-gray-500 hover:text-red-600'}" data-page="${i}">
-                                    ${i}
-                                </button>
-                            `);
-                            }
-                            pagination.off('click').on('click', 'button', function () {
-                                currentPage = parseInt($(this).data('page'));
-                                fetchUsers(keyword, currentPage);
-                            });
-                        }
-                    } else {
-                        // Jika tidak ada data
-                        tableBody.html('<tr><td colspan="4" class="text-center py-5 text-gray-500">Pengguna tidak ditemukan.</td></tr>');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
-
-        // Event listener untuk input pencarian
-        $('#searchUser').on('keyup', function () {
-            let keyword = $(this).val(); // Ambil nilai input
-            currentPage = 1; // Reset ke halaman pertama
-            fetchUsers(keyword, currentPage);
-        });
-
-        // Inisialisasi tabel dengan data default
-        fetchUsers('', currentPage);
     });
 </script>
 </body>

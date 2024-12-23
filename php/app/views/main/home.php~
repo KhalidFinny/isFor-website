@@ -46,6 +46,6 @@ session_start();
 </div>
 <?php include_once '../app/views/assets/components/footer.php'; ?>
 <!-- Add data.js script -->
-<script src="<?= JS; ?>/data.js"></script>
+<script src="<?= ASSETS; ?>/data.js"></script>
 </body>
 </html>

@@ -12,7 +12,6 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://localhost/IsFor-website/php/app/views/assets/css/inandout.css">
     <script src="http://localhost/IsFor-website/php/app/views/assets/js/animations.js" defer></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .agenda-item {
             opacity: 0;
@@ -135,12 +134,12 @@ session_start();
     </div>
 
     <script>
-        $(document).ready(function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry, index) => {
                     if (entry.isIntersecting) {
                         setTimeout(() => {
-                            $(entry.target).addClass('visible');
+                            entry.target.classList.add('visible');
                         }, index * 100);
                     }
                 });
@@ -148,8 +147,9 @@ session_start();
                 threshold: 0.1
             });
 
-            $('.agenda-item').each(function () {
-                observer.observe(this);
+            const items = document.querySelectorAll('.agenda-item');
+            items.forEach(item => {
+                observer.observe(item);
             });
         });
     </script>

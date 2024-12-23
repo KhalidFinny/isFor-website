@@ -1,3 +1,6 @@
+<?php
+//var_dump($data);
+?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
@@ -6,7 +9,41 @@
     <title>Dashboard User - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<style>
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .tabular-nums {
+        font-variant-numeric: tabular-nums;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .animate-pulse {
+        animation: pulse 0.5s ease-in-out;
+    }
+
+    @keyframes modalEnter {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .modal-enter {
+        animation: modalEnter 0.3s ease-out;
+    }
+</style>
 <body class="bg-white">
     <div class="flex">
         <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
@@ -212,10 +249,7 @@
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // DateTime Update Function
         function updateDateTime() {
             const now = new Date();
 
@@ -227,7 +261,7 @@
                 day: 'numeric'
             };
             const dateFormatter = new Intl.DateTimeFormat('id-ID', dateOptions);
-            document.getElementById('currentDate').textContent = dateFormatter.format(now);
+            $('#currentDate').text(dateFormatter.format(now));
 
             // Time formatting
             const timeOptions = {
@@ -237,83 +271,45 @@
                 hour12: false
             };
             const timeFormatter = new Intl.DateTimeFormat('id-ID', timeOptions);
-            const timeElement = document.getElementById('currentTime');
             const newTime = timeFormatter.format(now);
 
-            if (timeElement.textContent !== newTime) {
-                timeElement.classList.add('animate-pulse');
+            const $timeElement = $('#currentTime');
+            if ($timeElement.text() !== newTime) {
+                $timeElement.addClass('animate-pulse');
                 setTimeout(() => {
-                    timeElement.classList.remove('animate-pulse');
+                    $timeElement.removeClass('animate-pulse');
                 }, 500);
             }
 
-            timeElement.textContent = newTime;
+            $timeElement.text(newTime);
         }
 
-        // Modal Functions
         function viewLetter(id) {
-            document.getElementById('letterModal').classList.remove('hidden');
-            document.getElementById('letterModal').classList.add('flex');
+            $('#letterModal').removeClass('hidden').addClass('flex');
 
             $.ajax({
                 url: '<?= BASEURL ?>/letter/getLetter',
                 method: 'POST',
                 dataType: 'json',
-                data: { id : id},
-                success: function(data){
-                    const letterContent = document.getElementById('letterContent');
-                    letterContent.innerHTML = `
-                        <iframe src="${data}" width="100%" height="500px" class="rounded-lg border border-red-100"></iframe>
-                    `;
+                data: { id: id },
+                success: function (data) {
+                    $('#letterContent').html(`
+                <iframe src="${data}" width="100%" height="500px" class="rounded-lg border border-red-100"></iframe>
+            `);
                 },
-                error: function(data){
+                error: function () {
                     alert('Gagal memuat dokumen');
                 }
             });
         }
 
         function closeLetterModal() {
-            document.getElementById('letterModal').classList.add('hidden');
-            document.getElementById('letterModal').classList.remove('flex');
+            $('#letterModal').addClass('hidden').removeClass('flex');
         }
 
-        // Initialize DateTime
         updateDateTime();
         setInterval(updateDateTime, 1000);
+
     </script>
-
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        .tabular-nums {
-            font-variant-numeric: tabular-nums;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .animate-pulse {
-            animation: pulse 0.5s ease-in-out;
-        }
-
-        @keyframes modalEnter {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .modal-enter {
-            animation: modalEnter 0.3s ease-out;
-        }
-    </style>
 </body>
 </html>

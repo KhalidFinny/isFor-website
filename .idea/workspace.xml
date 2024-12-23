@@ -5,10 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/php/public/assets/css/main/document.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/public/assets/js/main/document.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/verify-file.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/config/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Home.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/debug.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/css/hasil-penelitian.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/adminDashboard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/galeri.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/css/login.css" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/css/login.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/favicon.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/3119338.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/3266f4b041cc8832471265ad1f403e4ecc480238.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/Jti_polinema.svg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/empty-user.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/m_image01.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/png-clipart-success-kid-child-computer-icons-fist-pumping-child-face.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/polinema_logo 2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/roadmap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/agenda.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/agenda.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/dokumen.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/dokumen.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeri.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/submitLetter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/submitLetter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/userDashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/userDashboard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/debug.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/Dokumen Renstra Penelitian Bab 1 - 6 (fix fix).pdf" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/Dokumen Renstra Penelitian Bab 1 - 6 (fix fix).pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/Panduan Penelitian dan PPM Tahun 2023.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/Panduan Penelitian dan PPM Tahun 2023.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/Pusat Riset IsFoR - narasi-visi-misi.docx" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/Pusat Riset IsFoR - narasi-visi-misi.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/Pusat Riset IsFoR - narasi.docx" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/Pusat Riset IsFoR - narasi.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/Rekom pusat riset isfor.docx" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/Rekom pusat riset isfor.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/Roadmap Pusat Riset IsFoR.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/Roadmap Pusat Riset IsFoR.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/SK NO 556 TAHUN 2023 PENGANGKATAN PENGELOLA PUSAT RISET (RESEARCH CENTER) IOT FOR HUMAN LIFE.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/SK NO 556 TAHUN 2023 PENGANGKATAN PENGELOLA PUSAT RISET (RESEARCH CENTER) IOT FOR HUMAN LIFE.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/Sosialisasi Pusat Riset IoT.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/Sosialisasi Pusat Riset IoT.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/document/Struktur Organisasi Pusat Riset IoT for Human Life_Baru.docx" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/files/documents/Struktur Organisasi Pusat Riset IoT for Human Life_Baru.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/test.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +56,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -83,8 +117,11 @@
       <recent name="C:\laragon\www\isFor-website\php\app\views\main" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\laragon\www\isFor-website\database" />
-      <recent name="C:\laragon\www\isFor-website\php\app\files" />
+      <recent name="C:\laragon\www\isFor-website\php\public\assets" />
+      <recent name="C:\laragon\www\isFor-website\php\public\assets\files\css" />
+      <recent name="C:\laragon\www\isFor-website\php\public\assets\files\js\documents" />
+      <recent name="C:\laragon\www\isFor-website\php\public\assets\file" />
+      <recent name="C:\laragon\www\isFor-website\php\public\assets\document" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -131,7 +168,7 @@
       <workItem from="1734631382133" duration="1263000" />
       <workItem from="1734757841891" duration="9680000" />
       <workItem from="1734771370789" duration="6448000" />
-      <workItem from="1734839981192" duration="17705000" />
+      <workItem from="1734839981192" duration="25261000" />
     </task>
     <servers />
   </component>

@@ -62,28 +62,21 @@ class Home extends Controller
 
     public function filterGallery()
     {
-        $logFile = __DIR__ . '/debug.log'; // Lokasi file log
-        file_put_contents($logFile, "Request received at " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
-
         if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
             $input = json_decode(file_get_contents('php://input'), true);
             if (json_last_error() !== JSON_ERROR_NONE) {
-                file_put_contents($logFile, "JSON Decode Error: " . json_last_error_msg() . "\n", FILE_APPEND);
                 echo json_encode(['error' => 'Invalid JSON format']);
                 return;
             }
             $_POST = $input;
         } else {
-            file_put_contents($logFile, "Invalid Content-Type: " . ($_SERVER['CONTENT_TYPE'] ?? 'not set') . "\n", FILE_APPEND);
             echo json_encode(['error' => 'Invalid Content-Type, expected application/json']);
             return;
         }
 
-        file_put_contents($logFile, "POST Data: " . print_r($_POST, true) . "\n", FILE_APPEND);
-
         $status = $_POST['status'] ?? null;
         $page = $_POST['page'] ?? 1;
-        $limit = $_POST['limit'] ?? 3;
+        $limit = $_POST['limit'] ?? 6;
 
         $categoryMap = [
             1 => 'DIPA SWADANA',
@@ -93,8 +86,6 @@ class Home extends Controller
         ];
 
         if (!isset($status) || !is_numeric($status) || $status < 0 || $status > 4) {
-            $error = "Invalid status: " . print_r($status, true) . "\n";
-            file_put_contents($logFile, $error, FILE_APPEND);
             echo json_encode(['error' => 'Invalid status']);
             return;
         }
@@ -110,12 +101,10 @@ class Home extends Controller
                 'limit' => $limit,
                 'totalPages' => ceil($total / $limit),
             ];
-            file_put_contents($logFile, "Response: " . print_r($result, true) . "\n", FILE_APPEND);
         } else if ($status === 0) {
             $result = $this->model('GalleryModel')->getAllPaginateGallery($page, $limit);
             $total = $result['total'];
             $data = $result['data'];
-            header('Content-Type: application/json');
             $result = [
                 'total' => $total,
                 'data' => $data,
@@ -123,18 +112,14 @@ class Home extends Controller
                 'limit' => $limit,
                 'totalPages' => ceil($total / $limit),
             ];
-            file_put_contents($logFile, "Response: " . print_r($response, true) . "\n", FILE_APPEND);
         } else {
-            $error = "Invalid status logic reached.\n";
-            file_put_contents($logFile, $error, FILE_APPEND);
             echo json_encode(['error' => 'Invalid status']);
             return;
         }
 
         echo json_encode($result);
     }
-
-
+    
     public function agenda()
     {
         $data['agenda'] = $this->model('AgendaModel')->getAllAgenda();

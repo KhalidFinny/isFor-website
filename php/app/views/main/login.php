@@ -6,96 +6,7 @@
     <title>Sign In</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .animated-background {
-            background: #ffffff;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(10px);
-        }
-
-        .circle-1 {
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(45deg, #fee2e2 0%, #fecaca 100%);
-            top: -100px;
-            right: -100px;
-            animation: float1 20s ease-in-out infinite;
-        }
-
-        .circle-2 {
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(45deg, #fecaca 0%, #fca5a5 100%);
-            bottom: -50px;
-            left: -50px;
-            animation: float2 15s ease-in-out infinite;
-        }
-
-        .circle-3 {
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(45deg, #fca5a5 0%, #f87171 100%);
-            top: 50%;
-            right: 15%;
-            animation: float3 18s ease-in-out infinite;
-        }
-
-        @keyframes float1 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(50px, 50px) rotate(90deg); }
-            50% { transform: translate(0, 100px) rotate(180deg); }
-            75% { transform: translate(-50px, 50px) rotate(270deg); }
-        }
-
-        @keyframes float2 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -50px) rotate(120deg); }
-            66% { transform: translate(-30px, 50px) rotate(240deg); }
-        }
-
-        @keyframes float3 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-40px, -40px) rotate(180deg); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
-        }
-
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid #f87171;
-        }
-
-        .hover-translate {
-            transition: all 0.3s ease;
-        }
-
-        .hover-translate:hover {
-            transform: translateX(4px);
-        }
-
-        .input-focus {
-            transition: all 0.3s ease;
-        }
-
-        .input-focus:focus {
-            transform: translateY(-1px);
-        }
-    </style>
+    <link rel="stylesheet" href="<?=CSS;?>/login.css">
 </head>
 <body class="min-h-screen animated-background" style="font-family: 'Plus Jakarta Sans', sans-serif;">
     <!-- Animated Background Circles -->
@@ -201,6 +112,6 @@
         </div>
     </div>
 
-    <script src="<?=ASSETS?>/assets/js/login.js"></script>
+    <script src="<?=JS;?>/login.js"></script>
 </body>
 </html>

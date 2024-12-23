@@ -13,7 +13,7 @@ session_start();
     <link rel="stylesheet" href="http://localhost/IsFor-website/php/app/views/assets/css/inandout.css">
     <script src="http://localhost/IsFor-website/php/app/views/assets/js/animations.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="<?= FILECSS;?>/main/document.css">
+    <link rel="stylesheet" href="<?= FILECSS;?>/document.css">
 </head>
 <body class="bg-gray-50">
 <?php if (!isset($_SESSION['user_id'])) : ?>
@@ -231,6 +231,7 @@ session_start();
     </div>
 </section>
 <script src="<?= FILE; ?>/main/document.js">
+
 </script>
 </body>
 </html>

@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/dist/docx.js"></script>
     <style>
-        /* Simplified Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -351,7 +350,6 @@ confirmButton.addEventListener('click', function() {
         Mengirim...
     `;
 
-    // Actually submit the form
     const formData = new FormData(form);
     fetch('<?=BASEURL?>/letter/sendletter', {
         method: 'POST',
