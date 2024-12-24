@@ -299,33 +299,33 @@ class ResearchOutput extends Controller
         $status = $_POST['status'] ?? null;
         $userId = $_SESSION['user_id'];
 
-        $jumlahDataperhalaman = 6;
-    
-        // Ambil jumlah total data sesuai status
-        if($status == 0){
-            $jumlahData = $this->model('ResearchOutputModel')->countFilesByUser($userId);
-        }else{
-            $jumlahData = $this->model('ResearchOutputModel')->countFilesByUserandStatus($userId, $status)['total'];
-        }
-        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-    
-        // Halaman aktif dari POST, menggunakan halamanAktif
-        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
-        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-    
-        // Validasi status dan ambil data
+        $itemsPerPage = 6;
+
+        // Get the total number of files based on status
         if ($status == 0) {
-            $files = $this->model('ResearchOutputModel')->getPaginatedFilesByUser($userId, $jumlahDataperhalaman, $awalData);
+            $totalFiles = $this->model('ResearchOutputModel')->countFilesByUser($userId);
         } else {
-            $files = $this->model('ResearchOutputModel')->getFilesByUserAndStatus($userId, $status, $awalData, $jumlahDataperhalaman);
+            $totalFiles = $this->model('ResearchOutputModel')->countFilesByUserAndStatus($userId, $status)['total'];
         }
-    
-        // Kirim data ke frontend
+        $totalPages = ceil($totalFiles / $itemsPerPage);
+
+        // Active page from POST, using activePage
+        $activePage = isset($_POST['activePage']) ? (int)$_POST['activePage'] : 1;
+        $offset = ($itemsPerPage * $activePage) - $itemsPerPage;
+
+        // Validate status and fetch data
+        if ($status == 0) {
+            $files = $this->model('ResearchOutputModel')->getPaginatedFilesByUser($userId, $itemsPerPage, $offset);
+        } else {
+            $files = $this->model('ResearchOutputModel')->getFilesByUserAndStatus($userId, $status, $offset, $itemsPerPage);
+        }
+
+        // Send data to the frontend
         echo json_encode([
             'files' => $files,
             'pagination' => [
-                'jumlahHalaman' => $jumlahHalaman,
-                'halamanAktif' => $halamanAktif
+                'totalPages' => $totalPages,
+                'activePage' => $activePage
             ]
         ]);
     }
@@ -362,24 +362,35 @@ class ResearchOutput extends Controller
     {
         $status = $_POST['status'];
 
-        switch ($status) {
-            case 0:
-                $files = $this->model('ResearchOutputModel')->getAllFiles();
-                break;
-            case 1:
-                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Pending
-                break;
-            case 2:
-                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Verified
-                break;
-            case 3:
-                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Rejected
-                break;
-            default:
-                echo json_encode(['error' => 'Invalid status']);
-                return;
+        $jumlahDataperhalaman = 4;
+    
+        // Ambil jumlah total data sesuai status
+        if($status == 0){
+            $jumlahData = $this->model('ResearchOutputModel')->countAllFiles();
+        }else{
+            $jumlahData = $this->model('ResearchOutputModel')->countAllFilesByStatus($status);
         }
-        echo json_encode($files);
+        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
+    
+        // Halaman aktif dari POST, menggunakan halamanAktif
+        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
+        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+    
+        // Validasi status dan ambil data
+        if ($status == 0) {
+            $files = $this->model('ResearchOutputModel')->getAllPaginatedFiles($jumlahDataperhalaman, $awalData);
+        } else {
+            $files = $this->model('ResearchOutputModel')->getFilesByStatus($status, $awalData, $jumlahDataperhalaman);
+        }
+    
+        // Kirim data ke frontend
+        echo json_encode([
+            'files' => $files,
+            'pagination' => [
+                'jumlahHalaman' => $jumlahHalaman,
+                'halamanAktif' => $halamanAktif
+            ]
+        ]);
     }
 
     public function delete()

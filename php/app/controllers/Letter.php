@@ -252,40 +252,39 @@ class Letter extends Controller
     }
 
     public function filterAdmin() {
-        $status = $_POST['status']; // Mengambil status dari POST
+        $input = json_decode(file_get_contents('php://input'), true);
+        $status = $input['status'] ?? null;
         $jumlahDataperhalaman = 4;
-    
-        // Ambil jumlah total data sesuai status
-        if($status == 0){
+
+        if ($status == 0) {
+            // Hitung semua surat tanpa memfilter status
             $jumlahData = $this->model('LettersModel')->countAllLetters();
-        }else{
-            $jumlahData = $this->model('LettersModel')->countAllLettersByUserandStatus($status)['total'];
+        } else {
+            // Hitung surat berdasarkan status saja
+            $jumlahData = $this->model('LettersModel')->countAllLettersByStatus($status)['total'];
         }
+
         $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-    
-        // Halaman aktif dari POST, menggunakan halamanAktif
+
         $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
         $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-    
-        // Validasi status dan ambil data
+
         switch ($status) {
             case 0:
+                // Ambil semua surat dengan paginasi
                 $letters = $this->model('LettersModel')->getAllLettersPaginate($awalData, $jumlahDataperhalaman);
                 break;
-            case 1:
-                $letters = $this->model('LettersModel')->getLettersByStatus($status, $awalData, $jumlahDataperhalaman);
-                break;
             case 2:
-                $letters = $this->model('LettersModel')->getLettersByStatus($status, $awalData, $jumlahDataperhalaman);
-                break;
             case 3:
+            case 1:
+                // Ambil surat berdasarkan status dengan paginasi
                 $letters = $this->model('LettersModel')->getLettersByStatus($status, $awalData, $jumlahDataperhalaman);
                 break;
             default:
                 echo json_encode(['error' => 'Invalid status']);
                 return;
         }
-    
+
         // Kirim data ke frontend
         echo json_encode([
             'letters' => $letters,
@@ -295,8 +294,6 @@ class Letter extends Controller
             ]
         ]);
     }
-    
-
 
     public function search()
     {

@@ -362,7 +362,7 @@ class ResearchOutput extends Controller
     {
         $status = $_POST['status'];
 
-        $jumlahDataperhalaman = 4;
+        $jumlahDataperhalaman = 6;
     
         // Ambil jumlah total data sesuai status
         if($status == 0){

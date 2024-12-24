@@ -335,86 +335,73 @@
         document.getElementById('letterModal').classList.remove('flex');
     }
 
-    // Animation observer
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animationPlayState = 'running';
+    function filter(status, currentPage = 1) {
+        console.log('Filter called with status:', status, 'and page:', currentPage);
+        $.ajax({
+            url: '<?= BASEURL ?>/letter/filterAdmin',
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({status: status, halamanAktif: currentPage}), // Kirim JSON ke server
+            contentType: 'application/json',
+            success: function (data) {
+                console.log('Received Data:', data);
+
+                const letterContainer = document.querySelector(".letter-card tbody");
+                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+
+                const tableHeader = `
+                <thead>
+                    <tr class="text-left text-sm font-medium text-gray-500">
+                        <th class="pb-4">Jenis Dokumen</th>
+                        <th class="pb-4">Tanggal</th>
+                        <th class="pb-4">Status</th>
+                        <th class="pb-4">Aksi</th>
+                    </tr>
+                </thead>
+            `;
+
+                letterContainer.innerHTML = ''; // Hanya hapus isi tbody
+                navElement.innerHTML = '';
+
+                // Populate table rows with data
+                data.letters.forEach(letter => {
+                    console.log(letter.status);
+
+                    let statusBadge = '';
+
+                    if (letter.status == 1) {
+                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
+                    } else if (letter.status == 2) {
+                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
+                    } else {
+                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
+                    }
+
+                    const row = `
+                    <tr class="border-t border-gray-100">
+                        <td class="py-4">${letter.title}</td>
+                        <td class="py-4">${letter.date}</td>
+                        <td class="py-4">${statusBadge}</td>
+                        <td class="py-4">
+                            <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                        </td>
+                    </tr>
+                `;
+                    letterContainer.innerHTML += row;
+                });
+
+                // Generate pagination
+                if (navElement) {
+                    generatePagination(navElement, data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error Status:', status);
+                console.error('Error Details:', error);
+                console.error('Response Text:', xhr.responseText);
             }
         });
-    }, {
-        threshold: 0.1
-    });
-
-    document.querySelectorAll('.slide-up, .fade-in').forEach(el => {
-        observer.observe(el);
-    });
-
-    function filter(status, currentPage = 1) {
-    console.log('Filter called with status:', status, 'and page:', currentPage);
-    $.ajax({
-        url: '<?= BASEURL ?>/letter/filterAdmin',
-        method: 'POST',
-        dataType: 'json',
-        data: {status: status, halamanAktif: currentPage}, // Kirim halamanAktif
-        success: function (data) {
-            console.log('Success Response:', data);
-            const letterContainer = document.querySelector(".letter-card table tbody");
-            const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-            const tableHeader = `
-                    <thead>
-                        <tr class="text-left text-sm font-medium text-gray-500">
-                            <th class="pb-4">Jenis Dokumen</th>
-                            <th class="pb-4">Tanggal</th>
-                            <th class="pb-4">Status</th>
-                            <th class="pb-4">Aksi</th>
-                        </tr>
-                    </thead>
-                `;
-
-            // Clear existing rows and add table header
-            letterContainer.innerHTML = '';
-            navElement.innerHTML = '';
-
-            // Populate table rows with data
-            data.letters.forEach(letter => {
-                console.log(letter.status);
-
-                let statusBadge = '';
-
-                if (letter.status == 1) {
-                    statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-                } else if (letter.status == 2) {
-                    statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
-                } else {
-                    statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
-                }
-
-                const row = `
-                        <tr class="border-t border-gray-100">
-                            <td class="py-4">${letter.title}</td>
-                            <td class="py-4">${letter.date}</td>
-                            <td class="py-4">${statusBadge}</td>
-                            <td class="py-4">
-                                <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                            </td>
-                        </tr>
-                    `;
-                letterContainer.innerHTML += row;
-            });
-
-            if (navElement) {
-                generatePagination(navElement, data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('Error Status:', status);
-            console.error('Error Details:', error);
-            console.error('Response Text:', xhr.responseText);
-        }
-    });
-}
-
+    }
 
     function generatePagination(navElement, currentPage, totalPages, status) {
     const ul = document.createElement('ul');
@@ -473,10 +460,98 @@
     navElement.appendChild(ul);
 }
 
-    //live search ajax
+    function showAlert(message, type = 'success') {
+        const alertElement = document.getElementById('alertMessage');
+        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+        const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
+        const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
+
+        alertElement.innerHTML = `
+            <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
+                <div class="flex-shrink-0 ${iconColor}">
+                    ${type === 'success'
+            ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+            : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+        }
+                </div>
+                <div class="ml-3 ${textColor} font-medium">${message}</div>
+                <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        alertElement.style.transform = 'translateY(0)';
+        alertElement.classList.remove('hidden');
+
+        // Auto hide after 5 seconds
+        setTimeout(closeAlert, 5000);
+    }
+
+    function closeAlert() {
+        const alertElement = document.getElementById('alertMessage');
+        alertElement.style.transform = 'translateY(-100%)';
+        setTimeout(() => alertElement.classList.add('hidden'), 300);
+    }
+
+    // Animation observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    document.querySelectorAll('.slide-up, .fade-in').forEach(el => {
+        observer.observe(el);
+    });
+
+    $(document).ready(function () {
+        $('#keyword').on('keyup', function () {
+            let keyword = $(this).val(); // Ambil nilai input
+            let resultContainer = $('#resultContainer'); // Elemen untuk menampilkan hasil
+
+            $.ajax({
+                url: '<?= BASEURL; ?>/letters/search',
+                type: 'POST',
+                data: {keyword: keyword},
+                dataType: 'json',
+                success: function (data) {
+                    // Kosongkan elemen hasil
+                    resultContainer.empty();
+
+                    if (data.length > 0) {
+                        $.each(data, function (index, letter) {
+                            resultContainer.append(`
+                            <div class="p-2 border-b border-gray-200">
+                                <h4 class="text-lg font-medium text-gray-800">${letter.title}</h4>
+                                <p class="text-sm text-gray-500">Tanggal: ${letter.date}</p>
+                            </div>
+                        `);
+                        });
+                    } else {
+                        resultContainer.html(`
+                        <div class="col-span-full text-center py-12">
+                            <h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3>
+                            <p class="text-red-600">Coba kata kunci lainnya.</p>
+                        </div>
+                    `);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+
     const keyword = document.getElementById('keyword');
     let debounceTimeout;
-
     keyword.addEventListener('keyup', function () {
         // console.log(keyword.value)
         clearTimeout(debounceTimeout);
@@ -550,81 +625,6 @@
 
                 // Call the existing filter function
                 filter(this.dataset.status);
-            });
-        });
-    });
-
-    function showAlert(message, type = 'success') {
-        const alertElement = document.getElementById('alertMessage');
-        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-        const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
-        const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
-
-        alertElement.innerHTML = `
-            <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
-                <div class="flex-shrink-0 ${iconColor}">
-                    ${type === 'success'
-            ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-            : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-        }
-                </div>
-                <div class="ml-3 ${textColor} font-medium">${message}</div>
-                <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-        `;
-
-        alertElement.style.transform = 'translateY(0)';
-        alertElement.classList.remove('hidden');
-
-        // Auto hide after 5 seconds
-        setTimeout(closeAlert, 5000);
-    }
-
-    function closeAlert() {
-        const alertElement = document.getElementById('alertMessage');
-        alertElement.style.transform = 'translateY(-100%)';
-        setTimeout(() => alertElement.classList.add('hidden'), 300);
-    }
-
-    $(document).ready(function () {
-        $('#keyword').on('keyup', function () {
-            let keyword = $(this).val(); // Ambil nilai input
-            let resultContainer = $('#resultContainer'); // Elemen untuk menampilkan hasil
-
-            $.ajax({
-                url: '<?= BASEURL; ?>/letters/search',
-                type: 'POST',
-                data: {keyword: keyword},
-                dataType: 'json',
-                success: function (data) {
-                    // Kosongkan elemen hasil
-                    resultContainer.empty();
-
-                    if (data.length > 0) {
-                        $.each(data, function (index, letter) {
-                            resultContainer.append(`
-                            <div class="p-2 border-b border-gray-200">
-                                <h4 class="text-lg font-medium text-gray-800">${letter.title}</h4>
-                                <p class="text-sm text-gray-500">Tanggal: ${letter.date}</p>
-                            </div>
-                        `);
-                        });
-                    } else {
-                        resultContainer.html(`
-                        <div class="col-span-full text-center py-12">
-                            <h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3>
-                            <p class="text-red-600">Coba kata kunci lainnya.</p>
-                        </div>
-                    `);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
             });
         });
     });
