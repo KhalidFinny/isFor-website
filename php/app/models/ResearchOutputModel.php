@@ -231,7 +231,7 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
-    public function getResearchDIPAPNBP()
+        public function getResearchDIPAPNBP()
     {
         $this->db->query("EXEC sp_getResearchDIPAPNBP");
         return $this->db->resultSet();
@@ -331,5 +331,86 @@ class ResearchOutputModel
         return $this->db->single()['name'] ?? null;
     }
 
+    public function getAllVerifiedFiles($limit, $offset)
+    {
+        $this->db->query('EXEC sp_GetAllVerifyResearchOutputs @limit = :limit, @offset = :offset');
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
+        return $this->db->resultSet();
+    }
+
+    public function getVerifiedFilesDIPASWA($limit, $offset)
+    {
+        $this->db->query('EXEC sp_getVerifyResearchDIPASWA @limit = :limit, @offset = :offset');
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
+        return $this->db->resultSet();
+    }
+
+    public function getVerifiedFilesDIPAPNBP($limit, $offset)
+    {
+        $this->db->query('EXEC sp_getVerifyResearchDIPAPNBP @limit = :limit, @offset = :offset');
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
+        return $this->db->resultSet();
+    }
+
+    public function getVerifiedFilesTesis($limit, $offset)
+    {
+        $this->db->query('EXEC sp_getVerifyResearchTesis @limit = :limit, @offset = :offset');
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalFilesByCategory($category)
+    {
+        $query = "SELECT COUNT(*) as total FROM research_outputs WHERE category LIKE :category AND status = 2";
+        $this->db->query($query);
+        $this->db->bind(':category', $category);
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
+    public function getFilesByCategory($category, $page, $limit)
+    {
+        $offset = ($page - 1) * $limit;
+        $query = "
+        SELECT * 
+        FROM research_outputs
+        WHERE category LIKE :category
+        AND status = 2
+        ORDER BY research_output_id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;
+    ";
+        $this->db->query($query);
+        $this->db->bind(':category', $category);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getAllPaginateFiles($page, $limit)
+    {
+        $offset = ($page - 1) * $limit;
+
+        // Query data paginasi
+        $this->db->query('
+        SELECT * 
+        FROM research_outputs
+        WHERE status = 2
+        ORDER BY uploaded_by DESC
+        OFFSET :offset ROWS
+        FETCH NEXT :limit ROWS ONLY;
+    ');
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $data = $this->db->resultSet();
+
+        // Query total record
+        $this->db->query('SELECT COUNT(*) AS Total FROM research_outputs WHERE status = 2;');
+        $total = $this->db->single();
+
+        return ['data' => $data, 'total' => $total['Total']];
+    }
 }
 

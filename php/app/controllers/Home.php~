@@ -38,27 +38,51 @@ class Home extends Controller
 
     public function filterHasilPenelitian()
     {
-        $status = $_POST['status'];
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $status = isset($inputData['status']) ? intval($inputData['status']) : null;
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1; // Default halaman 1
+        $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 10; // Default 10 data per halaman
+        $offset = ($page - 1) * $limit; // Menghitung offset
+
+        if ($status === null) {
+            echo json_encode(['error' => 'Parameter status is required']);
+            return;
+        }
 
         switch ($status) {
             case 0:
-                $hasil = $this->model('ResearchOutputModel')->getAll();
+                $hasil = $this->model('ResearchOutputModel')->getAllVerifiedFiles($limit, $offset);
+                $total = $this->model('ResearchOutputModel')->getCountAllVerifiedFiles();
                 break;
             case 1:
-                $hasil = $this->model('ResearchOutputModel')->getresearchDIPASWA();
+                $hasil = $this->model('ResearchOutputModel')->getVerifiedFilesDIPASWA($limit, $offset);
+                $total = $this->model('ResearchOutputModel')->getCountVerifiedFilesDIPASWA();
                 break;
             case 2:
-                $hasil = $this->model('ResearchOutputModel')->getresearchDIPAPNBP();
+                $hasil = $this->model('ResearchOutputModel')->getVerifiedFilesDIPAPNBP($limit, $offset);
+                $total = $this->model('ResearchOutputModel')->getCountVerifiedFilesDIPAPNBP();
                 break;
             case 3:
-                $hasil = $this->model('ResearchOutputModel')->getresearchTesis();
+                $hasil = $this->model('ResearchOutputModel')->getVerifiedFilesTesis($limit, $offset);
+                $total = $this->model('ResearchOutputModel')->getCountVerifiedFilesTesis();
                 break;
             default:
                 echo json_encode(['error' => 'Invalid status']);
                 return;
         }
-        echo json_encode($hasil);
+
+        $response = [
+            'data' => $hasil,
+            'pagination' => [
+                'current_page' => $page,
+                'total_data' => $total,
+                'total_pages' => ceil($total / $limit),
+            ]
+        ];
+
+        echo json_encode($response);
     }
+
 
     public function filterGallery()
     {
@@ -119,7 +143,7 @@ class Home extends Controller
 
         echo json_encode($result);
     }
-    
+
     public function agenda()
     {
         $data['agenda'] = $this->model('AgendaModel')->getAllAgenda();

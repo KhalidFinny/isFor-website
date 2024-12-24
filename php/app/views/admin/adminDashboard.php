@@ -406,11 +406,8 @@
 </div>
 <script>
     $(document).ready(function () {
-        // Function to update date and time
         function updateDateTime() {
             const now = new Date();
-
-            // Format date
             const dateOptions = {
                 weekday: 'long',
                 year: 'numeric',
@@ -419,8 +416,6 @@
             };
             const formattedDate = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
             $('#currentDate').text(formattedDate);
-
-            // Format time
             const timeOptions = {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -440,7 +435,6 @@
             timeElement.text(formattedTime);
         }
 
-        // Initialize date and time updates
         updateDateTime();
         setInterval(updateDateTime, 1000);
     });

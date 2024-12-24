@@ -124,11 +124,11 @@ session_start();
             <?php endif; ?>
         </div>
         <!-- Pagination -->
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" class="p-6" id="pagination-nav">
             <ul class="flex items-center -space-x-px h-8 text-sm">
                 <li>
                     <?php if ($data['currentPage'] > 1) : ?>
-                        <a href="?halaman=<?= $data['currentPage'] - 1 ?>"
+                        <a href="?page=<?= $data['currentPage'] - 1 ?>&status=<?= $data['selectedStatus'] ?>"
                            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                             <span class="sr-only">Previous</span>
                             <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
@@ -142,19 +142,20 @@ session_start();
                 <?php for ($i = 1; $i <= $data['totalPages']; $i++) : ?>
                     <?php if ($i == $data['currentPage']) : ?>
                         <li>
-                            <a href="?page=<?= $i; ?>" aria-current="page"
+                            <a href="?page=<?= $i; ?>&status=<?= $data['selectedStatus'] ?>"
+                               aria-current="page"
                                class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i; ?></a>
                         </li>
                     <?php else : ?>
                         <li>
-                            <a href="?page=<?= $i; ?>"
+                            <a href="?page=<?= $i; ?>&status=<?= $data['selectedStatus'] ?>"
                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $i; ?></a>
                         </li>
                     <?php endif; ?>
                 <?php endfor; ?>
                 <li>
                     <?php if ($data['currentPage'] < $data['totalPages']) : ?>
-                        <a href="?page=<?= $data['currentPage'] + 1 ?>"
+                        <a href="?page=<?= $data['currentPage'] + 1 ?>&status=<?= $data['selectedStatus'] ?>"
                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                             <span class="sr-only">Next</span>
                             <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
@@ -233,20 +234,28 @@ session_start();
         $.ajax({
             url: '<?= BASEURL ?>/home/filterHasilPenelitian',
             method: 'POST',
-            dataType: 'json',
-            data: {status: status},
-            success: function (data) {
-                console.log('Success Response:', data);
+            dataType: 'json', // Untuk respons
+            contentType: 'application/json', // Set Content-Type ke JSON
+            data: JSON.stringify({status: status}), // Kirim data sebagai JSON
+            success: function (response) {
+                console.log('Success Response:', response);
+
+                if (!response || !response.data) {
+                    console.error('Invalid response format');
+                    return;
+                }
 
                 const fileContainer = $('.files-container');
-                const navElement = $('nav[aria-label="Page navigation example"]');
+                let paginationNav = $('#pagination-nav');
 
+                // Bersihkan kontainer file dan navigasi
                 fileContainer.empty();
-                navElement.empty();
+                paginationNav.empty();
 
-                data.forEach(file => {
+                // Loop untuk menampilkan data file
+                response.data.forEach(file => {
                     const fileHTML = `
-                        <div class="file-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 visible">
+                    <div class="file-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 visible">
                         <!-- Category Badge -->
                         <div class="px-6 py-4 border-b border-gray-100">
                             <span class="inline-block px-3 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-full">
@@ -302,6 +311,56 @@ session_start();
                     fileContainer.append(fileHTML);
                 });
 
+                if (data.totalPages > 1) {
+                    let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
+
+                    // Tombol Previous
+                    if (data.currentPage > 1) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${data.currentPage - 1}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
+                    }
+
+                    // Halaman
+                    for (let i = 1; i <= data.totalPages; i++) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${i}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight ${i === data.currentPage ? 'text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">
+                            ${i}
+                        </a>
+                    </li>`;
+                    }
+
+                    // Tombol Next
+                    if (data.currentPage < data.totalPages) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${data.currentPage + 1}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-s-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4-4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
+                    }
+
+                    paginationHTML += `</ul>`;
+                    paginationNav.html(paginationHTML);
+
+                    // Tambahkan event handler untuk navigasi pagination
+                    paginationNav.find('a').on('click', function (e) {
+                        e.preventDefault();
+                        let selectedPage = $(this).data('page');
+                        loadSearchResults(keyword, selectedPage);
+                    });
+                }
             },
             error: function (xhr, status, error) {
                 console.error('Error Status:', status);
@@ -310,6 +369,7 @@ session_start();
             }
         });
     }
+
 
     $(document).ready(function () {
         const observer = new IntersectionObserver((entries) => {

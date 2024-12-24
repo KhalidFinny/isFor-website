@@ -402,21 +402,8 @@
                 </div>
             </div>
         </div>
+    </main>
 </div>
-</div>
-</div>
-</div>
-</main>
-</div>
-
-<script>
-    const userData = <?php echo json_encode($userData); ?>;
-
-    document.getElementById('username').textContent = userData.username;
-    document.getElementById('userRole').textContent = userData.role;
-    document.getElementById('userAvatar').src = userData.avatar;
-</script>
-
 <script>
     $(document).ready(function () {
         // Function to update date and time
