@@ -320,10 +320,12 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
-    public function getFilesByStatus($status)
+    public function getFilesByStatus($status, $awalData, $jumlahDataPerhalaman)
     {
-        $this->db->query("SELECT * FROM " . $this->table . " WHERE status = :status");
+        $this->db->query("SELECT * FROM " . $this->table . " WHERE status = :status ORDER BY [uploaded_at] DESC OFFSET :awalData ROWS FETCH NEXT :jumlahDataPerhalaman ROWS ONLY;");
         $this->db->bind(':status', $status);
+        $this->db->bind(':awalData', $awalData);
+        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman);
         return $this->db->resultSet();
     }
 
