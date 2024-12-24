@@ -220,7 +220,6 @@ class Letter extends Controller
         $status = $_POST['status'];
         $userId = $_SESSION['user_id'];
 
-        $status = $_POST['status']; // Mengambil status dari POST
         $jumlahDataperhalaman = 4;
     
         // Ambil jumlah total data sesuai status
