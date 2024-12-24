@@ -217,7 +217,7 @@
                                                     </span>
                                                 <?php else : ?>
                                                     <span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
-                                                        ditolak
+                                                        Ditolak
                                                     </span>
                                                 <?php endif ?>
                                             </td>
