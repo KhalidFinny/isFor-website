@@ -344,22 +344,22 @@
         modal.classList.remove('flex');
     }
 
-    function filter(status) {
+    function filter(status, currentPage = 1) {
         $.ajax({
             url: '<?= BASEURL ?>/ResearchOutput/filterAdmin',
             method: 'POST',
             dataType: 'json',
-            data: {status: status},
+            data: {status: status, halamanAktif: currentPage},
             success: function (data) {
                 console.log('Success Response:', data);
 
-                const fileContainer = $('#research-files');
-                const navElement = $('nav[aria-label="Page navigation example"]');
+                const fileContainer = document.querySelector("#research-files");
+                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
 
-                fileContainer.empty();
-                navElement.empty();
+                fileContainer.innerHTML = '';
+                navElement.innerHTML = '';
 
-                data.forEach(file => {
+                data.files.forEach(file => {
                     const fileHTML = `
                     <div class="bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
                         <div class="flex items-center space-x-4 mb-4">
@@ -395,8 +395,12 @@
                             </div>
                         </div>
                     </div>`;
-                    fileContainer.append(fileHTML);
+                    fileContainer.innerHTML += fileHTML;
                 });
+
+                if (navElement) {
+                    generatePagination(navElement, data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
+                }
             },
             error: function (xhr, status, error) {
                 console.error('Error Status:', status);
@@ -404,6 +408,63 @@
                 console.error('Response Text:', xhr.responseText);
             }
         });
+    }
+
+    function generatePagination(navElement, currentPage, totalPages, status) {
+        const ul = document.createElement('ul');
+        ul.className = 'flex items-center -space-x-px h-8 text-sm';
+
+        // Previous button
+        if (currentPage > 1) {
+            const prevLi = `
+                <li>
+                    <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
+                        class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                        <span class="sr-only">Previous</span>
+                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                        </svg>
+                    </a>
+                </li>
+            `;
+            ul.innerHTML += prevLi;
+        }
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
+            const pageLi = `
+                <li>
+                    <a href="javascript:void(0)" onclick="filter(${status}, ${i})"
+                        class="flex items-center justify-center px-3 h-8 leading-tight ${activeClass} border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                        ${i}
+                    </a>
+                </li>
+            `;
+            ul.innerHTML += pageLi;
+        }
+
+        // Next button
+        if (currentPage < totalPages) {
+            const nextLi = `
+                <li>
+                    <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
+                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                        <span class="sr-only">Next</span>
+                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                    </a>
+                </li>
+            `;
+            ul.innerHTML += nextLi;
+        }
+
+        navElement.appendChild(ul);
     }
 
     function loadSearchResults(keyword, page = 1) {
