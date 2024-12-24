@@ -362,24 +362,35 @@ class ResearchOutput extends Controller
     {
         $status = $_POST['status'];
 
-        switch ($status) {
-            case 0:
-                $files = $this->model('ResearchOutputModel')->getAllFiles();
-                break;
-            case 1:
-                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Pending
-                break;
-            case 2:
-                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Verified
-                break;
-            case 3:
-                $files = $this->model('ResearchOutputModel')->getFilesByStatus($status); // Rejected
-                break;
-            default:
-                echo json_encode(['error' => 'Invalid status']);
-                return;
+        $jumlahDataperhalaman = 4;
+    
+        // Ambil jumlah total data sesuai status
+        if($status == 0){
+            $jumlahData = $this->model('ResearchOutputModel')->countAllFiles();
+        }else{
+            $jumlahData = $this->model('ResearchOutputModel')->countAllFilesByStatus($status);
         }
-        echo json_encode($files);
+        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
+    
+        // Halaman aktif dari POST, menggunakan halamanAktif
+        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
+        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+    
+        // Validasi status dan ambil data
+        if ($status == 0) {
+            $files = $this->model('ResearchOutputModel')->getAllPaginatedFiles($jumlahDataperhalaman, $awalData);
+        } else {
+            $files = $this->model('ResearchOutputModel')->getFilesByStatus($status, $awalData, $jumlahDataperhalaman);
+        }
+    
+        // Kirim data ke frontend
+        echo json_encode([
+            'files' => $files,
+            'pagination' => [
+                'jumlahHalaman' => $jumlahHalaman,
+                'halamanAktif' => $halamanAktif
+            ]
+        ]);
     }
 
     public function delete()
