@@ -58,26 +58,38 @@ class LettersModel
         return $this->db->resultSet();
     }
 
-    public function getLetterByUserIdPending($id)
+    public function getLetterByUserIdStatus($id, $status, $awalData, $jumlahDataPerhalaman)
     {
-        $this->db->query('EXEC sp_GetLetterByUserIdPending :user_id');
-        $this->db->bind(':user_id', $id);
+        $this->db->query('SELECT * FROM letters WHERE status = :status AND user_id = :id ORDER BY [date] DESC OFFSET :awalData ROWS FETCH NEXT :jumlahDataPerhalaman ROWS ONLY;');
+        $this->db->bind(':status', $status);
+        $this->db->bind(':id', $id);
+        $this->db->bind(':awalData', $awalData);
+        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman);
         return $this->db->resultSet();
     }
 
-    public function getLetterByUserIdVerify($id)
-    {
-        $this->db->query('EXEC sp_GetLetterByUserIdVerify :user_id');
-        $this->db->bind(':user_id', $id);
-        return $this->db->resultSet();
+    public function countAllLettersByUserandStatus($id, $status){
+        // Hitung jumlah total data berdasarkan status
+        $query = "SELECT COUNT(*) AS total FROM letters WHERE user_id = :id AND status = :status";
+        $this->db->query($query);
+        $this->db->bind(':id', $id);
+        $this->db->bind(':status', $status);
+        return $this->db->single();
     }
 
-    public function getLetterByUserIdReject($id)
-    {
-        $this->db->query('EXEC sp_GetLetterByUserIdReject :user_id');
-        $this->db->bind(':user_id', $id);
-        return $this->db->resultSet();
-    }
+    // public function getLetterByUserIdVerify($id, $awalData, $jumlahDataperhalaman)
+    // {
+    //     $this->db->query('EXEC sp_GetLetterByUserIdVerify :user_id');
+    //     $this->db->bind(':user_id', $id);
+    //     return $this->db->resultSet();
+    // }
+
+    // public function getLetterByUserIdReject($id, $awalData, $jumlahDataperhalaman)
+    // {
+    //     $this->db->query('EXEC sp_GetLetterByUserIdReject :user_id');
+    //     $this->db->bind(':user_id', $id);
+    //     return $this->db->resultSet();
+    // }
 
     public function updateStatusLetter($id, $status)
     {
@@ -93,7 +105,7 @@ class LettersModel
         $this->db->query('EXEC sp_CountAllLettersByUserId :user_id');
         $this->db->bind(':user_id', $user_id);
         $this->db->execute();
-        return $this->db->single();
+        return $this->db->single()['total'];
     }
 
     public function countPendingStat($user_id)

@@ -219,26 +219,37 @@ class Letter extends Controller
         session_start();
         $status = $_POST['status'];
         $userId = $_SESSION['user_id'];
-        switch ($status) {
-            case 0:
-                $letters = $this->model('LettersModel')->getLetterByUserId($userId);
-                break;
-            case 1:
-                $letters = $this->model('LettersModel')->getLetterByUserIdPending($userId);
-                break;
-            case 2:
-                $letters = $this->model('LettersModel')->getLetterByUserIdVerify($userId);
-                break;
-            case 3:
-                $letters = $this->model('LettersModel')->getLetterByUserIdReject($userId);
-                break;
-            default:
-                echo json_encode(['error' => 'Invalid status']);
-                return;
-        }
 
-        // error_log(json_encode($letters)); // Debug output
-        echo json_encode($letters);
+        $status = $_POST['status']; // Mengambil status dari POST
+        $jumlahDataperhalaman = 4;
+    
+        // Ambil jumlah total data sesuai status
+        if($status == 0){
+            $jumlahData = $this->model('LettersModel')->countAllLeterbyUserId($userId);
+        }else{
+            $jumlahData = $this->model('LettersModel')->countAllLettersByUserandStatus($userId, $status)['total'];
+        }
+        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
+    
+        // Halaman aktif dari POST, menggunakan halamanAktif
+        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
+        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+    
+        // Validasi status dan ambil data
+        if ($status == 0) {
+            $letters = $this->model('LettersModel')->getLetterByUserIdPaginate($userId, $awalData, $jumlahDataperhalaman);
+        } else {
+            $letters = $this->model('LettersModel')->getLetterByUserIdStatus($userId, $status, $awalData, $jumlahDataperhalaman);
+        }
+    
+        // Kirim data ke frontend
+        echo json_encode([
+            'letters' => $letters,
+            'pagination' => [
+                'jumlahHalaman' => $jumlahHalaman,
+                'halamanAktif' => $halamanAktif
+            ]
+        ]);
     }
 
     public function filterAdmin() {
@@ -249,7 +260,7 @@ class Letter extends Controller
         if($status == 0){
             $jumlahData = $this->model('LettersModel')->countAllLetters();
         }else{
-            $jumlahData = $this->model('LettersModel')->countAllLettersByStatus($status)['total'];
+            $jumlahData = $this->model('LettersModel')->countAllLettersByUserandStatus($status)['total'];
         }
         $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
     
