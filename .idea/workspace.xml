@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/files/meta/6762d39577845.jpg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/files/meta/67683aa04ae3a.docx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/6762d39577845.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/files/research_output/67683aa04ae3a.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" afterDir="false" />
-    </list>
+    <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -137,7 +129,7 @@
       <workItem from="1734631382133" duration="1263000" />
       <workItem from="1734757841891" duration="9680000" />
       <workItem from="1734771370789" duration="6448000" />
-      <workItem from="1734839981192" duration="35846000" />
+      <workItem from="1734839981192" duration="36482000" />
     </task>
     <servers />
   </component>
