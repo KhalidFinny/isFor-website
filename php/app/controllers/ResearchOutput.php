@@ -299,27 +299,35 @@ class ResearchOutput extends Controller
         $status = $_POST['status'] ?? null;
         $userId = $_SESSION['user_id'];
 
-        $model = $this->model('ResearchOutputModel');
-        switch ($status) {
-            case 0:
-                $outputs = $model->getFilesByUser($userId);
-                break;
-            case 1:
-                $outputs = $model->getFilesByUserAndStatus($userId, '1');
-                break;
-            case 2:
-                $outputs = $model->getFilesByUserAndStatus($userId, '2');
-                break;
-            case 3:
-                $outputs = $model->getFilesByUserAndStatus($userId, '3');
-                break;
-            default:
-                echo json_encode(['error' => 'Invalid status']);
-                return;
+        $jumlahDataperhalaman = 4;
+    
+        // Ambil jumlah total data sesuai status
+        if($status == 0){
+            $jumlahData = $this->model('ResearchOutputModel')->countFilesByUser($userId);
+        }else{
+            $jumlahData = $this->model('ResearchOutputModel')->countFilesByUserandStatus($userId, $status)['total'];
         }
-
-        // Kembalikan data dalam format JSON
-        echo json_encode($outputs);
+        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
+    
+        // Halaman aktif dari POST, menggunakan halamanAktif
+        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
+        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+    
+        // Validasi status dan ambil data
+        if ($status == 0) {
+            $files = $this->model('ResearchOutputModel')->getPaginatedFilesByUser($userId, $jumlahDataperhalaman, $awalData);
+        } else {
+            $files = $this->model('ResearchOutputModel')->getFilesByUserAndStatus($userId, $status, $awalData, $jumlahDataperhalaman);
+        }
+    
+        // Kirim data ke frontend
+        echo json_encode([
+            'files' => $files,
+            'pagination' => [
+                'jumlahHalaman' => $jumlahHalaman,
+                'halamanAktif' => $halamanAktif
+            ]
+        ]);
     }
 
     public function search()
