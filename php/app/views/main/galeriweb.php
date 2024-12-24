@@ -170,23 +170,26 @@ session_start();
                     opacity-0 translate-y-4 transition-all duration-500 ease-out" id="previewContent">
             <!-- Container gambar dengan zoom -->
             <div class="flex-1 relative overflow-hidden rounded-2xl">
+                 <!-- Container gambar dengan padding -->
                 <img id="previewImage"
-                     class="w-full h-auto max-h-[80vh] object-contain transform transition-all duration-300"
-                     src="" alt="">
+                     class="w-full h-auto max-h-[80vh] max-w-[80vw] object-contain transition-transform duration-300 ease-in-out"
+                     src="" alt="" style="width: 50%; height: auto; object-fit: contain;"
+                     onload="adjustImageSize(this)"
+                     onmousemove="zoomImage(event)"
+                     onmouseout="resetZoom()">
             </div>
 
-            <!-- Info panel dengan animasi -->
-            <div class="w-full md:w-96 bg-white rounded-2xl p-6 space-y-4 transform transition-all duration-500">
-                <h3 id="previewTitle" class="text-2xl font-bold text-red-900"></h3>
-                <div class="space-y-2">
-                    <p id="previewCategory" class="text-xl font-bold text-red-600"></p>
-                    <p id="previewDate" class="text-xl font-bold text-red-600"></p>
+            <!-- Floating info panel dengan animasi -->
+            <div class="fixed inset-0 flex items-center justify-end">
+                <div class="w-full md:w-96 bg-white rounded-2xl p-6 space-y-4 transform transition-all duration-500 shadow-lg">
+                    <h3 id="previewTitle" class="text-2xl font-bold text-red-900"></h3>
+                    <div class="space-y-2">
+                        <p id="previewCategory" class="text-xl font-bold text-red-600"></p>
+                        <p id="previewDate" class="text-xl font-bold text-red-600"></p>
+                    </div>
+                    <p id="previewDescription" class="text-gray-600 leading-relaxed"></p>
                 </div>
-                <p id="previewDescription" class="text-gray-600 leading-relaxed"></p>
             </div>
-        </div>
-    </div>
-</div>
 
 
 <!-- Uncomment jika ingin menggunakan eksternal js-->
