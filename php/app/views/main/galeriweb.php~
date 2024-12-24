@@ -191,7 +191,7 @@ session_start();
 
 <!-- Uncomment jika ingin menggunakan eksternal js-->
 <!--<script>-->
-<!--    const BASEURL = '<?php //= BASEURL ?>'; -->
+<!--    const BASEURL = '--><?php //= BASEURL ?>'; -->
 <!--    const GALLERY = '<?php //= GALLERY ?>//'; -->
 <!-- </script>-->
 <!-- <script src="<?php //= JS; ?></gallery_web.js"></script>-->
