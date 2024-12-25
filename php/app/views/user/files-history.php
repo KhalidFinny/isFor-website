@@ -469,7 +469,7 @@
         let paginationNav = $('#pagination-nav'); // Targetkan elemen navigasi
 
         $.ajax({
-            url: '<?= BASEURL; ?>/researchoutput/search',
+            url: '<?= BASEURL; ?>/researchoutput/searchUser',
             type: 'POST',
             data: {keyword: keyword, page: page},
             dataType: 'json',

@@ -362,8 +362,8 @@ class ResearchOutput extends Controller
     {
         $status = $_POST['status'];
 
-        $jumlahDataperhalaman = 4;
-    
+        $jumlahDataperhalaman = 6;
+
         // Ambil jumlah total data sesuai status
         if($status == 0){
             $jumlahData = $this->model('ResearchOutputModel')->countAllFiles();
@@ -371,18 +371,18 @@ class ResearchOutput extends Controller
             $jumlahData = $this->model('ResearchOutputModel')->countAllFilesByStatus($status);
         }
         $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-    
+
         // Halaman aktif dari POST, menggunakan halamanAktif
         $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
         $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-    
+
         // Validasi status dan ambil data
         if ($status == 0) {
             $files = $this->model('ResearchOutputModel')->getAllPaginatedFiles($jumlahDataperhalaman, $awalData);
         } else {
             $files = $this->model('ResearchOutputModel')->getFilesByStatus($status, $awalData, $jumlahDataperhalaman);
         }
-    
+
         // Kirim data ke frontend
         echo json_encode([
             'files' => $files,
@@ -422,4 +422,40 @@ class ResearchOutput extends Controller
         }
         exit();
     }
+
+    public function searchUser()
+    {
+        if (isset($_POST['keyword'])) {
+            $keyword = $_POST['keyword'];
+            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+            $itemsPerPage = 6; // Jumlah item per halaman
+            $offset = ($page - 1) * $itemsPerPage;
+
+            // Ambil user_id dari sesi pengguna
+            session_start();
+            if (!isset($_SESSION['user_id'])) {
+                $_SESSION['user_id'] = 8;
+            }
+            $userId = $_SESSION['user_id'];
+
+            $researchOutputModel = $this->model('ResearchOutputModel');
+
+            try {
+                $results = $researchOutputModel->searchFilesUser($keyword, $userId, $itemsPerPage, $offset);
+                $totalResults = $researchOutputModel->countUserSearchResults($keyword, $userId);
+                $totalPages = ceil($totalResults / $itemsPerPage);
+
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'results' => $results,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $page,
+                ]);
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
+            }
+        }
+    }
+
 }
