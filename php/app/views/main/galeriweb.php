@@ -173,22 +173,20 @@ session_start();
                  <!-- Container gambar dengan padding -->
                 <img id="previewImage"
                      class="w-full h-auto max-h-[80vh] max-w-[80vw] object-contain transition-transform duration-300 ease-in-out"
-                     src="" alt="" style="width: 50%; height: auto; object-fit: contain;"
+                     src="" alt="" style="max-width: 100vw; max-height: 90vh; object-fit: contain;"
                      onload="adjustImageSize(this)"
                      onmousemove="zoomImage(event)"
                      onmouseout="resetZoom()">
             </div>
 
             <!-- Floating info panel dengan animasi -->
-            <div class="fixed inset-0 flex items-center justify-end">
-                <div class="w-full md:w-96 bg-white rounded-2xl p-6 space-y-4 transform transition-all duration-500 shadow-lg">
-                    <h3 id="previewTitle" class="text-2xl font-bold text-red-900"></h3>
-                    <div class="space-y-2">
-                        <p id="previewCategory" class="text-xl font-bold text-red-600"></p>
-                        <p id="previewDate" class="text-xl font-bold text-red-600"></p>
-                    </div>
-                    <p id="previewDescription" class="text-gray-600 leading-relaxed"></p>
+            <div class="flex-1 md:w-64 bg-white rounded-2xl p-4 space-y-2 transform transition-all duration-500 shadow-lg text-center">
+                <h3 id="previewTitle" class="text-xl font-bold text-red-900"></h3>
+                <div class="space-y-1">
+                    <p id="previewCategory" class="text-lg font-bold text-red-600"></p>
+                    <p id="previewDate" class="text-lg font-bold text-red-600"></p>
                 </div>
+                <p id="previewDescription" class="text-gray-600 text-sm leading-relaxed"></p>
             </div>
 
 
