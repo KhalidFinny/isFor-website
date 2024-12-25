@@ -110,7 +110,7 @@
 <script>
     // Navigation items data
     const navItems = [
-        {name: 'Beranda', href: '<?= BASEURL; ?>/#beranda'},
+        {name: 'Beranda', href: '<?=BASEURL?>'},
         {
             name: 'Tentang Kami',
             dropdownItems: [
