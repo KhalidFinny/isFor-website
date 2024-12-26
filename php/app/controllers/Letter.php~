@@ -373,7 +373,7 @@ class Letter extends Controller
         if (isset($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
             $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-            $itemsPerPage = 4;
+            $itemsPerPage = 6;
             $offset = ($page - 1) * $itemsPerPage;
 
             session_start();
