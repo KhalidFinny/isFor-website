@@ -293,25 +293,6 @@ class Letter extends Controller
         ]);
     }
 
-    public function search()
-    {
-        if (isset($_POST['keyword'])) {
-            $keyword = $_POST['keyword'];
-
-            $lettersModel = $this->model('LettersModel');
-
-            try {
-                $results = $lettersModel->searchLetters($keyword);
-
-                header('Content-Type: application/json');
-                echo json_encode($results);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
-            }
-        }
-    }
-
     public function letterHistoryView()
     {
         $this->checkLogin();
@@ -336,35 +317,31 @@ class Letter extends Controller
         }
     }
 
-    public function searchByUserId()
+    public function search()
     {
-        session_start();
-        if (session_status() == PHP_SESSION_NONE) {
-            $_SESSION['user_id'] = 2;
-//            $_SESSION['username'] = 'user';
-//            session_write_close();
-        }
-
-        header('Content-Type: application/json');
-        if (!isset($_SESSION['user_id'])) {
-            echo json_encode(['error' => 'User tidak terautentikasi.']);
-            exit;
-        }
-
-        if (isset($_POST['keyword'])) {
+        if (isset($_POST['keyword']) && isset($_POST['page'])) {
             $keyword = $_POST['keyword'];
-            $user_id = $_SESSION['user_id'];
+            $currentPage = (int)$_POST['page'];
+            $perPage = 6;
+            $offset = ($currentPage - 1) * $perPage;
+
             $lettersModel = $this->model('LettersModel');
 
             try {
-                $results = $lettersModel->searchLettersByUserId($keyword, $user_id);
-                echo json_encode($results);
+                $results = $lettersModel->searchLetters($keyword, $offset, $perPage);
+                $totalRecords = $lettersModel->countSearchResults($keyword);
+                $totalPages = ceil($totalRecords / $perPage);
+
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'results' => $results,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $currentPage
+                ]);
             } catch (Exception $e) {
                 error_log($e->getMessage());
                 echo json_encode(['error' => 'Terjadi kesalahan di server.']);
             }
-        } else {
-            echo json_encode(['error' => 'Keyword tidak ditemukan.']);
         }
     }
 

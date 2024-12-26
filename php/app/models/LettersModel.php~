@@ -184,24 +184,13 @@ class LettersModel
     }
 
 
-    public function searchLetters($keyword, $offset, $limit)
+    public function searchLetters($keyword)
     {
-        $query = "EXEC sp_searchLetters @Keyword = :keyword, @Offset = :offset, @Limit = :limit";
+        $query = "EXEC sp_searchLetters @Keyword = :keyword";
         $this->db->query($query);
         $this->db->bind(':keyword', $keyword);
-        $this->db->bind(':offset', $offset);
-        $this->db->bind(':limit', $limit);
         return $this->db->resultSet();
     }
-
-    public function countSearchResults($keyword)
-    {
-        $query = "SELECT COUNT(*) AS TotalRecords FROM letters WHERE title LIKE :keyword";
-        $this->db->query($query);
-        $this->db->bind(':keyword', '%' . $keyword . '%');
-        return $this->db->single()['TotalRecords'];
-    }
-
 
     public function getAllLetters()
     {

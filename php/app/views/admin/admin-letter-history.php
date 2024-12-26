@@ -233,7 +233,7 @@
                                 </table>
                             </div>
                         <?php endif; ?>
-                        <nav aria-label="Page navigation example">
+                        <nav aria-label="Page navigation example" id="pagination-nav">
                             <ul class="flex items-center -space-x-px h-8 text-sm">
                                 <li>
                                     <?php if ($data['halamanAktif'] > 1) : ?>
@@ -512,77 +512,38 @@
         observer.observe(el);
     });
 
-    $(document).ready(function () {
-        $('#keyword').on('keyup', function () {
-            let keyword = $(this).val(); // Ambil nilai input
-            let resultContainer = $('#resultContainer'); // Elemen untuk menampilkan hasil
+    // Define the search function using jQuery
+    function searchLetters(keyword, page = 1) {
+        const paginationNav = $('#pagination-nav');
+        const letterContainer = $(".letter-card table tbody");
+        let debounceTimeout;
 
-            $.ajax({
-                url: '<?= BASEURL; ?>/letters/search',
-                type: 'POST',
-                data: {keyword: keyword},
-                dataType: 'json',
-                success: function (data) {
-                    // Kosongkan elemen hasil
-                    resultContainer.empty();
-
-                    if (data.length > 0) {
-                        $.each(data, function (index, letter) {
-                            resultContainer.append(`
-                            <div class="p-2 border-b border-gray-200">
-                                <h4 class="text-lg font-medium text-gray-800">${letter.title}</h4>
-                                <p class="text-sm text-gray-500">Tanggal: ${letter.date}</p>
-                            </div>
-                        `);
-                        });
-                    } else {
-                        resultContainer.html(`
-                        <div class="col-span-full text-center py-12">
-                            <h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3>
-                            <p class="text-red-600">Coba kata kunci lainnya.</p>
-                        </div>
-                    `);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        });
-    });
-
-    const keyword = document.getElementById('keyword');
-    let debounceTimeout;
-    keyword.addEventListener('keyup', function () {
-        // console.log(keyword.value)
         clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(function () {
+        debounceTimeout = setTimeout(() => {
             $.ajax({
                 url: '<?= BASEURL ?>/letter/search',
                 method: 'POST',
+                data: {keyword: keyword, page: page},
                 dataType: 'json',
-                data: {keyword: keyword.value},
                 success: function (data) {
-                    // console.log('Success Response:', data);
-                    const letterContainer = document.querySelector(".letter-card table tbody");
-                    const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-                    const tableHeader = `
-                        <thead>
-                            <tr class="text-left text-sm font-medium text-gray-500">
-                                <th class="pb-4">Jenis Dokumen</th>
-                                <th class="pb-4">Tanggal</th>
-                                <th class="pb-4">Status</th>
-                                <th class="pb-4">Aksi</th>
-                            </tr>
-                        </thead>
-                    `;
+                    console.log("Total Pages:", data.totalPages);
+                    console.log("Current Page:", data.currentPage);
 
-                    // Clear existing rows and add table header
-                    letterContainer.innerHTML = '';
-                    navElement.innerHTML = '';
+                    letterContainer.empty();
+                    paginationNav.empty();
+
+                    // Check if there is no data
+                    if (data.results.length === 0) {
+                        letterContainer.append(`
+                        <tr>
+                            <td colspan="4" class="py-4 text-center text-gray-500">Surat tidak ditemukan</td>
+                        </tr>
+                    `);
+                        return;
+                    }
 
                     // Populate table rows with data
-                    data.forEach(letter => {
+                    data.results.forEach(letter => {
                         let statusBadge = '';
 
                         if (letter.status == 1) {
@@ -594,23 +555,68 @@
                         }
 
                         const row = `
-                            <tr class="border-t border-gray-100">
-                                <td class="py-4">${letter.title}</td>
-                                <td class="py-4">${letter.date}</td>
-                                <td class="py-4">${statusBadge}</td>
-                                <td class="py-4">
-                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                                </td>
-                            </tr>
-                        `;
-                        letterContainer.innerHTML += row;
+                        <tr class="border-t border-gray-100">
+                            <td class="py-4">${letter.title}</td>
+                            <td class="py-4">${letter.date}</td>
+                            <td class="py-4">${statusBadge}</td>
+                            <td class="py-4">
+                                <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                            </td>
+                        </tr>
+                    `;
+                        letterContainer.append(row);
                     });
+
+                    if (data.totalPages > 1) {
+                        console.log('Rendering pagination:', data.totalPages, data.currentPage);
+                        let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
+
+                        // Previous button
+                        if (data.currentPage > 1) {
+                            paginationHTML += `
+        <li>
+            <a href="#" data-page="${data.currentPage - 1}" class="pagination-link">
+                Previous
+            </a>
+        </li>`;
+                        }
+
+                        // Page numbers
+                        for (let i = 1; i <= data.totalPages; i++) {
+                            const isActive = i === data.currentPage ? 'active-class' : '';
+                            paginationHTML += `
+        <li>
+            <a href="#" data-page="${i}" class="${isActive} pagination-link">
+                ${i}
+            </a>
+        </li>`;
+                        }
+
+                        // Next button
+                        if (data.currentPage < data.totalPages) {
+                            paginationHTML += `
+        <li>
+            <a href="#" data-page="${data.currentPage + 1}" class="pagination-link">
+                Next
+            </a>
+        </li>`;
+                        }
+
+                        paginationHTML += `</ul>`;
+                        $('#pagination-nav').html(paginationHTML);
+                    }
                 },
                 error: function () {
                     console.log('Error terjadi dalam request');
                 }
             });
         }, 500);
+    }
+
+    // Attach event listener for the search input
+    $('#keyword').on('keyup', function () {
+        const keyword = $(this).val();
+        searchLetters(keyword);
     });
 
     document.addEventListener('DOMContentLoaded', function () {
