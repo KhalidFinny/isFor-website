@@ -33,9 +33,9 @@ class User extends Controller
 
         $photo = $this->upload();
 
-        if (!$photo) {
-            return false;
-        }
+        // if (!$photo) {
+        //     return false;
+        // }
 
         // var_dump($_POST);
         // var_dump($photo);
@@ -44,35 +44,33 @@ class User extends Controller
         $name = $_POST['name'];
         $username = $_POST['username'];
 
-        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
-            // Validasi apakah nama, username, dan email sudah ada
-            $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
+        // Validasi data pengguna (nama, username, email)
+        $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
 
-            if ($validationResult['name_exists']) {
-                $_SESSION['message'] = "Nama sudah terdaftar.";
-                header('Location: ' . BASEURL . '/User');
-                return false;
-            }
-            if ($validationResult['username_exists']) {
-                $_SESSION['message'] = "Username sudah terdaftar.";
-                header('Location: ' . BASEURL . '/User');
-                return false;
-            }
-            if ($validationResult['email_exists']) {
-                $_SESSION['message'] = "Email sudah terdaftar.";
-                header('Location: ' . BASEURL . '/User');
-                return false;
-            }
-
-            if ($this->model('UsersModel')->addUser($email, $_POST, $photo) == 0) {
-                $_SESSION['message'] = "Tambah data berhasil.";
-            } else {
-                $_SESSION['message'] = "Tambah data gagal.";
-            }
-
-            // var_dump($_SESSION['message']);
+        if ($validationResult['name_exists']) {
+            $_SESSION['message'] = "Nama sudah terdaftar.";
             header('Location: ' . BASEURL . '/User');
+            return false;
         }
+        if ($validationResult['username_exists']) {
+            $_SESSION['message'] = "Username sudah terdaftar.";
+            header('Location: ' . BASEURL . '/User');
+            return false;
+        }
+        if ($validationResult['email_exists']) {
+            $_SESSION['message'] = "Email sudah terdaftar.";
+            header('Location: ' . BASEURL . '/User');
+            return false;
+        }
+
+        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) == 0) {
+            $_SESSION['message'] = "Tambah data berhasil.";
+        } else {
+            $_SESSION['message'] = "Tambah data gagal.";
+        }
+
+        // var_dump($_SESSION['message']);
+        header('Location: ' . BASEURL . '/User');
     }
 
     public function upload()
