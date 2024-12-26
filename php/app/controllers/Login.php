@@ -6,6 +6,7 @@ class Login extends Controller{
     }
 
     public function authentication() {
+        session_start();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = htmlspecialchars($_POST['username']);
             $password = $_POST['password'];
@@ -31,15 +32,12 @@ class Login extends Controller{
                     }
                 }else {
                     //kondisi jika password salah
-                    echo "<script>
-                            alert('password atau username salah coba lagi')
-                            </script>";
-                            header('Location: ' . BASEURL . '/login');
-                    die();
+                    $_SESSION['message'] = "password salah";
+                    header('Location: ' . BASEURL . '/login');
                 }
             }else {
+                $_SESSION['message'] = "username tidak ditemukan";
                 header('Location: ' . BASEURL . '/login');
-                die();
             }
         }
     }
