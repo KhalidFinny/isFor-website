@@ -2,7 +2,7 @@
 //menginisialisasi database mulai dari host username password dan name agar tidak tertulis di connection
 
 define('BASEURL', 'http://localhost/IsFor-website/php/public');
-define('DOCUMENT', 'http://localhost/IsFor-website/php/public/assets/files/main');
+define('DOCUMENT', 'http://localhost/IsFor-website/php/public/assets/files/documents');
 define('FILE', 'http://localhost/IsFor-website/php/public/assets/js');
 define('FILECSS', 'http://localhost/IsFor-website/php/public/assets/css');
 define('PHOTOPROFILE', 'http://localhost/IsFor-website/php/app/img/profile/');

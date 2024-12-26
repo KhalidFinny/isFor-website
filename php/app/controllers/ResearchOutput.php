@@ -72,19 +72,47 @@ class ResearchOutput extends Controller
         }
     }
 
-
-    private function getOriginalFileName($fileNameWithExt)
+    public function researchHistoryView($status = 'all')
     {
-        $metaDir = __DIR__ . '/../files/meta/';
-        $metaFilePath = $metaDir . $fileNameWithExt . '.meta';
+        $this->checkLogin();
+        $role = $this->checkRole();
+        $this->checkSessionTimeOut();
 
-        // Debugging jalur metadata (opsional)
-        error_log("Accessing Metadata: $metaFilePath");
+        if ($role == 2) {
+            $this->saveLastVisitedPage();
 
-        if (file_exists($metaFilePath)) {
-            return file_get_contents($metaFilePath);
+            $researchOutputModel = $this->model('ResearchOutputModel');
+            $userId = $_SESSION['user_id'];
+
+            // Pagination setup
+            $itemsPerPage = 6; // Jumlah file per halaman
+            $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $offset = ($currentPage - 1) * $itemsPerPage;
+
+            // Filter berdasarkan status
+            if ($status === 'all') {
+                // Total files (tanpa pagination)
+                $totalFiles = $researchOutputModel->countFilesByUser($userId);
+                // Files dengan pagination
+                $files = $researchOutputModel->getPaginatedFilesByUser($userId, $itemsPerPage, $offset);
+            } else {
+                // Total files berdasarkan status (tanpa pagination)
+                $totalFiles = $researchOutputModel->countFilesByUserAndStatus($userId, $status);
+                // Files dengan pagination
+                $files = $researchOutputModel->getPaginatedFilesByUserAndStatus($userId, $status, $itemsPerPage, $offset);
+            }
+
+            $totalPages = ceil($totalFiles / $itemsPerPage);
+
+            $this->view('user/files-history', [
+                'totalFiles' => $totalFiles,
+                'files' => $files,
+                'selectedStatus' => $status,
+                'currentPage' => $currentPage,
+                'totalPages' => $totalPages,
+            ]);
         } else {
-            return 'Judul tidak ditemukan';
+            header('Location: ' . $this->getLastVisitedPage());
         }
     }
 
@@ -121,6 +149,21 @@ class ResearchOutput extends Controller
         } else {
             // Redirect untuk non-admin
             header('Location: ' . $this->getLastVisitedPage());
+        }
+    }
+
+    private function getOriginalFileName($fileNameWithExt)
+    {
+        $metaDir = __DIR__ . '/../files/meta/';
+        $metaFilePath = $metaDir . $fileNameWithExt . '.meta';
+
+        // Debugging jalur metadata (opsional)
+        error_log("Accessing Metadata: $metaFilePath");
+
+        if (file_exists($metaFilePath)) {
+            return file_get_contents($metaFilePath);
+        } else {
+            return 'Judul tidak ditemukan';
         }
     }
 
@@ -249,50 +292,6 @@ class ResearchOutput extends Controller
         }
     }
 
-    public function researchHistoryView($status = 'all')
-    {
-        $this->checkLogin();
-        $role = $this->checkRole();
-        $this->checkSessionTimeOut();
-
-        if ($role == 2) {
-            $this->saveLastVisitedPage();
-
-            $researchOutputModel = $this->model('ResearchOutputModel');
-            $userId = $_SESSION['user_id'];
-
-            // Pagination setup
-            $itemsPerPage = 6; // Jumlah file per halaman
-            $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-            $offset = ($currentPage - 1) * $itemsPerPage;
-
-            // Filter berdasarkan status
-            if ($status === 'all') {
-                // Total files (tanpa pagination)
-                $totalFiles = $researchOutputModel->countFilesByUser($userId);
-                // Files dengan pagination
-                $files = $researchOutputModel->getPaginatedFilesByUser($userId, $itemsPerPage, $offset);
-            } else {
-                // Total files berdasarkan status (tanpa pagination)
-                $totalFiles = $researchOutputModel->countFilesByUserAndStatus($userId, $status);
-                // Files dengan pagination
-                $files = $researchOutputModel->getPaginatedFilesByUserAndStatus($userId, $status, $itemsPerPage, $offset);
-            }
-
-            $totalPages = ceil($totalFiles / $itemsPerPage);
-
-            $this->view('user/files-history', [
-                'totalFiles' => $totalFiles,
-                'files' => $files,
-                'selectedStatus' => $status,
-                'currentPage' => $currentPage,
-                'totalPages' => $totalPages,
-            ]);
-        } else {
-            header('Location: ' . $this->getLastVisitedPage());
-        }
-    }
-
     public function filter()
     {
         session_start();
@@ -330,6 +329,37 @@ class ResearchOutput extends Controller
         ]);
     }
 
+    public function filterAdmin()
+    {
+        $status = $_POST['status'];
+        $jumlahDataperhalaman = 6;
+
+        if($status == 0){
+            $jumlahData = $this->model('ResearchOutputModel')->countAllFiles();
+        }else{
+            $jumlahData = $this->model('ResearchOutputModel')->countAllFilesByStatus($status);
+        }
+        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
+
+        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
+        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+
+        if ($status == 0) {
+            $files = $this->model('ResearchOutputModel')->getAllPaginatedFiles($jumlahDataperhalaman, $awalData);
+        } else {
+            $files = $this->model('ResearchOutputModel')->getFilesByStatus($status, $awalData, $jumlahDataperhalaman);
+        }
+
+        // Kirim data ke frontend
+        echo json_encode([
+            'files' => $files,
+            'pagination' => [
+                'jumlahHalaman' => $jumlahHalaman,
+                'halamanAktif' => $halamanAktif
+            ]
+        ]);
+    }
+
     public function search()
     {
         if (isset($_POST['keyword'])) {
@@ -358,39 +388,40 @@ class ResearchOutput extends Controller
         }
     }
 
-    public function filterAdmin()
+    public function searchUser()
     {
-        $status = $_POST['status'];
+        if (isset($_POST['keyword'])) {
+            $keyword = $_POST['keyword'];
+            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+            $itemsPerPage = 6;
+            $offset = ($page - 1) * $itemsPerPage;
 
-        $jumlahDataperhalaman = 6;
-    
-        // Ambil jumlah total data sesuai status
-        if($status == 0){
-            $jumlahData = $this->model('ResearchOutputModel')->countAllFiles();
-        }else{
-            $jumlahData = $this->model('ResearchOutputModel')->countAllFilesByStatus($status);
+            session_start();
+            if (!isset($_SESSION['user_id'])) {
+//                $_SESSION['user_id'] = 8;
+                echo json_encode(['error' => 'User tidak terautentikasi.']);
+                return;
+            }
+            $userId = $_SESSION['user_id'];
+
+            $researchOutputModel = $this->model('ResearchOutputModel');
+
+            try {
+                $results = $researchOutputModel->searchFilesUser($keyword, $userId, $itemsPerPage, $offset);
+                $totalResults = $researchOutputModel->countUserSearchResults($keyword, $userId);
+                $totalPages = ceil($totalResults / $itemsPerPage);
+
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'results' => $results,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $page,
+                ]);
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
+            }
         }
-        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-    
-        // Halaman aktif dari POST, menggunakan halamanAktif
-        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
-        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-    
-        // Validasi status dan ambil data
-        if ($status == 0) {
-            $files = $this->model('ResearchOutputModel')->getAllPaginatedFiles($jumlahDataperhalaman, $awalData);
-        } else {
-            $files = $this->model('ResearchOutputModel')->getFilesByStatus($status, $awalData, $jumlahDataperhalaman);
-        }
-    
-        // Kirim data ke frontend
-        echo json_encode([
-            'files' => $files,
-            'pagination' => [
-                'jumlahHalaman' => $jumlahHalaman,
-                'halamanAktif' => $halamanAktif
-            ]
-        ]);
     }
 
     public function delete()
@@ -422,4 +453,5 @@ class ResearchOutput extends Controller
         }
         exit();
     }
+
 }

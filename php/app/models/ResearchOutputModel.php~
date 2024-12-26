@@ -94,6 +94,15 @@ class ResearchOutputModel
         return $result['total'];
     }
 
+    public function countFilesByUserandStatus($userId, $status)
+    {
+        $this->db->query('SELECT COUNT(*) AS total FROM research_outputs WHERE uploaded_by = :uploaded_by AND status = :status;');
+        $this->db->bind(':uploaded_by', $userId);
+        $this->db->bind(':status', $status);
+        $result = $this->db->single();
+        return $result;
+    }
+
     // Get research outputs by user
     public function getFilesByUser($userId)
     {
@@ -102,11 +111,13 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
-    public function getFilesByUserAndStatus($userId, $status)
+    public function getFilesByUserAndStatus($userId, $status, $awalData, $jumlahDataPerhalaman)
     {
-        $this->db->query('EXEC sp_GetResearchOutputsByUserAndStatus :uploaded_by, :status');
+        $this->db->query('SELECT * FROM research_outputs WHERE uploaded_by = :uploaded_by AND status = :status ORDER BY [uploaded_at] DESC OFFSET :awalData ROWS FETCH NEXT :jumlahDataPerhalaman ROWS ONLY;');
         $this->db->bind(':uploaded_by', $userId);
         $this->db->bind(':status', $status);
+        $this->db->bind(':awalData', $awalData);
+        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman);
         return $this->db->resultSet();
     }
 
@@ -309,10 +320,12 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
-    public function getFilesByStatus($status)
+    public function getFilesByStatus($status, $awalData, $jumlahDataPerhalaman)
     {
-        $this->db->query("SELECT * FROM " . $this->table . " WHERE status = :status");
+        $this->db->query("SELECT * FROM " . $this->table . " WHERE status = :status ORDER BY [uploaded_at] DESC OFFSET :awalData ROWS FETCH NEXT :jumlahDataPerhalaman ROWS ONLY;");
         $this->db->bind(':status', $status);
+        $this->db->bind(':awalData', $awalData);
+        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman);
         return $this->db->resultSet();
     }
 
@@ -365,7 +378,7 @@ class ResearchOutputModel
 
     public function getTotalFilesByCategory($category)
     {
-        $query = "SELECT COUNT(*) as total FROM research_outputs WHERE category LIKE :category";
+        $query = "SELECT COUNT(*) as total FROM research_outputs WHERE category LIKE :category AND status = 2";
         $this->db->query($query);
         $this->db->bind(':category', $category);
         $result = $this->db->single();
@@ -412,5 +425,18 @@ class ResearchOutputModel
 
         return ['data' => $data, 'total' => $total['Total']];
     }
+
+    public function searchFilesUser($keyword, $userId, $limit, $offset)
+    {
+        $query = "EXEC sp_searchFilesUser @Keyword = :keyword, @UserId = :userId, @Limit = :limit, @Offset = :offset";
+        $this->db->query($query);
+        $this->db->bind(':keyword', $keyword);
+        $this->db->bind(':userId', $userId);
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
+        return $this->db->resultSet();
+    }
+
+
 }
 

@@ -68,7 +68,8 @@ class LettersModel
         return $this->db->resultSet();
     }
 
-    public function countAllLettersByUserandStatus($id, $status){
+    public function countAllLettersByUserandStatus($id, $status)
+    {
         // Hitung jumlah total data berdasarkan status
         $query = "SELECT COUNT(*) AS total FROM letters WHERE user_id = :id AND status = :status";
         $this->db->query($query);
@@ -244,36 +245,6 @@ class LettersModel
         }
     }
 
-    public function searchLettersByUserId($keyword, $user_id) {
-        try {
-            $query = "SELECT * 
-                  FROM letters 
-                  WHERE (title LIKE ? OR file_url LIKE ?) 
-                  AND user_id = ?";
-
-            $this->db->query($query);
-            $this->db->bind(1, '%' . $keyword . '%', PDO::PARAM_STR);
-            $this->db->bind(2, '%' . $keyword . '%', PDO::PARAM_STR);
-            $this->db->bind(3, $user_id, PDO::PARAM_INT);
-
-            // Log query dan parameter
-            error_log("Query: $query");
-            error_log("Keyword: %$keyword%");
-            error_log("User ID: $user_id");
-
-            $results = $this->db->resultSet();
-            if (empty($results)) {
-                error_log('Tidak ada hasil ditemukan.');
-                return [];
-            }
-
-            return $results;
-        } catch (Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
     public function getAllLetters()
     {
         $this->db->query("SELECT * FROM letters");
@@ -281,7 +252,8 @@ class LettersModel
     }
 
     // Get letters by status (for admin)
-    public function getLettersByStatus($status, $awalData, $jumlahDataPerhalaman){
+    public function getLettersByStatus($status, $awalData, $jumlahDataPerhalaman)
+    {
         // Bangun query SQL dengan OFFSET dan FETCH
         $query = "
             SELECT * 
@@ -297,7 +269,8 @@ class LettersModel
         return $this->db->resultSet();
     }
 
-    public function countAllLettersByStatus($status){
+    public function countAllLettersByStatus($status)
+    {
         // Hitung jumlah total data berdasarkan status
         $query = "SELECT COUNT(*) AS total FROM letters WHERE status = :status";
         $this->db->query($query);
@@ -305,18 +278,102 @@ class LettersModel
         return $this->db->single();
     }
 
-    public function getNameById($userId) {
+    public function getNameById($userId)
+    {
         $query = "SELECT name FROM users WHERE user_id = :user_id";
         $this->db->query($query);
         $this->db->bind(':user_id', $userId, PDO::PARAM_INT);
         return $this->db->single()['name'] ?? null;
     }
-//    public function searchLetter($user_id, $keyword){
-//        $this->db->query('SELECT * FROM letters WHERE user_id = :user_id AND title LIKE :keyword OR date LIKE :keyword');
-//        $this->db->bind(':user_id', $user_id);
-//        $this->db->bind(':keyword', '%' . $keyword . '%');
-//        $this->db->execute();
-//        return $this->db->resultSet();
+
+    public function searchLettersByUserId($keyword, $user_id)
+    {
+        try {
+            $query = "SELECT * 
+                  FROM letters 
+                  WHERE (title LIKE ? OR file_url LIKE ?) 
+                  AND user_id = ?";
+
+            $this->db->query($query);
+            $this->db->bind(1, '%' . $keyword . '%', PDO::PARAM_STR);
+            $this->db->bind(2, '%' . $keyword . '%', PDO::PARAM_STR);
+            $this->db->bind(3, $user_id, PDO::PARAM_INT);
+            $results = $this->db->resultSet();
+            if (empty($results)) {
+                error_log('Tidak ada hasil ditemukan.');
+                return [];
+            }
+
+            return $results;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+//    public function searchFilesUser($keyword, $userId, $limit, $offset)
+//    {
+//        // Mengganti query dengan langsung menyisipkan variabel di dalamnya untuk debugging
+//        $query = "SELECT *
+//        FROM letters
+//        WHERE (title LIKE '%$keyword%' OR file_url LIKE '%$keyword%' OR [date] LIKE '%$keyword%')
+//        AND user_id = $userId
+//        ORDER BY [date] DESC
+//        OFFSET $offset ROWS FETCH NEXT $limit ROWS ONLY;"; // Perhatikan penggunaan [date]
+//
+//        // Debugging log
+//        error_log("Search Query: $query");
+//
+//        try {
+//            $this->db->query($query);  // Menjalankan query tanpa binding
+//            $results = $this->db->resultSet();
+//            error_log("Search Results: " . json_encode($results));
+//            return $results;
+//        } catch (Exception $e) {
+//            error_log("Error executing query: " . $e->getMessage());
+//            throw $e; // Re-throw untuk menangkap di lapisan yang lebih tinggi
+//        }
+//    }
+//
+//    public function countUserSearchResults($keyword, $userId)
+//    {
+//        // Mengganti query dengan langsung menyisipkan variabel di dalamnya untuk debugging
+//        $query = "SELECT COUNT(*) AS total
+//        FROM letters
+//        WHERE user_id = $userId
+//        AND (title LIKE '%$keyword%'
+//        OR [date] LIKE '%$keyword%'
+//        OR file_url LIKE '%$keyword%');";
+//
+//        // Debugging log
+//        error_log("Count Query: $query");
+//
+//        try {
+//            $this->db->query($query);  // Menjalankan query tanpa binding
+//            return $this->db->single()['total'];
+//        } catch (Exception $e) {
+//            error_log("Error executing query: " . $e->getMessage());
+//            throw $e; // Re-throw untuk menangkap di lapisan yang lebih tinggi
+//        }
 //    }
 
+    public function searchLettersUser($keyword, $userId, $limit, $offset)
+    {
+        $query = "EXEC sp_searchLettersUser @Keyword = :keyword, @UserId = :userId, @Limit = :limit, @Offset = :offset";
+        $this->db->query($query);
+        $this->db->bind(':keyword', $keyword);
+        $this->db->bind(':userId', $userId);
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
+        return $this->db->resultSet();
+    }
+
+    public function countUserSearchResults($keyword, $userId)
+    {
+        $query = "EXEC sp_countSearchLettersUser @Keyword = :keyword, @UserId = :userId";
+        $this->db->query($query);
+        $this->db->bind(':keyword', $keyword);
+        $this->db->bind(':userId', $userId);
+        return $this->db->single()['total'];
+    }
 }

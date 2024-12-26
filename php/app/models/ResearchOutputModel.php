@@ -425,5 +425,26 @@ class ResearchOutputModel
 
         return ['data' => $data, 'total' => $total['Total']];
     }
+
+    public function searchFilesUser($keyword, $userId, $limit, $offset)
+    {
+        $query = "EXEC sp_searchFilesUser @Keyword = :keyword, @UserId = :userId, @Limit = :limit, @Offset = :offset";
+        $this->db->query($query);
+        $this->db->bind(':keyword', $keyword);
+        $this->db->bind(':userId', $userId);
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
+        return $this->db->resultSet();
+    }
+
+    public function countUserSearchResults($keyword, $userId)
+    {
+        $query = "EXEC sp_countSearchFilesUser @Keyword = :keyword, @UserId = :userId";
+        $this->db->query($query);
+        $this->db->bind(':keyword', $keyword);
+        $this->db->bind(':userId', $userId);
+        return $this->db->single()['total'];
+    }
+
 }
 

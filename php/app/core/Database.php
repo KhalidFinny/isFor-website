@@ -71,4 +71,14 @@ class Database {
         return $this->stmt->nextRowset();
     }
 
+    public function getLastQuery()
+    {
+        return $this->stmt->queryString;
+    }
+
+    public function getLastCountQuery()
+    {
+        return $this->stmt->queryString;
+    }
+
 }
