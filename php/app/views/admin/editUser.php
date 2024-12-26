@@ -167,9 +167,21 @@
                         <div class="form-element">
                             <label class="block text-sm font-medium text-red-700 mb-2">Foto Profil</label>
                             <div class="flex items-center space-x-4">
-                                <img src="<?= PHOTOPROFILE . $data['user']['profile_picture'] ?>"
-                                     alt="Profile Picture"
-                                     class="w-16 h-16 rounded-full object-cover border-2 border-red-100">
+                                <?php if (isset($data['user']['profile_picture']) && $data['user']['profile_picture'] != null): ?>
+                                    <img src="<?= PHOTOPROFILE . $data['user']['profile_picture'] ?>"
+                                         alt="Profile Picture"
+                                         class="w-16 h-16 rounded-full object-cover border-2 border-red-100">
+                                <?php else: ?>
+                                    <div class="flex-shrink-0 h-16 w-16 rounded-full overflow-hidden bg-red-50">
+                                        <svg class="h-full w-full object-cover rounded-full"
+                                             viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                    d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z"
+                                                    fill="#ef4444"/>
+                                        </svg>
+                                    </div>
+                                <?php endif; ?>
                                 <input type="file" name="profile_picture"
                                        class="input-modern flex-1 px-4 py-3 border-2 border-red-100 rounded-xl"
                                        accept="image/*">

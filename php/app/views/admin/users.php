@@ -454,22 +454,12 @@ if (isset($_SESSION['message'])) {
 
 <script>
     function showAddUserModal() {
-        const modal = document.getElementById('addUserModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        $('#addUserModal').removeClass('hidden').addClass('flex');
     }
 
     function hideAddUserModal() {
-        const modal = document.getElementById('addUserModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
+        $('#addUserModal').addClass('hidden').removeClass('flex');
     }
-
-    // Add file name display functionality
-    document.getElementById('profile_picture').addEventListener('change', function (e) {
-        const fileName = e.target.files[0]?.name || 'Pilih foto profil';
-        document.getElementById('file-name').textContent = fileName;
-    });
 
     $(document).ready(function () {
         // Elemen yang digunakan
@@ -478,7 +468,6 @@ if (isset($_SESSION['message'])) {
         let pageSize = 5; // Jumlah data per halaman
         let currentPage = 1; // Halaman aktif
 
-        // Fungsi untuk mengambil data pengguna menggunakan AJAX
         function fetchUsers(keyword, pageNumber) {
             $.ajax({
                 url: '<?= BASEURL; ?>/user/search', // URL endpoint
@@ -570,7 +559,10 @@ if (isset($_SESSION['message'])) {
         fetchUsers('', currentPage);
     });
 
-
+    $('#profile_picture').on('change', function (e) {
+        const fileName = e.target.files[0]?.name || 'Pilih foto profil';
+        $('#file-name').text(fileName);
+    });
 </script>
 </body>
 
