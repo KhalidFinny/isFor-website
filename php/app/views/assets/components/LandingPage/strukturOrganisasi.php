@@ -6,52 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        .fade-in-scale {
-            opacity: 0;
-            transform: scale(0.95);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .fade-in-scale.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-        
-        .image-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 1rem;
-            border: 2px solid #E5E7EB;
-            transition: border-color 0.3s ease;
-        }
-        
-        .image-container:hover {
-            border-color: #F87171;
-        }
-        
-        .image-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            to {
-                left: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="<?= COMPONENTS_CSS;?>/landing-pages/struktur-organisasi.css??>">
 </head>
 
 <!-- Struktur Organisasi Section -->
@@ -73,7 +28,7 @@
             <div class="col-span-12 max-w-5xl mx-auto">
                 <div class="fade-in-scale image-container">
                     <img 
-                        src="<?= ASSETS ?>/images/Organisasi.webp" 
+                        src="<?= IMAGES;?>/Organisasi.webp"
                         alt="Struktur Organisasi" 
                         class="w-full h-auto object-cover"
                         loading="lazy"

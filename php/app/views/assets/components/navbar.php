@@ -5,57 +5,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-    <style>
-        .dropdown-content {
-            visibility: hidden;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .nav-item:hover .dropdown-content {
-            visibility: visible;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .fade-enter {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        .fade-enter-active {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 300ms, transform 300ms;
-        }
-
-        .fade-exit {
-            opacity: 1;
-        }
-
-        .fade-exit-active {
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 300ms, transform 300ms;
-        }
-
-        /* History Navigation */
-        .history-back {
-            animation: slideInFromLeft 300ms ease-out;
-        }
-
-        @keyframes slideInFromLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="<?= COMPONENTS_CSS; ?>/navbar.css?>">
 </head>
 
 <body class="bg-gray-50">
@@ -65,7 +15,7 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo Section -->
                 <a href="<?=BASEURL?>" class="flex-shrink-0 flex items-center space-x-3">
-                    <img src="<?=ASSETS;?>/images/Logo1.webp" alt="IsFor Logo" class="h-9 w-auto"/>
+                    <img src="<?= IMAGES;?>/Logo1.webp" alt="IsFor Logo" class="h-9 w-auto"/>
                     <span class="text-l font-semibold text-green-600">Internet of Things For Human Life's</span>
                 </a>
 

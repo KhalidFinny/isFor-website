@@ -13,7 +13,7 @@
         <!-- Logo & Brand -->
         <div class="flex items-center justify-center h-16 px-6 border-b border-gray-100">
             <a href="<?=BASEURL?>" class="flex items-center">
-                <img src="<?=ASSETS?>/images/Logo1.webp" alt="IsFor Logo" class="h-10 w-auto">
+                <img src="<?= IMAGES;?>/Logo1.webp" alt="IsFor Logo" class="h-10 w-auto">
             </a>
         </div>
 

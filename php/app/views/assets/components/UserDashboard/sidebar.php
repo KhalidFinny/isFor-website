@@ -14,7 +14,7 @@
         <!-- Logo & Brand -->
         <div class="flex items-center justify-center h-16 px-6 border-b border-gray-100">
             <a href="<?= BASEURL ?>" class="flex items-center">
-                <img src="<?= ASSETS ?>/images/Logo1.webp" alt="IsFor Logo" class="h-10 w-auto">
+                <img src="<?= IMAGES;?>/Logo1.webp" alt="IsFor Logo" class="h-10 w-auto">
             </a>
         </div>
 
@@ -84,7 +84,7 @@
 
         <!-- Beranda Button -->
         <div class="absolute bottom-[88px] left-0 right-0 p-4 border-t border-gray-100">
-            <a href="<?= BASEURL ?>" 
+            <a href="<?= BASEURL?>"
                class="w-full flex items-center justify-center px-4 py-3 text-base font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
                 <svg class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 

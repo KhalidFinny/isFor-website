@@ -49,7 +49,7 @@
             <div class="col-span-12 lg:col-span-6 lg:col-start-7 mt-12 lg:mt-0">
                 <div class="relative animate-scale">
                     <div class="absolute inset-0"></div>
-                    <img src="<?= ASSETS; ?>/images/coding-image.png"
+                    <img src="<?= IMAGES;?>/coding-image.png"
                          alt="IsFor Illustration"
                          class="relative rounded-3xl animate-float"/>
                 </div>

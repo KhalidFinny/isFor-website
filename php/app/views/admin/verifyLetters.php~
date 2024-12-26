@@ -2,55 +2,9 @@
 $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters'], function ($letter) {
     return $letter['status'] == 1;
 }) : [];
-//var_dump($data);
 ?>
 
-<style>
-    /* Animasi kartu surat */
-    .letter-card {
-        transform: translateY(20px);
-        opacity: 0;
-        animation: cardAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    /* Efek hover pada kartu */
-    .letter-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Animasi kemunculan kartu */
-    @keyframes cardAppear {
-        0% {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Animasi badge status */
-    .status-badge span {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.5;
-        }
-    }
-
-    /* Efek hover pada tombol */
-    .btn-hover-effect {
-        position: relative;
-        overflow: hidden;
-    }
-</style>
+<link rel="stylesheet" href="<?= CSS; ?>/admin/verify-letters.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Layout utama dengan sidebar -->
 <div class="flex min-h-screen bg-white">

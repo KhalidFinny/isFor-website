@@ -1,0 +1,33 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-content {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    animation: fadeIn 0.2s ease-out;
+    transition: visibility 0.2s, opacity 0.2s linear;
+}
+
+.nav-item:hover .dropdown-content,
+.nav-item:focus-within .dropdown-content {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body {
+    font-family: "Urbanist", sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}

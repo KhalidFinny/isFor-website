@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= COMPONENTS_CSS;?>/landing-pages/roadmap.css">
 </head>
 
     <!-- Roadmap Section -->
@@ -57,6 +56,51 @@
                 </div>
             </div>
         </div>
+
+        <style>
+            .timeline-period {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s ease-out;
+            }
+
+            .timeline-period.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .category-card {
+                transition: all 0.3s ease;
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            .category-card.visible {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            .topic-item {
+                transition: all 0.2s ease;
+            }
+
+            .topic-item:hover {
+                transform: translateX(5px);
+                color: #dc2626; /* Red-600 */
+            }
+
+            .period-badge {
+                background: #dc2626; /* Red-600 */
+                box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+                transition: all 0.3s ease;
+            }
+
+            .period-badge:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+            }
+        </style>
+
         <script>
             // const roadmapData = {
             //     periods: [

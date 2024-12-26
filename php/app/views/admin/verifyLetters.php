@@ -3,10 +3,15 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     return $letter['status'] == 1;
 }) : [];
 ?>
-
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Surat - IsFor</title>
 <link rel="stylesheet" href="<?= CSS; ?>/admin/verify-letters.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Layout utama dengan sidebar -->
+</head>
+<body><!-- Layout utama dengan sidebar -->
 <div class="flex min-h-screen bg-white">
     <!-- Sidebar admin -->
     <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>

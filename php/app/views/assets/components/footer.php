@@ -16,7 +16,7 @@
             <div class="space-y-6">
                 <div class="flex items-center space-x-3">
                     <a href="<?= BASEURL ?>" class="flex-shrink-0 flex items-center space-x-3">
-                        <img src="<?= ASSETS; ?>/images/Logo1.webp" alt="IsFor Logo" class="h-12 w-auto"/>
+                        <img src="<?= IMAGES;?>/Logo1.webp" alt="IsFor Logo" class="h-12 w-auto"/>
                     </a>
                     <div class="flex flex-col">
                         <span class="text-red-600 font-bold text-xl">IsFor</span>

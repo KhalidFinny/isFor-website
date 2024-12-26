@@ -7,9 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= ASSETS; ?>/css/animations.css">
 </head>
-<!-- Sejarah Section -->
 <section class="min-h-screen py-20 relative overflow-hidden">
     <div class="container mx-auto px-6">
         <div class="swiss-grid">
@@ -61,7 +59,7 @@
             <div class="col-span-12 lg:col-span-5 lg:col-start-8">
                 <div class="relative">
                     <div class="absolute inset-0"></div>
-                    <img src="<?= ASSETS; ?>/images/Logo1.webp"
+                    <img src="<?= IMAGES;?>/Logo1.webp"
                          alt="IsFor Logo"
                          class="relative rounded-3xl animate-float"/>
                 </div>
