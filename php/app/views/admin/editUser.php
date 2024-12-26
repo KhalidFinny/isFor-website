@@ -9,80 +9,9 @@
     <title>Edit User</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="<?= CSS; ?>/admin/edit-user.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        /* Modern Form Animations */
-        .form-element {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: formElementFade 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes formElementFade {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Staggered animation delays */
-        .form-element:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .form-element:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .form-element:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .form-element:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        /* Input Animations */
-        .input-modern {
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .input-modern:focus {
-            transform: translateY(-2px);
-            border-color: #ef4444;
-            box-shadow: 0 2px 15px -3px rgba(239, 68, 68, 0.15);
-        }
-
-        /* Back Button Animation */
-        .back-button {
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .back-button:hover {
-            transform: translateX(-5px);
-        }
-
-        /* Card Animation */
-        .modern-card {
-            animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes cardEntrance {
-            0% {
-                opacity: 0;
-                transform: translateY(40px) scale(0.98);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-    </style>
 </head>
 <body class="bg-white">
 <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>

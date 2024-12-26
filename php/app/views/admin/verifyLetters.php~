@@ -174,7 +174,7 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     </div>
 </div>
 
-<!-- Modal Konfirmasi -->
+<!-- Modal konfirmasi -->
 <div id="confirmModal"
      class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm opacity-0 invisible transition-all duration-300 z-50">
     <div class="bg-white rounded-3xl p-8 w-[420px] mx-4 shadow-2xl transform translate-y-8 transition-all duration-300">

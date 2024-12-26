@@ -1,0 +1,24 @@
+/* Simplified Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.upload-zone {
+    background-size: 40px 40px;
+    background-image: radial-gradient(circle, #fee2e2 1px, transparent 1px);
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover {
+    background-color: #FEF2F2;
+}
+
+.form-input:focus {
+    border-color: #ef4444;
+    transform: translateY(-2px);
+}

@@ -5,33 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload File - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?= CSS; ?>/user/upload-file.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        /* Simplified Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-
-        .upload-zone {
-            background-size: 40px 40px;
-            background-image: radial-gradient(circle, #fee2e2 1px, transparent 1px);
-            transition: all 0.3s ease;
-        }
-
-        .upload-zone:hover {
-            background-color: #FEF2F2;
-        }
-
-        .form-input:focus {
-            border-color: #ef4444;
-            transform: translateY(-2px);
-        }
-    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-white">
 <div class="flex">

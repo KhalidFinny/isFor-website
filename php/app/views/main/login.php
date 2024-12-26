@@ -14,7 +14,7 @@
     <title>Sign In</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?=CSS;?>/login.css">
+    <link rel="stylesheet" href="<?=CSS;?>/main/login.css">
 </head>
 <body class="min-h-screen animated-background" style="font-family: 'Plus Jakarta Sans', sans-serif;">
     <!-- Animated Background Circles -->

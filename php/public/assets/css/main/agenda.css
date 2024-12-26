@@ -1,0 +1,20 @@
+.agenda-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agenda-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.number-label {
+    font-family: 'Space Grotesk', sans-serif;
+    color: #EBE5E7;
+    transition: color 0.3s ease;
+}
+
+.agenda-item:hover .number-label {
+    color: #EF4444;
+}

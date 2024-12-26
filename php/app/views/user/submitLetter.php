@@ -6,23 +6,8 @@
     <title>Ajukan Surat - IsFor PRI</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= CSS; ?>/user/submit-letter.css">
     <script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/dist/docx.js"></script>
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-
-        .form-input:focus {
-            border-color: #ef4444;
-            transform: translateY(-2px);
-            transition: all 0.3s ease;
-        }
-    </style>
 </head>
 <body class="bg-white">
 <div class="flex">
@@ -137,31 +122,10 @@
     </div>
 </div>
 
-<script>
-    function previewLetter() {
-        const formData = new FormData(document.getElementById('letterForm'));
-
-        fetch('<?=BASEURL?>/letter/previewletter', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                window.open(url, '_blank');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat preview surat');
-            });
-    }
-</script>
-
 <!-- Container utama untuk preview surat -->
 <div id="letterPreview" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6 mt-8">
     <!-- Judul bagian preview -->
     <h3 class="text-lg font-semibold text-red-800 mb-4">Status Pengajuan Surat</h3>
-
     <!-- Wrapper untuk konten preview -->
     <div class="bg-red-50 rounded-xl p-4">
         <div class="flex items-start space-x-4">
@@ -170,16 +134,14 @@
                 <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
                     <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
                 </div>
             </div>
-
             <!-- Informasi progress (bagian kanan) -->
             <div class="flex-1 min-w-0">
                 <!-- Judul preview surat -->
                 <p class="text-sm font-medium text-red-900" id="previewTitle">Mengirim Surat Penelitian</p>
-
                 <!-- Progress bar -->
                 <div class="mt-2 w-full bg-red-200 rounded-full h-2.5">
                     <div id="previewProgress"
@@ -193,7 +155,6 @@
         </div>
     </div>
 </div>
-
 <!-- Modal konfirmasi pengajuan surat -->
 <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
     <!-- Wrapper konten modal -->
@@ -207,7 +168,7 @@
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                 </svg>
             </div>
             <!-- Judul modal -->
@@ -233,12 +194,10 @@
         </div>
     </div>
 </div>
-
 <!-- Container untuk pesan alert -->
 <div id="alertMessage" class="hidden fixed top-4 right-4 max-w-md w-full">
     <!-- Konten alert akan di-inject melalui JavaScript -->
 </div>
-
 <div id="submitProgress" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6 mt-8">
     <h3 class="text-lg font-semibold text-red-800 mb-4">Status Pengiriman</h3>
     <div class="bg-red-50 rounded-xl p-4">
@@ -248,15 +207,13 @@
                 <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
                     <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
                 </div>
             </div>
-
             <!-- Progress Info -->
             <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-red-900">Mengirim Surat</p>
-
                 <!-- Progress Bar -->
                 <div class="mt-2 w-full bg-red-200 rounded-full h-2.5">
                     <div id="progressBar"
@@ -270,6 +227,25 @@
     </div>
 </div>
 
+<script>
+    function previewLetter() {
+        const formData = new FormData(document.getElementById('letterForm'));
+
+        fetch('<?=BASEURL?>/letter/previewletter', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat preview surat');
+            });
+    }
+</script>
 <script>
 // Inisialisasi variabel untuk mengakses elemen-elemen DOM
 const form = document.getElementById('letterForm');                    // Form utama pengajuan surat

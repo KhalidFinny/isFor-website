@@ -11,7 +11,7 @@ session_start();
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="<?= CSS; ?>/gallery_web.css">
+    <link rel="stylesheet" href="<?= CSS; ?>/main/gallery-web.css">
 </head>
 <body class="bg-white">
 <?php if (!isset($_SESSION['user_id'])): ?>
@@ -334,8 +334,6 @@ session_start();
             dataType: 'json', // Format respons JSON
             data: JSON.stringify({status: status, page: page}), // Kirim data dalam format JSON
             success: function (response) {
-                console.log('Success Response:', response);
-
                 // Seleksi elemen HTML
                 const galleryContainer = document.querySelector(".container-galleries");
                 const navElement = document.querySelector('nav[aria-label="Page navigation example"]');

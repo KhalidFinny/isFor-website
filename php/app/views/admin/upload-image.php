@@ -6,114 +6,11 @@
     <title>Upload Gambar</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="<?= CSS; ?>/admin/upload-image.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
             integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        /* Animasi Fade In */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-
-        /* Zona Upload */
-        .upload-zone {
-            background-size: 40px 40px;
-            background-image: radial-gradient(circle, #fee2e2 1px, transparent 1px);
-            transition: all 0.3s ease;
-        }
-
-        .upload-zone:hover {
-            background-color: #FEF2F2;
-        }
-
-        /* Input Form */
-        .form-input {
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            border-color: #ef4444;
-            transform: translateY(-2px);
-        }
-
-        /* Grid Preview Gambar */
-        .preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        /* Animasi Fade Up */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-up {
-            animation: fadeUp 0.4s ease-out forwards;
-        }
-
-        /* Animasi Scale In */
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .preview-image {
-            animation: scaleIn 0.3s ease-out forwards;
-        }
-
-        /* Form Control */
-        .form-control {
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        /* Animasi Alert */
-        .alert-show {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-            pointer-events: auto !important;
-        }
-
-        .alert-hide {
-            opacity: 0 !important;
-            transform: translateY(-100%) !important;
-            pointer-events: none !important;
-        }
-    </style>
 </head>
 <body class="bg-white">
 <div class="flex">

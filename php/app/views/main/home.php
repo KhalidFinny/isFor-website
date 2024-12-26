@@ -9,15 +9,10 @@ session_start();
     <title>IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= CSS;?>/navbaranimation.css">
-    <link rel="stylesheet" href="<?= CSS;?>/animations.css">
-    <link rel="stylesheet" href="<?= CSS; ?>/cross-browser.css">
     <base href="/isfor-web/"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <link rel="stylesheet" href="http://localhost/IsFor-website/php/app/views/assets/css/inandout.css">
-    <script src="http://localhost/IsFor-website/php/app/views/assets/js/animations.js" defer></script>
 </head>
 <body class="grid-pattern">
 <?php if (!isset($_SESSION['user_id'])) : ?>

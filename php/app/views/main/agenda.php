@@ -9,35 +9,13 @@ session_start();
     <title>Agenda - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://localhost/IsFor-website/php/app/views/assets/css/inandout.css">
+    <link rel="stylesheet" href="<?= CSS; ?>/main/agenda.css?>">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="http://localhost/IsFor-website/php/app/views/assets/js/animations.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .agenda-item {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .agenda-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .number-label {
-            font-family: 'Space Grotesk', sans-serif;
-            color: #EBE5E7;
-            transition: color 0.3s ease;
-        }
-        
-        .agenda-item:hover .number-label {
-            color: #EF4444;
-        }
-    </style>
-    <title>Agenda - IsFor Internet of Things For Human Life's</title>
 </head>
-    <?php if (!isset($_SESSION['user_id'])) : ?>
+<?php if (!isset($_SESSION['user_id'])) : ?>
         <?php include_once '../app/views/assets/components/navbar.php'; ?>
     <?php else : ?>
         <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>

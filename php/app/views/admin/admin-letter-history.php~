@@ -1,6 +1,3 @@
-<?php
-//var_dump($data);
-?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
@@ -91,7 +88,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
+    <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
@@ -111,7 +108,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-red-600">Total Surat</p>
-                                <p class="text-2xl font-bold text-red-900"><?= $data['letter'] ?></p>
+                                <p class="text-2xl font-bold text-red-900"><?= $data['totalLetters'] ?></p>
                             </div>
                             <div class="p-3 bg-red-50 rounded-xl">
                                 <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24"
@@ -221,7 +218,7 @@
                                                     </span>
                                                 <?php else : ?>
                                                     <span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
-                                                        Ditolak
+                                                        ditolak
                                                     </span>
                                                 <?php endif ?>
                                             </td>
@@ -236,7 +233,7 @@
                                 </table>
                             </div>
                         <?php endif; ?>
-                        <nav aria-label="Page navigation example" id="pagination-nav">
+                        <nav aria-label="Page navigation example">
                             <ul class="flex items-center -space-x-px h-8 text-sm">
                                 <li>
                                     <?php if ($data['halamanAktif'] > 1) : ?>
@@ -309,10 +306,12 @@
     <!-- Alert content will be injected here by showAlert() -->
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function viewLetter(id) {
         // Implementation for viewing letter
-        $('#letterModal').removeClass('hidden').addClass('flex');
+        document.getElementById('letterModal').classList.remove('hidden');
+        document.getElementById('letterModal').classList.add('flex');
 
         $.ajax({
             url: '<?= BASEURL ?>/letter/getLetter',
@@ -322,10 +321,10 @@
             success: function (data) {
                 console.log(data);
                 // Implementation for viewing letter
-                const $letterContent = $('#letterContent');
-                $letterContent.html(`
-                <iframe src="${data}" width="100%" height="500px"></iframe>
-            `);
+                const letterContent = document.getElementById('letterContent');
+                letterContent.innerHTML = `
+                        <iframe src="${data}" width="100%" height="500px"></iframe>
+                    `;
             },
             error: function (data) {
                 alert('Gagal');
@@ -334,19 +333,24 @@
     }
 
     function closeLetterModal() {
-        $('#letterModal').addClass('hidden').removeClass('flex');
+        document.getElementById('letterModal').classList.add('hidden');
+        document.getElementById('letterModal').classList.remove('flex');
     }
 
     function filter(status, currentPage = 1) {
+        // console.log('Filter called with status:', status, 'and page:', currentPage);
         $.ajax({
-            url: '<?= BASEURL ?>/letter/filter',
+            url: '<?= BASEURL ?>/letter/filterAdmin',
             method: 'POST',
             dataType: 'json',
-            data: {status: status, halamanAktif: currentPage},
+            data: JSON.stringify({status: status, halamanAktif: currentPage}), // Kirim JSON ke server
+            contentType: 'application/json',
             success: function (data) {
-                // console.log('Success Response:', data);
-                const $letterContainer = $(".letter-card table tbody");
-                const $navElement = $('nav[aria-label="Page navigation example"]');
+                console.log('Received Data:', data);
+
+                const letterContainer = document.querySelector(".letter-card tbody");
+                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+
                 const tableHeader = `
                 <thead>
                     <tr class="text-left text-sm font-medium text-gray-500">
@@ -358,12 +362,13 @@
                 </thead>
             `;
 
-                // Clear existing rows and add table header
-                $letterContainer.empty();
-                $navElement.empty();
+                letterContainer.innerHTML = ''; // Hanya hapus isi tbody
+                navElement.innerHTML = '';
 
                 // Populate table rows with data
                 data.letters.forEach(letter => {
+                    console.log(letter.status);
+
                     let statusBadge = '';
 
                     if (letter.status == 1) {
@@ -384,29 +389,29 @@
                         </td>
                     </tr>
                 `;
-                    $letterContainer.append(row);
+                    letterContainer.innerHTML += row;
                 });
 
                 // Generate pagination
-                if ($navElement.length) {
-                    generatePagination($navElement[0], data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
+                if (navElement) {
+                    generatePagination(navElement, data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
                 }
             },
             error: function (xhr, status, error) {
                 console.error('Error Status:', status);
                 console.error('Error Details:', error);
                 console.error('Response Text:', xhr.responseText);
-                // alert('Gagal');
             }
         });
     }
 
     function generatePagination(navElement, currentPage, totalPages, status) {
-        const $ul = $('<ul>', {class: 'flex items-center -space-x-px h-8 text-sm'});
+        const ul = document.createElement('ul');
+        ul.className = 'flex items-center -space-x-px h-8 text-sm';
 
         // Previous button
         if (currentPage > 1) {
-            const $prevLi = $(`
+            const prevLi = `
             <li>
                 <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
                     class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
@@ -418,27 +423,27 @@
                     </svg>
                 </a>
             </li>
-        `);
-            $ul.append($prevLi);
+        `;
+            ul.innerHTML += prevLi;
         }
 
         // Page numbers
         for (let i = 1; i <= totalPages; i++) {
             const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
-            const $pageLi = $(`
+            const pageLi = `
             <li>
                 <a href="javascript:void(0)" onclick="filter(${status}, ${i})"
                     class="flex items-center justify-center px-3 h-8 leading-tight ${activeClass} border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
                     ${i}
                 </a>
             </li>
-        `);
-            $ul.append($pageLi);
+        `;
+            ul.innerHTML += pageLi;
         }
 
         // Next button
         if (currentPage < totalPages) {
-            const $nextLi = $(`
+            const nextLi = `
             <li>
                 <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
                     class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
@@ -450,48 +455,50 @@
                     </svg>
                 </a>
             </li>
-        `);
-            $ul.append($nextLi);
+        `;
+            ul.innerHTML += nextLi;
         }
 
-        $(navElement).append($ul);
+        navElement.appendChild(ul);
     }
 
     function showAlert(message, type = 'success') {
-        const alertElement = $('#alertMessage');
+        const alertElement = document.getElementById('alertMessage');
         const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
         const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
         const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
 
-        const alertHtml = `
-        <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
-            <div class="flex-shrink-0 ${iconColor}">
-                ${type === 'success'
+        alertElement.innerHTML = `
+            <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
+                <div class="flex-shrink-0 ${iconColor}">
+                    ${type === 'success'
             ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
             : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
         }
+                </div>
+                <div class="ml-3 ${textColor} font-medium">${message}</div>
+                <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
-            <div class="ml-3 ${textColor} font-medium">${message}</div>
-            <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-    `;
+        `;
 
-        alertElement.html(alertHtml)
-            .removeClass('hidden')
-            .css('transform', 'translateY(0)');
+        alertElement.style.transform = 'translateY(0)';
+        alertElement.classList.remove('hidden');
 
+        // Auto hide after 5 seconds
         setTimeout(closeAlert, 5000);
     }
 
     function closeAlert() {
-        $('#alertMessage').css('transform', 'translateY(-100%)');
-        setTimeout(() => $('#alertMessage').addClass('hidden'), 300);
+        const alertElement = document.getElementById('alertMessage');
+        alertElement.style.transform = 'translateY(-100%)';
+        setTimeout(() => alertElement.classList.add('hidden'), 300);
     }
 
+    // Animation observer
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -506,130 +513,112 @@
         observer.observe(el);
     });
 
-    // Define the search function using jQuery
-    function searchLetters(keyword, page = 1) {
-        let paginationNav = $('#pagination-nav');
-        const letterContainer = $(".letter-card table tbody");
-        let debounceTimeout;
+    function loadSearchResults(keyword, page = 1) {
+        let letterContainer = document.querySelector(".letter-card table tbody");
+        let navElement = document.querySelector('nav[aria-label="Page navigation example"]');
 
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(function () {
-            $.ajax({
-                    url: '<?= BASEURL ?>/letter/searchUser',
-                    method: 'POST',
-                    data: {keyword: keyword, page: page},
-                    dataType: 'json',
-                    success: function (data) {
-                        letterContainer.empty();
-                        paginationNav.empty();
+        $.ajax({
+            url: '<?= BASEURL; ?>/letter/search',
+            type: 'POST',
+            data: {keyword: keyword, page: page},
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                letterContainer.innerHTML = ''; // Clear table
+                navElement.innerHTML = ''; // Clear pagination
 
-                        // Check if there is no data
-                        if (data.results.length === 0) {
-                            letterContainer.append(`
-                        <tr>
-                            <td colspan="4" class="py-4 text-center text-gray-500">Surat tidak ditemukan</td>
-                        </tr>
-                    `);
-                            return;
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(item => {
+                        let statusBadge = '';
+                        if (item.status == 1) {
+                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
+                        } else if (item.status == 2) {
+                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
+                        } else {
+                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
                         }
 
-                        // Populate table rows with data
-                        data.results.forEach(letter => {
-                            let statusBadge = '';
+                        letterContainer.innerHTML += `
+                            <tr class="border-t border-gray-100">
+                                <td class="py-4">${item.title}</td>
+                                <td class="py-4">${item.date}</td>
+                                <td class="py-4">${statusBadge}</td>
+                                <td class="py-4">
+                                    <button onclick="viewLetter(${item.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                                </td >
+                            </tr>
+                        `;
+                    });
+                } else {
+                    letterContainer.innerHTML = `<tr><td colspan="4" class="text-center">Hasil tidak ditemukan</td></tr>`;
+                }
 
-                            if (letter.status == 1) {
-                                statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-                            } else if (letter.status == 2) {
-                                statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
-                            } else {
-                                statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
-                            }
+                // Tampilkan pagination berdasarkan total halaman
+                if (data.totalPages > 1) {
+                    let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
 
-                            const row = `
-                        <tr class="border-t border-gray-100">
-                            <td class="py-4">${letter.title}</td>
-                            <td class="py-4">${letter.date}</td>
-                            <td class="py-4">${statusBadge}</td>
-                            <td class="py-4">
-                                <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                            </td>
-                        </tr>
-                    `;
-                            letterContainer.append(row);
-                        });
-
-                        // Add pagination
-                        if (data.totalPages > 1) {
-                            let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
-
-                            if (data.currentPage > 1) {
-                                paginationHTML += `
-                            <li>
-                                <a href="#" data-page="${data.currentPage - 1}"
-                                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
-                                    <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                                    </svg>
-                                </a>
-                            </li>`;
-                            }
-
-                            for (let i = 1; i <= data.totalPages; i++) {
-                                const isActive = i === data.currentPage ? 'z-10 bg-red-50 border-red-300 text-red-600' : 'bg-white text-gray-500';
-                                const pageButton = `
-                                <li>
-                                    <a href="#" data-page="${i}"
-                                       class="flex items-center justify-center px-3 h-8 leading-tight ${i === data.currentPage ? 'text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">
-                                        ${i}
-                                    </a>
-                                </li>`;
-                            }
-
-                            if (data.currentPage < data.totalPages) {
-                                paginationHTML += `
-                            <li>
-                                <a href="#" data-page="${data.currentPage + 1}"
-                                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
-                                    <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                                    </svg>
-                                </a>
-                            </li>`;
-                            }
-
-                            paginationHTML += `</ul>`;
-                            paginationNav.html(paginationHTML);
-
-                            paginationNav.find('a').on('click', function (e) {
-                                e.preventDefault();
-                                let selectedPage = $(this).data('page');
-                                loadSearchResults(keyword, selectedPage);
-                        }
+                    // Tombol Previous
+                    if (data.currentPage > 1) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${data.currentPage - 1}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
                     }
-                },
-                error
-        :
 
-            function () {
-                console.log('Error terjadi dalam request');
+                    // Halaman
+                    for (let i = 1; i <= data.totalPages; i++) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${i}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight ${i === data.currentPage ? 'text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">
+                            ${i}
+                        </a>
+                    </li>`;
+                    }
+
+                    // Tombol Next
+                    if (data.currentPage < data.totalPages) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${data.currentPage + 1}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-s-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4-4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
+                    }
+
+                    paginationHTML += `</ul>`;
+                    navElement.innerHTML = paginationHTML;
+
+                    navElement.addEventListener('click', function (e) {
+                        if (e.target.tagName === 'A') {
+                            e.preventDefault();
+                            const selectedPage = e.target.dataset.page;
+                            loadSearchResults(keyword, selectedPage);
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                console.error('Response Text:', xhr.responseText);
             }
         });
     }
 
-    ,
-    500
-    )
-    ;
-    }
-
-    // Attach event listener for pagination
-    $(document).on('click', 'nav[aria-label="Page navigation example"] a', function (e) {
-        e.preventDefault();
-        const page = $(this).data('page');
-        $('#currentPage').val(page);
-        searchLetters();
+    $(document).ready(function () {
+        $('#keyword').on('keyup', function () {
+            const keyword = $(this).val();
+            loadSearchResults(keyword);
+        });
     });
-
 
     document.addEventListener('DOMContentLoaded', function () {
         const filterButtons = document.querySelectorAll('.filter-btn');
@@ -647,6 +636,7 @@
             });
         });
     });
+
 </script>
 </body>
 </html>

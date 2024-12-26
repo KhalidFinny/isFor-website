@@ -1,0 +1,88 @@
+/* Animasi dasar untuk kartu dengan efek fade dan scale */
+.file-card {
+    animation: scaleIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+/* Definisi animasi scaleIn */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Delay bertahap untuk setiap kartu */
+.file-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.file-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.file-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.file-card {
+    transform: translateY(20px);
+    opacity: 0;
+    animation: cardAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.file-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes cardAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-hover-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Modal styles */
+.modal {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    transform: translateY(-20px);
+    transition: all 0.3s ease-in-out;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+/* Alert styles */
+.alert {
+    transform: translateY(-100%);
+    transition: all 0.3s ease-in-out;
+}
+
+.alert.active {
+    transform: translateY(0);
+}

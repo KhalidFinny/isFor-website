@@ -1,0 +1,97 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.animate-fade-in {
+    animation: smoothFadeIn 0.4s ease-out;
+}
+
+.animate-slide-in {
+    animation: smoothSlideIn 0.4s ease-out;
+}
+
+/* Modal Animation */
+.modal-enter {
+    animation: modalEnter 0.3s ease-out;
+}
+
+@keyframes modalEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes smoothFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes smoothSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Text Colors */
+.text-primary {
+    color: #ef4444;
+}
+
+/* Red-500 */
+.text-secondary {
+    color: #f87171;
+}
+
+/* Red-400 */
+.text-subtle {
+    color: #fca5a5;
+}
+
+/* Red-300 */
+
+/* Form Input Styles */
+.form-input {
+    transition: all 0.2s ease;
+    border: 1px solid #fecaca;
+    background: rgba(255, 255, 255, 0.8);
+    color: #ef4444;
+}
+
+.form-input::placeholder {
+    color: #fca5a5;
+}
+
+/* Table Styles */
+.table-row:hover {
+    background-color: #fff1f1;
+}
+
+/* Button Styles */
+.btn-primary {
+    transition: all 0.2s ease;
+    background-color: #ef4444;
+}
+
+.btn-primary:hover {
+    background-color: #dc2626;
+    transform: translateY(-1px);
+}

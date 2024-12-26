@@ -9,11 +9,11 @@ session_start();
     <title>Resource Archive - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
           rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://localhost/IsFor-website/php/app/views/assets/css/inandout.css">
+    <link rel="stylesheet" href="<?= CSS;?>/main/document.css">
     <script src="http://localhost/IsFor-website/php/app/views/assets/js/animations.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="<?= FILECSS;?>/main/document.css">
 </head>
 <body class="bg-gray-50">
 <?php if (!isset($_SESSION['user_id'])) : ?>

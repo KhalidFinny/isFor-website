@@ -1,11 +1,3 @@
-<?php
-if (isset($_SESSION['message'])) {
-    $message = $_SESSION['message'];
-    echo "<script>alert('$message');</script>";
-    unset($_SESSION['message']);
-}
-//var_dump($data);
-?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 
@@ -17,106 +9,8 @@ if (isset($_SESSION['message'])) {
             href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
             rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= CSS; ?>/admin/users.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        .animate-fade-in {
-            animation: smoothFadeIn 0.4s ease-out;
-        }
-
-        .animate-slide-in {
-            animation: smoothSlideIn 0.4s ease-out;
-        }
-
-        /* Modal Animation */
-        .modal-enter {
-            animation: modalEnter 0.3s ease-out;
-        }
-
-        @keyframes modalEnter {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        @keyframes smoothFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes smoothSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* Text Colors */
-        .text-primary {
-            color: #ef4444;
-        }
-
-        /* Red-500 */
-        .text-secondary {
-            color: #f87171;
-        }
-
-        /* Red-400 */
-        .text-subtle {
-            color: #fca5a5;
-        }
-
-        /* Red-300 */
-
-        /* Form Input Styles */
-        .form-input {
-            transition: all 0.2s ease;
-            border: 1px solid #fecaca;
-            background: rgba(255, 255, 255, 0.8);
-            color: #ef4444;
-        }
-
-        .form-input::placeholder {
-            color: #fca5a5;
-        }
-
-        /* Table Styles */
-        .table-row:hover {
-            background-color: #fff1f1;
-        }
-
-        /* Button Styles */
-        .btn-primary {
-            transition: all 0.2s ease;
-            background-color: #ef4444;
-        }
-
-        .btn-primary:hover {
-            background-color: #dc2626;
-            transform: translateY(-1px);
-        }
-    </style>
 </head>
 
 <body class="bg-white">
@@ -287,38 +181,32 @@ if (isset($_SESSION['message'])) {
                 <?php endif; ?>
             </section>
             <!-- Pagination -->
-            <div class="px-8 py-4 border-t border-gray-100" id="pagination">
+            <div class="px-8 py-4 border-t border-gray-100">
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-500">
                         Showing
                         <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
                         to
                         <span class="font-medium">
-                                <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']) ?>
-                            </span>
+                                    <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']) ?>
+                                </span>
                         of
                         <span class="font-medium"><?= $data['totalUsers'] ?></span>
                         results
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <!-- Tombol Previous -->
-                        <?php if ($data['currentPage'] > 1): ?>
-                            <a href="?page=<?= $data['currentPage'] - 1; ?>"
-                               class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200">
-                                Previous
+                    <div class="flex items-center space-x-2" id="pagination">
+                        <!-- Page indicator -->
+                        <div class="text-sm text-gray-500">
+                            Page <span class="font-medium"><?= $data['currentPage']; ?></span> of <span
+                                    class="font-medium"><?= $data['totalPages']; ?></span>
+                        </div>
+                        <!-- Pagination numbers -->
+                        <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
+                            <a href="?page=<?= $i; ?>"
+                               class="px-4 py-2 text-sm font-medium rounded-lg <?= $i == $data['currentPage'] ? 'border border-red-400  text-red-500' : 'bg-white text-red-500 duration-300 hover:bg-red-100'; ?>">
+                                <?= $i; ?>
                             </a>
-                        <?php else: ?>
-                            <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Previous</span>
-                        <?php endif; ?>
-                        <!-- Tombol Next -->
-                        <?php if ($data['currentPage'] < $data['totalPages']): ?>
-                            <a href="?page=<?= $data['currentPage'] + 1; ?>"
-                               class="px-4 py-2 text-sm text-gray-500 hover:text-red-600 transition-colors duration-200">
-                                Next
-                            </a>
-                        <?php else: ?>
-                            <span class="px-4 py-2 text-sm text-gray-300 cursor-not-allowed">Next</span>
-                        <?php endif; ?>
+                        <?php endfor; ?>
                     </div>
                 </div>
             </div>

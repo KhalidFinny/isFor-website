@@ -239,6 +239,7 @@ session_start();
             contentType: 'application/json', // Set Content-Type ke JSON
             data: JSON.stringify({status: status, page: page}), // Kirim data sebagai JSON
             success: function (response) {
+                console.log('Success Response:', response);
 
                 if (!response || !response.data) {
                     console.error('Invalid response format');

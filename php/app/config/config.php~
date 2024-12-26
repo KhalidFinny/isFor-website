@@ -5,6 +5,7 @@ define('BASEURL', 'http://localhost/IsFor-website/php/public');
 define('DOCUMENT', 'http://localhost/IsFor-website/php/public/assets/files/documents');
 define('FILE', 'http://localhost/IsFor-website/php/public/assets/js');
 define('CSS', 'http://localhost/IsFor-website/php/public/assets/css');
+define('MAINCSS', 'http://localhost/IsFor-website/php/public/assets/css/main');
 define('PHOTOPROFILE', 'http://localhost/IsFor-website/php/app/img/profile/');
 define('ASSETS', 'http://localhost/IsFor-website/php/app/views/assets');
 define('LETTER', 'http://localhost/IsFor-website/php/app/letters');

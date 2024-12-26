@@ -9,85 +9,9 @@
     <title>Riwayat File - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="<?= CSS; ?>/admin/files-history.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-            opacity: 0;
-        }
-
-        .slide-up {
-            animation: slideUp 0.5s ease-out forwards;
-            opacity: 0;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .image-card {
-            transition: all 0.3s ease;
-            transform: translateY(0);
-        }
-
-        .image-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px -10px rgba(51, 65, 85, 0.1);
-        }
-
-        .status-badge {
-            transition: all 0.3s ease;
-        }
-
-        .status-badge:hover {
-            transform: scale(1.05);
-        }
-
-        .filter-btn {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #dc2626;
-            transition: width 0.3s ease;
-        }
-
-        .filter-btn.active {
-            color: #dc2626;
-        }
-
-        .filter-btn.active::after {
-            width: 100%;
-        }
-
-        .filter-btn:hover {
-            background-color: #fee2e2;
-        }
-    </style>
 </head>
 <body class="bg-white">
 <div class="flex">

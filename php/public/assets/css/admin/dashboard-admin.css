@@ -1,0 +1,117 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #fff;
+}
+
+/* Modern Animations */
+.animate-fade-in {
+    animation: smoothFadeIn 0.4s ease-out;
+}
+
+.animate-slide-in {
+    animation: smoothSlideIn 0.4s ease-out;
+}
+
+/* Refined Card Styles */
+.stats-card {
+    transition: all 0.2s ease;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.stats-card:hover {
+    border-color: #dc2626;
+    background: #fff5f5;
+}
+
+/* Modern Sidebar Styling */
+.sidebar-link {
+    transition: all 0.2s ease;
+    border-left: 2px solid transparent;
+}
+
+.sidebar-link:hover {
+    background-color: #fee2e2;
+    border-left-color: #dc2626;
+}
+
+.sidebar-link.active {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border-left-color: #dc2626;
+}
+
+/* Clean Table Styling */
+.table-row {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.table-row:hover {
+    background-color: #fff5f5;
+}
+
+/* Modern Button Style */
+.btn-primary {
+    background-color: #dc2626;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #b91c1c;
+}
+
+.btn-outline {
+    border: 1px solid #dc2626;
+    color: #dc2626;
+}
+
+.btn-outline:hover {
+    background-color: #fee2e2;
+}
+
+@keyframes smoothFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes smoothSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Modern Status Badge */
+.status-badge {
+    transition: all 0.2s ease;
+    border: 1px solid currentColor;
+}
+
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 0.5s ease-in-out;
+}
