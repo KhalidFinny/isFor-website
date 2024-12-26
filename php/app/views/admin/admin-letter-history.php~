@@ -336,7 +336,7 @@
     }
 
     function filter(status, currentPage = 1) {
-        console.log('Filter called with status:', status, 'and page:', currentPage);
+        // console.log('Filter called with status:', status, 'and page:', currentPage);
         $.ajax({
             url: '<?= BASEURL ?>/letter/filterAdmin',
             method: 'POST',

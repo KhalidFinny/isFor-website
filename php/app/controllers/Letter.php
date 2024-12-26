@@ -58,8 +58,6 @@ class Letter extends Controller
         }
     }
 
-
-    //untuk admin
     public function getLetter()
     {
         $id = $_POST['id'];
@@ -211,7 +209,7 @@ class Letter extends Controller
         $data['halamanAktif'] = $halamanAktif;
         $data['totalLetters'] = $jumlahData;
         $this->view('admin/admin-letter-history', $data);
-        
+
     }
 
     public function filter()
@@ -221,7 +219,7 @@ class Letter extends Controller
         $userId = $_SESSION['user_id'];
 
         $jumlahDataperhalaman = 4;
-    
+
         // Ambil jumlah total data sesuai status
         if($status == 0){
             $jumlahData = $this->model('LettersModel')->countAllLeterbyUserId($userId);
@@ -229,18 +227,18 @@ class Letter extends Controller
             $jumlahData = $this->model('LettersModel')->countAllLettersByUserandStatus($userId, $status)['total'];
         }
         $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-    
+
         // Halaman aktif dari POST, menggunakan halamanAktif
         $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
         $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-    
+
         // Validasi status dan ambil data
         if ($status == 0) {
             $letters = $this->model('LettersModel')->getLetterByUserIdPaginate($userId, $awalData, $jumlahDataperhalaman);
         } else {
             $letters = $this->model('LettersModel')->getLetterByUserIdStatus($userId, $status, $awalData, $jumlahDataperhalaman);
         }
-    
+
         // Kirim data ke frontend
         echo json_encode([
             'letters' => $letters,
@@ -314,7 +312,6 @@ class Letter extends Controller
         }
     }
 
-
     public function letterHistoryView()
     {
         $this->checkLogin();
@@ -341,26 +338,14 @@ class Letter extends Controller
 
     public function searchByUserId()
     {
+        session_start();
         if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-//            $_SESSION['user_id'] = 2;
+            $_SESSION['user_id'] = 2;
 //            $_SESSION['username'] = 'user';
 //            session_write_close();
-            echo 'Session ID: ' . session_id();
         }
-        echo 'Session Save Path: ' . ini_get('session.save_path');
 
-
-        var_dump($_SESSION);
-        var_dump($_COOKIE);
         header('Content-Type: application/json');
-
-        echo json_encode([
-            'session_id' => session_id(),
-            'session_data' => $_SESSION,
-            'cookies' => $_COOKIE
-        ]);
-
         if (!isset($_SESSION['user_id'])) {
             echo json_encode(['error' => 'User tidak terautentikasi.']);
             exit;
@@ -368,14 +353,11 @@ class Letter extends Controller
 
         if (isset($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
-            $user_id = $_SESSION['user_id']; // Ambil user_id dari sesi
-
+            $user_id = $_SESSION['user_id'];
             $lettersModel = $this->model('LettersModel');
 
             try {
                 $results = $lettersModel->searchLettersByUserId($keyword, $user_id);
-
-                header('Content-Type: application/json');
                 echo json_encode($results);
             } catch (Exception $e) {
                 error_log($e->getMessage());
@@ -385,4 +367,41 @@ class Letter extends Controller
             echo json_encode(['error' => 'Keyword tidak ditemukan.']);
         }
     }
+
+    public function searchUser()
+    {
+        if (isset($_POST['keyword'])) {
+            $keyword = $_POST['keyword'];
+            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+            $itemsPerPage = 6;
+            $offset = ($page - 1) * $itemsPerPage;
+
+            session_start();
+            if (!isset($_SESSION['user_id'])) {
+//                $_SESSION['user_id'] = 8;
+                echo json_encode(['error' => 'User tidak terautentikasi.']);
+                return;
+            }
+            $userId = $_SESSION['user_id'];
+
+            $researchOutputModel = $this->model('LettersModel');
+
+            try {
+                $results = $researchOutputModel->searchLettersUser($keyword, $userId, $itemsPerPage, $offset);
+                $totalResults = $researchOutputModel->countUserSearchResults($keyword, $userId);
+                $totalPages = ceil($totalResults / $itemsPerPage);
+
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'results' => $results,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $page,
+                ]);
+            } catch (Exception $e) {
+                echo json_encode(['error' => $e->getMessage()]);
+            }
+        }
+    }
+
 }
+

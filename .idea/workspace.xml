@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="" />
+    <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/php/public/log_script.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/core/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/core/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/models/LettersModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/LettersModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/admin-letter-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/admin-letter-history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/letter-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/letter-history.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -78,11 +88,11 @@
       <recent name="C:\laragon\www\isFor-website\php\app\views\main" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\isFor-website\php\app" />
       <recent name="C:\laragon\www\isFor-website\php\public\assets" />
       <recent name="C:\laragon\www\isFor-website\php\public\assets\files\css" />
       <recent name="C:\laragon\www\isFor-website\php\public\assets\files\js\documents" />
       <recent name="C:\laragon\www\isFor-website\php\public\assets\file" />
-      <recent name="C:\laragon\www\isFor-website\php\public\assets\document" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -129,7 +139,7 @@
       <workItem from="1734631382133" duration="1263000" />
       <workItem from="1734757841891" duration="9680000" />
       <workItem from="1734771370789" duration="6448000" />
-      <workItem from="1734839981192" duration="46506000" />
+      <workItem from="1734839981192" duration="61026000" />
     </task>
     <servers />
   </component>

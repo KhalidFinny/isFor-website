@@ -310,28 +310,20 @@
 <script>
     function previewFile(url) {
         if (!url) return;
+        const fileExtensionsForDirectPreview = /\.(jpg|jpeg|png|gif|pdf)$/i;
 
-        const modal = document.getElementById('fileModal');
-        const content = document.getElementById('fileContent');
-
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-
-        // Add file extension check for different preview types
-        if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
-            content.innerHTML = `<img src="${url}" class="max-w-full h-auto rounded-lg">`;
-        } else if (url.match(/\.(pdf)$/i)) {
-            content.innerHTML = `<iframe src="${url}" width="100%" height="600px" class="rounded-lg border border-red-100"></iframe>`;
+        if (fileExtensionsForDirectPreview.test(url)) {
+            window.open(url, '_blank');
         } else {
-            content.innerHTML = `<div class="text-center p-8">
-                <p class="text-gray-600 mb-4">Preview not available for this file type</p>
-                <a href="${url}" download class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                    </svg>
-                    Download File
-                </a>
-            </div>`;
+            alert('Preview tidak tersedia untuk jenis file ini. File akan didownload.');
+            const $downloadLink = $('<a>', {
+                href: url,
+                download: '',
+                css: {display: 'none'}
+            }).appendTo('body');
+
+            $downloadLink[0].click();
+            $downloadLink.remove();
         }
     }
 

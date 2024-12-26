@@ -1,3 +1,6 @@
+<?php
+//var_dump($data);
+?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
@@ -7,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .fade-in {
             animation: fadeIn 0.5s ease-out forwards;
@@ -87,7 +91,7 @@
 </head>
 <body class="bg-white">
 <div class="flex">
-<?php include '../app/views/assets/components/UserDashboard/sidebar.php';?>
+    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
 
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
@@ -217,7 +221,7 @@
                                                     </span>
                                                 <?php else : ?>
                                                     <span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
-                                                        ditolak
+                                                        Ditolak
                                                     </span>
                                                 <?php endif ?>
                                             </td>
@@ -232,7 +236,7 @@
                                 </table>
                             </div>
                         <?php endif; ?>
-                        <nav aria-label="Page navigation example">
+                        <nav aria-label="Page navigation example" id="pagination-nav">
                             <ul class="flex items-center -space-x-px h-8 text-sm">
                                 <li>
                                     <?php if ($data['halamanAktif'] > 1) : ?>
@@ -308,8 +312,7 @@
 <script>
     function viewLetter(id) {
         // Implementation for viewing letter
-        document.getElementById('letterModal').classList.remove('hidden');
-        document.getElementById('letterModal').classList.add('flex');
+        $('#letterModal').removeClass('hidden').addClass('flex');
 
         $.ajax({
             url: '<?= BASEURL ?>/letter/getLetter',
@@ -319,10 +322,10 @@
             success: function (data) {
                 console.log(data);
                 // Implementation for viewing letter
-                const letterContent = document.getElementById('letterContent');
-                letterContent.innerHTML = `
-                        <iframe src="${data}" width="100%" height="500px"></iframe>
-                    `;
+                const $letterContent = $('#letterContent');
+                $letterContent.html(`
+                <iframe src="${data}" width="100%" height="500px"></iframe>
+            `);
             },
             error: function (data) {
                 alert('Gagal');
@@ -331,11 +334,164 @@
     }
 
     function closeLetterModal() {
-        document.getElementById('letterModal').classList.add('hidden');
-        document.getElementById('letterModal').classList.remove('flex');
+        $('#letterModal').addClass('hidden').removeClass('flex');
     }
 
-    // Animation observer
+    function filter(status, currentPage = 1) {
+        $.ajax({
+            url: '<?= BASEURL ?>/letter/filter',
+            method: 'POST',
+            dataType: 'json',
+            data: {status: status, halamanAktif: currentPage},
+            success: function (data) {
+                // console.log('Success Response:', data);
+                const $letterContainer = $(".letter-card table tbody");
+                const $navElement = $('nav[aria-label="Page navigation example"]');
+                const tableHeader = `
+                <thead>
+                    <tr class="text-left text-sm font-medium text-gray-500">
+                        <th class="pb-4">Jenis Dokumen</th>
+                        <th class="pb-4">Tanggal</th>
+                        <th class="pb-4">Status</th>
+                        <th class="pb-4">Aksi</th>
+                    </tr>
+                </thead>
+            `;
+
+                // Clear existing rows and add table header
+                $letterContainer.empty();
+                $navElement.empty();
+
+                // Populate table rows with data
+                data.letters.forEach(letter => {
+                    let statusBadge = '';
+
+                    if (letter.status == 1) {
+                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
+                    } else if (letter.status == 2) {
+                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
+                    } else {
+                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
+                    }
+
+                    const row = `
+                    <tr class="border-t border-gray-100">
+                        <td class="py-4">${letter.title}</td>
+                        <td class="py-4">${letter.date}</td>
+                        <td class="py-4">${statusBadge}</td>
+                        <td class="py-4">
+                            <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                        </td>
+                    </tr>
+                `;
+                    $letterContainer.append(row);
+                });
+
+                // Generate pagination
+                if ($navElement.length) {
+                    generatePagination($navElement[0], data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error Status:', status);
+                console.error('Error Details:', error);
+                console.error('Response Text:', xhr.responseText);
+                // alert('Gagal');
+            }
+        });
+    }
+
+    function generatePagination(navElement, currentPage, totalPages, status) {
+        const $ul = $('<ul>', {class: 'flex items-center -space-x-px h-8 text-sm'});
+
+        // Previous button
+        if (currentPage > 1) {
+            const $prevLi = $(`
+            <li>
+                <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
+                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                    <span class="sr-only">Previous</span>
+                    <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                    </svg>
+                </a>
+            </li>
+        `);
+            $ul.append($prevLi);
+        }
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
+            const $pageLi = $(`
+            <li>
+                <a href="javascript:void(0)" onclick="filter(${status}, ${i})"
+                    class="flex items-center justify-center px-3 h-8 leading-tight ${activeClass} border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    ${i}
+                </a>
+            </li>
+        `);
+            $ul.append($pageLi);
+        }
+
+        // Next button
+        if (currentPage < totalPages) {
+            const $nextLi = $(`
+            <li>
+                <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                    <span class="sr-only">Next</span>
+                    <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                </a>
+            </li>
+        `);
+            $ul.append($nextLi);
+        }
+
+        $(navElement).append($ul);
+    }
+
+    function showAlert(message, type = 'success') {
+        const alertElement = $('#alertMessage');
+        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+        const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
+        const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
+
+        const alertHtml = `
+        <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
+            <div class="flex-shrink-0 ${iconColor}">
+                ${type === 'success'
+            ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+            : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+        }
+            </div>
+            <div class="ml-3 ${textColor} font-medium">${message}</div>
+            <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    `;
+
+        alertElement.html(alertHtml)
+            .removeClass('hidden')
+            .css('transform', 'translateY(0)');
+
+        setTimeout(closeAlert, 5000);
+    }
+
+    function closeAlert() {
+        $('#alertMessage').css('transform', 'translateY(-100%)');
+        setTimeout(() => $('#alertMessage').addClass('hidden'), 300);
+    }
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -350,192 +506,130 @@
         observer.observe(el);
     });
 
-    function filter(status, currentPage = 1) {
-        $.ajax({
-            url: '<?= BASEURL ?>/letter/filter',
-            method: 'POST',
-            dataType: 'json',
-            data: {status: status, halamanAktif: currentPage},
-            success: function (data) {
-                // console.log('Success Response:', data);
-                const letterContainer = document.querySelector(".letter-card table tbody");
-                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-                const tableHeader = `
-                        <thead>
-                            <tr class="text-left text-sm font-medium text-gray-500">
-                                <th class="pb-4">Jenis Dokumen</th>
-                                <th class="pb-4">Tanggal</th>
-                                <th class="pb-4">Status</th>
-                                <th class="pb-4">Aksi</th>
-                            </tr>
-                        </thead>
+    // Define the search function using jQuery
+    function searchLetters(keyword, page = 1) {
+        let paginationNav = $('#pagination-nav');
+        const letterContainer = $(".letter-card table tbody");
+        let debounceTimeout;
+
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(function () {
+            $.ajax({
+                    url: '<?= BASEURL ?>/letter/searchUser',
+                    method: 'POST',
+                    data: {keyword: keyword, page: page},
+                    dataType: 'json',
+                    success: function (data) {
+                        letterContainer.empty();
+                        paginationNav.empty();
+
+                        // Check if there is no data
+                        if (data.results.length === 0) {
+                            letterContainer.append(`
+                        <tr>
+                            <td colspan="4" class="py-4 text-center text-gray-500">Surat tidak ditemukan</td>
+                        </tr>
+                    `);
+                            return;
+                        }
+
+                        // Populate table rows with data
+                        data.results.forEach(letter => {
+                            let statusBadge = '';
+
+                            if (letter.status == 1) {
+                                statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
+                            } else if (letter.status == 2) {
+                                statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
+                            } else {
+                                statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
+                            }
+
+                            const row = `
+                        <tr class="border-t border-gray-100">
+                            <td class="py-4">${letter.title}</td>
+                            <td class="py-4">${letter.date}</td>
+                            <td class="py-4">${statusBadge}</td>
+                            <td class="py-4">
+                                <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                            </td>
+                        </tr>
                     `;
+                            letterContainer.append(row);
+                        });
 
-                // Clear existing rows and add table header
-                letterContainer.innerHTML = '';
-                navElement.innerHTML = '';
+                        // Add pagination
+                        if (data.totalPages > 1) {
+                            let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
 
-                // Populate table rows with data
-                data.letters.forEach(letter => {
-                    console.log(letter.status);
+                            if (data.currentPage > 1) {
+                                paginationHTML += `
+                            <li>
+                                <a href="#" data-page="${data.currentPage - 1}"
+                                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                                    <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                                    </svg>
+                                </a>
+                            </li>`;
+                            }
 
-                    let statusBadge = '';
+                            for (let i = 1; i <= data.totalPages; i++) {
+                                const isActive = i === data.currentPage ? 'z-10 bg-red-50 border-red-300 text-red-600' : 'bg-white text-gray-500';
+                                const pageButton = `
+                                <li>
+                                    <a href="#" data-page="${i}"
+                                       class="flex items-center justify-center px-3 h-8 leading-tight ${i === data.currentPage ? 'text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">
+                                        ${i}
+                                    </a>
+                                </li>`;
+                            }
 
-                    if (letter.status == 1) {
-                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-                    } else if (letter.status == 2) {
-                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
-                    } else {
-                        statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
+                            if (data.currentPage < data.totalPages) {
+                                paginationHTML += `
+                            <li>
+                                <a href="#" data-page="${data.currentPage + 1}"
+                                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                                    <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                                    </svg>
+                                </a>
+                            </li>`;
+                            }
+
+                            paginationHTML += `</ul>`;
+                            paginationNav.html(paginationHTML);
+
+                            paginationNav.find('a').on('click', function (e) {
+                                e.preventDefault();
+                                let selectedPage = $(this).data('page');
+                                loadSearchResults(keyword, selectedPage);
+                        }
                     }
+                },
+                error
+        :
 
-                    // console.log(statusBadge);
-                    const row = `
-                            <tr class="border-t border-gray-100">
-                                <td class="py-4">${letter.title}</td>
-                                <td class="py-4">${letter.date}</td>
-                                <td class="py-4">${statusBadge}</td>
-                                <td class="py-4">
-                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                                </td>
-                            </tr>
-                        `;
-                    letterContainer.innerHTML += row;
-                });
-
-                if (navElement) {
-                    generatePagination(navElement, data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error Status:', status);
-                console.error('Error Details:', error);
-                console.error('Response Text:', xhr.responseText);
-                // alert('Gagal');
+            function () {
+                console.log('Error terjadi dalam request');
             }
         });
     }
 
-    function generatePagination(navElement, currentPage, totalPages, status) {
-        const ul = document.createElement('ul');
-        ul.className = 'flex items-center -space-x-px h-8 text-sm';
-
-        // Previous button
-        if (currentPage > 1) {
-            const prevLi = `
-                <li>
-                    <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
-                        class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
-                        <span class="sr-only">Previous</span>
-                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                        </svg>
-                    </a>
-                </li>
-            `;
-            ul.innerHTML += prevLi;
-        }
-
-        // Page numbers
-        for (let i = 1; i <= totalPages; i++) {
-            const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
-            const pageLi = `
-                <li>
-                    <a href="javascript:void(0)" onclick="filter(${status}, ${i})"
-                        class="flex items-center justify-center px-3 h-8 leading-tight ${activeClass} border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                        ${i}
-                    </a>
-                </li>
-            `;
-            ul.innerHTML += pageLi;
-        }
-
-        // Next button
-        if (currentPage < totalPages) {
-            const nextLi = `
-                <li>
-                    <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
-                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
-                        <span class="sr-only">Next</span>
-                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                        </svg>
-                    </a>
-                </li>
-            `;
-            ul.innerHTML += nextLi;
-        }
-
-        navElement.appendChild(ul);
+    ,
+    500
+    )
+    ;
     }
 
-    //live search ajax
-    const keyword = document.getElementById('keyword');
-    let debounceTimeout;
-
-    keyword.addEventListener('keyup', function () {
-        // console.log(keyword.value)
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(function () {
-            $.ajax({
-                url: '<?= BASEURL ?>/letter/search',
-                method: 'POST',
-                dataType: 'json',
-                data: {keyword: keyword.value},
-                success: function (data) {
-                    // console.log('Success Response:', data);
-                    const letterContainer = document.querySelector(".letter-card table tbody");
-                    const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-                    const tableHeader = `
-                        <thead>
-                            <tr class="text-left text-sm font-medium text-gray-500">
-                                <th class="pb-4">Jenis Dokumen</th>
-                                <th class="pb-4">Tanggal</th>
-                                <th class="pb-4">Status</th>
-                                <th class="pb-4">Aksi</th>
-                            </tr>
-                        </thead>
-                    `;
-
-                    // Clear existing rows and add table header
-                    letterContainer.innerHTML = '';
-                    navElement.innerHTML = '';
-
-                    // Populate table rows with data
-                    data.forEach(letter => {
-                        let statusBadge = '';
-
-                        if (letter.status == 1) {
-                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-                        } else if (letter.status == 2) {
-                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
-                        } else {
-                            statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
-                        }
-
-                        const row = `
-                            <tr class="border-t border-gray-100">
-                                <td class="py-4">${letter.title}</td>
-                                <td class="py-4">${letter.date}</td>
-                                <td class="py-4">${statusBadge}</td>
-                                <td class="py-4">
-                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                                </td>
-                            </tr>
-                        `;
-                        letterContainer.innerHTML += row;
-                    });
-                },
-                error: function () {
-                    console.log('Error terjadi dalam request');
-                }
-            });
-        }, 500);
+    // Attach event listener for pagination
+    $(document).on('click', 'nav[aria-label="Page navigation example"] a', function (e) {
+        e.preventDefault();
+        const page = $(this).data('page');
+        $('#currentPage').val(page);
+        searchLetters();
     });
+
 
     document.addEventListener('DOMContentLoaded', function () {
         const filterButtons = document.querySelectorAll('.filter-btn');
@@ -553,77 +647,6 @@
             });
         });
     });
-
-    function showAlert(message, type = 'success') {
-        const alertElement = document.getElementById('alertMessage');
-        const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-        const textColor = type === 'success' ? 'text-green-600' : 'text-red-600';
-        const iconColor = type === 'success' ? 'text-green-400' : 'text-red-400';
-
-        alertElement.innerHTML = `
-            <div class="max-w-md w-full ${bgColor} border-2 rounded-xl p-4 flex items-center shadow-lg">
-                <div class="flex-shrink-0 ${iconColor}">
-                    ${type === 'success'
-            ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-            : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-        }
-                </div>
-                <div class="ml-3 ${textColor} font-medium">${message}</div>
-                <button onclick="closeAlert()" class="ml-auto ${textColor} hover:${textColor}">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-        `;
-
-        alertElement.style.transform = 'translateY(0)';
-        alertElement.classList.remove('hidden');
-
-        // Auto hide after 5 seconds
-        setTimeout(closeAlert, 5000);
-    }
-
-    function closeAlert() {
-        const alertElement = document.getElementById('alertMessage');
-        alertElement.style.transform = 'translateY(-100%)';
-        setTimeout(() => alertElement.classList.add('hidden'), 300);
-    }
-
-    $(document).ready(function () {
-        $('#keyword').on('keyup', function () {
-            let keyword = $(this).val(); // Ambil nilai input
-            let resultContainer = $('#resultContainer'); // Elemen untuk menampilkan hasil
-
-            $.ajax({
-                url: '<?= BASEURL; ?>/letters/search',
-                type: 'POST',
-                data: {keyword: keyword},
-                dataType: 'json',
-                success: function (data) {
-                    // Kosongkan elemen hasil
-                    resultContainer.empty();
-
-                    if (data.length > 0) {
-                        $.each(data, function (index, letter) {
-                            resultContainer.append(`
-                            <div class="p-2 border-b border-gray-200">
-                                <h4 class="text-lg font-medium text-gray-800">${letter.title}</h4>
-                                <p class="text-sm text-gray-500">Tanggal: ${letter.date}</p>
-                            </div>
-                        `);
-                        });
-                    } else {
-                        resultContainer.html('<p class="text-gray-500">Surat tidak ditemukan.</p>');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        });
-    });
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

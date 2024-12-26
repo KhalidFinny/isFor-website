@@ -310,25 +310,22 @@
 <script>
     function previewFile(url) {
         if (!url) return;
-
-        // Cek ekstensi file untuk menentukan apakah file bisa langsung ditampilkan
         const fileExtensionsForDirectPreview = /\.(jpg|jpeg|png|gif|pdf)$/i;
 
         if (fileExtensionsForDirectPreview.test(url)) {
-            // Buka file di tab baru untuk preview
             window.open(url, '_blank');
         } else {
-            // Jika file tidak dapat di-preview langsung, berikan opsi untuk mendownload
             alert('Preview tidak tersedia untuk jenis file ini. File akan didownload.');
-            const downloadLink = document.createElement('a');
-            downloadLink.href = url;
-            downloadLink.download = '';
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+            const $downloadLink = $('<a>', {
+                href: url,
+                download: '',
+                css: {display: 'none'}
+            }).appendTo('body');
+
+            $downloadLink[0].click();
+            $downloadLink.remove();
         }
     }
-
 
     function closePreview() {
         const modal = document.getElementById('fileModal');
@@ -601,6 +598,5 @@
     });
 
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
