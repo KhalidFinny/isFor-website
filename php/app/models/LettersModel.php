@@ -183,12 +183,65 @@ class LettersModel
     }
 
 
-    public function searchLetters($keyword)
+    public function searchLetters($keyword, $itemsPerPage, $offset)
     {
-        $query = "EXEC sp_searchLetters @Keyword = :keyword";
-        $this->db->query($query);
-        $this->db->bind(':keyword', $keyword);
-        return $this->db->resultSet();
+        try {
+            $query = "SELECT * 
+                    FROM letters 
+                    WHERE (title LIKE ? OR [date] LIKE ?) 
+                    ORDER BY [date] DESC 
+                    OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+
+            $this->db->query($query);
+            $this->db->bind(1, '%' . $keyword . '%', PDO::PARAM_STR);
+            $this->db->bind(2, '%' . $keyword . '%', PDO::PARAM_STR);
+            $this->db->bind(3, $offset, PDO::PARAM_INT);
+            $this->db->bind(4, $itemsPerPage, PDO::PARAM_INT);
+
+            // Log query dan parameter
+            error_log("Query: $query");
+            error_log("Keyword: %$keyword%");
+
+            $results = $this->db->resultSet();
+            if (empty($results)) {
+                error_log('Tidak ada hasil ditemukan.');
+                return [];
+            }
+
+            return $results;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public function countSearchResults($keyword)
+    {
+        try {
+            $query = "SELECT COUNT(*) AS total
+                    FROM letters 
+                    WHERE (title LIKE ? OR [date] LIKE ?)";
+
+            $this->db->query($query);
+            $this->db->bind(1, '%' . $keyword . '%', PDO::PARAM_STR);
+            $this->db->bind(2, '%' . $keyword . '%', PDO::PARAM_STR);
+
+            // Log query dan parameter
+            error_log("Query: $query");
+            error_log("Keyword: %$keyword%");
+
+            $result = $this->db->single(); // Ambil hasil query sebagai array
+            $totalResults = isset($result['total']) ? (int)$result['total'] : 0;
+
+            // Log total hasil
+            error_log("Total results: $totalResults");
+
+            return $totalResults;
+        } catch (Exception $e) {
+            error_log("Error in countSearchResults: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function searchLettersByUserId($keyword, $user_id) {

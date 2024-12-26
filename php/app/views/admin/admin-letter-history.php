@@ -305,6 +305,7 @@
     <!-- Alert content will be injected here by showAlert() -->
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function viewLetter(id) {
         // Implementation for viewing letter
@@ -511,105 +512,181 @@
         observer.observe(el);
     });
 
-    $(document).ready(function () {
-        $('#keyword').on('keyup', function () {
-            let keyword = $(this).val(); // Ambil nilai input
-            let resultContainer = $('#resultContainer'); // Elemen untuk menampilkan hasil
+    // const keyword = document.getElementById('keyword');
+    // let debounceTimeout;
+    // keyword.addEventListener('keyup', function () {
+    //     // console.log(keyword.value)
+    //     clearTimeout(debounceTimeout);
+    //     debounceTimeout = setTimeout(function () {
+    //         $.ajax({
+    //             url: '<?= BASEURL ?>/letter/search',
+    //             method: 'POST',
+    //             dataType: 'json',
+    //             data: {keyword: keyword.value},
+    //             success: function (data) {
+    //                 // console.log('Success Response:', data);
+                    // const letterContainer = document.querySelector(".letter-card table tbody");
+                    // const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+                    // const tableHeader = `
+                    //     <thead>
+                    //         <tr class="text-left text-sm font-medium text-gray-500">
+                    //             <th class="pb-4">Jenis Dokumen</th>
+                    //             <th class="pb-4">Tanggal</th>
+                    //             <th class="pb-4">Status</th>
+                    //             <th class="pb-4">Aksi</th>
+                    //         </tr>
+                    //     </thead>
+                    // `;
 
-            $.ajax({
-                url: '<?= BASEURL; ?>/letters/search',
-                type: 'POST',
-                data: {keyword: keyword},
-                dataType: 'json',
-                success: function (data) {
-                    // Kosongkan elemen hasil
-                    resultContainer.empty();
+                    // // Clear existing rows and add table header
+                    // letterContainer.innerHTML = '';
+                    // navElement.innerHTML = '';
 
-                    if (data.length > 0) {
-                        $.each(data, function (index, letter) {
-                            resultContainer.append(`
-                            <div class="p-2 border-b border-gray-200">
-                                <h4 class="text-lg font-medium text-gray-800">${letter.title}</h4>
-                                <p class="text-sm text-gray-500">Tanggal: ${letter.date}</p>
-                            </div>
-                        `);
-                        });
-                    } else {
-                        resultContainer.html(`
-                        <div class="col-span-full text-center py-12">
-                            <h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3>
-                            <p class="text-red-600">Coba kata kunci lainnya.</p>
-                        </div>
-                    `);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        });
-    });
+    //                 // Populate table rows with data
+    //                 if(data.results.length > 0){
+    //                     $each(data.results, function (index, item) {
+    //                         letterContainer.append(`
+                            
+    //                         `);
+    //                     });
+    //                 }
 
-    const keyword = document.getElementById('keyword');
-    let debounceTimeout;
-    keyword.addEventListener('keyup', function () {
-        // console.log(keyword.value)
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(function () {
-            $.ajax({
-                url: '<?= BASEURL ?>/letter/search',
-                method: 'POST',
-                dataType: 'json',
-                data: {keyword: keyword.value},
-                success: function (data) {
-                    // console.log('Success Response:', data);
-                    const letterContainer = document.querySelector(".letter-card table tbody");
-                    const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-                    const tableHeader = `
-                        <thead>
-                            <tr class="text-left text-sm font-medium text-gray-500">
-                                <th class="pb-4">Jenis Dokumen</th>
-                                <th class="pb-4">Tanggal</th>
-                                <th class="pb-4">Status</th>
-                                <th class="pb-4">Aksi</th>
-                            </tr>
-                        </thead>
-                    `;
+    //                 // data.forEach(letter => {
+                        // let statusBadge = '';
 
-                    // Clear existing rows and add table header
-                    letterContainer.innerHTML = '';
-                    navElement.innerHTML = '';
+                        // if (letter.status == 1) {
+                        //     statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
+                        // } else if (letter.status == 2) {
+                        //     statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
+                        // } else {
+                        //     statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
+                        // }
 
-                    // Populate table rows with data
-                    data.forEach(letter => {
+                        // const row = `
+                        //     <tr class="border-t border-gray-100">
+                        //         <td class="py-4">${letter.title}</td>
+                        //         <td class="py-4">${letter.date}</td>
+                        //         <td class="py-4">${statusBadge}</td>
+                        //         <td class="py-4">
+                        //             <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                        //         </td>
+                        //     </tr>
+                        // `;
+    //                 //     letterContainer.innerHTML += row;
+    //                 // });
+    //             },
+    //             error: function () {
+    //                 console.log('Error terjadi dalam request');
+    //             }
+    //         });
+    //     }, 500);
+    // });
+
+    function loadSearchResults(keyword, page = 1) {
+        let letterContainer = document.querySelector(".letter-card table tbody");
+        let navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+
+        $.ajax({
+            url: '<?= BASEURL; ?>/letter/search',
+            type: 'POST',
+            data: {keyword: keyword, page: page},
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                letterContainer.innerHTML = ''; // Clear table
+                navElement.innerHTML = ''; // Clear pagination
+
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(item => {
                         let statusBadge = '';
-
-                        if (letter.status == 1) {
+                        if (item.status == 1) {
                             statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-                        } else if (letter.status == 2) {
+                        } else if (item.status == 2) {
                             statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
                         } else {
                             statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
                         }
 
-                        const row = `
+                        letterContainer.innerHTML += `
                             <tr class="border-t border-gray-100">
-                                <td class="py-4">${letter.title}</td>
-                                <td class="py-4">${letter.date}</td>
+                                <td class="py-4">${item.title}</td>
+                                <td class="py-4">${item.date}</td>
                                 <td class="py-4">${statusBadge}</td>
                                 <td class="py-4">
-                                    <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                                </td>
+                                    <button onclick="viewLetter(${item.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                                </td >
                             </tr>
                         `;
-                        letterContainer.innerHTML += row;
                     });
-                },
-                error: function () {
-                    console.log('Error terjadi dalam request');
+                } else {
+                    letterContainer.innerHTML = `<tr><td colspan="4" class="text-center">Hasil tidak ditemukan</td></tr>`;
                 }
-            });
-        }, 500);
+
+                // Tampilkan pagination berdasarkan total halaman
+                if (data.totalPages > 1) {
+                    let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
+
+                    // Tombol Previous
+                    if (data.currentPage > 1) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${data.currentPage - 1}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
+                    }
+
+                    // Halaman
+                    for (let i = 1; i <= data.totalPages; i++) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${i}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight ${i === data.currentPage ? 'text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">
+                            ${i}
+                        </a>
+                    </li>`;
+                    }
+
+                    // Tombol Next
+                    if (data.currentPage < data.totalPages) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${data.currentPage + 1}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-s-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4-4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
+                    }
+
+                    paginationHTML += `</ul>`;
+                    navElement.innerHTML = paginationHTML;
+
+                    navElement.addEventListener('click', function (e) {
+                        if (e.target.tagName === 'A') {
+                            e.preventDefault();
+                            const selectedPage = e.target.dataset.page;
+                            loadSearchResults(keyword, selectedPage);
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                console.error('Response Text:', xhr.responseText);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#keyword').on('keyup', function () {
+            const keyword = $(this).val();
+            loadSearchResults(keyword);
+        });
     });
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -630,6 +707,5 @@
     });
 
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
