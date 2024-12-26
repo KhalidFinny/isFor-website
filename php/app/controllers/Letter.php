@@ -293,6 +293,43 @@ class Letter extends Controller
         ]);
     }
 
+    public function search()
+    {
+        if (isset($_POST['keyword'])) {
+            $keyword = $_POST['keyword'];
+            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+            $itemsPerPage = 6;
+            $offset = ($page - 1) * $itemsPerPage;
+
+            $lettersModel = $this->model('LettersModel');
+
+            try {
+                $results = $lettersModel->searchLetters($keyword, $itemsPerPage, $offset);
+                $totalResults = $lettersModel->countSearchResults($keyword);
+                $totalPages = ceil($totalResults / $itemsPerPage);
+
+                header('Content-Type: application/json');
+                http_response_code(200); // Success
+                echo json_encode([
+                    'results' => $results,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $page,
+                ]);
+            } catch (Exception $e) {
+                error_log("Error in search function: " . $e->getMessage());
+                error_log("Trace: " . $e->getTraceAsString());
+
+                header('Content-Type: application/json');
+                http_response_code(500); // Server error
+                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
+            }
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(400); // Bad request
+            echo json_encode(['error' => 'Parameter tidak lengkap.']);
+        }
+    }
+
     public function letterHistoryView()
     {
         $this->checkLogin();
@@ -314,34 +351,6 @@ class Letter extends Controller
             $this->view('user/letter-history', $data);
         } else {
             header('Location: ' . $this->getLastVisitedPage());
-        }
-    }
-
-    public function search()
-    {
-        if (isset($_POST['keyword']) && isset($_POST['page'])) {
-            $keyword = $_POST['keyword'];
-            $currentPage = (int)$_POST['page'];
-            $perPage = 6;
-            $offset = ($currentPage - 1) * $perPage;
-
-            $lettersModel = $this->model('LettersModel');
-
-            try {
-                $results = $lettersModel->searchLetters($keyword, $offset, $perPage);
-                $totalRecords = $lettersModel->countSearchResults($keyword);
-                $totalPages = ceil($totalRecords / $perPage);
-
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'results' => $results,
-                    'totalPages' => $totalPages,
-                    'currentPage' => $currentPage
-                ]);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
-            }
         }
     }
 

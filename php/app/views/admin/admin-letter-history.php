@@ -233,7 +233,7 @@
                                 </table>
                             </div>
                         <?php endif; ?>
-                        <nav aria-label="Page navigation example" id="pagination-nav">
+                        <nav aria-label="Page navigation example">
                             <ul class="flex items-center -space-x-px h-8 text-sm">
                                 <li>
                                     <?php if ($data['halamanAktif'] > 1) : ?>
@@ -306,6 +306,7 @@
     <!-- Alert content will be injected here by showAlert() -->
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function viewLetter(id) {
         // Implementation for viewing letter
@@ -405,12 +406,12 @@
     }
 
     function generatePagination(navElement, currentPage, totalPages, status) {
-    const ul = document.createElement('ul');
-    ul.className = 'flex items-center -space-x-px h-8 text-sm';
+        const ul = document.createElement('ul');
+        ul.className = 'flex items-center -space-x-px h-8 text-sm';
 
-    // Previous button
-    if (currentPage > 1) {
-        const prevLi = `
+        // Previous button
+        if (currentPage > 1) {
+            const prevLi = `
             <li>
                 <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
                     class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
@@ -423,13 +424,13 @@
                 </a>
             </li>
         `;
-        ul.innerHTML += prevLi;
-    }
+            ul.innerHTML += prevLi;
+        }
 
-    // Page numbers
-    for (let i = 1; i <= totalPages; i++) {
-        const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
-        const pageLi = `
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
+            const pageLi = `
             <li>
                 <a href="javascript:void(0)" onclick="filter(${status}, ${i})"
                     class="flex items-center justify-center px-3 h-8 leading-tight ${activeClass} border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
@@ -437,12 +438,12 @@
                 </a>
             </li>
         `;
-        ul.innerHTML += pageLi;
-    }
+            ul.innerHTML += pageLi;
+        }
 
-    // Next button
-    if (currentPage < totalPages) {
-        const nextLi = `
+        // Next button
+        if (currentPage < totalPages) {
+            const nextLi = `
             <li>
                 <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
                     class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
@@ -455,11 +456,11 @@
                 </a>
             </li>
         `;
-        ul.innerHTML += nextLi;
-    }
+            ul.innerHTML += nextLi;
+        }
 
-    navElement.appendChild(ul);
-}
+        navElement.appendChild(ul);
+    }
 
     function showAlert(message, type = 'success') {
         const alertElement = document.getElementById('alertMessage');
@@ -512,111 +513,111 @@
         observer.observe(el);
     });
 
-    // Define the search function using jQuery
-    function searchLetters(keyword, page = 1) {
-        const paginationNav = $('#pagination-nav');
-        const letterContainer = $(".letter-card table tbody");
-        let debounceTimeout;
+    function loadSearchResults(keyword, page = 1) {
+        let letterContainer = document.querySelector(".letter-card table tbody");
+        let navElement = document.querySelector('nav[aria-label="Page navigation example"]');
 
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(() => {
-            $.ajax({
-                url: '<?= BASEURL ?>/letter/search',
-                method: 'POST',
-                data: {keyword: keyword, page: page},
-                dataType: 'json',
-                success: function (data) {
-                    console.log("Total Pages:", data.totalPages);
-                    console.log("Current Page:", data.currentPage);
+        $.ajax({
+            url: '<?= BASEURL; ?>/letter/search',
+            type: 'POST',
+            data: {keyword: keyword, page: page},
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                letterContainer.innerHTML = ''; // Clear table
+                navElement.innerHTML = ''; // Clear pagination
 
-                    letterContainer.empty();
-                    paginationNav.empty();
-
-                    // Check if there is no data
-                    if (data.results.length === 0) {
-                        letterContainer.append(`
-                        <tr>
-                            <td colspan="4" class="py-4 text-center text-gray-500">Surat tidak ditemukan</td>
-                        </tr>
-                    `);
-                        return;
-                    }
-
-                    // Populate table rows with data
-                    data.results.forEach(letter => {
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(item => {
                         let statusBadge = '';
-
-                        if (letter.status == 1) {
+                        if (item.status == 1) {
                             statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
-                        } else if (letter.status == 2) {
+                        } else if (item.status == 2) {
                             statusBadge = '<span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Disetujui</span>';
                         } else {
                             statusBadge = '<span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Ditolak</span>';
                         }
 
-                        const row = `
-                        <tr class="border-t border-gray-100">
-                            <td class="py-4">${letter.title}</td>
-                            <td class="py-4">${letter.date}</td>
-                            <td class="py-4">${statusBadge}</td>
-                            <td class="py-4">
-                                <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
-                            </td>
-                        </tr>
-                    `;
-                        letterContainer.append(row);
+                        letterContainer.innerHTML += `
+                            <tr class="border-t border-gray-100">
+                                <td class="py-4">${item.title}</td>
+                                <td class="py-4">${item.date}</td>
+                                <td class="py-4">${statusBadge}</td>
+                                <td class="py-4">
+                                    <button onclick="viewLetter(${item.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
+                                </td >
+                            </tr>
+                        `;
                     });
-
-                    if (data.totalPages > 1) {
-                        console.log('Rendering pagination:', data.totalPages, data.currentPage);
-                        let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
-
-                        // Previous button
-                        if (data.currentPage > 1) {
-                            paginationHTML += `
-        <li>
-            <a href="#" data-page="${data.currentPage - 1}" class="pagination-link">
-                Previous
-            </a>
-        </li>`;
-                        }
-
-                        // Page numbers
-                        for (let i = 1; i <= data.totalPages; i++) {
-                            const isActive = i === data.currentPage ? 'active-class' : '';
-                            paginationHTML += `
-        <li>
-            <a href="#" data-page="${i}" class="${isActive} pagination-link">
-                ${i}
-            </a>
-        </li>`;
-                        }
-
-                        // Next button
-                        if (data.currentPage < data.totalPages) {
-                            paginationHTML += `
-        <li>
-            <a href="#" data-page="${data.currentPage + 1}" class="pagination-link">
-                Next
-            </a>
-        </li>`;
-                        }
-
-                        paginationHTML += `</ul>`;
-                        $('#pagination-nav').html(paginationHTML);
-                    }
-                },
-                error: function () {
-                    console.log('Error terjadi dalam request');
+                } else {
+                    letterContainer.innerHTML = `<tr><td colspan="4" class="text-center">Hasil tidak ditemukan</td></tr>`;
                 }
-            });
-        }, 500);
+
+                // Tampilkan pagination berdasarkan total halaman
+                if (data.totalPages > 1) {
+                    let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
+
+                    // Tombol Previous
+                    if (data.currentPage > 1) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${data.currentPage - 1}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
+                    }
+
+                    // Halaman
+                    for (let i = 1; i <= data.totalPages; i++) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${i}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight ${i === data.currentPage ? 'text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">
+                            ${i}
+                        </a>
+                    </li>`;
+                    }
+
+                    // Tombol Next
+                    if (data.currentPage < data.totalPages) {
+                        paginationHTML += `
+                    <li>
+                        <a href="#" data-page="${data.currentPage + 1}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-s-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4-4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
+                    }
+
+                    paginationHTML += `</ul>`;
+                    navElement.innerHTML = paginationHTML;
+
+                    navElement.addEventListener('click', function (e) {
+                        if (e.target.tagName === 'A') {
+                            e.preventDefault();
+                            const selectedPage = e.target.dataset.page;
+                            loadSearchResults(keyword, selectedPage);
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                console.error('Response Text:', xhr.responseText);
+            }
+        });
     }
 
-    // Attach event listener for the search input
-    $('#keyword').on('keyup', function () {
-        const keyword = $(this).val();
-        searchLetters(keyword);
+    $(document).ready(function () {
+        $('#keyword').on('keyup', function () {
+            const keyword = $(this).val();
+            loadSearchResults(keyword);
+        });
     });
 
     document.addEventListener('DOMContentLoaded', function () {
