@@ -70,6 +70,8 @@
     };
 
     $(document).ready(renderPengelola);
+
+
 </script>
 </body>
 </html>

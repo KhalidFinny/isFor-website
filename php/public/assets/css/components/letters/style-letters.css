@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.header{
+    padding-top: 96px;
+    padding-left: 96px;
+    padding-right: 96px;
+
+}
+
+.header td{
+    border-bottom: 2px black double;
+}
+
+.keterangan{
+    padding-top: 30px;
+    padding-left: 96px;
+    padding-right: 96px;
+
+}
+
+.pernyataan{
+    padding-top: 30px;
+    padding-left: 96px;
+    padding-right: 96px;
+}
+
+.penutup{
+    padding-top: 30px;
+    padding-left: 96px;
+    padding-right: 96px;
+}
+
+.signature{
+    padding-top: 30px;
+    padding-left: 96px;
+    padding-right: 96px;
+    float: right;
+}

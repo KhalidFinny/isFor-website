@@ -10,7 +10,6 @@ class GalleryModel
         $this->db = new Database;
     }
 
-    // Create a new gallery entry
     public function create($image, $category, $title, $uploaded_by, $description)
     {
         $this->db->query('EXEC sp_CreateGallery :image, :category, :title, :uploaded_by, :description');
@@ -19,7 +18,6 @@ class GalleryModel
         $this->db->bind(':title', $title);
         $this->db->bind(':uploaded_by', $uploaded_by);
         $this->db->bind(':description', $description);
-
         try {
             $this->db->execute();
             return true;
@@ -28,14 +26,12 @@ class GalleryModel
         }
     }
 
-    // Read all gallery entries
     public function getAll()
     {
         $this->db->query('EXEC sp_GetAllGalleries');
         return $this->db->resultSet();
     }
 
-    // Read a specific gallery entry by ID
     public function getImageById($id)
     {
         $this->db->query('EXEC sp_GetGalleryById :id');
@@ -68,6 +64,23 @@ class GalleryModel
         return $this->db->resultSet();
     }
 
+    public function getGalleriesWithPagination($limit, $offset)
+    {
+        $query = "EXEC sp_GetGalleriesWithPagination @Limit = :limit, @Offset = :offset";
+        $this->db->query($query);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalGalleries()
+    {
+        $query = "EXEC sp_GetTotalGalleries";
+        $this->db->query($query);
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
     public function delete($id)
     {
         $queryGetImage = "SELECT image FROM " . $this->table . " WHERE gallery_id = :id";
@@ -97,23 +110,6 @@ class GalleryModel
             'dbDeleteSuccess' => $this->db->rowCount() > 0,
             'unlinkSuccess' => $unlinkSuccess,
         ];
-    }
-
-    public function getGalleriesWithPagination($limit, $offset)
-    {
-        $query = "EXEC sp_GetGalleriesWithPagination @Limit = :limit, @Offset = :offset";
-        $this->db->query($query);
-        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
-        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
-        return $this->db->resultSet();
-    }
-
-    public function getTotalGalleries()
-    {
-        $query = "EXEC sp_GetTotalGalleries";
-        $this->db->query($query);
-        $result = $this->db->single();
-        return $result ? (int)$result['total'] : 0;
     }
 
     public function getGaleryDIPASWA()

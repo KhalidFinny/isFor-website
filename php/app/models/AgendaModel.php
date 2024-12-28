@@ -24,7 +24,6 @@ class AgendaModel{
         $this->db->bind(':title', $data['title']);
         $this->db->bind(':description', $data['description']);
         $this->db->execute();
-
         return $this->db->rowCount();
     }
 
@@ -34,7 +33,6 @@ class AgendaModel{
         $this->db->bind(':title', $data['title']);
         $this->db->bind(':description', $data['description']);
         $this->db->execute();
-
         return $this->db->rowCount();
     }
 
@@ -42,7 +40,6 @@ class AgendaModel{
         $this->db->query('EXEC sp_DeleteAgenda :id');
         $this->db->bind(':id', $id);
         $this->db->execute();
-
         return $this->db->rowCount();
     }
 }

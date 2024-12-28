@@ -99,11 +99,9 @@ class Letter extends Controller
         $dompdf->add_info("Title", $title);
 
         if ($preview) {
-            // Stream untuk preview di browser
             $dompdf->stream($title);
-            exit; // Stop eksekusi setelah stream
+            exit;
         } else {
-            // Kembalikan konten PDF untuk keperluan lain
             return $dompdf->output();
         }
         $dompdf->stream($title);

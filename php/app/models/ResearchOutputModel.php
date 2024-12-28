@@ -174,12 +174,6 @@ class ResearchOutputModel
         return $result ? (int)$result['total'] : 0;
     }
 
-//    public function delete($id)
-//    {
-//        $this->db->query('EXEC sp_DeleteResearchOutput :id');
-//        $this->db->bind(':id', $id);
-//        return $this->db->execute();
-//    }
     public function delete($id)
     {
         // Query untuk mendapatkan file URL
@@ -242,7 +236,7 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
-        public function getResearchDIPAPNBP()
+    public function getResearchDIPAPNBP()
     {
         $this->db->query("EXEC sp_getResearchDIPAPNBP");
         return $this->db->resultSet();
@@ -337,7 +331,8 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
-    public function getNameById($userId) {
+    public function getNameById($userId)
+    {
         $query = "SELECT name FROM users WHERE user_id = :user_id";
         $this->db->query($query);
         $this->db->bind(':user_id', $userId, PDO::PARAM_INT);

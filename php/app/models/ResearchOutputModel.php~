@@ -437,6 +437,14 @@ class ResearchOutputModel
         return $this->db->resultSet();
     }
 
+    public function countUserSearchResults($keyword, $userId)
+    {
+        $query = "EXEC sp_countSearchFilesUser @Keyword = :keyword, @UserId = :userId";
+        $this->db->query($query);
+        $this->db->bind(':keyword', $keyword);
+        $this->db->bind(':userId', $userId);
+        return $this->db->single()['total'];
+    }
 
 }
 
