@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 ?>
 <!DOCTYPE html>
@@ -16,10 +16,10 @@ session_start();
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <?php if (!isset($_SESSION['user_id'])) : ?>
-    <?php include_once '../app/views/assets/components/navbar.php'; ?>
-<?php else : ?>
-    <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
-<?php endif; ?>
+        <?php include_once '../app/views/assets/components/navbar.php'; ?>
+    <?php else : ?>
+        <?php include_once '../app/views/assets/components/navbarafterlogin.php'; ?>
+    <?php endif; ?>
 <section class="min-h-screen py-20 relative overflow-hidden bg-white">
     <div class="container mx-auto px-6 max-w-4xl">
         <!-- Header -->
@@ -36,8 +36,59 @@ session_start();
         <!-- Agenda Items -->
         <div class="space-y-8">
             <?php
-            if (empty($data['agenda'])) {
-                echo '<div class="text-center text-gray-600 py-8">Belum ada agenda saat ini.</div>';
+            $agendaTopics = [
+                [
+                    "number" => "01",
+                    "title" => "Artificial Intelligence & Machine Learning",
+                    "description" => "Pengembangan sistem cerdas dan pembelajaran mesin untuk solusi inovatif"
+                ],
+                [
+                    "number" => "02",
+                    "title" => "Internet of Things (IoT)",
+                    "description" => "Implementasi teknologi IoT untuk smart city dan industri 4.0"
+                ],
+                [
+                    "number" => "03",
+                    "title" => "Cybersecurity",
+                    "description" => "Penelitian keamanan siber dan perlindungan infrastruktur digital"
+                ],
+                [
+                    "number" => "04",
+                    "title" => "Big Data Analytics",
+                    "description" => "Analisis data skala besar untuk pengambilan keputusan"
+                ],
+                [
+                    "number" => "05",
+                    "title" => "Cloud Computing",
+                    "description" => "Pengembangan infrastruktur dan layanan berbasis cloud"
+                ],
+                [
+                    "number" => "06",
+                    "title" => "Software Engineering",
+                    "description" => "Metodologi dan praktik terbaik dalam pengembangan perangkat lunak"
+                ]
+            ];
+
+            if(empty($data['agenda'])){
+                foreach ($agendaTopics as $topic){
+                    ?>
+                    <div class="agenda-item group">
+                        <div class="flex items-start space-x-8 p-8 border-2 border-gray-100 hover:border-red-200 transition-all duration-300">
+                            <div class="number-label text-6xl font-bold leading-none">
+                                <?php echo $topic['number']; ?>
+                            </div>
+                            <div class="flex-1 pt-2">
+                                <h3 class="text-2xl font-bold text-red-900 mb-3 group-hover:text-red-600 transition-colors duration-300">
+                                    <?php echo $topic['title']; ?>
+                                </h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    <?php echo $topic['description']; ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
             } else {
                 foreach ($data['agenda'] as $topic):
                     ?>
