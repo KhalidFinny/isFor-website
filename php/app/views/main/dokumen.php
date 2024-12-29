@@ -230,7 +230,7 @@ session_start();
         </div>
     </div>
 </section>
-<script src="<?= FILE; ?>/main/document.js">
+<script src="<?= JS; ?>/main/document.js">
 </script>
 </body>
 </html>
