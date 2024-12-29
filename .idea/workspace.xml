@@ -5,30 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/php/public/assets/css/components/landing-pages/pengelola.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php/public/assets/css/components/letters/style-letters.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php/public/test.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/controllers/Letter.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/Letter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6763a42a8ba88_admin.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/files/6766d22219b30_WhatsApp Image 2024-12-21 at 11.40.24_0dfef059.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_testing.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/letters/pending/surat_pengajuan_testing.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/AgendaModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/AgendaModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/GalleryModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/GalleryModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/models/ResearchOutputModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/Doc/styleSurat.html" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/Doc/styleSurat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/components/LandingPage/pengelola.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/assets/components/LandingPage/pengelola.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/Indrazno.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/Logo1.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/Organisasi.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/PakErfan.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/ahmadi.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/coding-image.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/imam.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/rakhmatarianto.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/rudy.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/assets/images/usmannurhasan.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/public/log_script.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/admin/manage-roadmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/admin/manage-roadmap.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/assets/css/admin/manage-roadmap.css" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/css/admin/manage-roadmap.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/test.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,6 +139,8 @@
       <workItem from="1734771370789" duration="6448000" />
       <workItem from="1734839981192" duration="84201000" />
       <workItem from="1735356583860" duration="304000" />
+      <workItem from="1735357231242" duration="672000" />
+      <workItem from="1735478947730" duration="3426000" />
     </task>
     <servers />
   </component>
