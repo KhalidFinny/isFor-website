@@ -14,6 +14,15 @@
     <?php include '../app/views/assets/components/UserDashboard/sidebar.php';?>
     <div class="flex-1 min-h-screen ml-64 bg-white">
         <main class="py-10 px-8">
+        <div class="max-w-7xl mx-auto mb-12">
+                <a href="<?= BASEURL ?>/dashboardAdmin"
+                   class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    <span>Kembali</span>
+                </a>
+            </div>
             <!-- Swiss-inspired Header -->
             <div class="max-w-7xl mx-auto mb-12 fade-in">
                 <div class="flex items-center space-x-4 mb-4">

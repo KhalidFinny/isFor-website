@@ -17,13 +17,22 @@
     <div class="flex-1 min-h-screen ml-64">
         <main class="py-10 px-8">
             <div class="max-w-7xl mx-auto">
-                <!-- Header Section -->
-                <div class="mb-8 fade-in">
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-600 bg-clip-text text-transparent">
-                        Riwayat Surat
-                    </h1>
-                    <p class="mt-2 text-red-600">Kelola dan pantau status pengajuan surat Anda</p>
+            <a href="<?= BASEURL ?>/dashboardAdmin"
+                   class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    <span>Kembali</span>
+                </a>
+            </div>
+                 <!-- Swiss-inspired Header -->
+            <div class="max-w-7xl mx-auto mb-12 fade-in">
+                <div class="flex items-center space-x-4 mb-4">
+                    <span class="h-px w-12 bg-red-600"></span>
+                    <span class="text-red-600 font-medium">Riwayat</span>
                 </div>
+                <h1 class="text-5xl font-bold text-red-900 mb-2">Riwayat File</h1>
+            </div>
 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
