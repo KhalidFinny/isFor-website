@@ -271,8 +271,7 @@
                 <a href="<?= BASEURL ?>/dashboardAdmin"
                    class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
                     <span>Kembali</span>
                 </a>
@@ -297,15 +296,13 @@
 
             <!-- Roadmap Grid -->
             <div class="grid gap-8" id="roadmapContent">
-                <!-- Will be populated by JavaScript -->
                 <?php if (!empty($data['roadmaps'])): ?>
                     <?php foreach ($data['roadmaps'] as $periode => $categories): ?>
                         <div class="bg-white rounded-2xl border-2 border-red-100 overflow-hidden fade-in mb-8">
                             <div class="p-6 border-b border-red-100 flex justify-between items-center">
                                 <h2 class="text-xl font-semibold text-red-800">Periode <?= $periode ?></h2>
                                 <div class="flex space-x-2">
-                                    <button onclick="editRoadmap('<?= $periode ?>')"
-                                            class="p-2 text-gray-600 hover:text-red-600 rounded-lg">
+                                    <button data-periode="<?= $periode ?>" class="edit-roadmap-btn p-2 text-gray-600 hover:text-red-600 rounded-lg">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                   d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -348,35 +345,27 @@
         </main>
     </div>
 </div>
-<!-- Elegant Modal with Red Accents -->
-<div id="roadmapModal"
-     class="fixed inset-0 z-50 hidden items-center justify-center"
-     style="background: rgba(0, 0, 0, 0);">
-    <div class="absolute inset-0 bg-black/30 backdrop-blur-sm opacity-0 transition-all duration-300"
-         id="modalBackdrop"></div>
-    <div id="modalContent"
-         class="relative bg-white w-[90%] h-[85vh] max-w-6xl mx-auto rounded-lg shadow-2xl border border-red-100
-                opacity-0 translate-y-4 scale-95 transition-all duration-300">
-        <!-- Minimal Header with Red Accent -->
+
+<!-- Modal -->
+<div id="roadmapModal" class="fixed inset-0 z-50 hidden items-center justify-center" style="background: rgba(0, 0, 0, 0);">
+    <div class="absolute inset-0 bg-black/30 backdrop-blur-sm opacity-0 transition-all duration-300" id="modalBackdrop"></div>
+    <div id="modalContent" class="relative bg-white w-[90%] h-[85vh] max-w-6xl mx-auto rounded-lg shadow-2xl border border-red-100 opacity-0 translate-y-4 scale-95 transition-all duration-300">
+        <!-- Modal Header -->
         <div class="px-8 py-6 border-b border-red-50">
             <div class="flex items-center justify-between">
                 <h3 class="text-2xl text-gray-800 font-light tracking-tight" id="modalTitle">
                     <span class="text-red-500">Edit</span> Periode Roadmap
                 </h3>
-                <button onclick="closeModal()"
-                        class="text-gray-400 hover:text-red-500 transition-colors duration-200
-                               active:scale-95 transform">
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition-colors duration-200 active:scale-95 transform">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                              d="M6 18L18 6M6 6l12 12"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
         </div>
 
-        <!-- Two-column Layout -->
-        <form id="roadmapForm" action="<?= BASEURL ?>/roadmap/addRoadmap" method="post"
-              class="grid grid-cols-5 h-[calc(85vh-73px)]">
+        <!-- Modal Form -->
+        <form id="roadmapForm" action="<?= BASEURL ?>/roadmap/addRoadmap" method="post" class="grid grid-cols-5 h-[calc(85vh-73px)]">
             <!-- Left Column - Timeline -->
             <div class="col-span-1 border-r border-red-50 p-8">
                 <div class="space-y-8">
@@ -384,34 +373,20 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm text-red-500 mb-2 font-medium">Tahun Mulai</label>
-                            <input type="number" name="year_start" required
-                                   class="w-full px-4 py-2.5 bg-white border border-red-100 rounded-md
-                                          focus:border-red-500 focus:ring-1 focus:ring-red-500
-                                          transition-all duration-200 text-gray-700
-                                          active:scale-[0.99] transform">
+                            <input type="number" name="year_start" required class="w-full px-4 py-2.5 bg-white border border-red-100 rounded-md focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-700 active:scale-[0.99] transform">
                         </div>
                         <div>
                             <label class="block text-sm text-red-500 mb-2 font-medium">Tahun Selesai</label>
-                            <input type="number" name="year_end" required
-                                   class="w-full px-4 py-2.5 bg-white border border-red-100 rounded-md
-                                          focus:border-red-500 focus:ring-1 focus:ring-red-500
-                                          transition-all duration-200 text-gray-700
-                                          active:scale-[0.99] transform">
+                            <input type="number" name="year_end" required class="w-full px-4 py-2.5 bg-white border border-red-100 rounded-md focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-700 active:scale-[0.99] transform">
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="space-y-3 pt-6 border-t border-red-50">
-                        <button type="submit" id="submitButton"
-                                class="w-full py-2.5 bg-red-500 text-white rounded-md hover:bg-red-600
-                                       transition-all duration-200 text-sm font-medium
-                                       active:scale-[0.98] transform active:bg-red-700">
+                        <button type="submit" id="submitButton" class="w-full py-2.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all duration-200 text-sm font-medium active:scale-[0.98] transform active:bg-red-700">
                             Tambah Roadmap
                         </button>
-                        <button type="button" onclick="closeModal()"
-                                class="w-full py-2.5 text-red-500 bg-red-50 rounded-md hover:bg-red-100
-                                       transition-all duration-200 text-sm
-                                       active:scale-[0.98] transform">
+                        <button type="button" onclick="closeModal()" class="w-full py-2.5 text-red-500 bg-red-50 rounded-md hover:bg-red-100 transition-all duration-200 text-sm active:scale-[0.98] transform">
                             Batal
                         </button>
                     </div>
@@ -422,10 +397,7 @@
             <div class="col-span-4 bg-gray-50/50 p-8">
                 <div class="flex justify-between items-center mb-6">
                     <h4 class="text-base text-red-500 font-medium">Kategori dan Topik</h4>
-                    <button type="button" onclick="addCategory()"
-                            class="inline-flex items-center px-4 py-2 text-sm text-red-500 hover:text-red-600
-                                   transition-all duration-200 border border-red-100 rounded-md
-                                   hover:bg-red-50 active:scale-[0.98] transform">
+                    <button type="button" onclick="addCategory()" class="inline-flex items-center px-4 py-2 text-sm text-red-500 hover:text-red-600 transition-all duration-200 border border-red-100 rounded-md hover:bg-red-50 active:scale-[0.98] transform">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -434,22 +406,18 @@
                 </div>
 
                 <!-- Categories Grid -->
-                <div id="categoriesContainer"
-                     class="grid grid-cols-2 gap-5 h-[calc(100%-3.5rem)] overflow-y-auto pr-2 custom-scrollbar">
-                </div>
+                <div id="categoriesContainer" class="grid grid-cols-2 gap-5 h-[calc(100%-3.5rem)] overflow-y-auto pr-2 custom-scrollbar"></div>
             </div>
         </form>
     </div>
 </div>
 
-
 <script>
-    // Updated modal functions
+    // Modal Functions
     function showModal() {
         const modal = document.getElementById('roadmapModal');
         modal.style.display = 'flex';
-        // Force reflow
-        modal.offsetHeight;
+        modal.offsetHeight; // Force reflow
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
@@ -458,22 +426,14 @@
         const modal = document.getElementById('roadmapModal');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-        // Wait for animation to complete before hiding
         setTimeout(() => {
             modal.style.display = 'none';
         }, 300);
     }
 
-    // Smooth category removal
-    function removeCategory(element) {
-        const card = element.closest('.category-card');
-        card.classList.add('removing');
-        setTimeout(() => {
-            card.remove();
-        }, 300);
-    }
+    // Category and Topic Management
+    let categoryCounter = 0;
 
-    // Updated category addition
     function addCategory() {
         const categoryId = categoryCounter++;
         const categoryDiv = document.createElement('div');
@@ -521,47 +481,36 @@
         topicInput.type = 'text';
         topicInput.name = `topic_${categoryId}_${Date.now()}`;
         topicInput.placeholder = 'Topik';
-        topicInput.className = 'w-full px-3 py-2 border border-red-100 rounded-md text-sm topic-input ' +
-            'focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-200';
+        topicInput.className = 'w-full px-3 py-2 border border-red-100 rounded-md text-sm topic-input focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-200';
 
         document.querySelector(`.topics-${categoryId}`).appendChild(topicInput);
         topicInput.offsetHeight; // Force reflow
     }
 
-    let currentId = null;
-    let categoryCounter = 0;
-
-    function showAddModal() {
-        currentId = null;
-        document.getElementById('modalTitle').textContent = 'Tambah Periode Roadmap';
-        document.getElementById('roadmapForm').reset();
-        document.getElementById('categoriesContainer').innerHTML = '';
-        addCategory(); // Add initial category field
-        showModal();
+    function removeCategory(element) {
+        const card = element.closest('.category-card');
+        card.classList.add('removing');
+        setTimeout(() => {
+            card.remove();
+        }, 300);
     }
 
+    // Edit Roadmap Function
     function editRoadmap(periode) {
         document.getElementById('modalTitle').textContent = 'Edit Periode Roadmap';
-        document.getElementById('submitButton').textContent = 'simpan perubahan';
+        document.getElementById('submitButton').textContent = 'Simpan Perubahan';
         const form = document.getElementById('roadmapForm');
-
-
-        form.action = `<?=BASEURL?>/roadmap/editRoadmap`;
+        form.action = `<?= BASEURL ?>/roadmap/editRoadmap`;
 
         $.ajax({
-            url: '<?=BASEURL?>/roadmap/getUpdate',
+            url: '<?= BASEURL ?>/roadmap/getUpdate',
             method: 'POST',
             dataType: 'json',
-            data: {periode: periode},
+            data: { periode: periode },
             success: function (response) {
-                // console.log(response);
-
                 const roadmaps = (response) => {
-                    // Ambil `year_start` dan `year_end` dari data pertama
                     const year_start = response[0]?.year_start;
                     const year_end = response[0]?.year_end;
-
-                    // Kelompokkan topik berdasarkan kategori
                     const categories = response.reduce((acc, item) => {
                         if (!acc[item.category]) {
                             acc[item.category] = [];
@@ -569,20 +518,13 @@
                         acc[item.category].push(item.topic);
                         return acc;
                     }, {});
-
-                    // Gabungkan hasil
-                    return {year_start, year_end, categories};
+                    return { year_start, year_end, categories };
                 };
 
-                // Hasil akhir
                 const result = roadmaps(response);
-
-                console.log(result);
-
                 form.year_start.value = result.year_start;
                 form.year_end.value = result.year_end;
 
-                // Clear and populate categories
                 const categoriesContainer = document.getElementById('categoriesContainer');
                 categoriesContainer.innerHTML = '';
 
@@ -591,39 +533,38 @@
                     const categoryDiv = document.createElement('div');
                     categoryDiv.className = 'border-2 border-red-50 rounded-xl p-4 space-y-4';
                     categoryDiv.innerHTML = `
-                            <input type="hidden" name="old_year_start" value="${result.year_start}">
-                            <input type="hidden" name="old_year_end" value="${result.year_end}">
-                            <div class="flex justify-between items-center">
-                                <input type="text" name="category_${categoryId}" value="${category}"
-                                    class="w-2/3 px-4 py-2 border-2 border-red-100 rounded-xl form-input">
-                                <button type="button" onclick="this.closest('.border-2').remove()"
-                                        class="text-red-600 hover:text-red-700">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                    </svg>
-                                </button>
+                        <input type="hidden" name="old_year_start" value="${result.year_start}">
+                        <input type="hidden" name="old_year_end" value="${result.year_end}">
+                        <div class="flex justify-between items-center">
+                            <input type="text" name="category_${categoryId}" value="${category}"
+                                class="w-2/3 px-4 py-2 border-2 border-red-100 rounded-xl form-input">
+                            <button type="button" onclick="this.closest('.border-2').remove()"
+                                    class="text-red-600 hover:text-red-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="topics-${categoryId}">
+                                ${topics.map((topic, index) => `
+                                    <input type="text" name="topic_${categoryId}_${index}" value="${topic}"
+                                        class="w-full px-4 py-2 border-2 border-red-100 rounded-xl form-input mb-2">
+                                `).join('')}
                             </div>
-                            <div class="space-y-2">
-                                <div class="topics-${categoryId}">
-                                    ${topics.map((topic, index) => `
-                                        <input type="text" name="topic_${categoryId}_${index}" value="${topic}"
-                                            class="w-full px-4 py-2 border-2 border-red-100 rounded-xl form-input mb-2">
-                                    `).join('')}
-                                </div>
-                                <button type="button" onclick="addTopic(${categoryId})"
-                                        class="text-sm text-red-600 hover:text-red-700 flex items-center space-x-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                    </svg>
-                                    <span>Tambah Topik</span>
-                                </button>
-                            </div>
-                        `;
+                            <button type="button" onclick="addTopic(${categoryId})"
+                                    class="text-sm text-red-600 hover:text-red-700 flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <span>Tambah Topik</span>
+                            </button>
+                        </div>
+                    `;
                     categoriesContainer.appendChild(categoryDiv);
                 });
 
-                document.getElementById('roadmapModal').classList.remove('hidden');
-                document.getElementById('roadmapModal').classList.add('flex');
+                showModal();
             },
             error: function (response) {
                 alert('Gagal memperbarui status surat');
@@ -631,13 +572,14 @@
         });
     }
 
+    // Delete Roadmap Function
     function deleteRoadmap(periode) {
         if (confirm('Apakah Anda yakin ingin menghapus periode roadmap ini?')) {
             $.ajax({
-                url: '<?=BASEURL?>/roadmap/delete',
+                url: '<?= BASEURL ?>/roadmap/delete',
                 method: 'POST',
                 dataType: 'json',
-                data: {periode: periode},
+                data: { periode: periode },
                 success: function (response) {
                     alert(response.status);
                     location.reload();
@@ -649,44 +591,16 @@
         }
     }
 
-    // Form submission handler
-    // document.getElementById('roadmapForm').addEventListener('submit', function(e) {
-    //     // e.preventDefault();
-
-    //     const formData = {
-    //         id: currentId || roadmaps.length + 1,
-    //         year_start: parseInt(this.year_start.value),
-    //         year_end: parseInt(this.year_end.value),
-    //         categories: {}
-    //     };
-
-    //     // Collect categories and topics
-    //     const categoryInputs = document.querySelectorAll('[name^="category_"]');
-    //     categoryInputs.forEach(categoryInput => {
-    //         const categoryId = categoryInput.name.split('_')[1];
-    //         const categoryName = categoryInput.value;
-    //         const topicInputs = document.querySelectorAll(`[name^="topic_${categoryId}_"]`);
-    //         const topics = Array.from(topicInputs).map(input => input.value).filter(Boolean);
-
-    //         if (categoryName && topics.length > 0) {
-    //             formData.categories[categoryName] = topics;
-    //         }
-    //     });
-
-    //     if (currentId) {
-    //         // Edit existing roadmap
-    //         roadmaps = roadmaps.map(r => r.id === currentId ? formData : r);
-    //     } else {
-    //         // Add new roadmap
-    //         roadmaps.push(formData);
-    //     }
-
-    //     renderRoadmap();
-    //     closeModal();
-    // });
-
-    // Initial render
-    document.addEventListener('DOMContentLoaded', renderRoadmap);
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function () {
+        // Attach event listeners to edit buttons
+        document.querySelectorAll('.edit-roadmap-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const periode = this.getAttribute('data-periode');
+                editRoadmap(periode);
+            });
+        });
+    });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
