@@ -1,3 +1,10 @@
+<?php
+    if (isset($_SESSION['message'])) {
+        $message = $_SESSION['message'];
+        echo "<script>alert('$message');</script>";
+        unset($_SESSION['message']);
+    }
+?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
@@ -365,7 +372,7 @@
         </div>
 
         <!-- Modal Form -->
-        <form id="roadmapForm" action="<?= BASEURL ?>/roadmap/addRoadmap" method="post" class="grid grid-cols-5 h-[calc(85vh-73px)]">
+        <form id="roadmapForm" action="<?= BASEURL ?>/roadmap/addRoadmap" method="post" class="grid grid-cols-5 h-[calc(85vh-73px)]" onsubmit="disableSubmitButton()">
             <!-- Left Column - Timeline -->
             <div class="col-span-1 border-r border-red-50 p-8">
                 <div class="space-y-8">
@@ -432,7 +439,27 @@
     }
 
     // Category and Topic Management
+    let currentId = null;
     let categoryCounter = 0;
+
+    function showAddModal() {
+        currentId = null;
+        document.getElementById('modalTitle').textContent = 'Tambah Periode Roadmap';
+        document.getElementById('roadmapForm').reset();
+        document.getElementById('categoriesContainer').innerHTML = '';
+        addCategory(); // Add initial category field
+        showModal();
+    }
+
+    function disableSubmitButton() {
+        const submitButton = document.getElementById('submitButton');
+
+        // Nonaktifkan tombol dan ubah teksnya
+        submitButton.disabled = true;
+        submitButton.textContent = "Memproses...";
+
+        // Form tetap akan dikirimkan karena fungsi ini tidak memanggil event.preventDefault()
+    }
 
     function addCategory() {
         const categoryId = categoryCounter++;
