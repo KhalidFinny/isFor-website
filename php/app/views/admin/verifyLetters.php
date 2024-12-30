@@ -247,9 +247,15 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     }
 
     $('#confirmButton').on('click', function () {
-        const comment = $('#comment').val(); // Get the comment from the textarea
+        const comment = $('#comment').val().trim(); // Get the comment from the textarea and trim whitespace
 
-        // Lakukan AJAX setelah tombol konfirmasi ditekan
+        // Validasi jika komentar kosong
+        if (!comment) {
+            showAlert('error', 'Komentar tidak boleh kosong!', 'Silakan isi komentar terlebih dahulu.');
+            return; // Hentikan eksekusi jika komentar kosong
+        }
+
+        // Lakukan AJAX setelah validasi berhasil
         $.ajax({
             url: '<?= BASEURL ?>/letter/updateStatusLetter',
             method: 'POST',

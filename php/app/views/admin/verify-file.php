@@ -243,9 +243,14 @@
 
         const comment = document.getElementById('comment').value; // Get the comment
 
+        if (!comment) {
+            showAlert('Komentar tidak boleh kosong!', 'error');
+            return;
+        }
+
         let endpoint = currentAction === 'verify'
-            ? `<?= BASEURL; ?>/researchoutput/verifyFile/${currentFileId}`
-            : `<?= BASEURL; ?>/researchoutput/rejectFile/${currentFileId}`;
+            ? `<?= BASEURL; ?>/researchoutput/verifyFile/${currentFileId}/${comment}`
+            : `<?= BASEURL; ?>/researchoutput/rejectFile/${currentFileId}/${comment}`;
 
         try {
             const response = await fetch(endpoint, {

@@ -253,7 +253,7 @@ class ResearchOutput extends Controller
         }
     }
 
-    public function verifyFile($id)
+    public function verifyFile($id, $comment)
     {
         $this->checkLogin();
         $role = $this->checkRole();
@@ -262,7 +262,7 @@ class ResearchOutput extends Controller
         if ($role == 1) { // Pastikan hanya admin yang bisa memverifikasi
             $model = $this->model("ResearchOutputModel");
             $files = $model->getPendingFiles();
-            if ($model->updateStatus($id, 2)) { // Status 2 untuk verified
+            if ($model->updateStatus($id, 2, $comment)) { // Status 2 untuk verified
                 echo json_encode(['success' => true, 'message' => 'Image verified successfully.']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Failed to verify image.']);
@@ -273,7 +273,7 @@ class ResearchOutput extends Controller
         }
     }
 
-    public function rejectFile($id)
+    public function rejectFile($id, $comment)
     {
         $this->checkLogin();
         $role = $this->checkRole();
@@ -281,7 +281,7 @@ class ResearchOutput extends Controller
 
         if ($role == 1) {
             $model = $this->model("ResearchOutputModel");
-            if ($model->updateStatus($id, 3)) { // Status 3 untuk rejected
+            if ($model->updateStatus($id, 3, $comment)) { // Status 3 untuk rejected
                 echo json_encode(['success' => true, 'message' => 'Image rejected successfully.']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Failed to reject image.']);

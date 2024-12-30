@@ -72,12 +72,13 @@ class ResearchOutputModel
         return $this->db->single();
     }
 
-    public function updateStatus($id, $status)
+    public function updateStatus($id, $status, $comment)
     {
-        $query = "EXEC sp_updateStatus @id = :id, @status = :status";
+        $query = "UPDATE research_outputs SET status = :status, comment = :comment WHERE research_output_id = :id";
         $this->db->query($query);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $this->db->bind(':status', $status, PDO::PARAM_INT);
+        $this->db->bind(':comment', $comment);
         try {
             $this->db->execute();
             return true;

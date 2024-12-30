@@ -92,11 +92,12 @@ class LettersModel
     //     return $this->db->resultSet();
     // }
 
-    public function updateStatusLetter($id, $status)
+    public function updateStatusLetter($id, $status, $comment)
     {
-        $this->db->query('EXEC sp_UpdateStatusLetter :id, :status');
+        $this->db->query('UPDATE letters SET status = :status, comment = :comment WHERE letter_id = :id');
         $this->db->bind(':id', $id);
         $this->db->bind(':status', $status);
+        $this->db->bind(':comment', $comment);
         $this->db->execute();
         return $this->db->rowCount();
     }
