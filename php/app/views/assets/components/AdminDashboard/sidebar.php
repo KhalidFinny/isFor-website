@@ -6,10 +6,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Admin Sidebar</title>
+    <style>
+        /* Custom scrollbar styling */
+        .scrollable-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable-sidebar::-webkit-scrollbar-track {
+            background: #f8f8f8;
+            border-radius: 3px;
+        }
+
+        .scrollable-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e2e2;
+            border-radius: 3px;
+        }
+
+        .scrollable-sidebar::-webkit-scrollbar-thumb:hover {
+            background: #cfcfcf;
+        }
+    </style>
 </head>
 <body>
     <!-- Sidebar with Red Theme -->
-    <div class="fixed inset-y-0 left-0 w-64 bg-white border-r border-red-200">
+    <div class="fixed inset-y-0 left-0 w-64 bg-white border-r border-red-200 flex flex-col">
         <!-- Logo & Brand -->
         <div class="flex items-center justify-center h-16 px-6 border-b border-gray-100">
             <a href="<?=BASEURL?>" class="flex items-center">
@@ -17,8 +37,8 @@
             </a>
         </div>
 
-        <!-- Navigation -->
-        <div class="p-4 space-y-2">
+        <!-- Scrollable Navigation Section -->
+        <div class="flex-1 overflow-y-auto scrollable-sidebar p-4">
             <!-- Main Dashboard -->
             <a href="<?=BASEURL?>/dashboardAdmin"
                class="flex items-center px-4 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg group transition-colors">
@@ -112,6 +132,8 @@
                     </a>
                 </div>
             </div>
+
+            <!-- History Section -->
             <div class="pt-2">
                 <span class="px-4 text-xs font-semibold text-red-500 uppercase tracking-wider">Riwayat</span>
                 <div class="mt-2 space-y-1">
@@ -133,18 +155,18 @@
                     </a>
                 </div>
             </div>
+        </div>
 
-            <!-- Beranda Button -->
-            <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100">
-                <a href="<?=BASEURL?>"
-                   class="w-full flex items-center justify-center px-4 py-3 text-base font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
-                    <svg class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    Beranda
-                </a>
-            </div>
+        <!-- Fixed Beranda Button -->
+        <div class="p-4 border-t border-gray-100">
+            <a href="<?=BASEURL?>"
+               class="w-full flex items-center justify-center px-4 py-3 text-base font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
+                <svg class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Beranda
+            </a>
         </div>
     </div>
 </body>
