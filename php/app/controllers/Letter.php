@@ -162,8 +162,9 @@ class Letter extends Controller
     {
         $id = $_POST['id'];
         $status = $_POST['status'];
+        $comment = $_POST['comment'];
 
-        $affectedRows = $this->model('LettersModel')->updateStatusLetter($id, $status);
+        $affectedRows = $this->model('LettersModel')->updateStatusLetter($id, $status, $comment);
         if ($affectedRows > 0) {
             // Ambil nama file berdasarkan ID
             $fileName = $this->model('LettersModel')->getLetterById($id);
