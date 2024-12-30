@@ -15,49 +15,48 @@ class Roadmap extends Controller{
     }
     
 
-    public function groupingRoadmap(){
+    public function groupingRoadmap() {
         $uniqueYears = $this->model('RoadmapsModel')->getYears();
-
+        $groupedRoadmaps = []; // Inisialisasi awal untuk menghindari error
+    
         if (!empty($uniqueYears)) {
             foreach ($uniqueYears as $year) {
                 $roadmaps = $this->model('RoadmapsModel')->getRoadmaps($year['year_start'], $year['year_end']);
-
+    
                 // Mengurutkan roadmap berdasarkan year_start
                 usort($roadmaps, function($a, $b) {
-                    return $a['year_start'] <=> $b['year_start']; // Mengurutkan dari kecil ke besar
+                    return $a['year_start'] <=> $b['year_start'];
                 });
-
-                foreach($roadmaps as $roadmap){
+    
+                foreach ($roadmaps as $roadmap) {
                     $period = $roadmap['year_start'] . '-' . $roadmap['year_end'];
                     $category = $roadmap['category'];
-
+    
                     // Memeriksa apakah periode sudah ada dalam kelompok
                     if (!isset($groupedRoadmaps[$period])) {
-                        // Jika belum ada, buat array kosong untuk periode ini
                         $groupedRoadmaps[$period] = [];
                     }
-
+    
                     // Memeriksa apakah kategori sudah ada dalam kelompok untuk periode ini
                     if (!isset($groupedRoadmaps[$period][$category])) {
-                        // Jika belum ada, buat array kosong untuk kategori ini dalam periode tersebut
                         $groupedRoadmaps[$period][$category] = [];
                     }
-
-                    // Menambahkan topik ke kategori yang sesuai dalam periode ini
-                    $groupedRoadmaps[$period][$category][] = $roadmap['topic'];
+    
+                    // Mencegah duplikasi data
+                    if (!in_array($roadmap['topic'], $groupedRoadmaps[$period][$category])) {
+                        $groupedRoadmaps[$period][$category][] = $roadmap['topic'];
+                    }
                 }
             }
         }
-
-
-
-        // Mengurutkan kelompok berdasarkan year_start secara keseluruhan
+    
+        // Mengurutkan kelompok berdasarkan period secara keseluruhan
         if (!empty($groupedRoadmaps)) {
             ksort($groupedRoadmaps);
-
-            return $groupedRoadmaps;
         }
-
+    
+        // Kembalikan hasil
+        return $groupedRoadmaps;
     }
 
     public function checkyear(){
@@ -68,41 +67,61 @@ class Roadmap extends Controller{
         }
     }
 
-    public function addRoadmap(){
+    public function addRoadmap() {
         $year_start = $_POST['year_start'];
         $year_end = $_POST['year_end'];
         $data = [];
     
-        foreach($_POST as $key => $value){
+        // Iterasi untuk memproses setiap topik yang diterima dari form
+        foreach ($_POST as $key => $value) {
             if (strpos($key, 'topic_') === 0) {
-                $parts = explode('_', $key); // Hasil: ['topic', '0', '0'], ['category', '0']
+                $parts = explode('_', $key); // Hasil: ['topic', '0', '0']
+                $category_index = $parts[1]; // Ambil index kategori dari $parts
+                $category_key = "category_" . $category_index; // Key kategori
+                $category_name = $_POST[$category_key] ?? null; // Ambil kategori jika ada
     
-                $category_index = $parts[1]; // Ambil index ke 1 dari $parts'
-                $category_key = "category_" . $category_index; // Buat key kategori berdasarkan index kategori
-                $category_name = $_POST[$category_key] ?? null; // mengecek apakah $_POST[$category_key] ada di $_POST atau tidak contoh : $category_key = 'category_0'.Apakah $_POST['category_0'] ada di post atau tidak.
+                // Pastikan kategori dan topik ada, dan topik tidak kosong
+                if ($category_name && !empty($value)) {
+                    // Cek apakah kombinasi kategori dan topik sudah ada dalam array $data
+                    $isDuplicate = false;
+                    foreach ($data as $existingRoadmap) {
+                        if ($existingRoadmap['category'] == $category_name && $existingRoadmap['topic'] == $value) {
+                            $isDuplicate = true;
+                            break; // Jika sudah ada, berhenti memeriksa
+                        }
+                    }
     
-                // Cek apakah kategori ditemukan, jika ya, simpan data
-                if ($category_name  && !empty($value)) {
-                    $data[] = [
-                        'year_start' => $year_start,
-                        'year_end' => $year_end,
-                        'category' => $category_name,
-                        'topic' => $value
-                    ];
+                    // Jika kombinasi kategori dan topik belum ada, tambahkan ke dalam data
+                    if (!$isDuplicate) {
+                        $data[] = [
+                            'year_start' => $year_start,
+                            'year_end' => $year_end,
+                            'category' => $category_name,
+                            'topic' => $value
+                        ];
+                    }
                 }
             }
         }
     
-        if ($this->model('RoadmapsModel')->addRoadmaps($data) > 0) {
+        // Jika tidak ada data yang valid untuk disimpan, tampilkan pesan kesalahan
+        if (empty($data)) {
+            $_SESSION['message'] = "Tidak ada data yang valid untuk ditambahkan!";
             header('Location: ' . BASEURL . '/roadmap');
-            echo "tambah data berhasil";
-        } else {
-            echo
-            '<script/>
-                    alert("tambah data gagal");
-                </script>';
+            return;
         }
-    }
+    
+        // Simpan data roadmap ke database
+        if ($this->model('RoadmapsModel')->addRoadmaps($data) > 0) {
+            // Redirect setelah berhasil menambah data
+            header('Location: ' . BASEURL . '/roadmap');
+            exit; // Pastikan script berhenti setelah redirect
+        } else {
+            // Jika gagal menambah data
+            $_SESSION['message'] = "Tambah data gagal!";
+            header('Location: ' . BASEURL . '/roadmap');
+        }
+    }    
 
     public function delete(){
         $year = explode('-', $_POST['periode']);
@@ -129,44 +148,62 @@ class Roadmap extends Controller{
         $year_end = $_POST['old_year_end'];
         $new_year_start = $_POST['year_start'];
         $new_year_end = $_POST['year_end'];
-
+        $data = [];
+    
+        // Menghapus data lama terlebih dahulu
         if ($this->model('RoadmapsModel')->deleteRoadmap($year_start, $year_end) > 0) {
-            foreach($_POST as $key => $value){
+            // Iterasi untuk memproses setiap topik yang diterima dari form
+            foreach ($_POST as $key => $value) {
                 if (strpos($key, 'topic_') === 0) {
-                    $parts = explode('_', $key); // Hasil: ['topic', '0', '0'], ['category', '0']
-
-                    $category_index = $parts[1]; // Ambil index ke 1 dari $parts'
-                    $category_key = "category_" . $category_index; // Buat key kategori berdasarkan index kategori
-                    $category_name = $_POST[$category_key] ?? null; // mengecek apakah $_POST[$category_key] ada di $_POST atau tidak contoh : $category_key = 'category_0'.Apakah $_POST['category_0'] ada di post atau tidak.
-
-                    // Cek apakah kategori ditemukan, jika ya, simpan data
-                    if ($category_name  && !empty($value)) {
-                        $data[] = [
-                            'year_start' => $new_year_start,
-                            'year_end' => $new_year_end,
-                            'category' => $category_name,
-                            'topic' => $value
-                        ];
+                    $parts = explode('_', $key); // Hasil: ['topic', '0', '0']
+                    $category_index = $parts[1]; // Ambil index kategori dari $parts
+                    $category_key = "category_" . $category_index; // Key kategori
+                    $category_name = $_POST[$category_key] ?? null; // Ambil kategori jika ada
+    
+                    // Pastikan kategori dan topik ada, dan topik tidak kosong
+                    if ($category_name && !empty($value)) {
+                        // Cek apakah kombinasi kategori dan topik sudah ada dalam array $data
+                        $isDuplicate = false;
+                        foreach ($data as $existingRoadmap) {
+                            if ($existingRoadmap['category'] == $category_name && $existingRoadmap['topic'] == $value) {
+                                $isDuplicate = true;
+                                break; // Jika sudah ada, berhenti memeriksa
+                            }
+                        }
+    
+                        // Jika kombinasi kategori dan topik belum ada, tambahkan ke dalam data
+                        if (!$isDuplicate) {
+                            $data[] = [
+                                'year_start' => $new_year_start,
+                                'year_end' => $new_year_end,
+                                'category' => $category_name,
+                                'topic' => $value
+                            ];
+                        }
                     }
                 }
             }
-
+    
+            // Jika tidak ada data yang valid untuk disimpan
+            if (empty($data)) {
+                $_SESSION['message'] = "Tidak ada data yang valid untuk ditambahkan!";
+                header('Location: ' . BASEURL . '/roadmap');
+                return;
+            }
+    
+            // Simpan data roadmap yang baru ke database
             if ($this->model('RoadmapsModel')->addRoadmaps($data) > 0) {
                 header('Location: ' . BASEURL . '/roadmap');
-                echo "update data berhasil";
+                exit; // Pastikan script berhenti setelah redirect
             } else {
-                echo
-                '<script/>
-                        alert("update data gagal");
-                    </script>';
+                // Jika gagal menambah data
+                $_SESSION['message'] = "Update data gagal!";
+                header('Location: ' . BASEURL . '/roadmap');
             }
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Gagal menghapus data']);
+            // Jika gagal menghapus data lama
+            $_SESSION['message'] = "Gagal menghapus data lama!";
+            header('Location: ' . BASEURL . '/roadmap');
         }
-
-        // var_dump($_POST);
-
-        // var_dump($year_start);
-        // var_dump($year_end);
-    }
+    }    
 }
