@@ -153,6 +153,11 @@
                 <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Konfirmasi Aksi</h3>
                 <p class="text-sm text-gray-500 mt-2" id="modalMessage">Apakah Anda yakin ingin melakukan aksi ini?</p>
             </div>
+            <!-- Comment Section -->
+            <div class="mb-4">
+                <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">Komentar:</label>
+                <textarea id="comment" rows="3" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
+            </div>
             <div class="flex gap-3">
                 <button id="confirmButton"
                         class="flex-1 justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
@@ -197,6 +202,7 @@
 
     function closeModal() {
         document.getElementById('confirmationModal').classList.remove('active');
+        document.getElementById('comment').value = ''; // Clear the comment field
     }
 
     function showAlert(message, type = 'success') {
@@ -235,6 +241,8 @@
     document.getElementById('confirmButton').addEventListener('click', async () => {
         if (!currentFileId || !currentAction) return;
 
+        const comment = document.getElementById('comment').value; // Get the comment
+
         let endpoint = currentAction === 'verify'
             ? `<?= BASEURL; ?>/researchoutput/verifyFile/${currentFileId}`
             : `<?= BASEURL; ?>/researchoutput/rejectFile/${currentFileId}`;
@@ -245,7 +253,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({fileId: currentFileId})
+                body: JSON.stringify({fileId: currentFileId, comment: comment}) // Include the comment
             });
 
             if (response.ok) {

@@ -8,10 +8,11 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifikasi Surat - IsFor</title>
-<link rel="stylesheet" href="<?= CSS; ?>/admin/verify-letters.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="<?= CSS; ?>/admin/verify-letters.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body><!-- Layout utama dengan sidebar -->
+<body>
+<!-- Layout utama dengan sidebar -->
 <div class="flex min-h-screen bg-white">
     <!-- Sidebar admin -->
     <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
@@ -112,7 +113,6 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
-
             </div>
             <!-- Pagination -->
             <?php if ($data['totalPages'] > 1): ?>
@@ -161,8 +161,14 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
             </div>
 
             <!-- Pesan konfirmasi -->
-            <div class="mb-8">
+            <div class="mb-4">
                 <p class="text-gray-600">Apakah Anda yakin ingin melanjutkan?</p>
+            </div>
+
+            <!-- Comment Section -->
+            <div class="mb-6">
+                <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">Komentar:</label>
+                <textarea id="comment" rows="3" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
             </div>
 
             <div class="flex justify-end items-center gap-3">
@@ -237,15 +243,18 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
 
     function closeModal() {
         $('#confirmModal').removeClass('opacity-100 visible').addClass('opacity-0 invisible');
+        $('#comment').val(''); // Clear the comment field
     }
 
     $('#confirmButton').on('click', function () {
+        const comment = $('#comment').val(); // Get the comment from the textarea
+
         // Lakukan AJAX setelah tombol konfirmasi ditekan
         $.ajax({
             url: '<?= BASEURL ?>/letter/updateStatusLetter',
             method: 'POST',
             dataType: 'json',
-            data: {id: currentId, status: currentStatus},
+            data: {id: currentId, status: currentStatus, comment: comment}, // Include the comment in the data
             success: function () {
                 closeModal();
                 showAlert('success', 'Berhasil', `Surat berhasil ${currentAction}`);
@@ -292,9 +301,8 @@ $filteredLetters = isset($data['allLetters']) ? array_filter($data['allLetters']
     }
 
     function rejectLetter(id) {
-        openModal(id, 3, "hapus");
+        openModal(id, 3, "tolak");
     }
-
 
     $(document).ready(function () {
         $('.letter-card').each(function (index) {

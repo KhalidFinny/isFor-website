@@ -166,6 +166,22 @@
                                             </a>
                                         </div>
                                     </div>
+
+                                    <!-- Comments Section -->
+                                    <div class="mt-4">
+                                        <p class="text-sm text-gray-600">Komentar:</p>
+                                        <div class="text-sm text-gray-700">
+                                            <?php
+                                            $comment = $file['comment'] ?? 'Tidak ada komentar';
+                                            if (strlen($comment) > 50) {
+                                                echo '<span class="truncated-comment">' . substr($comment, 0, 50) . '...</span>';
+                                                echo '<button onclick="showCommentModal(`' . htmlspecialchars($comment) . '`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>';
+                                            } else {
+                                                echo $comment;
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -239,8 +255,22 @@
     </div>
 </div>
 
-</body>
-</html>
+<!-- Comment Modal -->
+<div id="commentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-red-900">Komentar</h3>
+            <button onclick="closeCommentModal()" class="text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div id="commentContent" class="text-gray-700">
+            <!-- Comment content will be loaded here -->
+        </div>
+    </div>
+</div>
 
 <script>
     function previewFile(url) {
@@ -274,6 +304,24 @@
         const modal = document.getElementById('fileModal');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+    }
+
+    function showCommentModal(comment) {
+        const commentModal = document.getElementById('commentModal');
+        const commentContent = document.getElementById('commentContent');
+
+        // Set the comment content
+        commentContent.textContent = comment;
+
+        // Show the modal
+        commentModal.classList.remove('hidden');
+        commentModal.classList.add('flex');
+    }
+
+    function closeCommentModal() {
+        const commentModal = document.getElementById('commentModal');
+        commentModal.classList.add('hidden');
+        commentModal.classList.remove('flex');
     }
 
     function filter(status, currentPage = 1) {
@@ -324,6 +372,16 @@
                                     </svg>
                                     Download
                                 </a>
+                            </div>
+                        </div>
+                        <!-- Comments Section -->
+                        <div class="mt-4">
+                            <p class="text-sm text-gray-600">Komentar:</p>
+                            <div class="text-sm text-gray-700">
+                                ${file.comment && file.comment.length > 50 ?
+                        `<span class="truncated-comment">${file.comment.substring(0, 50)}...</span>
+                        <button onclick="showCommentModal(\`${file.comment}\`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>` :
+                        file.comment || 'Tidak ada komentar'}
                             </div>
                         </div>
                     </div>`;
@@ -460,6 +518,16 @@
                                 </a>
                             </div>
                         </div>
+                        <!-- Comments Section -->
+                        <div class="mt-4">
+                            <p class="text-sm text-gray-600">Komentar:</p>
+                            <div class="text-sm text-gray-700">
+                                ${item.comment && item.comment.length > 50 ?
+                        `<span class="truncated-comment">${item.comment.substring(0, 50)}...</span>
+                        <button onclick="showCommentModal(\`${item.comment}\`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>` :
+                        item.comment || 'Tidak ada komentar'}
+                            </div>
+                        </div>
                     </div>
                 `);
                     });
@@ -541,3 +609,5 @@
     });
 
 </script>
+</body>
+</html>
