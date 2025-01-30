@@ -49,7 +49,7 @@ session_start();
             <?php if (empty($data['galleries'])): ?>
                 <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10">
                     <p class="text-gray-500 text-lg">
-                        Belum ada gallery saat ini.
+                        Belum ada data saat ini.
                     </p>
                 </div>
             <?php else: ?>

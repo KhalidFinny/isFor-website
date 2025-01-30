@@ -52,9 +52,9 @@ session_start();
                     <div class="file-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
                         <!-- Category Badge -->
                         <div class="px-6 py-4 border-b border-gray-100">
-                            <span class="inline-block px-3 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-full">
-                                <?php echo htmlspecialchars($item['category'] ?? 'research'); ?>
-                            </span>
+                    <span class="inline-block px-3 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-full">
+                        <?php echo htmlspecialchars($item['category'] ?? 'research'); ?>
+                    </span>
                         </div>
 
                         <!-- File Info -->
@@ -77,8 +77,8 @@ session_start();
                                         <?php echo htmlspecialchars($item['description']); ?>
                                     </p>
                                     <span class="text-xs text-gray-400">
-                                        Uploaded on <?php echo date('d M Y', strtotime($item['uploaded_at'])); ?>
-                                    </span>
+                                Uploaded on <?php echo date('d M Y', strtotime($item['uploaded_at'])); ?>
+                            </span>
                                 </div>
                             </div>
 
@@ -121,8 +121,15 @@ session_start();
                         </div>
                     </div>
                 <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10">
+                    <p class="text-gray-500 text-lg">
+                        Belum ada hasil penelitian saat ini.
+                    </p>
+                </div>
             <?php endif; ?>
         </div>
+
         <!-- Pagination -->
         <div class="mt-6">
             <nav aria-label="Page navigation example" id="pagination">
@@ -254,6 +261,14 @@ session_start();
                 navElement.innerHTML = '';
                 ul.className = 'flex items-center -space-x-px h-8 text-sm';
 
+                if (response.data.length === 0) {
+                        fileContainer.html(`
+                        <div class="text-center text-gray-500 py-6">
+                        <p class="text-lg font-semibold">Belum ada hasil penelitian saat ini.</p>
+                        </div>
+                    `);
+                    return;
+                }
                 // Loop untuk menampilkan data file
                 response.data.forEach(file => {
                     const fileHTML = `

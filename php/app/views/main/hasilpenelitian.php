@@ -261,6 +261,16 @@ session_start();
                 navElement.innerHTML = '';
                 ul.className = 'flex items-center -space-x-px h-8 text-sm';
 
+                if (response.data.length === 0) {
+                        fileContainer.html(`
+                        <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10">
+                            <p class="text-gray-500 text-lg">
+                                Belum ada hasil penelitian saat ini.
+                            </p>
+                        </div>
+                    `);
+                    return;
+                }
                 // Loop untuk menampilkan data file
                 response.data.forEach(file => {
                     const fileHTML = `
