@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/isfor_database.bak" beforeDir="false" afterPath="$PROJECT_DIR$/database/isfor_database.bak" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/galeriweb.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/hasilpenelitian.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/config/config.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +65,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "com.codeium.enabled": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/laragon/www/isFor-website/database",
+    "last_opened_file_path": "C:/laragon/www/isFor-website",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -78,11 +76,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\isFor-website\database" />
       <recent name="C:\laragon\www\isFor-website\php\app\core" />
       <recent name="C:\laragon\www\isFor-website\php\public\assets\files" />
       <recent name="C:\laragon\www\isFor-website\php\public\assets\css" />
       <recent name="C:\laragon\www\isFor-website\php\public\assets\css\user" />
-      <recent name="C:\laragon\www\isFor-website\php\public\assets\css\main" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\laragon\www\isFor-website\php\app\img\profile" />
@@ -145,7 +143,13 @@
       <workItem from="1735897687261" duration="591000" />
       <workItem from="1735900516173" duration="8000" />
       <workItem from="1735901663997" duration="9000" />
-      <workItem from="1738220542161" duration="1323000" />
+      <workItem from="1738220542161" duration="1695000" />
+      <workItem from="1739156461725" duration="69000" />
+      <workItem from="1739157193519" duration="49000" />
+      <workItem from="1739159475951" duration="1108000" />
+      <workItem from="1739942267546" duration="230000" />
+      <workItem from="1740358790289" duration="185000" />
+      <workItem from="1741695616551" duration="191000" />
     </task>
     <servers />
   </component>
