@@ -32,11 +32,12 @@ class RoadmapsModel
 
     public function getRoadmaps($year_start, $year_end)
     {
-        $this->db->query('SELECT * FROM roadmaps WHERE year_start = :year_start AND year_end = :year_end ORDER BY year_start ASC');
+        $this->db->query('EXEC sp_GetRoadmapsByYears :year_start, :year_end');
         $this->db->bind(':year_start', $year_start);
         $this->db->bind(':year_end', $year_end);
         return $this->db->resultSet();
     }
+
 
     public function deleteRoadmap($year_start, $year_end)
     {

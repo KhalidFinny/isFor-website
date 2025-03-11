@@ -13,7 +13,12 @@ define('FILES', 'http://localhost/IsFor-website/php/app/files/research_output');
 define('DOCUMENT', 'http://localhost/IsFor-website/php/public/assets/files/documents');
 define('IMAGES', 'http://localhost/IsFor-website/php/public/assets/files/images/static-images');
 
-define('DB_HOST', '10.144.201.247');
-define('DB_USER', 'sa');
-define('DB_PASS', 'MySecureDB#456');
+// define('DB_HOST', '10.144.201.247');
+// define('DB_USER', 'sa');
+// define('DB_PASS', 'MySecureDB#456');
+// define('DB_NAME', 'isfor_database');
+
+define('DB_HOST', '192.168.1.4');
+define('DB_USER', 'admin');
+define('DB_PASS', 'admin');
 define('DB_NAME', 'isfor_database');
