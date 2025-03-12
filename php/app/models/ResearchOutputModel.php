@@ -12,13 +12,13 @@ class ResearchOutputModel
 
     public function create($file_url, $uploaded_by, $title, $category, $description, $status = 1)
     {
-        $this->db->query('EXEC sp_CreateResearchOutput :file_url, :uploaded_by, :title, :category, :description, :status');
+        $this->db->query('CALL sp_CreateResearchOutput(:file_url, :uploaded_by, :title, :category, :description, :status)');
         $this->db->bind(':file_url', $file_url);
-        $this->db->bind(':uploaded_by', $uploaded_by);
+        $this->db->bind(':uploaded_by', $uploaded_by, PDO::PARAM_INT);
         $this->db->bind(':title', $title);
         $this->db->bind(':category', $category);
         $this->db->bind(':description', $description);
-        $this->db->bind(':status', $status);
+        $this->db->bind(':status', $status, PDO::PARAM_INT);
 
         try {
             $this->db->execute();
@@ -30,12 +30,12 @@ class ResearchOutputModel
 
     public function update($id, $file_url, $title, $category, $status)
     {
-        $this->db->query('EXEC sp_UpdateResearchOutput :id, :file_url, :title, :category, :status');
-        $this->db->bind(':id', $id);
+        $this->db->query('CALL sp_UpdateResearchOutput(:id, :file_url, :title, :category, :status)');
+        $this->db->bind(':id', $id, PDO::PARAM_INT);
         $this->db->bind(':file_url', $file_url);
         $this->db->bind(':title', $title);
         $this->db->bind(':category', $category);
-        $this->db->bind(':status', $status);
+        $this->db->bind(':status', $status, PDO::PARAM_INT);
 
         try {
             $this->db->execute();
@@ -47,28 +47,28 @@ class ResearchOutputModel
 
     public function getAll()
     {
-        $this->db->query('EXEC sp_GetAllResearchOutputs');
+        $this->db->query('CALL sp_GetAllResearchOutputs()');
         return $this->db->resultSet();
     }
 
     public function getPendingFiles()
     {
-        $this->db->query('EXEC sp_GetResearchOutputsByStatus :status');
-        $this->db->bind(':status', 1);
+        $this->db->query('CALL sp_GetResearchOutputsByStatus(:status)');
+        $this->db->bind(':status', 1, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function getVerifyFiles()
     {
-        $this->db->query('EXEC sp_GetResearchOutputsByStatus :status');
-        $this->db->bind(':status', 2);
+        $this->db->query('CALL sp_GetResearchOutputsByStatus(:status)');
+        $this->db->bind(':status', 2, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function getById($id)
     {
-        $this->db->query('EXEC sp_GetResearchOutputById :id');
-        $this->db->bind(':id', $id);
+        $this->db->query('CALL sp_GetResearchOutputById(:id)');
+        $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->single();
     }
 
@@ -89,76 +89,41 @@ class ResearchOutputModel
 
     public function countFilesByUser($userId)
     {
-        $this->db->query('EXEC sp_CountResearchOutputsByUser :uploaded_by');
-        $this->db->bind(':uploaded_by', $userId);
+        $this->db->query('CALL sp_CountResearchOutputsByUser(:uploaded_by)');
+        $this->db->bind(':uploaded_by', $userId, PDO::PARAM_INT);
         $result = $this->db->single();
         return $result['total'];
     }
 
     public function countFilesByUserandStatus($userId, $status)
     {
-        $this->db->query('SELECT COUNT(*) AS total FROM research_outputs WHERE uploaded_by = :uploaded_by AND status = :status;');
-        $this->db->bind(':uploaded_by', $userId);
-        $this->db->bind(':status', $status);
+        $this->db->query("SELECT COUNT(*) AS total FROM research_outputs WHERE uploaded_by = :uploaded_by AND status = :status;");
+        $this->db->bind(':uploaded_by', $userId, PDO::PARAM_INT);
+        $this->db->bind(':status', $status, PDO::PARAM_INT);
         $result = $this->db->single();
         return $result;
     }
 
-    // Get research outputs by user
     public function getFilesByUser($userId)
     {
-        $this->db->query('EXEC sp_GetResearchOutputsByUser :uploaded_by');
-        $this->db->bind(':uploaded_by', $userId);
+        $this->db->query("CALL sp_GetResearchOutputsByUser(:uploaded_by)");
+        $this->db->bind(':uploaded_by', $userId, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function getFilesByUserAndStatus($userId, $status, $awalData, $jumlahDataPerhalaman)
     {
-        $this->db->query('SELECT * FROM research_outputs WHERE uploaded_by = :uploaded_by AND status = :status ORDER BY [uploaded_at] DESC OFFSET :awalData ROWS FETCH NEXT :jumlahDataPerhalaman ROWS ONLY;');
-        $this->db->bind(':uploaded_by', $userId);
-        $this->db->bind(':status', $status);
-        $this->db->bind(':awalData', $awalData);
-        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman);
+        $this->db->query("CALL sp_GetResearchOutputsByUserAndStatus(:uploaded_by, :status, :awalData, :jumlahDataPerhalaman)");
+        $this->db->bind(':uploaded_by', $userId, PDO::PARAM_INT);
+        $this->db->bind(':status', $status, PDO::PARAM_INT);
+        $this->db->bind(':awalData', $awalData, PDO::PARAM_INT);
+        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman, PDO::PARAM_INT);
         return $this->db->resultSet();
-    }
-
-    public function getPaginatedFilesByUser($userId, $limit, $offset)
-    {
-        $this->db->query("EXEC sp_GetPaginatedFilesByUser :UserId, :Limit, :Offset");
-        $this->db->bind(':UserId', $userId, PDO::PARAM_INT);
-        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
-        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
-        return $this->db->resultSet();
-    }
-
-    public function getPaginatedFilesByUserAndStatus($userId, $status, $limit, $offset)
-    {
-        $this->db->query("EXEC sp_GetPaginatedFilesByUserAndStatus :UserId, :Status, :Limit, :Offset");
-        $this->db->bind(':UserId', $userId, PDO::PARAM_INT);
-        $this->db->bind(':Status', $status, PDO::PARAM_INT);
-        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
-        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
-        return $this->db->resultSet();
-    }
-
-    public function getPendingFilesWithPagination($limit, $offset)
-    {
-        $this->db->query("EXEC sp_GetPendingFilesWithPagination :Limit, :Offset");
-        $this->db->bind(':Limit', $limit, PDO::PARAM_INT);
-        $this->db->bind(':Offset', $offset, PDO::PARAM_INT);
-        return $this->db->resultSet();
-    }
-
-    public function getTotalPendingFiles()
-    {
-        $this->db->query("EXEC sp_GetTotalPendingFiles");
-        $result = $this->db->single();
-        return $result ? (int)$result['total'] : 0;
     }
 
     public function getVerifiedResearchOutputs($limit, $offset)
     {
-        $query = "EXEC sp_GetVerifiedResearchOutputs @Limit = :limit, @Offset = :offset";
+        $query = "CALL sp_GetVerifiedResearchOutputs(:limit, :offset)";
         $this->db->query($query);
         $this->db->bind(':limit', $limit, PDO::PARAM_INT);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
@@ -167,12 +132,44 @@ class ResearchOutputModel
 
     public function getTotalVerifiedResearchOutputs()
     {
-        $query = "EXEC sp_GetTotalVerifiedResearchOutputs";
-
+        $query = "CALL sp_GetTotalVerifiedResearchOutputs()";
         $this->db->query($query);
         $result = $this->db->single();
-
         return $result ? (int)$result['total'] : 0;
+    }
+
+    public function getTotalPendingFiles()
+    {
+        $this->db->query("CALL sp_GetTotalPendingFiles()");
+        $result = $this->db->single();
+        return $result ? (int)$result['total'] : 0;
+    }
+
+    public function getPendingFilesWithPagination($limit, $offset)
+    {
+        $this->db->query("CALL sp_GetPendingFilesWithPagination(:limit, :offset)");
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getPaginatedFilesByUserAndStatus($userId, $status, $limit, $offset)
+    {
+        $this->db->query("CALL sp_GetPaginatedFilesByUserAndStatus(:UserId, :Status, :limit, :offset)");
+        $this->db->bind(':UserId', $userId, PDO::PARAM_INT);
+        $this->db->bind(':Status', $status, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function getPaginatedFilesByUser($userId, $limit, $offset)
+    {
+        $this->db->query("CALL sp_GetPaginatedFilesByUser(:UserId, :limit, :offset)");
+        $this->db->bind(':UserId', $userId, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
     }
 
     public function delete($id)
@@ -233,31 +230,31 @@ class ResearchOutputModel
 
     public function getResearchDIPASWA()
     {
-        $this->db->query("EXEC sp_getResearchDIPASWA");
+        $this->db->query("CALL sp_GetResearchDIPASWA()");
         return $this->db->resultSet();
     }
 
     public function getResearchDIPAPNBP()
     {
-        $this->db->query("EXEC sp_getResearchDIPAPNBP");
+        $this->db->query("CALL sp_GetResearchDIPAPNBP()");
         return $this->db->resultSet();
     }
 
     public function getResearchTesis()
     {
-        $this->db->query("EXEC sp_getResearchTesis");
+        $this->db->query("CALL sp_GetResearchTesis()");
         return $this->db->resultSet();
     }
 
     public function countAllFiles()
     {
-        $this->db->query("EXEC sp_countAllFiles");
+        $this->db->query("CALL sp_CountAllFiles()");
         return $this->db->single()['total'];
     }
 
     public function getAllPaginatedFiles($itemsPerPage, $offset)
     {
-        $this->db->query("EXEC sp_getAllPaginatedFiles @itemsPerPage = :itemsPerPage, @offset = :offset");
+        $this->db->query("CALL sp_GetAllPaginatedFiles(:itemsPerPage, :offset)");
         $this->db->bind(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
@@ -265,47 +262,45 @@ class ResearchOutputModel
 
     public function countAllFilesByStatus($status)
     {
-        $this->db->query("EXEC sp_countAllFilesByStatus @status = :status");
+        $this->db->query("CALL sp_CountAllFilesByStatus(:status)");
         $this->db->bind(':status', $status, PDO::PARAM_INT);
         return $this->db->single()['total'];
     }
 
     public function getAllPaginatedFilesByStatus($status, $itemsPerPage, $offset)
     {
-        $this->db->query("EXEC sp_getAllPaginatedFilesByStatus @status = :status, @itemsPerPage = :items, @offset = :offset");
+        $this->db->query("CALL sp_GetAllPaginatedFilesByStatus(:status, :itemsPerPage, :offset)");
         $this->db->bind(':status', $status, PDO::PARAM_INT);
-        $this->db->bind(':items', $itemsPerPage, PDO::PARAM_INT);
+        $this->db->bind(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function countPendingFiles()
     {
-        $this->db->query("EXEC sp_countPendingFiles");
+        $this->db->query("CALL sp_CountPendingFiles()");
         return $this->db->single()['total'];
     }
 
     public function countRejectedFiles()
     {
-        $this->db->query("EXEC sp_countRejectedFiles");
+        $this->db->query("CALL sp_CountRejectedFiles()");
         return $this->db->single()['total'];
     }
 
     public function searchResearchOutputs($keyword, $limit, $offset)
     {
-        $query = "EXEC sp_searchFiles @Keyword = :keyword, @Limit = :limit, @Offset = :offset";
-        $this->db->query($query);
-        $this->db->bind(':keyword', $keyword);
-        $this->db->bind(':limit', $limit);
-        $this->db->bind(':offset', $offset);
+        $this->db->query("CALL sp_SearchFiles(:keyword, :limit, :offset)");
+        $this->db->bind(':keyword', $keyword, PDO::PARAM_STR);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function countSearchResults($keyword)
     {
-        $query = "EXEC sp_countSearchFiles @Keyword = :keyword";
-        $this->db->query($query);
-        $this->db->bind(':keyword', $keyword);
+        $this->db->query("CALL sp_CountSearchFiles(:keyword)");
+        $this->db->bind(':keyword', $keyword, PDO::PARAM_STR);
         return $this->db->single()['total'];
     }
 
@@ -317,10 +312,14 @@ class ResearchOutputModel
 
     public function getFilesByStatus($status, $awalData, $jumlahDataPerhalaman)
     {
-        $this->db->query("SELECT * FROM " . $this->table . " WHERE status = :status ORDER BY [uploaded_at] DESC OFFSET :awalData ROWS FETCH NEXT :jumlahDataPerhalaman ROWS ONLY;");
-        $this->db->bind(':status', $status);
-        $this->db->bind(':awalData', $awalData);
-        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman);
+        $query = "SELECT * FROM " . $this->table . " 
+                  WHERE status = :status 
+                  ORDER BY uploaded_at DESC 
+                  LIMIT :awalData, :jumlahDataPerhalaman";
+        $this->db->query($query);
+        $this->db->bind(':status', $status, PDO::PARAM_INT);
+        $this->db->bind(':awalData', $awalData, PDO::PARAM_INT);
+        $this->db->bind(':jumlahDataPerhalaman', $jumlahDataPerhalaman, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
@@ -328,7 +327,7 @@ class ResearchOutputModel
     {
         $query = "SELECT * FROM " . $this->table . " WHERE status = :status";
         $this->db->query($query);
-        $this->db->bind(':status', 2);
+        $this->db->bind(':status', 2, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
@@ -342,41 +341,41 @@ class ResearchOutputModel
 
     public function getAllVerifiedFiles($limit, $offset)
     {
-        $this->db->query('EXEC sp_GetAllVerifyResearchOutputs @limit = :limit, @offset = :offset');
-        $this->db->bind(':limit', $limit);
-        $this->db->bind(':offset', $offset);
+        $this->db->query("CALL sp_GetAllVerifyResearchOutputs(:limit, :offset)");
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function getVerifiedFilesDIPASWA($limit, $offset)
     {
-        $this->db->query('EXEC sp_getVerifyResearchDIPASWA @limit = :limit, @offset = :offset');
-        $this->db->bind(':limit', $limit);
-        $this->db->bind(':offset', $offset);
+        $this->db->query('CALL sp_GetVerifyResearchDIPASWA(:limit, :offset)');
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function getVerifiedFilesDIPAPNBP($limit, $offset)
     {
-        $this->db->query('EXEC sp_getVerifyResearchDIPAPNBP @limit = :limit, @offset = :offset');
-        $this->db->bind(':limit', $limit);
-        $this->db->bind(':offset', $offset);
+        $this->db->query('CALL sp_GetVerifyResearchDIPAPNBP(:limit, :offset)');
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function getVerifiedFilesTesis($limit, $offset)
     {
-        $this->db->query('EXEC sp_getVerifyResearchTesis @limit = :limit, @offset = :offset');
-        $this->db->bind(':limit', $limit);
-        $this->db->bind(':offset', $offset);
+        $this->db->query('CALL sp_GetVerifyResearchTesis(:limit, :offset)');
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function getTotalFilesByCategory($category)
     {
-        $query = "SELECT COUNT(*) as total FROM research_outputs WHERE category LIKE :category AND status = 2";
+        $query = "SELECT COUNT(*) AS total FROM research_outputs WHERE category LIKE :category AND status = 2";
         $this->db->query($query);
-        $this->db->bind(':category', $category);
+        $this->db->bind(':category', $category, PDO::PARAM_STR);
         $result = $this->db->single();
         return $result ? (int)$result['total'] : 0;
     }
@@ -385,14 +384,15 @@ class ResearchOutputModel
     {
         $offset = ($page - 1) * $limit;
         $query = "
-        SELECT * 
-        FROM research_outputs
-        WHERE category LIKE :category
-        AND status = 2
-        ORDER BY research_output_id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;
-    ";
+            SELECT * 
+            FROM research_outputs
+            WHERE category LIKE :category
+              AND status = 2
+            ORDER BY research_output_id
+            LIMIT :offset, :limit
+        ";
         $this->db->query($query);
-        $this->db->bind(':category', $category);
+        $this->db->bind(':category', $category, PDO::PARAM_STR);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         $this->db->bind(':limit', $limit, PDO::PARAM_INT);
         return $this->db->resultSet();
@@ -404,13 +404,12 @@ class ResearchOutputModel
 
         // Query data paginasi
         $this->db->query('
-        SELECT * 
-        FROM research_outputs
-        WHERE status = 2
-        ORDER BY uploaded_by DESC
-        OFFSET :offset ROWS
-        FETCH NEXT :limit ROWS ONLY;
-    ');
+            SELECT * 
+            FROM research_outputs
+            WHERE status = 2
+            ORDER BY uploaded_by DESC
+            LIMIT :offset, :limit
+        ');
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         $this->db->bind(':limit', $limit, PDO::PARAM_INT);
         $data = $this->db->resultSet();
@@ -424,23 +423,20 @@ class ResearchOutputModel
 
     public function searchFilesUser($keyword, $userId, $limit, $offset)
     {
-        $query = "EXEC sp_searchFilesUser @Keyword = :keyword, @UserId = :userId, @Limit = :limit, @Offset = :offset";
-        $this->db->query($query);
-        $this->db->bind(':keyword', $keyword);
-        $this->db->bind(':userId', $userId);
-        $this->db->bind(':limit', $limit);
-        $this->db->bind(':offset', $offset);
+        $this->db->query('CALL sp_SearchFilesUser(:keyword, :userId, :limit, :offset)');
+        $this->db->bind(':keyword', $keyword, PDO::PARAM_STR);
+        $this->db->bind(':userId', $userId, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function countUserSearchResults($keyword, $userId)
     {
-        $query = "EXEC sp_countSearchFilesUser @Keyword = :keyword, @UserId = :userId";
-        $this->db->query($query);
-        $this->db->bind(':keyword', $keyword);
-        $this->db->bind(':userId', $userId);
+        $this->db->query('CALL sp_CountSearchFilesUser(:keyword, :userId)');
+        $this->db->bind(':keyword', $keyword, PDO::PARAM_STR);
+        $this->db->bind(':userId', $userId, PDO::PARAM_INT);
         return $this->db->single()['total'];
     }
-
 }
 

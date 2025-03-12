@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 12 Mar 2025 pada 11.24
+-- Waktu pembuatan: 12 Mar 2025 pada 12.02
 -- Versi server: 8.0.30
 -- Versi PHP: 8.3.15
 
@@ -39,6 +39,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_AddRoadmap` (IN `p_year_start` I
     VALUES (p_year_start, p_year_end, p_category, p_topic);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountAllFiles` ()   BEGIN
+    SELECT COUNT(*) AS total
+    FROM research_outputs;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountAllFilesByStatus` (IN `p_status` INT)   BEGIN
+    SELECT COUNT(*) AS total
+    FROM research_outputs
+    WHERE status = p_status;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountAllLetters` ()   BEGIN
     SELECT COUNT(*) AS total
     FROM letters;
@@ -56,10 +67,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountPending` ()   BEGIN
     WHERE status = 1;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountPendingFiles` ()   BEGIN
+    SELECT COUNT(*) AS total
+    FROM research_outputs
+    WHERE status = 1;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountPendingStatus` (IN `p_user_id` INT)   BEGIN
     SELECT COUNT(status) AS total
     FROM letters
     WHERE status = 1 AND user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountRejectedFiles` ()   BEGIN
+    SELECT COUNT(*) AS total
+    FROM research_outputs
+    WHERE status = 3;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountRejectedLetters` ()   BEGIN
@@ -72,6 +95,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountRejectStat` (IN `p_user_id`
     SELECT COUNT(status) AS total
     FROM letters
     WHERE status = 3 AND user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountResearchOutputsByUser` (IN `p_uploaded_by` INT)   BEGIN
+    SELECT COUNT(*) AS total
+    FROM research_outputs
+    WHERE uploaded_by = p_uploaded_by;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountSearchFiles` (IN `p_Keyword` VARCHAR(255))   BEGIN
+    SELECT COUNT(*) AS total
+    FROM research_outputs
+    WHERE title LIKE CONCAT('%', p_Keyword, '%')
+       OR category LIKE CONCAT('%', p_Keyword, '%')
+       OR description LIKE CONCAT('%', p_Keyword, '%');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountSearchFilesUser` (IN `p_Keyword` VARCHAR(255), IN `p_UserId` INT)   BEGIN
+    SELECT COUNT(*) AS total
+    FROM research_outputs
+    WHERE uploaded_by = p_UserId
+      AND (title LIKE CONCAT('%', p_Keyword, '%')
+           OR category LIKE CONCAT('%', p_Keyword, '%')
+           OR description LIKE CONCAT('%', p_Keyword, '%'));
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountSearchLettersUser` (IN `p_Keyword` VARCHAR(255), IN `p_UserId` INT)   BEGIN
@@ -91,6 +137,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountVerifyStatus` (IN `p_user_i
     SELECT COUNT(status) AS total
     FROM letters
     WHERE status = 2 AND user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CreateResearchOutput` (IN `p_file_url` VARCHAR(255), IN `p_uploaded_by` INT, IN `p_title` VARCHAR(255), IN `p_category` VARCHAR(255), IN `p_description` TEXT, IN `p_status` INT)   BEGIN
+    INSERT INTO research_outputs (file_url, uploaded_by, title, category, description, status)
+    VALUES (p_file_url, p_uploaded_by, p_title, p_category, p_description, p_status);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_DeleteAgenda` (IN `p_id` INT)   BEGIN
@@ -133,6 +184,33 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllLettersPaginate` (IN `p_of
     LIMIT p_offset, p_limit;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllPaginatedFiles` (IN `p_itemsPerPage` INT, IN `p_offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    ORDER BY uploaded_at DESC
+    LIMIT p_offset, p_itemsPerPage;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllPaginatedFilesByStatus` (IN `p_status` INT, IN `p_itemsPerPage` INT, IN `p_offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE status = p_status
+    ORDER BY uploaded_at DESC
+    LIMIT p_offset, p_itemsPerPage;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllResearchOutputs` ()   BEGIN
+    SELECT * FROM research_outputs;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllVerifyResearchOutputs` (IN `p_limit` INT, IN `p_offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE status = 2
+    ORDER BY uploaded_at DESC
+    LIMIT p_offset, p_limit;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetLetterById` (IN `p_id` INT)   BEGIN
     SELECT file_url FROM letters WHERE letter_id = p_id;
 END$$
@@ -156,12 +234,79 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetLetterByUserIdPaginate` (IN `
     LIMIT p_awalData, p_jumlahDataPerhalaman;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetPaginatedFilesByUser` (IN `p_UserId` INT, IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE uploaded_by = p_UserId
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetPaginatedFilesByUserAndStatus` (IN `p_UserId` INT, IN `p_Status` INT, IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE uploaded_by = p_UserId AND status = p_Status
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetPendingFilesWithPagination` (IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE status = 1
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetPendingLettersWithPagination` (IN `p_offset` INT, IN `p_limit` INT)   BEGIN
     SELECT letter_id, title, file_url, status, user_id, `date`
     FROM letters
     WHERE status = 1
     ORDER BY `date` DESC
     LIMIT p_offset, p_limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetResearchDIPAPNBP` ()   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE category LIKE 'DIPA PNBP';
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetResearchDIPASWA` ()   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE category LIKE 'DIPA SWADANA';
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetResearchOutputById` (IN `p_id` INT)   BEGIN
+    SELECT * FROM research_outputs
+    WHERE research_output_id = p_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetResearchOutputsByStatus` (IN `p_status` INT)   BEGIN
+    SELECT * FROM research_outputs
+    WHERE status = p_status;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetResearchOutputsByUser` (IN `p_uploaded_by` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE uploaded_by = p_uploaded_by
+    ORDER BY uploaded_at DESC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetResearchOutputsByUserAndStatus` (IN `p_uploaded_by` INT, IN `p_status` INT, IN `p_awalData` INT, IN `p_jumlahDataPerhalaman` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE uploaded_by = p_uploaded_by AND status = p_status
+    ORDER BY uploaded_at DESC
+    LIMIT p_awalData, p_jumlahDataPerhalaman;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetResearchTesis` ()   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE category LIKE 'Tesis Magister';
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetRoadmapByPeriode` (IN `p_year_start` INT, IN `p_year_end` INT)   BEGIN
@@ -177,14 +322,82 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetRoadmaps` (IN `p_year_start` 
     ORDER BY year_start ASC;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetTotalPendingFiles` ()   BEGIN
+    SELECT COUNT(1) AS total
+    FROM research_outputs
+    WHERE status = 1;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetTotalPendingLetters` ()   BEGIN
     SELECT COUNT(*) AS total
     FROM letters
     WHERE status = 1;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetTotalVerifiedResearchOutputs` ()   BEGIN
+    SELECT COUNT(1) AS total
+    FROM research_outputs
+    WHERE status = 2;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetVerifiedResearchOutputs` (IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT research_output_id, file_url, uploaded_by, uploaded_at, title, category, status, description
+    FROM research_outputs
+    WHERE status = 2
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetVerifyResearchDIPAPNBP` (IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE category LIKE 'DIPA PNBP'
+      AND status = 2
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetVerifyResearchDIPASWA` (IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE category LIKE 'DIPA SWADANA'
+      AND status = 2
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetVerifyResearchTesis` (IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT *
+    FROM research_outputs
+    WHERE category LIKE 'Tesis Magister'
+      AND status = 2
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetYears` ()   BEGIN
     SELECT DISTINCT year_start, year_end FROM roadmaps;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_SearchFiles` (IN `p_Keyword` VARCHAR(255), IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT research_output_id, title, category, status, file_url, uploaded_at
+    FROM research_outputs
+    WHERE title LIKE CONCAT('%', p_Keyword, '%')
+       OR category LIKE CONCAT('%', p_Keyword, '%')
+       OR description LIKE CONCAT('%', p_Keyword, '%')
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_SearchFilesUser` (IN `p_Keyword` VARCHAR(255), IN `p_UserId` INT, IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT research_output_id, title, category, status, file_url, uploaded_at
+    FROM research_outputs
+    WHERE uploaded_by = p_UserId
+      AND (title LIKE CONCAT('%', p_Keyword, '%')
+           OR category LIKE CONCAT('%', p_Keyword, '%')
+           OR description LIKE CONCAT('%', p_Keyword, '%'))
+    ORDER BY uploaded_at DESC
+    LIMIT p_Offset, p_Limit;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_SearchLettersUser` (IN `p_Keyword` VARCHAR(255), IN `p_UserId` INT, IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
@@ -194,6 +407,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_SearchLettersUser` (IN `p_Keywor
       AND user_id = p_UserId
     ORDER BY `date` DESC
     LIMIT p_Offset, p_Limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_UpdateResearchOutput` (IN `p_id` INT, IN `p_file_url` VARCHAR(255), IN `p_title` VARCHAR(255), IN `p_category` VARCHAR(255), IN `p_status` INT)   BEGIN
+    UPDATE research_outputs
+    SET file_url = p_file_url,
+        title = p_title,
+        category = p_category,
+        status = p_status
+    WHERE research_output_id = p_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_UpdateRoadmap` (IN `p_roadmap_id` INT, IN `p_year_start` INT, IN `p_year_end` INT, IN `p_category` VARCHAR(255), IN `p_topic` VARCHAR(255))   BEGIN
