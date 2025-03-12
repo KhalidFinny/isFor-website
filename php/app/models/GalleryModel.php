@@ -10,14 +10,18 @@ class GalleryModel
         $this->db = new Database;
     }
 
+
     public function create($image, $category, $title, $uploaded_by, $description)
     {
-        $this->db->query('EXEC sp_CreateGallery :image, :category, :title, :uploaded_by, :description');
+        $query = "INSERT INTO galleries (image, category, title, uploaded_by, description, created_at)
+                  VALUES (:image, :category, :title, :uploaded_by, :description, NOW())";
+        $this->db->query($query);
         $this->db->bind(':image', $image);
         $this->db->bind(':category', $category);
         $this->db->bind(':title', $title);
         $this->db->bind(':uploaded_by', $uploaded_by);
         $this->db->bind(':description', $description);
+
         try {
             $this->db->execute();
             return true;
@@ -28,20 +32,27 @@ class GalleryModel
 
     public function getAll()
     {
-        $this->db->query('EXEC sp_GetAllGalleries');
+        $query = "SELECT * FROM galleries ORDER BY created_at DESC";
+        $this->db->query($query);
         return $this->db->resultSet();
     }
 
     public function getImageById($id)
     {
-        $this->db->query('EXEC sp_GetGalleryById :id');
+        $query = "SELECT * FROM galleries WHERE gallery_id = :id";
+        $this->db->query($query);
         $this->db->bind(':id', $id);
         return $this->db->single();
     }
 
     public function update($id, $image, $category, $title)
     {
-        $this->db->query('EXEC sp_UpdateGallery :id, :image, :category, :title');
+        $query = "UPDATE galleries 
+                  SET image = :image, 
+                      category = :category, 
+                      title = :title 
+                  WHERE gallery_id = :id";
+        $this->db->query($query);
         $this->db->bind(':id', $id);
         $this->db->bind(':image', $image);
         $this->db->bind(':category', $category);
@@ -51,7 +62,8 @@ class GalleryModel
 
     public function countImagesByUser($userId)
     {
-        $this->db->query('EXEC sp_CountImagesByUser :uploaded_by');
+        $query = "SELECT COUNT(*) AS total FROM galleries WHERE uploaded_by = :uploaded_by";
+        $this->db->query($query);
         $this->db->bind(':uploaded_by', $userId);
         $result = $this->db->single();
         return $result['total'];
@@ -59,23 +71,27 @@ class GalleryModel
 
     public function getImagesByUser($userId)
     {
-        $this->db->query('EXEC sp_GetImagesByUser :uploaded_by');
+        $query = "SELECT * FROM galleries WHERE uploaded_by = :uploaded_by ORDER BY created_at DESC";
+        $this->db->query($query);
         $this->db->bind(':uploaded_by', $userId);
         return $this->db->resultSet();
     }
 
     public function getGalleriesWithPagination($limit, $offset)
     {
-        $query = "EXEC sp_GetGalleriesWithPagination @Limit = :limit, @Offset = :offset";
+        $query = "SELECT gallery_id, image, category, title, uploaded_by, created_at, description 
+              FROM galleries 
+              ORDER BY created_at DESC 
+              LIMIT :offset, :limit";
         $this->db->query($query);
-        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function getTotalGalleries()
     {
-        $query = "EXEC sp_GetTotalGalleries";
+        $query = "SELECT COUNT(1) AS total FROM galleries";
         $this->db->query($query);
         $result = $this->db->single();
         return $result ? (int)$result['total'] : 0;
@@ -114,29 +130,33 @@ class GalleryModel
 
     public function getGaleryDIPASWA()
     {
-        $query = " SELECT * FROM galleries WHERE category LIKE 'DIPA SWADANA'";
+        $query = "SELECT * FROM galleries WHERE category LIKE :category";
         $this->db->query($query);
+        $this->db->bind(':category', 'DIPA SWADANA');
         return $this->db->resultSet();
     }
 
     public function getGaleryDIPAPNBP()
     {
-        $query = " SELECT * FROM galleries WHERE category LIKE 'DIPA PNBP'";
+        $query = "SELECT * FROM galleries WHERE category LIKE :category";
         $this->db->query($query);
+        $this->db->bind(':category', 'DIPA PNBP');
         return $this->db->resultSet();
     }
 
     public function getGaleryTesis()
     {
-        $query = " SELECT * FROM galleries WHERE category LIKE 'Tesis Magister'";
+        $query = "SELECT * FROM galleries WHERE category LIKE :category";
         $this->db->query($query);
+        $this->db->bind(':category', 'Tesis Magister');
         return $this->db->resultSet();
     }
 
     public function getGaleryBerita()
     {
-        $query = " SELECT * FROM galleries WHERE category LIKE 'Berita'";
+        $query = "SELECT * FROM galleries WHERE category LIKE :category";
         $this->db->query($query);
+        $this->db->bind(':category', 'Berita');
         return $this->db->resultSet();
     }
 
@@ -147,7 +167,8 @@ class GalleryModel
         SELECT * 
         FROM galleries 
         WHERE category LIKE :category
-        ORDER BY gallery_id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;
+        ORDER BY gallery_id
+        LIMIT :offset, :limit
     ";
         $this->db->query($query);
         $this->db->bind(':category', $category);
@@ -170,13 +191,13 @@ class GalleryModel
         $offset = ($page - 1) * $limit;
 
         // Query data paginasi
-        $this->db->query('
+        $query = "
         SELECT * 
         FROM galleries
         ORDER BY created_at DESC
-        OFFSET :offset ROWS
-        FETCH NEXT :limit ROWS ONLY;
-    ');
+        LIMIT :offset, :limit
+    ";
+        $this->db->query($query);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         $this->db->bind(':limit', $limit, PDO::PARAM_INT);
         $data = $this->db->resultSet();
