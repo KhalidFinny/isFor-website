@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 11 Mar 2025 pada 15.05
+-- Waktu pembuatan: 12 Mar 2025 pada 03.48
 -- Versi server: 8.0.30
 -- Versi PHP: 8.3.15
 
@@ -20,6 +20,128 @@ SET time_zone = "+00:00";
 --
 -- Database: `isfor_database`
 --
+
+DELIMITER $$
+--
+-- Prosedur
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_AddLetter` (IN `p_title` VARCHAR(255), IN `p_date` DATE, IN `p_file_url` TEXT, IN `p_status` INT, IN `p_user_id` INT)   BEGIN
+    INSERT INTO letters (title, `date`, file_url, status, user_id)
+    VALUES (p_title, p_date, p_file_url, p_status, p_user_id);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountAllLetters` ()   BEGIN
+    SELECT COUNT(*) AS total
+    FROM letters;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountAllLettersByUserId` (IN `p_user_id` INT)   BEGIN
+    SELECT COUNT(file_url) AS total 
+    FROM letters 
+    WHERE user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountPending` ()   BEGIN
+    SELECT COUNT(status) AS total
+    FROM letters
+    WHERE status = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountPendingStatus` (IN `p_user_id` INT)   BEGIN
+    SELECT COUNT(status) AS total
+    FROM letters
+    WHERE status = 1 AND user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountRejectedLetters` ()   BEGIN
+    SELECT COUNT(*) AS total
+    FROM letters
+    WHERE status = 3;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountRejectStat` (IN `p_user_id` INT)   BEGIN
+    SELECT COUNT(status) AS total
+    FROM letters
+    WHERE status = 3 AND user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountSearchLettersUser` (IN `p_Keyword` VARCHAR(255), IN `p_UserId` INT)   BEGIN
+    SELECT COUNT(*) AS total
+    FROM letters
+    WHERE (title LIKE CONCAT('%', p_Keyword, '%') OR `date` LIKE CONCAT('%', p_Keyword, '%'))
+      AND user_id = p_UserId;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountVerify` ()   BEGIN
+    SELECT COUNT(status) AS total
+    FROM letters
+    WHERE status = 2;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountVerifyStatus` (IN `p_user_id` INT)   BEGIN
+    SELECT COUNT(status) AS total
+    FROM letters
+    WHERE status = 2 AND user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllLetters` ()   BEGIN
+    SELECT * FROM letters;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllLettersPaginate` (IN `p_offset` INT, IN `p_limit` INT)   BEGIN
+    SELECT *
+    FROM letters
+    ORDER BY `date` DESC
+    LIMIT p_offset, p_limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetLetterById` (IN `p_id` INT)   BEGIN
+    SELECT file_url FROM letters WHERE letter_id = p_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetLetterByUserId` (IN `p_user_id` INT)   BEGIN
+    SELECT * FROM letters WHERE user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetLetterByUserIdLimit` (IN `p_id` INT)   BEGIN
+    SELECT * FROM letters 
+    WHERE user_id = p_id 
+    ORDER BY `date` DESC
+    LIMIT 5;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetLetterByUserIdPaginate` (IN `p_id` INT, IN `p_awalData` INT, IN `p_jumlahDataPerhalaman` INT)   BEGIN
+    SELECT * 
+    FROM letters 
+    WHERE user_id = p_id 
+    ORDER BY `date` DESC 
+    LIMIT p_awalData, p_jumlahDataPerhalaman;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetPendingLettersWithPagination` (IN `p_offset` INT, IN `p_limit` INT)   BEGIN
+    SELECT letter_id, title, file_url, status, user_id, `date`
+    FROM letters
+    WHERE status = 1
+    ORDER BY `date` DESC
+    LIMIT p_offset, p_limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetTotalPendingLetters` ()   BEGIN
+    SELECT COUNT(*) AS total
+    FROM letters
+    WHERE status = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_SearchLettersUser` (IN `p_Keyword` VARCHAR(255), IN `p_UserId` INT, IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
+    SELECT *
+    FROM letters
+    WHERE (title LIKE CONCAT('%', p_Keyword, '%') OR `date` LIKE CONCAT('%', p_Keyword, '%'))
+      AND user_id = p_UserId
+    ORDER BY `date` DESC
+    LIMIT p_Offset, p_Limit;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
