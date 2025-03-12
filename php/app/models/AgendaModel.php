@@ -12,48 +12,40 @@ class AgendaModel
 
     public function getAllAgenda()
     {
-        $query = 'SELECT *, ROW_NUMBER() OVER (ORDER BY agenda_id) AS number FROM agenda';
-        $this->db->query($query);
+        $this->db->query('CALL sp_GetAllAgenda()');
         return $this->db->resultSet();
     }
 
     public function getAgendaById($id)
     {
-        $query = 'SELECT * FROM agenda WHERE agenda_id = :id';
-        $this->db->query($query);
-        $this->db->bind(':id', $id);
+        $this->db->query('CALL sp_GetAgendaById(:id)');
+        $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->single();
     }
 
     public function addAgenda($data)
     {
-        $query = 'INSERT INTO agenda (title, description) VALUES (:title, :description)';
-        $this->db->query($query);
-        $this->db->bind(':title', $data['title']);
-        $this->db->bind(':description', $data['description']);
+        $this->db->query('CALL sp_AddAgenda(:title, :description)');
+        $this->db->bind(':title', $data['title'], PDO::PARAM_STR);
+        $this->db->bind(':description', $data['description'], PDO::PARAM_STR);
         $this->db->execute();
         return $this->db->rowCount();
     }
 
     public function editAgenda($data)
     {
-        $query = 'UPDATE agenda 
-                  SET title = :title, 
-                      description = :description 
-                  WHERE agenda_id = :id';
-        $this->db->query($query);
-        $this->db->bind(':id', $data['agenda_id']);
-        $this->db->bind(':title', $data['title']);
-        $this->db->bind(':description', $data['description']);
+        $this->db->query('CALL sp_EditAgenda(:id, :title, :description)');
+        $this->db->bind(':id', $data['agenda_id'], PDO::PARAM_INT);
+        $this->db->bind(':title', $data['title'], PDO::PARAM_STR);
+        $this->db->bind(':description', $data['description'], PDO::PARAM_STR);
         $this->db->execute();
         return $this->db->rowCount();
     }
 
     public function deleteAgenda($id)
     {
-        $query = 'DELETE FROM agenda WHERE agenda_id = :id';
-        $this->db->query($query);
-        $this->db->bind(':id', $id);
+        $this->db->query('CALL sp_DeleteAgenda(:id)');
+        $this->db->bind(':id', $id, PDO::PARAM_INT);
         $this->db->execute();
         return $this->db->rowCount();
     }

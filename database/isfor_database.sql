@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 12 Mar 2025 pada 03.48
+-- Waktu pembuatan: 12 Mar 2025 pada 05.15
 -- Versi server: 8.0.30
 -- Versi PHP: 8.3.15
 
@@ -25,6 +25,10 @@ DELIMITER $$
 --
 -- Prosedur
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_AddAgenda` (IN `p_title` VARCHAR(255), IN `p_description` TEXT)   BEGIN
+    INSERT INTO agenda (title, description) VALUES (p_title, p_description);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_AddLetter` (IN `p_title` VARCHAR(255), IN `p_date` DATE, IN `p_file_url` TEXT, IN `p_status` INT, IN `p_user_id` INT)   BEGIN
     INSERT INTO letters (title, `date`, file_url, status, user_id)
     VALUES (p_title, p_date, p_file_url, p_status, p_user_id);
@@ -82,6 +86,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountVerifyStatus` (IN `p_user_i
     SELECT COUNT(status) AS total
     FROM letters
     WHERE status = 2 AND user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_DeleteAgenda` (IN `p_id` INT)   BEGIN
+    DELETE FROM agenda WHERE agenda_id = p_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_EditAgenda` (IN `p_id` INT, IN `p_title` VARCHAR(255), IN `p_description` TEXT)   BEGIN
+    UPDATE agenda 
+    SET title = p_title, 
+        description = p_description 
+    WHERE agenda_id = p_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAgendaById` (IN `p_id` INT)   BEGIN
+    SELECT * FROM agenda WHERE agenda_id = p_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllAgenda` ()   BEGIN
+    SELECT *, ROW_NUMBER() OVER (ORDER BY agenda_id) AS number FROM agenda;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetAllLetters` ()   BEGIN
