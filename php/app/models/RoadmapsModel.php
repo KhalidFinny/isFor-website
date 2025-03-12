@@ -12,44 +12,45 @@ class RoadmapsModel
 
     public function addRoadmaps($data)
     {
+        $rowCount = 0;
         foreach ($data as $row) {
-            $this->db->query('INSERT INTO roadmaps (year_start, year_end, category, topic) VALUES (:year_start, :year_end, :category, :topic)');
-            $this->db->bind(':year_start', $row['year_start']);
-            $this->db->bind(':year_end', $row['year_end']);
-            $this->db->bind(':category', $row['category']);
-            $this->db->bind(':topic', $row['topic']);
+            $this->db->query('CALL sp_AddRoadmap(:year_start, :year_end, :category, :topic)');
+            $this->db->bind(':year_start', $row['year_start'], PDO::PARAM_INT);
+            $this->db->bind(':year_end', $row['year_end'], PDO::PARAM_INT);
+            $this->db->bind(':category', $row['category'], PDO::PARAM_STR);
+            $this->db->bind(':topic', $row['topic'], PDO::PARAM_STR);
             $this->db->execute();
+            $rowCount += $this->db->rowCount();
         }
-        return $this->db->rowCount();
+        return $rowCount;
     }
-
 
     public function getYears()
     {
-        $this->db->query('SELECT DISTINCT year_start, year_end FROM roadmaps');
+        $this->db->query('CALL sp_GetYears()');
         return $this->db->resultSet();
     }
 
     public function getRoadmaps($year_start, $year_end)
     {
-        $this->db->query('SELECT * FROM roadmaps WHERE year_start = :year_start AND year_end = :year_end ORDER BY year_start ASC');
-        $this->db->bind(':year_start', $year_start);
-        $this->db->bind(':year_end', $year_end);
+        $this->db->query('CALL sp_GetRoadmaps(:year_start, :year_end)');
+        $this->db->bind(':year_start', $year_start, PDO::PARAM_INT);
+        $this->db->bind(':year_end', $year_end, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
 
     public function deleteRoadmap($year_start, $year_end)
     {
-        $this->db->query('DELETE FROM roadmaps WHERE year_start = :year_start AND year_end = :year_end');
-        $this->db->bind(':year_start', $year_start);
-        $this->db->bind(':year_end', $year_end);
+        $this->db->query('CALL sp_DeleteRoadmap(:year_start, :year_end)');
+        $this->db->bind(':year_start', $year_start, PDO::PARAM_INT);
+        $this->db->bind(':year_end', $year_end, PDO::PARAM_INT);
         $this->db->execute();
         return $this->db->rowCount();
     }
 
     public function getRoadmapByPeriode($year_start, $year_end)
     {
-        $this->db->query('SELECT * FROM roadmaps WHERE year_start = :year_start AND year_end = :year_end');
+        $this->db->query('CALL sp_GetRoadmapByPeriode(:year_start, :year_end)');
         $this->db->bind(':year_start', $year_start, PDO::PARAM_INT);
         $this->db->bind(':year_end', $year_end, PDO::PARAM_INT);
         return $this->db->resultSet();
@@ -57,28 +58,24 @@ class RoadmapsModel
 
     public function updateRoadmap($data)
     {
+        $rowCount = 0;
         foreach ($data as $row) {
-            // Jika terdapat flag delete di dalam array, maka hapus baris tersebut berdasarkan roadmap_id
             if (isset($row['delete']) && $row['delete'] === true) {
-                $this->db->query('DELETE FROM roadmaps WHERE roadmap_id = :roadmap_id');
-                $this->db->bind(':roadmap_id', $row['roadmap_id']);
+                $this->db->query('CALL sp_DeleteRoadmapById(:roadmap_id)');
+                $this->db->bind(':roadmap_id', $row['roadmap_id'], PDO::PARAM_INT);
                 $this->db->execute();
+                $rowCount += $this->db->rowCount();
             } else {
-                // Update data roadmap
-                $this->db->query('UPDATE roadmaps 
-                                  SET year_start = :year_start, 
-                                      year_end = :year_end, 
-                                      category = :category, 
-                                      topic = :topic 
-                                  WHERE roadmap_id = :roadmap_id');
-                $this->db->bind(':roadmap_id', $row['roadmap_id']);
-                $this->db->bind(':year_start', $row['year_start']);
-                $this->db->bind(':year_end', $row['year_end']);
-                $this->db->bind(':category', $row['category']);
-                $this->db->bind(':topic', $row['topic']);
+                $this->db->query('CALL sp_UpdateRoadmap(:roadmap_id, :year_start, :year_end, :category, :topic)');
+                $this->db->bind(':roadmap_id', $row['roadmap_id'], PDO::PARAM_INT);
+                $this->db->bind(':year_start', $row['year_start'], PDO::PARAM_INT);
+                $this->db->bind(':year_end', $row['year_end'], PDO::PARAM_INT);
+                $this->db->bind(':category', $row['category'], PDO::PARAM_STR);
+                $this->db->bind(':topic', $row['topic'], PDO::PARAM_STR);
                 $this->db->execute();
+                $rowCount += $this->db->rowCount();
             }
         }
-        return $this->db->rowCount();
+        return $rowCount;
     }
 }

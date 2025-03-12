@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 12 Mar 2025 pada 05.15
+-- Waktu pembuatan: 12 Mar 2025 pada 11.24
 -- Versi server: 8.0.30
 -- Versi PHP: 8.3.15
 
@@ -32,6 +32,11 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_AddLetter` (IN `p_title` VARCHAR(255), IN `p_date` DATE, IN `p_file_url` TEXT, IN `p_status` INT, IN `p_user_id` INT)   BEGIN
     INSERT INTO letters (title, `date`, file_url, status, user_id)
     VALUES (p_title, p_date, p_file_url, p_status, p_user_id);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_AddRoadmap` (IN `p_year_start` INT, IN `p_year_end` INT, IN `p_category` VARCHAR(255), IN `p_topic` VARCHAR(255))   BEGIN
+    INSERT INTO roadmaps (year_start, year_end, category, topic)
+    VALUES (p_year_start, p_year_end, p_category, p_topic);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CountAllLetters` ()   BEGIN
@@ -92,6 +97,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_DeleteAgenda` (IN `p_id` INT)   
     DELETE FROM agenda WHERE agenda_id = p_id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_DeleteRoadmap` (IN `p_year_start` INT, IN `p_year_end` INT)   BEGIN
+    DELETE FROM roadmaps
+    WHERE year_start = p_year_start AND year_end = p_year_end;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_DeleteRoadmapById` (IN `p_roadmap_id` INT)   BEGIN
+    DELETE FROM roadmaps
+    WHERE roadmap_id = p_roadmap_id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_EditAgenda` (IN `p_id` INT, IN `p_title` VARCHAR(255), IN `p_description` TEXT)   BEGIN
     UPDATE agenda 
     SET title = p_title, 
@@ -149,10 +164,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetPendingLettersWithPagination`
     LIMIT p_offset, p_limit;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetRoadmapByPeriode` (IN `p_year_start` INT, IN `p_year_end` INT)   BEGIN
+    SELECT *
+    FROM roadmaps
+    WHERE year_start = p_year_start AND year_end = p_year_end;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetRoadmaps` (IN `p_year_start` INT, IN `p_year_end` INT)   BEGIN
+    SELECT *
+    FROM roadmaps
+    WHERE year_start = p_year_start AND year_end = p_year_end
+    ORDER BY year_start ASC;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetTotalPendingLetters` ()   BEGIN
     SELECT COUNT(*) AS total
     FROM letters
     WHERE status = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GetYears` ()   BEGIN
+    SELECT DISTINCT year_start, year_end FROM roadmaps;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_SearchLettersUser` (IN `p_Keyword` VARCHAR(255), IN `p_UserId` INT, IN `p_Limit` INT, IN `p_Offset` INT)   BEGIN
@@ -162,6 +194,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_SearchLettersUser` (IN `p_Keywor
       AND user_id = p_UserId
     ORDER BY `date` DESC
     LIMIT p_Offset, p_Limit;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_UpdateRoadmap` (IN `p_roadmap_id` INT, IN `p_year_start` INT, IN `p_year_end` INT, IN `p_category` VARCHAR(255), IN `p_topic` VARCHAR(255))   BEGIN
+    UPDATE roadmaps
+    SET year_start = p_year_start,
+        year_end = p_year_end,
+        category = p_category,
+        topic = p_topic
+    WHERE roadmap_id = p_roadmap_id;
 END$$
 
 DELIMITER ;
