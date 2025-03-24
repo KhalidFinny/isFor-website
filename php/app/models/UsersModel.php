@@ -21,9 +21,9 @@ class UsersModel
     public function addDefaultUser()
     {
         $defaultData = [
-            'name' => 'admin',
+            'name' => 'Dr.Rakhmat Arianto, S.ST., M.Kom',
             'username' => 'admin',
-            'email' => 'admin@example.com',
+            'email' => 'arianto@polinema.ac.id',
             'profile_picture' => null,
             'password' => password_hash('123', PASSWORD_BCRYPT),
             'role_id' => 1
