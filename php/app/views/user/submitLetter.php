@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajukan Surat - IsFor PRI</title>
+    <title>Ajukan Surat - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= CSS; ?>/user/submit-letter.css">
     <script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/dist/docx.js"></script>
 </head>
 <body class="bg-white">
-<div class="flex">
+<div class="flex flex-col md:flex-row">
     <?php include '../app/views/assets/components/UserDashboard/sidebar.php';?>
-    <div class="flex-1 min-h-screen ml-64 bg-white">
-        <main class="py-10 px-8">
-        <div class="max-w-7xl mx-auto mb-12">
+    <div class="flex-1 min-h-screen md:ml-64 bg-white">
+        <main class="py-10 px-4 md:px-8">
+            <div class="max-w-7xl mx-auto mb-12">
                 <a href="<?= BASEURL ?>/dashboardAdmin"
                    class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -29,19 +29,19 @@
                     <span class="h-px w-12 bg-red-600"></span>
                     <span class="text-red-600 font-medium">Pengajuan</span>
                 </div>
-                <h1 class="text-5xl font-bold text-red-900 mb-2">Surat Rekomendasi</h1>
+                <h1 class="text-3xl md:text-5xl font-bold text-red-900 mb-2">Surat Rekomendasi</h1>
             </div>
 
             <!-- Form Section -->
             <form action="<?=BASEURL?>/letter/sendletter" method="POST" id="letterForm" class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-12 gap-8">
-                    <!-- Left Column -->
-                    <div class="col-span-8">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <!-- Left Column with Detail Penelitian -->
+                    <div class="md:col-span-8 order-2 md:order-1">
                         <section class="bg-white rounded-2xl border-2 border-red-100 overflow-hidden fade-in mb-8">
                             <div class="p-6 border-b border-red-100">
                                 <h2 class="text-xl font-semibold text-red-800">Detail Penelitian</h2>
                             </div>
-                            <div class="p-8 space-y-6">
+                            <div class="p-4 md:p-8 space-y-6">
                                 <!-- Research Title -->
                                 <div class="space-y-2">
                                     <label class="block text-sm font-medium text-gray-600">Judul Penelitian</label>
@@ -70,8 +70,8 @@
                     </div>
 
                     <!-- Right Column -->
-                    <div class="col-span-4">
-                        <div class="sticky top-8 bg-white rounded-2xl p-8 border-2 border-red-100 space-y-6">
+                    <div class="md:col-span-4 order-2 md:order-2">
+                        <div class="md:sticky md:top-8 bg-white rounded-2xl p-4 md:p-8 border-2 border-red-100 space-y-6">
                             <input type="hidden" name="user_id" value="<?=$_SESSION["user_id"]?>">
                             <input type="hidden" name="letterType" value="research_recommendation">
 
@@ -164,6 +164,7 @@
         </div>
     </div>
 </div>
+
 <!-- Modal konfirmasi pengajuan surat -->
 <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
     <!-- Wrapper konten modal -->
@@ -203,10 +204,12 @@
         </div>
     </div>
 </div>
+
 <!-- Container untuk pesan alert -->
 <div id="alertMessage" class="hidden fixed top-4 right-4 max-w-md w-full">
     <!-- Konten alert akan di-inject melalui JavaScript -->
 </div>
+
 <div id="submitProgress" class="hidden bg-white rounded-2xl border-2 border-red-100 p-6 mt-8">
     <h3 class="text-lg font-semibold text-red-800 mb-4">Status Pengiriman</h3>
     <div class="bg-red-50 rounded-xl p-4">
@@ -255,6 +258,7 @@
             });
     }
 </script>
+
 <script>
 // Inisialisasi variabel untuk mengakses elemen-elemen DOM
 const form = document.getElementById('letterForm');                    // Form utama pengajuan surat
