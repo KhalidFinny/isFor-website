@@ -8,28 +8,121 @@
           rel="stylesheet">
     <link rel="stylesheet" href="<?= CSS; ?>/admin/manage-agenda.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Ensure the body doesn't have horizontal overflow */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Responsive adjustments for mobile view */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important; /* Remove sidebar margin on mobile when sidebar is closed */
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .main-content.sidebar-open {
+                margin-left: 16rem; /* Match sidebar width (w-64 = 16rem) when sidebar is open */
+            }
+
+            /* Adjust padding for main content on mobile */
+            .main-content {
+                padding: 1.5rem; /* Reduced padding for mobile */
+            }
+
+            /* Adjust the back button section */
+            .back-button-section {
+                margin-bottom: 2rem; /* Increased spacing */
+            }
+
+            /* Adjust the header section */
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem; /* Add spacing between elements */
+            }
+
+            /* Adjust the grid layout for agenda cards */
+            .agenda-grid {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                gap: 1.5rem; /* Increased gap between cards */
+            }
+
+            /* Style agenda cards for better visual separation */
+            .agenda-card {
+                padding: 1.5rem; /* Increased padding inside cards */
+                border-radius: 1rem; /* Slightly larger border radius */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+            }
+
+            /* Adjust the card header (number and buttons) */
+            .agenda-card-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+            }
+
+            /* Adjust the modal for mobile */
+            #modalContent {
+                width: 90%; /* Use more screen width on mobile */
+                max-width: 90%; /* Ensure it doesn't exceed screen width */
+                padding: 1.5rem; /* Adjust padding for mobile */
+            }
+
+            /* Adjust form elements in the modal */
+            .form-element {
+                flex-direction: column; /* Stack form elements vertically */
+                gap: 1rem; /* Add spacing between elements */
+            }
+
+            .form-element .w-1-3 {
+                width: 100%; /* Full width on mobile */
+            }
+
+            /* Adjust the confirm alert for mobile */
+            #confirmAlert .confirm-alert-content {
+                width: 90%; /* Use more screen width on mobile */
+                max-width: 90%; /* Ensure it doesn't exceed screen width */
+                padding: 1.5rem; /* Adjust padding for mobile */
+            }
+
+            /* Ensure hamburger menu doesn't overlap content */
+            .hamburger {
+                z-index: 50;
+            }
+        }
+
+        /* Ensure desktop view remains unchanged */
+        @media (min-width: 769px) {
+            .main-content {
+                margin-left: 16rem; /* Match sidebar width (w-64 = 16rem) */
+            }
+        }
+    </style>
 </head>
 <body class="bg-white">
 <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 <!-- Main Content Area -->
-<div class="flex-1 min-h-screen ml-64 bg-white">
+<div class="flex-1 min-h-screen main-content bg-white" id="mainContent">
     <main class="py-10 px-8">
-    <div class="max-w-7xl mx-auto mb-12">
-                <a href="<?= BASEURL ?>/dashboardAdmin"
-                   class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    <span>Kembali</span>
-                </a>
-            </div>
+        <div class="max-w-7xl mx-auto back-button-section">
+            <a href="<?= BASEURL ?>/dashboardAdmin"
+               class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Kembali</span>
+            </a>
+        </div>
+
         <!-- Swiss-inspired Header -->
         <div class="max-w-7xl mx-auto mb-12 fade-in">
             <div class="flex items-center space-x-4 mb-4">
                 <span class="h-px w-12 bg-red-600"></span>
                 <span class="text-red-600 font-medium">Manajemen</span>
             </div>
-            <div class="flex justify-between items-end">
+            <div class="header-section flex justify-between items-end">
                 <h1 class="text-5xl font-bold text-red-900 mb-2">Kelola Agenda</h1>
                 <button onclick="openAgendaModal('add')"
                         class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300">
@@ -39,38 +132,13 @@
         </div>
 
         <!-- Grid Layout with Sample Data -->
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-            <?php
-            if (empty($data['agenda'])): ?>
-                <?php foreach ($data['agenda'] as $agenda): ?>
-                    <div class="agenda-card bg-white p-6 rounded-2xl border-2 border-red-100">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl font-bold text-red-500"><?= $agenda['number'] ?></span>
-                            <div class="flex space-x-2">
-                                <button onclick="openAgendaModal('edit', <?= htmlspecialchars(json_encode($agenda['agenda_id'])) ?>)"
-                                        class="p-2 text-red-400 hover:text-red-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                    </svg>
-                                </button>
-                                <button onclick="confirmDelete(<?= $agenda['id'] ?>)"
-                                        class="p-2 text-red-400 hover:text-red-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-semibold text-red-800 mb-2"><?= $agenda['title'] ?></h3>
-                        <p class="text-red-600"><?= $agenda['description'] ?></p>
-                    </div>
-                <?php endforeach; ?>
+        <div class="agenda-grid grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
+            <?php if (empty($data['agenda'])): ?>
+                <p class="text-red-600 col-span-full text-center">Tidak ada agenda yang tersedia.</p>
             <?php else: ?>
                 <?php foreach ($data['agenda'] as $agenda): ?>
                     <div class="agenda-card bg-white p-6 rounded-2xl border-2 border-red-100">
-                        <div class="flex justify-between items-start mb-4">
+                        <div class="agenda-card-header flex justify-between items-start mb-4">
                             <span class="text-4xl font-bold text-red-500"><?= $data['no']++ ?></span>
                             <div class="flex space-x-2">
                                 <button onclick="openAgendaModal('edit', <?= htmlspecialchars(json_encode($agenda)) ?>)"
@@ -124,7 +192,7 @@
             <input type="hidden" id="agenda_id" name="agenda_id" value="">
 
             <div class="flex space-x-4 form-element">
-                <div class="w-1/3">
+                <div class="w-1/3 w-1-3">
                     <label class="block text-sm font-medium text-red-700 mb-1">Nomor</label>
                     <input type="text" id="agendaNumber" required readonly
                            class="w-full px-4 py-2 border-2 border-red-100 rounded-xl text-center bg-red-50 text-red-600 font-semibold
@@ -165,7 +233,7 @@
 
 <!-- Confirm Delete Alert -->
 <div id="confirmAlert" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-4 fade-in">
+    <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-4 fade-in confirm-alert-content">
         <div class="text-center">
             <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
                 <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,8 +293,6 @@
             document.getElementById('agendaDescription').value = agenda.description;
 
             form.action = '<?=BASEURL;?>/agenda/editAgenda';
-
-            // Your existing edit logic
         } else {
             title.textContent = 'Tambah Agenda Baru';
             form.reset();
@@ -244,6 +310,8 @@
             modal.style.display = 'none';
         }, 300);
     }
+
+    let agendaIdToDelete = null;
 
     function confirmDelete(id) {
         agendaIdToDelete = id;
@@ -285,11 +353,34 @@
         }
     }
 
-    // Simple form handler for demo
-    // document.getElementById('agendaForm').addEventListener('submit', function(e) {
-    //     e.preventDefault();
-    //     closeAgendaModal();
-    // });
+    // Synchronize main content margin with sidebar state
+    $(document).ready(function () {
+        const menuToggle = $('#menuToggle');
+        const sidebar = $('#sidebar');
+        const mainContent = $('#mainContent');
+
+        menuToggle.on('click', function () {
+            sidebar.toggleClass('open');
+            if (window.innerWidth <= 768) {
+                mainContent.toggleClass('sidebar-open');
+            }
+        });
+
+        // Close sidebar and adjust main content when clicking outside on mobile
+        $(document).on('click', function (e) {
+            if (window.innerWidth <= 768 && !sidebar[0].contains(e.target) && !menuToggle[0].contains(e.target)) {
+                sidebar.removeClass('open');
+                mainContent.removeClass('sidebar-open');
+            }
+        });
+
+        // Adjust on window resize
+        $(window).on('resize', function () {
+            if (window.innerWidth > 768) {
+                mainContent.removeClass('sidebar-open');
+            }
+        });
+    });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>

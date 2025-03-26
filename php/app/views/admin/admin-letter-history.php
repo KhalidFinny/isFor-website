@@ -8,14 +8,153 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= CSS; ?>/admin/letter-history.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Ensure the body doesn't have horizontal overflow */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Responsive adjustments for mobile view */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important; /* Remove sidebar margin on mobile when sidebar is closed */
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .main-content.sidebar-open {
+                margin-left: 16rem; /* Match sidebar width (w-64 = 16rem) when sidebar is open */
+            }
+
+            /* Adjust padding for main content on mobile */
+            .main-content {
+                padding: 1.5rem; /* Reduced padding for mobile */
+            }
+
+            /* Adjust the back button section */
+            .back-button-section {
+                margin-bottom: 2rem; /* Increased spacing */
+            }
+
+            /* Adjust the header section */
+            .header-section {
+                margin-bottom: 2rem; /* Increased spacing */
+            }
+
+            /* Adjust the stats cards grid */
+            .stats-grid {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                gap: 1.5rem; /* Increased gap between cards */
+            }
+
+            /* Style stats cards for better visual separation */
+            .stats-card {
+                padding: 1.5rem; /* Increased padding inside cards */
+                border-radius: 1rem; /* Slightly larger border radius */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+            }
+
+            /* Adjust the letter list section */
+            .letter-list-section {
+                padding: 1.5rem; /* Adjust padding for mobile */
+            }
+
+            /* Adjust the filters and search section */
+            .filters-search {
+                flex-direction: column; /* Stack vertically on mobile */
+                gap: 1rem; /* Add spacing between elements */
+                align-items: flex-start; /* Align to the left */
+            }
+
+            /* Adjust the filter buttons */
+            .filter-buttons {
+                flex-wrap: wrap; /* Allow buttons to wrap */
+                gap: 0.5rem; /* Add spacing between buttons */
+            }
+
+            /* Adjust the search bar */
+            .search-bar {
+                width: 100%; /* Full width on mobile */
+            }
+
+            /* Make the table responsive by converting to a card layout on mobile */
+            .letter-table {
+                display: block; /* Override table display */
+            }
+
+            .letter-table thead {
+                display: none; /* Hide table header on mobile */
+            }
+
+            .letter-table tbody {
+                display: block; /* Make tbody a block element */
+            }
+
+            .letter-table tr {
+                display: block; /* Make each row a block element */
+                border: 2px solid #fee2e2; /* Add border to each card */
+                border-radius: 1rem; /* Rounded corners */
+                margin-bottom: 1rem; /* Add spacing between cards */
+                padding: 1rem; /* Add padding inside each card */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+            }
+
+            .letter-table td {
+                display: block; /* Stack table cells vertically */
+                padding: 0.5rem 0; /* Adjust padding for mobile */
+                text-align: left; /* Align text to the left */
+            }
+
+            /* Add labels for each table cell on mobile */
+            .letter-table td:before {
+                content: attr(data-label); /* Use data-label attribute for labels */
+                font-weight: 600; /* Bold labels */
+                color: #dc2626; /* Red color for labels */
+                display: block; /* Make label a block element */
+                margin-bottom: 0.25rem; /* Add spacing below label */
+            }
+
+            /* Adjust specific table cells */
+            .letter-table td:nth-child(1):before { content: "Jenis Dokumen"; }
+            .letter-table td:nth-child(2):before { content: "Tanggal"; }
+            .letter-table td:nth-child(3):before { content: "Status"; }
+            .letter-table td:nth-child(4):before { content: "Komentar"; }
+            .letter-table td:nth-child(5):before { content: "Aksi"; }
+
+            /* Adjust the pagination */
+            .pagination {
+                flex-wrap: wrap; /* Allow pagination to wrap */
+                gap: 0.5rem; /* Add spacing between pagination items */
+                justify-content: center; /* Center pagination on mobile */
+            }
+
+            /* Adjust the modals for mobile */
+            .modal-content {
+                width: 90%; /* Use more screen width on mobile */
+                max-width: 90%; /* Ensure it doesn't exceed screen width */
+                padding: 1.5rem; /* Adjust padding for mobile */
+            }
+
+            /* Ensure hamburger menu doesn't overlap content */
+            .hamburger {
+                z-index: 50;
+            }
+        }
+
+        /* Ensure desktop view remains unchanged */
+        @media (min-width: 769px) {
+            .main-content {
+                margin-left: 16rem; /* Match sidebar width (w-64 = 16rem) */
+            }
+        }
+    </style>
 </head>
 <body class="bg-white">
 <div class="flex">
     <?php include '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 
-    <div class="flex-1 min-h-screen ml-64">
+    <div class="flex-1 min-h-screen main-content" id="mainContent">
         <main class="py-10 px-8">
-            <div class="max-w-7xl mx-auto">
+            <div class="max-w-7xl mx-auto back-button-section">
                 <a href="<?= BASEURL ?>/dashboardAdmin" class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -23,18 +162,19 @@
                     <span>Kembali</span>
                 </a>
             </div>
+
             <!-- Swiss-inspired Header -->
-            <div class="max-w-7xl mx-auto mb-12 fade-in">
+            <div class="max-w-7xl mx-auto header-section fade-in">
                 <div class="flex items-center space-x-4 mb-4">
                     <span class="h-px w-12 bg-red-600"></span>
                     <span class="text-red-600 font-medium">Riwayat</span>
                 </div>
-                <h1 class="text-5xl font-bold text-red-900 mb-2">Riwayat File</h1>
+                <h1 class="text-5xl font-bold text-red-900 mb-2">Riwayat Surat</h1>
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl border-2 border-red-100 slide-up" style="animation-delay: 0.1s">
+            <div class="stats-grid grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="stats-card bg-white p-6 rounded-xl border-2 border-red-100 slide-up" style="animation-delay: 0.1s">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-red-600">Total Surat</p>
@@ -47,15 +187,15 @@
                         </div>
                     </div>
                 </div>
-                <!-- Similar stats cards for Approved and Pending -->
+                <!-- Similar stats cards for Approved and Pending can be added here -->
             </div>
 
             <!-- Letter List Section -->
-            <div class="bg-white rounded-xl border-2 border-red-100 overflow-hidden slide-up" style="animation-delay: 0.2s">
+            <div class="letter-list-section bg-white rounded-xl border-2 border-red-100 overflow-hidden slide-up" style="animation-delay: 0.2s">
                 <!-- Filters and Search -->
                 <div class="p-6 border-b border-red-100">
-                    <div class="flex justify-between items-center">
-                        <div class="relative flex items-center space-x-4">
+                    <div class="filters-search flex justify-between items-center">
+                        <div class="relative filter-buttons flex items-center space-x-4">
                             <!-- Animated Underline -->
                             <div class="absolute bottom-0 h-0.5 bg-red-600 transition-all duration-300" id="activeIndicator"></div>
 
@@ -72,7 +212,7 @@
                                 Ditolak
                             </button>
                         </div>
-                        <div class="relative">
+                        <div class="relative search-bar">
                             <input type="text" placeholder="Cari surat..." id="keyword" class="pl-10 pr-4 py-2 bg-red-50 border-0 rounded-lg text-red-900 placeholder-red-400 focus:ring-2 focus:ring-red-500">
                             <svg class="w-5 h-5 text-red-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -92,9 +232,8 @@
                         </div>
                     <?php else : ?>
                         <!-- Letter Cards -->
-                        <div class="letter-card bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300">
-                            <!-- Letter content here -->
-                            <table class="w-full">
+                        <div class="letter-card">
+                            <table class="letter-table w-full">
                                 <thead>
                                 <tr class="text-left text-sm font-medium text-gray-500">
                                     <th class="pb-4">Jenis Dokumen</th>
@@ -105,12 +244,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Sample submission row -->
                                 <?php foreach ($data['allLetters'] as $letter) : ?>
                                     <tr class="border-t border-gray-100">
-                                        <td class="py-4"><?= $letter['title'] ?></td>
-                                        <td class="py-4"><?= $letter['date'] ?></td>
-                                        <td class="py-4">
+                                        <td class="py-4" data-label="Jenis Dokumen"><?= $letter['title'] ?></td>
+                                        <td class="py-4" data-label="Tanggal"><?= $letter['date'] ?></td>
+                                        <td class="py-4" data-label="Status">
                                             <?php if ($letter['status'] == 1) : ?>
                                                 <span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">
                                                     Tertunda
@@ -125,7 +263,7 @@
                                                 </span>
                                             <?php endif ?>
                                         </td>
-                                        <td class="py-4">
+                                        <td class="py-4" data-label="Komentar">
                                             <?php
                                             $comment = $letter['comment'] ?? 'Tidak ada komentar';
                                             if (strlen($comment) > 50) {
@@ -136,7 +274,7 @@
                                             }
                                             ?>
                                         </td>
-                                        <td class="py-4">
+                                        <td class="py-4" data-label="Aksi">
                                             <button onclick="viewLetter(<?= $letter['letter_id']; ?>)" class="text-red-600 hover:text-red-800">Lihat Detail</button>
                                         </td>
                                     </tr>
@@ -146,7 +284,7 @@
                         </div>
                     <?php endif; ?>
                     <nav aria-label="Page navigation example">
-                        <ul class="flex items-center -space-x-px h-8 text-sm">
+                        <ul class="pagination flex items-center -space-x-px h-8 text-sm">
                             <li>
                                 <?php if ($data['halamanAktif'] > 1) : ?>
                                     <a href="?halaman=<?= $data['halamanAktif'] - 1 ?>" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -188,7 +326,7 @@
 
 <!-- Preview Modal -->
 <div id="letterModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-    <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
+    <div class="modal-content bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-bold text-red-900">Detail Surat</h3>
             <button onclick="closeLetterModal()" class="text-gray-500 hover:text-gray-700">
@@ -205,7 +343,7 @@
 
 <!-- Comment Modal -->
 <div id="commentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-    <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
+    <div class="modal-content bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-bold text-red-900">Komentar</h3>
             <button onclick="closeCommentModal()" class="text-gray-500 hover:text-gray-700">
@@ -227,7 +365,6 @@
 
 <script>
     function viewLetter(id) {
-        // Implementation for viewing letter
         document.getElementById('letterModal').classList.remove('hidden');
         document.getElementById('letterModal').classList.add('flex');
 
@@ -237,12 +374,10 @@
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                console.log(data);
-                // Implementation for viewing letter
                 const letterContent = document.getElementById('letterContent');
                 letterContent.innerHTML = `
-                        <iframe src="${data}" width="100%" height="500px"></iframe>
-                    `;
+                    <iframe src="${data}" width="100%" height="500px"></iframe>
+                `;
             },
             error: function (data) {
                 alert('Gagal');
@@ -259,10 +394,7 @@
         const commentModal = document.getElementById('commentModal');
         const commentContent = document.getElementById('commentContent');
 
-        // Set the comment content
         commentContent.textContent = comment;
-
-        // Show the modal
         commentModal.classList.remove('hidden');
         commentModal.classList.add('flex');
     }
@@ -274,40 +406,21 @@
     }
 
     function filter(status, currentPage = 1) {
-        // console.log('Filter called with status:', status, 'and page:', currentPage);
         $.ajax({
             url: '<?= BASEURL ?>/letter/filterAdmin',
             method: 'POST',
             dataType: 'json',
-            data: JSON.stringify({status: status, halamanAktif: currentPage}), // Kirim JSON ke server
+            data: JSON.stringify({status: status, halamanAktif: currentPage}),
             contentType: 'application/json',
             success: function (data) {
-                console.log('Received Data:', data);
-
                 const letterContainer = document.querySelector(".letter-card tbody");
                 const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
 
-                const tableHeader = `
-                <thead>
-                    <tr class="text-left text-sm font-medium text-gray-500">
-                        <th class="pb-4">Jenis Dokumen</th>
-                        <th class="pb-4">Tanggal</th>
-                        <th class="pb-4">Status</th>
-                        <th class="pb-4">Komentar</th>
-                        <th class="pb-4">Aksi</th>
-                    </tr>
-                </thead>
-            `;
-
-                letterContainer.innerHTML = ''; // Hanya hapus isi tbody
+                letterContainer.innerHTML = '';
                 navElement.innerHTML = '';
 
-                // Populate table rows with data
                 data.letters.forEach(letter => {
-                    console.log(letter.status);
-
                     let statusBadge = '';
-
                     if (letter.status == 1) {
                         statusBadge = '<span class="px-3 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-full">Tertunda</span>';
                     } else if (letter.status == 2) {
@@ -322,14 +435,14 @@
 
                     const row = `
                     <tr class="border-t border-gray-100">
-                        <td class="py-4">${letter.title}</td>
-                        <td class="py-4">${letter.date}</td>
-                        <td class="py-4">${statusBadge}</td>
-                        <td class="py-4">
+                        <td class="py-4" data-label="Jenis Dokumen">${letter.title}</td>
+                        <td class="py-4" data-label="Tanggal">${letter.date}</td>
+                        <td class="py-4" data-label="Status">${statusBadge}</td>
+                        <td class="py-4" data-label="Komentar">
                             <span class="truncated-comment">${truncatedComment}</span>
                             ${readMoreButton}
                         </td>
-                        <td class="py-4">
+                        <td class="py-4" data-label="Aksi">
                             <button onclick="viewLetter(${letter.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
                         </td>
                     </tr>
@@ -337,7 +450,6 @@
                     letterContainer.innerHTML += row;
                 });
 
-                // Generate pagination
                 if (navElement) {
                     generatePagination(navElement, data.pagination.halamanAktif, data.pagination.jumlahHalaman, status);
                 }
@@ -352,9 +464,8 @@
 
     function generatePagination(navElement, currentPage, totalPages, status) {
         const ul = document.createElement('ul');
-        ul.className = 'flex items-center -space-x-px h-8 text-sm';
+        ul.className = 'pagination flex items-center -space-x-px h-8 text-sm';
 
-        // Previous button
         if (currentPage > 1) {
             const prevLi = `
             <li>
@@ -372,7 +483,6 @@
             ul.innerHTML += prevLi;
         }
 
-        // Page numbers
         for (let i = 1; i <= totalPages; i++) {
             const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
             const pageLi = `
@@ -386,7 +496,6 @@
             ul.innerHTML += pageLi;
         }
 
-        // Next button
         if (currentPage < totalPages) {
             const nextLi = `
             <li>
@@ -433,7 +542,6 @@
         alertElement.style.transform = 'translateY(0)';
         alertElement.classList.remove('hidden');
 
-        // Auto hide after 5 seconds
         setTimeout(closeAlert, 5000);
     }
 
@@ -442,21 +550,6 @@
         alertElement.style.transform = 'translateY(-100%)';
         setTimeout(() => alertElement.classList.add('hidden'), 300);
     }
-
-    // Animation observer
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animationPlayState = 'running';
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
-    document.querySelectorAll('.slide-up, .fade-in').forEach(el => {
-        observer.observe(el);
-    });
 
     function loadSearchResults(keyword, page = 1) {
         let letterContainer = document.querySelector(".letter-card table tbody");
@@ -468,9 +561,8 @@
             data: {keyword: keyword, page: page},
             dataType: 'json',
             success: function (data) {
-                console.log(data);
-                letterContainer.innerHTML = ''; // Clear table
-                navElement.innerHTML = ''; // Clear pagination
+                letterContainer.innerHTML = '';
+                navElement.innerHTML = '';
 
                 if (data.results && data.results.length > 0) {
                     data.results.forEach(item => {
@@ -489,14 +581,14 @@
 
                         letterContainer.innerHTML += `
                             <tr class="border-t border-gray-100">
-                                <td class="py-4">${item.title}</td>
-                                <td class="py-4">${item.date}</td>
-                                <td class="py-4">${statusBadge}</td>
-                                <td class="py-4">
+                                <td class="py-4" data-label="Jenis Dokumen">${item.title}</td>
+                                <td class="py-4" data-label="Tanggal">${item.date}</td>
+                                <td class="py-4" data-label="Status">${statusBadge}</td>
+                                <td class="py-4" data-label="Komentar">
                                     <span class="truncated-comment">${truncatedComment}</span>
                                     ${readMoreButton}
                                 </td>
-                                <td class="py-4">
+                                <td class="py-4" data-label="Aksi">
                                     <button onclick="viewLetter(${item.letter_id})" class="text-red-600 hover:text-red-800">Lihat Detail</button>
                                 </td>
                             </tr>
@@ -506,11 +598,9 @@
                     letterContainer.innerHTML = `<tr><td colspan="5" class="text-center">Hasil tidak ditemukan</td></tr>`;
                 }
 
-                // Tampilkan pagination berdasarkan total halaman
                 if (data.totalPages > 1) {
-                    let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
+                    let paginationHTML = `<ul class="pagination flex items-center -space-x-px h-8 text-sm">`;
 
-                    // Tombol Previous
                     if (data.currentPage > 1) {
                         paginationHTML += `
                     <li>
@@ -523,7 +613,6 @@
                     </li>`;
                     }
 
-                    // Halaman
                     for (let i = 1; i <= data.totalPages; i++) {
                         paginationHTML += `
                     <li>
@@ -534,7 +623,6 @@
                     </li>`;
                     }
 
-                    // Tombol Next
                     if (data.currentPage < data.totalPages) {
                         paginationHTML += `
                     <li>
@@ -571,6 +659,30 @@
             const keyword = $(this).val();
             loadSearchResults(keyword);
         });
+
+        const menuToggle = $('#menuToggle');
+        const sidebar = $('#sidebar');
+        const mainContent = $('#mainContent');
+
+        menuToggle.on('click', function () {
+            sidebar.toggleClass('open');
+            if (window.innerWidth <= 768) {
+                mainContent.toggleClass('sidebar-open');
+            }
+        });
+
+        $(document).on('click', function (e) {
+            if (window.innerWidth <= 768 && !sidebar[0].contains(e.target) && !menuToggle[0].contains(e.target)) {
+                sidebar.removeClass('open');
+                mainContent.removeClass('sidebar-open');
+            }
+        });
+
+        $(window).on('resize', function () {
+            if (window.innerWidth > 768) {
+                mainContent.removeClass('sidebar-open');
+            }
+        });
     });
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -578,18 +690,26 @@
 
         filterButtons.forEach(button => {
             button.addEventListener('click', function () {
-                // Remove active class from all buttons
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-
-                // Add active class to clicked button
                 this.classList.add('active');
-
-                // Call the existing filter function
                 filter(this.dataset.status);
             });
         });
-    });
 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.slide-up, .fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    });
 </script>
 </body>
 </html>

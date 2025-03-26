@@ -1,9 +1,9 @@
 <?php
-    if (isset($_SESSION['message'])) {
-        $message = $_SESSION['message'];
-        echo "<script>alert('$message');</script>";
-        unset($_SESSION['message']);
-    }
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    echo "<script>alert('$message');</script>";
+    unset($_SESSION['message']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
@@ -18,6 +18,7 @@
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
 
         @keyframes fadeIn {
@@ -120,7 +121,6 @@
         #modalContent:hover::-webkit-scrollbar-thumb {
             background: #cfcfcf; /* Warna thumb saat hover */
         }
-
 
         #roadmapModal.flex #modalContent {
             opacity: 1;
@@ -267,14 +267,111 @@
         .custom-scrollbar:hover::-webkit-scrollbar-thumb {
             background: #dc2626;
         }
+
+        /* Responsive adjustments for mobile view */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important; /* Remove sidebar margin on mobile when sidebar is closed */
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .main-content.sidebar-open {
+                margin-left: 16rem; /* Match sidebar width (w-64 = 16rem) when sidebar is open */
+            }
+
+            /* Adjust padding for main content on mobile */
+            .main-content {
+                padding: 1.5rem; /* Reduced padding for mobile */
+            }
+
+            /* Adjust the back button section */
+            .back-button-section {
+                margin-bottom: 2rem; /* Increased spacing */
+            }
+
+            /* Adjust the header section */
+            .header-section {
+                margin-bottom: 2rem; /* Increased spacing */
+            }
+
+            /* Adjust the roadmap grid */
+            .roadmap-grid {
+                gap: 1.5rem; /* Increased gap between roadmap periods */
+            }
+
+            /* Style roadmap cards for better visual separation */
+            .roadmap-card {
+                padding: 1.5rem; /* Increased padding inside cards */
+                border-radius: 1rem; /* Slightly larger border radius */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+            }
+
+            /* Adjust the category grid inside roadmap cards */
+            .category-grid {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                gap: 1.5rem; /* Increased gap between category cards */
+            }
+
+            /* Style category cards for better visual separation */
+            .category-card {
+                padding: 1.5rem; /* Increased padding inside cards */
+                border-radius: 1rem; /* Slightly larger border radius */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+            }
+
+            /* Adjust the modal for mobile */
+            #modalContent {
+                width: 90%; /* Use more screen width on mobile */
+                max-width: 90%; /* Ensure it doesn't exceed screen width */
+                height: auto; /* Allow height to adjust based on content */
+                max-height: 90vh; /* Slightly more height on mobile */
+                padding: 0; /* Remove padding to handle internally */
+            }
+
+            /* Adjust the modal form layout */
+            #roadmapForm {
+                grid-template-columns: 1fr; /* Stack columns vertically on mobile */
+                height: auto; /* Allow height to adjust based on content */
+            }
+
+            /* Adjust the left column (timeline) */
+            .modal-timeline {
+                border-right: none; /* Remove border on mobile */
+                border-bottom: 1px solid #fee2e2; /* Add bottom border for separation */
+                padding: 1.5rem; /* Adjust padding for mobile */
+            }
+
+            /* Adjust the right column (categories) */
+            .modal-categories {
+                padding: 1.5rem; /* Adjust padding for mobile */
+            }
+
+            /* Adjust the categories grid in the modal */
+            #categoriesContainer {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                gap: 1.5rem; /* Increased gap between category cards */
+            }
+
+            /* Ensure hamburger menu doesn't overlap content */
+            .hamburger {
+                z-index: 50;
+            }
+        }
+
+        /* Ensure desktop view remains unchanged */
+        @media (min-width: 769px) {
+            .main-content {
+                margin-left: 16rem; /* Match sidebar width (w-64 = 16rem) */
+            }
+        }
     </style>
 </head>
 <body class="bg-white">
 <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 <div class="flex">
-    <div class="flex-1 min-h-screen ml-64">
+    <div class="flex-1 min-h-screen main-content" id="mainContent">
         <main class="py-10 px-8">
-            <div class="max-w-7xl mx-auto mb-12">
+            <div class="max-w-7xl mx-auto back-button-section">
                 <a href="<?= BASEURL ?>/dashboardAdmin"
                    class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -283,8 +380,9 @@
                     <span>Kembali</span>
                 </a>
             </div>
+
             <!-- Header -->
-            <div class="max-w-7xl mx-auto mb-12 fade-in">
+            <div class="max-w-7xl mx-auto header-section fade-in">
                 <div class="flex items-center space-x-4 mb-4">
                     <span class="h-px w-12 bg-red-600"></span>
                     <span class="text-red-600 font-medium">Research</span>
@@ -302,10 +400,10 @@
             </button>
 
             <!-- Roadmap Grid -->
-            <div class="grid gap-8" id="roadmapContent">
+            <div class="roadmap-grid grid gap-8" id="roadmapContent">
                 <?php if (!empty($data['roadmaps'])): ?>
                     <?php foreach ($data['roadmaps'] as $periode => $categories): ?>
-                        <div class="bg-white rounded-2xl border-2 border-red-100 overflow-hidden fade-in mb-8">
+                        <div class="roadmap-card bg-white rounded-2xl border-2 border-red-100 overflow-hidden fade-in mb-8">
                             <div class="p-6 border-b border-red-100 flex justify-between items-center">
                                 <h2 class="text-xl font-semibold text-red-800">Periode <?= $periode ?></h2>
                                 <div class="flex space-x-2">
@@ -325,7 +423,7 @@
                                 </div>
                             </div>
                             <div class="p-8">
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <div class="category-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                     <?php foreach ($categories as $category => $topics): ?>
                                         <div class="category-card bg-white p-6 rounded-xl border-2 border-red-50">
                                             <h3 class="text-lg font-semibold text-gray-900 mb-4"><?= $category ?></h3>
@@ -374,7 +472,7 @@
         <!-- Modal Form -->
         <form id="roadmapForm" action="<?= BASEURL ?>/roadmap/addRoadmap" method="post" class="grid grid-cols-5 h-[calc(85vh-73px)]" onsubmit="disableSubmitButton()">
             <!-- Left Column - Timeline -->
-            <div class="col-span-1 border-r border-red-50 p-8">
+            <div class="col-span-1 border-r border-red-50 p-8 modal-timeline">
                 <div class="space-y-8">
                     <!-- Year Inputs -->
                     <div class="space-y-6">
@@ -401,7 +499,7 @@
             </div>
 
             <!-- Right Column - Categories -->
-            <div class="col-span-4 bg-gray-50/50 p-8">
+            <div class="col-span-4 bg-gray-50/50 p-8 modal-categories">
                 <div class="flex justify-between items-center mb-6">
                     <h4 class="text-base text-red-500 font-medium">Kategori dan Topik</h4>
                     <button type="button" onclick="addCategory()" class="inline-flex items-center px-4 py-2 text-sm text-red-500 hover:text-red-600 transition-all duration-200 border border-red-100 rounded-md hover:bg-red-50 active:scale-[0.98] transform">
@@ -453,12 +551,8 @@
 
     function disableSubmitButton() {
         const submitButton = document.getElementById('submitButton');
-
-        // Nonaktifkan tombol dan ubah teksnya
         submitButton.disabled = true;
         submitButton.textContent = "Memproses...";
-
-        // Form tetap akan dikirimkan karena fungsi ini tidak memanggil event.preventDefault()
     }
 
     function addCategory() {
@@ -626,6 +720,33 @@
                 const periode = this.getAttribute('data-periode');
                 editRoadmap(periode);
             });
+        });
+
+        // Synchronize main content margin with sidebar state
+        const menuToggle = $('#menuToggle');
+        const sidebar = $('#sidebar');
+        const mainContent = $('#mainContent');
+
+        menuToggle.on('click', function () {
+            sidebar.toggleClass('open');
+            if (window.innerWidth <= 768) {
+                mainContent.toggleClass('sidebar-open');
+            }
+        });
+
+        // Close sidebar and adjust main content when clicking outside on mobile
+        $(document).on('click', function (e) {
+            if (window.innerWidth <= 768 && !sidebar[0].contains(e.target) && !menuToggle[0].contains(e.target)) {
+                sidebar.removeClass('open');
+                mainContent.removeClass('sidebar-open');
+            }
+        });
+
+        // Adjust on window resize
+        $(window).on('resize', function () {
+            if (window.innerWidth > 768) {
+                mainContent.removeClass('sidebar-open');
+            }
         });
     });
 </script>
