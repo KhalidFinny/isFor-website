@@ -115,6 +115,14 @@ class UsersModel
         }
     }
 
+    public function deleteImage($id) {
+        $this->db->query("SELECT profile_picture FROM users WHERE user_id = :id");
+        $this->db->bind(":id", $id);
+        $user = $this->db->single();
+
+        return $user;
+    }
+
 
     public function editUser($email, $id, $data, $photo, $password) {
         $query = "UPDATE users
