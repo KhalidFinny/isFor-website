@@ -67,7 +67,7 @@ class Home extends Controller
 
         if (array_key_exists($status, $categoryMap)) {
             $category = $categoryMap[$status];
-            $total = $this->model('ResearchOutputModel')-> getTotalFilesByCategory($category);
+            $total = $this->model('ResearchOutputModel')->getTotalFilesByCategory($category);
             $data = $this->model('ResearchOutputModel')->getFilesByCategory($category, $page, $limit);
             $result = [
                 'total' => $total,

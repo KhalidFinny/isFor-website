@@ -179,39 +179,12 @@
                             </table>
                         </div>
                     <?php endif; ?>
-                </section>
-                <!-- Pagination -->
-                <div class="px-4 sm:px-8 py-4 border-t border-gray-100">
-                    <div class="flex
-                    <div class=" text-sm text-gray-500">
-                        Showing
-                        <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
-                        to
-                        <span class="font-medium">
-                            <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']) ?>
-                        </span>
-                        of
-                        <span class="font-medium"><?= $data['totalUsers'] ?></span>
-                        results
+                    <div class="flex items-center justify-between px-4 py-3 border-t border-gray-200">
+                        <div id="infoContainer" class="text-sm text-gray-500"></div>
+                        <div id="pagination" class="flex items-center space-x-2"></div>
                     </div>
-                    <div class="flex items-center space-x-2" id="pagination">
-                        <!-- Page indicator -->
-                        <div class="text-sm text-gray-500">
-                            Page <span class="font-medium"><?= $data['currentPage']; ?></span> of <span
-                                class="font-medium"><?= $data['totalPages']; ?></span>
-                        </div>
-                        <!-- Pagination numbers -->
-                        <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
-                            <a href="?page=<?= $i; ?>"
-                                class="px-4 py-2 text-sm font-medium rounded-lg <?= $i == $data['currentPage'] ? 'border border-red-400  text-red-500' : 'bg-white text-red-500 duration-300 hover:bg-red-100'; ?>">
-                                <?= $i; ?>
-                            </a>
-                        <?php endfor; ?>
-                    </div>
-                </div>
+            </main>
         </div>
-        </main>
-    </div>
     </div>
 
     <!-- Add User Modal -->
@@ -381,17 +354,63 @@
                     }
                 });
             });
+        });
 
-            // AJAX untuk pencarian data pengguna
-            let tableBody = $('tbody'); // Elemen <tbody> tabel
-            let pagination = $('#pagination'); // Elemen pagination
+        $(document).ready(function() {
+            let tableBody = $('tbody');
+            let pagination = $('#pagination');
+            let infoContainer = $('#infoContainer');
             let pageSize = 5; // Jumlah data per halaman
             let currentPage = 1; // Halaman aktif
 
+            // Fungsi untuk membuat tombol pagination dengan ellipsis
+            function createPaginationButtons(totalPages, currentPage) {
+                let buttons = [];
+                if (totalPages <= 5) {
+                    // Jika halaman kurang atau sama dengan 5, tampilkan semua tombol
+                    for (let i = 1; i <= totalPages; i++) {
+                        buttons.push({
+                            page: i
+                        });
+                    }
+                } else {
+                    // Tampilkan tombol halaman pertama
+                    buttons.push({
+                        page: 1
+                    });
+                    // Jika currentPage > 3, tampilkan ellipsis
+                    if (currentPage > 3) {
+                        buttons.push({
+                            ellipsis: true
+                        });
+                    }
+                    // Tampilkan halaman di sekitar currentPage (1 sebelum dan 1 sesudah)
+                    let start = Math.max(2, currentPage - 1);
+                    let end = Math.min(totalPages - 1, currentPage + 1);
+                    for (let i = start; i <= end; i++) {
+                        buttons.push({
+                            page: i
+                        });
+                    }
+                    // Jika currentPage < totalPages - 2, tampilkan ellipsis
+                    if (currentPage < totalPages - 2) {
+                        buttons.push({
+                            ellipsis: true
+                        });
+                    }
+                    // Tampilkan tombol halaman terakhir
+                    buttons.push({
+                        page: totalPages
+                    });
+                }
+                return buttons;
+            }
+
+            // Fungsi utama untuk mengambil data pengguna dengan AJAX
             function fetchUsers(keyword, pageNumber) {
                 $.ajax({
-                    url: '<?= BASEURL; ?>/user/search', // URL endpoint
-                    type: 'POST', // Metode HTTP
+                    url: '<?= BASEURL; ?>/user/search', // Endpoint, sesuaikan jika perlu
+                    type: 'POST',
                     data: {
                         keyword: keyword,
                         pageNumber: pageNumber,
@@ -399,9 +418,12 @@
                     },
                     dataType: 'json',
                     success: function(data) {
+                        // Kosongkan tabel, pagination, dan infoContainer
                         tableBody.empty();
                         pagination.empty();
+                        infoContainer.empty();
 
+                        // Jika ada data
                         if (data.data.length > 0) {
                             $.each(data.data, function(index, user) {
                                 let roleClass = user.role_id == "1" ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600';
@@ -409,13 +431,13 @@
                                 let profilePic = user.profile_picture ?
                                     `<img class="h-full w-full object-cover rounded-full" src="<?= PHOTOPROFILE ?>${user.profile_picture}" alt="">` :
                                     `<svg class="h-full w-full object-cover rounded-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z" fill="#ef4444"/>
-                            </svg>`;
+                                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20.2C9.5 20.2 7.29 18.92 6 16.98C6.03 14.99 10 13.9 12 13.9C13.99 13.9 17.97 14.99 18 16.98C16.71 18.92 14.5 20.2 12 20.2Z" fill="#ef4444"/>
+                                </svg>`;
 
                                 tableBody.append(`
                             <tr class="table-row">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center space-x-4">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
                                         <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-red-50">
                                             ${profilePic}
                                         </div>
@@ -424,47 +446,84 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-8 py-5">
-                                    <div class="text-sm text-red-500">${user.email}</div>
+                                <td class="px-6 py-4 text-sm text-red-500">
+                                    ${user.email}
                                 </td>
-                                <td class="px-8 py-5">
+                                <td class="px-6 py-4">
                                     <span class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium ${roleClass}">
                                         <span class="w-1 h-1 mr-1.5 rounded-full bg-${roleLabel === 'Admin' ? 'red-500' : 'blue-500'}"></span>
                                         ${roleLabel}
                                     </span>
                                 </td>
-                                <td class="px-8 py-5 text-sm space-x-3">
+                                <td class="px-6 py-4 text-sm space-x-3">
                                     <a href="<?= BASEURL; ?>/User/editView/${user.user_id}" class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414
+                                                     a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </a>
                                     <a href="<?= BASEURL; ?>/User/Delete/${user.user_id}" class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200" onclick="return confirm('Are you sure you want to delete this user?')">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                      </svg>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                                                     01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0
+                                                     00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
                                     </a>
                                 </td>
                             </tr>
                         `);
                             });
 
+                            // Buat pagination dengan ellipsis
                             let totalPages = Math.ceil(data.totalCount / pageSize);
                             if (totalPages > 1) {
-                                for (let i = 1; i <= totalPages; i++) {
-                                    pagination.append(`
-                                <button class="px-4 py-2 text-sm ${i === currentPage ? 'text-red-600' : 'text-gray-500 hover:text-red-600'}" data-page="${i}">
-                                    ${i}
-                                </button>
-                            `);
-                                }
+                                // Tampilkan info "Page X of Y"
+                                pagination.append(`
+                            <div class="text-sm text-gray-500">
+                                Page <span class="font-medium">${pageNumber}</span> of <span class="font-medium">${totalPages}</span>
+                            </div>
+                        `);
+
+                                let buttons = createPaginationButtons(totalPages, pageNumber);
+                                buttons.forEach(btn => {
+                                    if (btn.ellipsis) {
+                                        pagination.append(`<span class="px-3 py-1 text-sm">...</span>`);
+                                    } else {
+                                        let activeClass = (btn.page === pageNumber) ?
+                                            'bg-red-100 text-red-600 border-red-200' :
+                                            'bg-white text-gray-600 border-gray-200 hover:bg-red-50 hover:text-red-600';
+                                        pagination.append(`
+                                    <button class="px-3 py-1 text-sm border rounded-md ${activeClass}" data-page="${btn.page}">
+                                        ${btn.page}
+                                    </button>
+                                `);
+                                    }
+                                });
+
+                                // Event klik tombol pagination
                                 pagination.off('click').on('click', 'button', function() {
                                     currentPage = parseInt($(this).data('page'));
                                     fetchUsers(keyword, currentPage);
                                 });
                             }
                         } else {
-                            tableBody.html('<tr><td colspan="4" class="text-center py-5 text-gray-500">Pengguna tidak ditemukan.</td></tr>');
+                            tableBody.html(`
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-gray-500">
+                                Pengguna tidak ditemukan.
+                            </td>
+                        </tr>
+                    `);
+                        }
+
+                        // Tampilkan info "Showing X to Y of Z results" jika tersedia
+                        if (data.totalCount) {
+                            let start = (pageNumber - 1) * pageSize + 1;
+                            let end = Math.min(pageNumber * pageSize, data.totalCount);
+                            let infoText = `Showing ${start} to ${end} of ${data.totalCount} results`;
+                            infoContainer.text(infoText);
                         }
                     },
                     error: function(xhr, status, error) {
@@ -473,18 +532,16 @@
                 });
             }
 
-            // Event untuk input pencarian
+            // Event pencarian
             $('#searchUser').on('keyup', function() {
                 let keyword = $(this).val();
                 currentPage = 1;
                 fetchUsers(keyword, currentPage);
             });
 
-            // Panggil fetchUsers() untuk pertama kali
+            // Panggil fetchUsers() pertama kali
             fetchUsers('', currentPage);
         });
-
-
 
         $('#profile_picture').on('change', function(e) {
             const fileName = e.target.files[0]?.name || 'Pilih foto profil';
