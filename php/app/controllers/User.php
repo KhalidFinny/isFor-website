@@ -177,8 +177,9 @@ class User extends Controller
                 // Coba upload file baru terlebih dahulu
                 $newPhoto = $this->upload();
                 if ($newPhoto === false) {
-                    // Jika upload gagal, jangan hapus gambar lama
-                    return;
+                    // Respons error sudah dikirim dari fungsi upload(),
+                    // hentikan eksekusi agar client menerima respon tersebut.
+                    exit();
                 } else {
                     // Jika upload berhasil, hapus gambar lama jika ada
                     $imageData = $this->model('UsersModel')->deleteImage($id);
@@ -205,8 +206,6 @@ class User extends Controller
             }
         }
     }
-
-
 
     private function redirectWithError($error)
     {
