@@ -188,6 +188,7 @@ session_start();
                         onload="adjustImageSize(this)"
                         onmousemove="zoomImage(event)"
                         onmouseout="resetZoom()">
+
                 </div>
 
                 <!-- Floating info panel dengan animasi -->
@@ -199,316 +200,359 @@ session_start();
                     </div>
                     <p id="previewDescription" class="text-gray-600 text-sm leading-relaxed"></p>
                 </div>
-
-
-                <script>
-                    function deleteImage(ImageId) {
-                        if (confirm('Are you sure you want to delete this file?')) {
-                            $.ajax({
-                                url: '<?= BASEURL ?>/galleries/deleteImage',
-                                type: 'POST',
-                                data: {
-                                    gallery_id: ImageId
-                                },
-                                success: function(response) {
-                                    let result = JSON.parse(response);
-                                    if (result.success) {
-                                        alert(result.message);
-                                        window.location.reload();
-                                    } else {
-                                        alert(result.message);
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    alert('An error occurred: ' + error);
-                                }
-                            });
+            </div>
+        </div>
+    </div>
+    <script>
+        function deleteImage(imageId) {
+            if (confirm('Are you sure you want to delete this file?')) {
+                $.ajax({
+                    url: '<?= BASEURL ?>/galleries/deleteImage',
+                    type: 'POST',
+                    data: {
+                        gallery_id: imageId
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.reload();
+                        } else {
+                            alert(response.message);
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('An error occurred: ' + error);
                     }
+                });
+            }
+        }
 
-                    function showImagePreview(imageUrl, title, category, date, description) {
-                        const $modal = $('#imagePreviewModal');
-                        const $content = $('#previewContent');
-                        const $image = $('#previewImage');
-                        const $titleEl = $('#previewTitle');
-                        const $categoryEl = $('#previewCategory');
-                        const $dateEl = $('#previewDate');
-                        const $descriptionEl = $('#previewDescription');
+        function filter(status, page = 1) {
+            $.ajax({
+                url: '<?= BASEURL ?>/home/filterGallery',
+                method: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    status: status,
+                    page: page
+                }),
+                success: function(response) {
+                    const galleryContainer = document.querySelector(".container-galleries");
+                    const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+                    const ul = document.createElement('ul');
 
-                        $image.attr('src', imageUrl);
-                        $titleEl.text(title);
-                        $categoryEl.text(category);
-                        $dateEl.text(date);
-                        $descriptionEl.text(description);
+                    galleryContainer.innerHTML = '';
+                    navElement.innerHTML = '';
+                    ul.className = 'flex items-center -space-x-px h-8 text-sm';
 
-                        $modal.addClass('modal-open');
-                        setTimeout(() => {
-                            $content.addClass('content-show');
-                        }, 100);
+                    if (response.data && response.data.length > 0) {
+                        response.data.forEach(gallery => {
+                            const formattedDate = new Date(gallery.created_at).toLocaleDateString('id-ID', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                            });
 
-                        $('body').css('overflow', 'hidden');
-
-                        initializeZoom($image[0]);
-                    }
-
-                    function initializeZoom(image) {
-                        const $image = $(image);
-                        let scale = 1;
-                        let panning = false;
-                        let pointX = 0;
-                        let pointY = 0;
-                        let start = {
-                            x: 0,
-                            y: 0
-                        };
-
-                        $image.addClass('zoom-active');
-
-                        // Double click to reset zoom
-                        $image.on('dblclick', () => {
-                            scale = 1;
-                            pointX = 0;
-                            pointY = 0;
-                            $image.css('transform', `translate(0px, 0px) scale(1)`);
-                            $image.removeClass('zoomed');
-                        });
-
-                        // Mouse wheel zoom
-                        $image.on('wheel', (e) => {
-                            e.preventDefault();
-                            const xs = (e.originalEvent.clientX - pointX) / scale;
-                            const ys = (e.originalEvent.clientY - pointY) / scale;
-
-                            if (e.originalEvent.deltaY < 0) {
-                                scale *= 1.1;
-                                $image.addClass('zoomed');
-                            } else {
-                                scale /= 1.1;
-                                if (scale <= 1) {
-                                    scale = 1;
-                                    $image.removeClass('zoomed');
-                                }
-                            }
-
-                            scale = Math.min(Math.max(1, scale), 4);
-                            pointX = e.originalEvent.clientX - xs * scale;
-                            pointY = e.originalEvent.clientY - ys * scale;
-
-                            $image.css('transform', `translate(${pointX}px, ${pointY}px) scale(${scale})`);
-                        });
-
-                        // Pan functionality
-                        $image.on('mousedown', (e) => {
-                            e.preventDefault();
-                            if (scale > 1) {
-                                start = {
-                                    x: e.clientX - pointX,
-                                    y: e.clientY - pointY
-                                };
-                                panning = true;
-                            }
-                        });
-
-                        $(document).on('mousemove', (e) => {
-                            if (!panning) return;
-                            e.preventDefault();
-                            pointX = e.clientX - start.x;
-                            pointY = e.clientY - start.y;
-                            $image.css('transform', `translate(${pointX}px, ${pointY}px) scale(${scale})`);
-                        });
-
-                        $(document).on('mouseup mouseleave', () => {
-                            panning = false;
-                        });
-                    }
-
-                    function closeImagePreview() {
-                        const $modal = $('#imagePreviewModal');
-                        const $content = $('#previewContent');
-                        const $image = $('#previewImage');
-
-                        $content.removeClass('content-show');
-
-                        setTimeout(() => {
-                            $modal.removeClass('modal-open');
-                            $image.css('transform', 'translate(0px, 0px) scale(1)');
-                            $image.removeClass('zoomed');
-                            $('body').css('overflow', '');
-                        }, 300);
-                    }
-
-                    function filter(status, page = 1) {
-                        // Mengirimkan request AJAX
-                        $.ajax({
-                            url: '<?= BASEURL ?>/home/filterGallery', // Endpoint backend
-                            method: 'POST', // Metode POST
-                            contentType: 'application/json', // Header Content-Type
-                            dataType: 'json', // Format respons JSON
-                            data: JSON.stringify({
-                                status: status,
-                                page: page
-                            }), // Kirim data dalam format JSON
-                            success: function(response) {
-                                // Seleksi elemen HTML
-                                const galleryContainer = document.querySelector(".container-galleries");
-                                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
-                                const ul = document.createElement('ul');
-
-                                // Kosongkan elemen sebelumnya
-                                galleryContainer.innerHTML = '';
-                                navElement.innerHTML = '';
-                                ul.className = 'flex items-center -space-x-px h-8 text-sm';
-
-                                // Jika ada data galeri
-                                if (response.data && response.data.length > 0) {
-                                    response.data.forEach(galery => {
-                                        const formattedDate = new Date(galery.created_at).toLocaleDateString('id-ID', {
-                                            day: '2-digit',
-                                            month: 'short',
-                                            year: 'numeric',
-                                        });
-
-                                        const fileHTML = `
-                    <div class="gallery-item group visible" style="animation-delay: 0.1s">
-                        <div class="image-container cursor-pointer" onclick="showImagePreview(
-                                '<?= GALLERY; ?>/${galery.image}',
-                                '${galery.title.replace(/'/g, "\\'")}',
-                                '${galery.category.replace(/'/g, "\\'")}',
-                                '${formattedDate}',
-                                '${galery.description.replace(/'/g, "\\'")}'
-                            )">
-                            <div class="image-placeholder">
-                                <img src="<?= GALLERY; ?>/${galery.image}" alt="${galery.title}" class="w-full h-full object-cover">
-                            </div>
-                            <div class="image-overlay">
-                                <span class="text-xl font-bold text-white mb-2">
-                                    ${galery.category} · ${formattedDate}
-                                </span>
-                                <h3 class="text-xl font-bold text-white mb-3">
-                                    ${galery.title}
-                                </h3>
-                                <p class="text-red-100 text-sm leading-relaxed">
-                                    ${galery.description}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex justify-between items-center">
-                            <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
-                                ${galery.title}
-                            </h3>
-                            <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
-                                <button onclick="deleteImage(<?= $item['gallery_id']; ?>)"
-                                        class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                        title="Delete">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
-                                </button>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                `;
-                                        galleryContainer.innerHTML += fileHTML;
-                                    });
-                                } else {
-                                    galleryContainer.innerHTML = `
-                                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10">
-                                    <p class="text-gray-500 text-lg">
-                                        Belum ada data saat ini.
+                            const fileHTML = `
+                        <div class="gallery-item group visible" style="animation-delay: 0.1s">
+                            <div class="image-container cursor-pointer" onclick="showImagePreview(
+                                    '<?= GALLERY; ?>/${gallery.image}',
+                                    '${gallery.title.replace(/'/g, "\\'")}',
+                                    '${gallery.category.replace(/'/g, "\\'")}',
+                                    '${formattedDate}',
+                                    '${gallery.description.replace(/'/g, "\\'")}'
+                                )">
+                                <div class="image-placeholder">
+                                    <img src="<?= GALLERY; ?>/${gallery.image}" alt="${gallery.title}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="image-overlay">
+                                    <span class="text-xl font-bold text-white mb-2">
+                                        ${gallery.category} · ${formattedDate}
+                                    </span>
+                                    <h3 class="text-xl font-bold text-white mb-3">
+                                        ${gallery.title}
+                                    </h3>
+                                    <p class="text-red-100 text-sm leading-relaxed">
+                                        ${gallery.description}
                                     </p>
-                                </div>`;
-                                }
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <h3 class="text-lg font-bold text-red-900 group-hover:text-red-600 transition-colors duration-300">
+                                    ${gallery.title}
+                                </h3>
+                                <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
+                                    <button onclick="deleteImage(${gallery.gallery_id})"
+                                            class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            title="Delete">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        `;
+                            galleryContainer.innerHTML += fileHTML;
+                        });
+                    } else {
+                        galleryContainer.innerHTML = `
+                        <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10">
+                            <p class="text-gray-500 text-lg">Belum ada data saat ini.</p>
+                        </div>`;
+                    }
 
-                                // Tambahkan navigasi halaman jika diperlukan
-                                if (response.total > response.limit) {
-                                    const totalPages = response.totalPages; // Jumlah total halaman
-                                    const currentPage = response.page; // Halaman saat ini
+                    if (response.total > response.limit) {
+                        const totalPages = response.totalPages;
+                        const currentPage = response.page;
 
-                                    // Tombol "Previous"
-                                    if (currentPage > 1) {
-                                        ul.innerHTML += `
+                        if (currentPage > 1) {
+                            ul.innerHTML += `
                         <li>
                             <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
-                            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
                                 <span class="sr-only">Previous</span>
-                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round"
-                                        stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                                <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
                                 </svg>
                             </a>
                         </li>
                         `;
-                                    }
+                        }
 
-                                    // Tombol halaman
-                                    for (let i = 1; i <= totalPages; i++) {
-                                        ul.innerHTML += `
+                        for (let i = 1; i <= totalPages; i++) {
+                            ul.innerHTML += `
                         <li>
                             <a href="javascript:void(0)" onclick="filter(${status}, ${i})"
-                            class="flex items-center justify-center px-3 h-8 leading-tight ${i === currentPage ? 'text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'}">${i}
+                            class="flex items-center justify-center px-3 h-8 leading-tight ${i === currentPage ? 'text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">${i}
                             </a>
                         </li>
                         `;
-                                    }
+                        }
 
-                                    // Tombol "Next"
-                                    if (currentPage < totalPages) {
-                                        ul.innerHTML += `
+                        if (currentPage < totalPages) {
+                            ul.innerHTML += `
                         <li>
                             <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
-                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
                                 <span class="sr-only">Next</span>
-                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round"
-                                        stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                                <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                                 </svg>
                             </a>
                         </li>
                         `;
-                                    }
+                        }
 
-                                    navElement.appendChild(ul);
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.error('Error:', error);
-                                alert('Terjadi kesalahan saat memuat galeri.');
-                            }
-                        });
+                        navElement.appendChild(ul);
                     }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat memuat galeri.');
+                }
+            });
+        }
 
-                    $(document).ready(function() {
-                        const observer = new IntersectionObserver((entries) => {
-                            entries.forEach((entry, index) => {
-                                if (entry.isIntersecting) {
-                                    setTimeout(() => {
-                                        $(entry.target).addClass('visible');
-                                    }, index * 100);
-                                }
-                            });
-                        }, {
-                            threshold: 0.1
-                        });
+        function showImagePreview(imageUrl, title, category, date, description) {
+            const $modal = $('#imagePreviewModal');
+            const $content = $('#previewContent');
+            const $image = $('#previewImage');
+            const $titleEl = $('#previewTitle');
+            const $categoryEl = $('#previewCategory');
+            const $dateEl = $('#previewDate');
+            const $descriptionEl = $('#previewDescription');
 
-                        const $topicButtons = $('.topic-button');
-                        $topicButtons.on('click', function() {
-                            $topicButtons.removeClass('active');
-                            $(this).addClass('active');
-                        });
+            $image.attr('src', imageUrl);
+            $titleEl.text(title);
+            $categoryEl.text(category);
+            $dateEl.text(date);
+            $descriptionEl.text(description);
 
-                        const $galleryItems = $('.gallery-item');
-                        $galleryItems.each(function() {
-                            observer.observe(this);
-                        });
+            $modal.addClass('modal-open');
+            setTimeout(() => {
+                $content.addClass('content-show');
+            }, 100);
 
-                        $galleryItems.on('click', function() {
-                            $(this).toggleClass('zoomed');
-                        });
-                    });
-                </script>
+            $('body').css('overflow', 'hidden');
+
+            initializeZoom($image[0]);
+        }
+
+        function initializeZoom(image) {
+            const $image = $(image);
+            let scale = 1;
+            let panning = false;
+            let pointX = 0;
+            let pointY = 0;
+            let start = {
+                x: 0,
+                y: 0
+            };
+
+            $image.addClass('zoom-active');
+
+            // Double click to reset zoom
+            $image.on('dblclick', () => {
+                scale = 1;
+                pointX = 0;
+                pointY = 0;
+                $image.css('transform', `translate(0px, 0px) scale(1)`);
+                $image.removeClass('zoomed');
+            });
+
+            // Mouse wheel zoom
+            $image.on('wheel', (e) => {
+                e.preventDefault();
+                const xs = (e.originalEvent.clientX - pointX) / scale;
+                const ys = (e.originalEvent.clientY - pointY) / scale;
+
+                if (e.originalEvent.deltaY < 0) {
+                    scale *= 1.1;
+                    $image.addClass('zoomed');
+                } else {
+                    scale /= 1.1;
+                    if (scale <= 1) {
+                        scale = 1;
+                        $image.removeClass('zoomed');
+                    }
+                }
+
+                scale = Math.min(Math.max(1, scale), 4);
+                pointX = e.originalEvent.clientX - xs * scale;
+                pointY = e.originalEvent.clientY - ys * scale;
+
+                $image.css('transform', `translate(${pointX}px, ${pointY}px) scale(${scale})`);
+            });
+
+            // Pan functionality
+            $image.on('mousedown', (e) => {
+                e.preventDefault();
+                if (scale > 1) {
+                    start = {
+                        x: e.clientX - pointX,
+                        y: e.clientY - pointY
+                    };
+                    panning = true;
+                }
+            });
+
+            $(document).on('mousemove', (e) => {
+                if (!panning) return;
+                e.preventDefault();
+                pointX = e.clientX - start.x;
+                pointY = e.clientY - start.y;
+                $image.css('transform', `translate(${pointX}px, ${pointY}px) scale(${scale})`);
+            });
+
+            $(document).on('mouseup mouseleave', () => {
+                panning = false;
+            });
+        }
+
+        function closeImagePreview() {
+            const $modal = $('#imagePreviewModal');
+            const $content = $('#previewContent');
+            const $image = $('#previewImage');
+
+            $content.removeClass('content-show');
+            setTimeout(() => {
+                $modal.removeClass('modal-open');
+                $image.css('transform', 'translate(0px, 0px) scale(1)');
+                $image.removeClass('zoomed');
+                $('body').css('overflow', '');
+            }, 300);
+        }
+
+        // Atur ulang ukuran gambar agar memenuhi container jika gambar lebih kecil dari container
+        function adjustImageSize(image) {
+            const $img = $(image);
+            // Misalnya, jika container berukuran 80vw x 80vh, dan kita ingin gambar memenuhi container
+            const containerWidth = $(window).width() * 0.8;
+            const containerHeight = $(window).height() * 0.8;
+            // Ambil dimensi asli gambar
+            const naturalWidth = image.naturalWidth;
+            const naturalHeight = image.naturalHeight;
+            // Hitung faktor skala berdasarkan container dan dimensi gambar
+            const scaleWidth = containerWidth / naturalWidth;
+            const scaleHeight = containerHeight / naturalHeight;
+            const scale = Math.min(scaleWidth, scaleHeight, 1); // jangan lebih besar dari 1 untuk gambar asli
+            $img.css('transform', `scale(${scale})`);
+        }
+
+        // Implementasi fungsi zoomImage dengan menggunakan wheel event
+        function zoomImage(event) {
+            event.preventDefault();
+            if (!event.originalEvent || typeof event.originalEvent.deltaY === 'undefined') {
+                return; // Jika tidak ada properti deltaY, jangan lakukan apa-apa.
+            }
+            const $image = $('#previewImage');
+            const transform = $image.css('transform');
+            let scale = 1,
+                translateX = 0,
+                translateY = 0;
+            if (transform !== 'none') {
+                const values = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
+                scale = parseFloat(values[0]);
+                translateX = parseFloat(values[4]);
+                translateY = parseFloat(values[5]);
+            }
+
+            const zoomFactor = 1.1;
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+
+            if (event.originalEvent.deltaY < 0) {
+                scale *= zoomFactor;
+            } else {
+                scale /= zoomFactor;
+            }
+            scale = Math.min(Math.max(scale, 1), 4);
+
+            $image.css('transform', `translate(${translateX}px, ${translateY}px) scale(${scale})`);
+        }
+
+
+        // Reset zoom mengembalikan transform ke nilai default
+        function resetZoom() {
+            const $image = $('#previewImage');
+            $image.css('transform', 'translate(0px, 0px) scale(1)');
+        }
+
+
+        $(document).ready(function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            $(entry.target).addClass('visible');
+                        }, index * 100);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            const $topicButtons = $('.topic-button');
+            $topicButtons.on('click', function() {
+                $topicButtons.removeClass('active');
+                $(this).addClass('active');
+            });
+
+            const $galleryItems = $('.gallery-item');
+            $galleryItems.each(function() {
+                observer.observe(this);
+            });
+
+            $galleryItems.on('click', function() {
+                $(this).toggleClass('zoomed');
+            });
+        });
+    </script>
+
 </body>
 
 </html>
