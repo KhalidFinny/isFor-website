@@ -26,93 +26,6 @@ class User extends Controller
         }
     }
 
-
-    public function create()
-    {
-        session_start();
-
-        $photo = $this->upload();
-
-        // if (!$photo) {
-        //     return false;
-        // }
-
-        // var_dump($_POST);
-        // var_dump($photo);
-        // exit;
-        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $name = $_POST['name'];
-        $username = $_POST['username'];
-
-        // Validasi data pengguna (nama, username, email)
-        $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
-
-        if ($validationResult['name_exists']) {
-            $_SESSION['message'] = "Nama sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
-        }
-        if ($validationResult['username_exists']) {
-            $_SESSION['message'] = "Username sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
-        }
-        if ($validationResult['email_exists']) {
-            $_SESSION['message'] = "Email sudah terdaftar.";
-            header('Location: ' . BASEURL . '/User');
-            return false;
-        }
-
-        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) == 0) {
-            $_SESSION['message'] = "Tambah data berhasil.";
-        } else {
-            $_SESSION['message'] = "Tambah data gagal.";
-        }
-
-        // var_dump($_SESSION['message']);
-        header('Location: ' . BASEURL . '/User');
-    }
-
-    public function upload()
-    {
-     //        var_dump($_FILES);
-//        file_put_contents('debug.log', print_r($_FILES, true));
-        $nameFile = $_FILES['profile_picture']['name'];
-        $sizeFile = $_FILES['profile_picture']['size'];
-        $error = $_FILES['profile_picture']['error'];
-        $tmpName = $_FILES['profile_picture']['tmp_name'];
-
-        if (!isset($nameFile) || $error === 4) {
-            return null; // Tidak ada file yang diunggah
-        }
-
-        //cek yang diupload adalah gambar
-        $extensionImageValid = ['jpg', 'jpeg', 'png'];
-        $extensionImage = explode('.', $nameFile);
-        $extensionImage = strtolower(end($extensionImage));
-
-        if (!in_array($extensionImage, $extensionImageValid)) {
-            echo "yang anda upload bukan gambar";
-            return false;
-        }
-
-        //cek jika ukurannya terlalu besar
-        if ($sizeFile > 5000000) {
-            echo "ukuran gambar terlalu besar";
-            return false;
-        }
-
-        //lolos pengecekan, gambar siap diupload
-        // generate nama file baru
-        $newFileName = uniqid();
-        $newFileName .= '.';
-        $newFileName .= $extensionImage;
-
-        move_uploaded_file($tmpName, '../app/img/profile/' . $newFileName);
-
-        return $newFileName;
-    }
-
     public function editView($id)
     {
         $this->checkLogin();
@@ -126,6 +39,102 @@ class User extends Controller
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
+
+
+    public function create()
+    {
+        session_start();
+
+        // Panggil fungsi upload, jika terjadi error (false) maka respon error sudah dikirim
+        // Namun jika tidak ada file yang diunggah, nilai $photo akan bernilai null
+        $photo = $this->upload();
+        if ($photo === false) {
+            return;
+        }
+
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $name = $_POST['name'] ?? '';
+        $username = $_POST['username'] ?? '';
+
+        // Validasi data pengguna (nama, username, email)
+        $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
+
+        if ($validationResult['name_exists']) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Nama sudah terdaftar.'
+            ]);
+            return;
+        }
+        if ($validationResult['username_exists']) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Username sudah terdaftar.'
+            ]);
+            return;
+        }
+        if ($validationResult['email_exists']) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Email sudah terdaftar.'
+            ]);
+            return;
+        }
+
+        // Tambah pengguna baru
+        if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Tambah data berhasil.'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Tambah data gagal.'
+            ]);
+        }
+    }
+
+    public function upload()
+    {
+        $nameFile = $_FILES['profile_picture']['name'] ?? '';
+        $sizeFile = $_FILES['profile_picture']['size'] ?? 0;
+        $error = $_FILES['profile_picture']['error'] ?? 4;
+        $tmpName = $_FILES['profile_picture']['tmp_name'] ?? '';
+
+        // Jika tidak ada file yang diunggah, kembalikan null sehingga gambar default
+        if (empty($nameFile) || $error === 4) {
+            return null;
+        }
+
+        // Cek yang diupload adalah gambar
+        $extensionImageValid = ['jpg', 'jpeg', 'png'];
+        $extensionImage = explode('.', $nameFile);
+        $extensionImage = strtolower(end($extensionImage));
+
+        if (!in_array($extensionImage, $extensionImageValid)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'File tidak didukung. Hanya file JPG, JPEG, dan PNG yang diperbolehkan.'
+            ]);
+            return false;
+        }
+
+        // Cek jika ukurannya terlalu besar
+        if ($sizeFile > 5000000) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ukuran gambar terlalu besar.'
+            ]);
+            return false;
+        }
+
+        // Lolos pengecekan, gambar siap diupload
+        $newFileName = uniqid() . '.' . $extensionImage;
+        move_uploaded_file($tmpName, '../app/img/profile/' . $newFileName);
+        return $newFileName;
+    }
+
 
     public function edit()
     {
@@ -165,13 +174,19 @@ class User extends Controller
             $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
 
             if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-                $image_name = $this->model('UsersModel')->deleteImage($id);
-
-                if ($image_name['profile_picture'] && file_exists('../app/img/profile/' . $image_name['profile_picture'])) {
-                    unlink('../app/img/profile/' . $image_name['profile_picture']);
+                // Coba upload file baru terlebih dahulu
+                $newPhoto = $this->upload();
+                if ($newPhoto === false) {
+                    // Jika upload gagal, jangan hapus gambar lama
+                    return;
+                } else {
+                    // Jika upload berhasil, hapus gambar lama jika ada
+                    $imageData = $this->model('UsersModel')->deleteImage($id);
+                    if ($imageData['profile_picture'] && file_exists('../app/img/profile/' . $imageData['profile_picture'])) {
+                        unlink('../app/img/profile/' . $imageData['profile_picture']);
+                    }
+                    $photo = $newPhoto;
                 }
-
-                $photo = $this->upload();
             } else {
                 $photo = $oldPhoto;
             }
@@ -190,6 +205,8 @@ class User extends Controller
             }
         }
     }
+
+
 
     private function redirectWithError($error)
     {
@@ -238,5 +255,4 @@ class User extends Controller
             }
         }
     }
-
 }
