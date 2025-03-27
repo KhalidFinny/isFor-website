@@ -135,7 +135,6 @@ class User extends Controller
         return $newFileName;
     }
 
-
     public function edit()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
