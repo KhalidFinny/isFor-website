@@ -12,24 +12,78 @@
     <link rel="stylesheet" href="<?= CSS; ?>/admin/edit-user.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                margin-left: 0 !important;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .form-header h1 {
+                font-size: 2rem;
+            }
+            
+            .modern-card {
+                padding: 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .form-element input, 
+            .form-element select, 
+            .form-element textarea {
+                padding: 0.75rem;
+            }
+            
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 0.5rem;
+            }
+            
+            .form-actions button {
+                width: 100%;
+                padding: 0.75rem;
+            }
+            
+            .profile-picture-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+        
+        /* Desktop styles */
+        @media (min-width: 769px) {
+            .page-container {
+                margin-left: 16rem;
+            }
+        }
+    </style>
 </head>
 <body class="bg-white">
 <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 
-<div class="flex-1 min-h-screen ml-64">
-    <main class="py-10 px-8">
+<div class="flex-1 min-h-screen page-container">
+    <main class="main-content py-6 md:py-10 px-4 md:px-8">
         <!-- Header with Red Accent -->
-        <div class="max-w-7xl mx-auto mb-12 form-element">
+        <div class="max-w-7xl mx-auto mb-8 md:mb-12 form-element">
             <div class="flex items-center space-x-4 mb-4">
                 <span class="h-px w-12 bg-red-600"></span>
                 <span class="text-red-600 font-medium">Manajemen</span>
             </div>
-            <h1 class="text-5xl font-bold text-red-900 mb-2">Edit Pengguna</h1>
+            <h1 class="text-3xl md:text-5xl font-bold text-red-900 mb-2">Edit Pengguna</h1>
             <p class="text-gray-600 mt-2 max-w-lg">Perbarui informasi pengguna dengan mengisi formulir di bawah ini</p>
 
             <!-- Back Button with Animation -->
             <a href="<?= BASEURL; ?>/dashboardAdmin"
-               class="back-button mt-6 inline-flex items-center space-x-2 text-red-600 hover:text-red-700">
+               class="back-button mt-4 md:mt-6 inline-flex items-center space-x-2 text-red-600 hover:text-red-700">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -39,12 +93,12 @@
         </div>
 
         <!-- Modern Card with Red Accents -->
-        <div class="modern-card bg-white rounded-2xl shadow-sm max-w-4xl mx-auto border border-red-100">
-            <div class="p-8 border-b border-red-100">
-                <h2 class="text-2xl font-light text-red-500">Formulir Edit Pengguna</h2>
+        <div class="modern-card bg-white rounded-xl md:rounded-2xl shadow-sm max-w-4xl mx-auto border border-red-100">
+            <div class="p-4 md:p-8 border-b border-red-100">
+                <h2 class="text-xl md:text-2xl font-light text-red-500">Formulir Edit Pengguna</h2>
             </div>
 
-            <form id="editUserForm" action="<?= BASEURL; ?>/User/edit" method="POST" class="p-8"
+            <form id="editUserForm" action="<?= BASEURL; ?>/User/edit" method="POST" class="p-4 md:p-8"
                   enctype="multipart/form-data">
                 <!-- Hidden inputs -->
                 <input type="hidden" name="user_id" value="<?= $data['user']['user_id'] ?>">
@@ -52,41 +106,41 @@
                 <input type="hidden" name="oldImage" value="<?= $data['user']['profile_picture'] ?>">
                 <input type="hidden" name="oldPass" value="<?= $data['user']['password'] ?>">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <!-- Left Column -->
-                    <div class="space-y-6">
+                    <div class="space-y-4 md:space-y-6">
                         <div class="form-element">
                             <label class="block text-sm font-medium text-red-700 mb-2">Nama Lengkap</label>
                             <input type="text" name="name" value="<?= $data['user']['name'] ?>" required
-                                   class="input-modern w-full px-4 py-3 border-2 border-red-100 rounded-xl">
+                                   class="input-modern w-full px-3 py-2 md:px-4 md:py-3 border-2 border-red-100 rounded-lg md:rounded-xl">
                         </div>
 
                         <div class="form-element">
                             <label class="block text-sm font-medium text-red-700 mb-2">Username</label>
                             <input type="text" name="username" value="<?= $data['user']['username'] ?>" required
-                                   class="input-modern w-full px-4 py-3 border-2 border-red-100 rounded-xl">
+                                   class="input-modern w-full px-3 py-2 md:px-4 md:py-3 border-2 border-red-100 rounded-lg md:rounded-xl">
                         </div>
 
                         <div class="form-element">
                             <label class="block text-sm font-medium text-red-700 mb-2">Email</label>
                             <input type="email" name="email" value="<?= $data['user']['email'] ?>" required
-                                   class="input-modern w-full px-4 py-3 border-2 border-red-100 rounded-xl">
+                                   class="input-modern w-full px-3 py-2 md:px-4 md:py-3 border-2 border-red-100 rounded-lg md:rounded-xl">
                         </div>
                     </div>
 
                     <!-- Right Column -->
-                    <div class="space-y-6">
+                    <div class="space-y-4 md:space-y-6">
                         <div class="form-element">
                             <label class="block text-sm font-medium text-red-700 mb-2">Password Baru</label>
                             <input type="password" name="password"
-                                   class="input-modern w-full px-4 py-3 border-2 border-red-100 rounded-xl"
+                                   class="input-modern w-full px-3 py-2 md:px-4 md:py-3 border-2 border-red-100 rounded-lg md:rounded-xl"
                                    placeholder="Kosongkan jika tidak ingin mengubah">
                         </div>
 
                         <div class="form-element">
                             <label class="block text-sm font-medium text-red-700 mb-2">Role Saat Ini</label>
-                            <div class="px-4 py-3 bg-red-50 rounded-xl border-2 border-red-100">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                            <div class="px-3 py-2 md:px-4 md:py-3 bg-red-50 rounded-lg md:rounded-xl border-2 border-red-100">
+                                    <span class="inline-flex items-center px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium 
                                                <?= $data['user']['role_id'] == 1 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' ?>">
                                         <?= $data['user']['role_id'] == 1 ? "Admin" : "User" ?>
                                     </span>
@@ -95,13 +149,13 @@
 
                         <div class="form-element">
                             <label class="block text-sm font-medium text-red-700 mb-2">Foto Profil</label>
-                            <div class="flex items-center space-x-4">
+                            <div class="profile-picture-container flex items-center space-x-2 md:space-x-4">
                                 <?php if (isset($data['user']['profile_picture']) && $data['user']['profile_picture'] != null): ?>
                                     <img src="<?= PHOTOPROFILE . $data['user']['profile_picture'] ?>"
                                          alt="Profile Picture"
-                                         class="w-16 h-16 rounded-full object-cover border-2 border-red-100">
+                                         class="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-red-100">
                                 <?php else: ?>
-                                    <div class="flex-shrink-0 h-16 w-16 rounded-full overflow-hidden bg-red-50">
+                                    <div class="flex-shrink-0 h-12 w-12 md:h-16 md:w-16 rounded-full overflow-hidden bg-red-50">
                                         <svg class="h-full w-full object-cover rounded-full"
                                              viewBox="0 0 24 24" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +166,7 @@
                                     </div>
                                 <?php endif; ?>
                                 <input type="file" name="profile_picture"
-                                       class="input-modern flex-1 px-4 py-3 border-2 border-red-100 rounded-xl"
+                                       class="input-modern flex-1 px-3 py-2 md:px-4 md:py-3 border-2 border-red-100 rounded-lg md:rounded-xl"
                                        accept="image/*">
                             </div>
                         </div>
@@ -120,13 +174,13 @@
                 </div>
 
                 <!-- Form Actions -->
-                <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-red-100">
+                <div class="form-actions flex flex-col-reverse md:flex-row justify-end gap-2 md:space-x-4 mt-6 md:mt-8 pt-4 md:pt-6 border-t border-red-100">
                     <button type="button" onclick="window.history.back()"
-                            class="px-6 py-2 text-red-600 hover:text-red-700 transition-all duration-200">
+                            class="px-4 py-2 md:px-6 md:py-2 text-red-600 hover:text-red-700 transition-all duration-200">
                         Batal
                     </button>
                     <button type="submit"
-                            class="px-6 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600
+                            class="px-4 py-2 md:px-6 md:py-2 bg-red-500 text-white rounded-lg md:rounded-xl hover:bg-red-600
                                        transform hover:-translate-y-1 transition-all duration-300
                                        active:scale-95">
                         Simpan Perubahan

@@ -165,6 +165,12 @@ class User extends Controller
             $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
 
             if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
+                $image_name = $this->model('UsersModel')->deleteImage($id);
+
+                if ($image_name['profile_picture'] && file_exists('../app/img/profile/' . $image_name['profile_picture'])) {
+                    unlink('../app/img/profile/' . $image_name['profile_picture']);
+                }
+
                 $photo = $this->upload();
             } else {
                 $photo = $oldPhoto;
@@ -201,7 +207,7 @@ class User extends Controller
         }
 
         if ($this->model('UsersModel')->deleteUser($id) > 0) {
-            header('Location: ' . BASEURL . '/dashboardAdmin');
+            header('Location: ' . BASEURL . '/user');
             echo "tambah data berhasil";
         } else {
             echo "delete user gagal";

@@ -14,11 +14,11 @@
 </head>
 
 <body class="bg-white">
-    <div class="flex">
+    <div class="flex flex-col lg:flex-row">
         <?php include_once '../app/views/assets/components/AdminDashboard/sidebar.php'; ?>
 
-        <div class="flex-1 min-h-screen ml-64">
-            <main class="py-10 px-8">
+        <div class="flex-1 min-h-screen lg:ml-64">
+            <main class="py-10 px-4 sm:px-8">
                 <!-- Back Button -->
                 <div class="max-w-7xl mx-auto mb-12">
                     <a href="<?= BASEURL ?>/dashboardAdmin"
@@ -32,17 +32,17 @@
                 </div>
                 <!-- Header -->
                 <header class="max-w-7xl mx-auto mb-12 animate-fade-in">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                         <div>
                             <div class="flex items-center space-x-4 mb-4">
                                 <span class="h-px w-12 bg-red-500"></span>
                                 <span class="text-red-500 font-medium">Manajemen</span>
                             </div>
-                            <h1 class="text-4xl font-bold text-red-600">Pengguna</h1>
+                            <h1 class="text-3xl sm:text-4xl font-bold text-red-600">Pengguna</h1>
                         </div>
 
                         <button onclick="showAddUserModal()"
-                            class="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300 flex items-center space-x-2 btn-primary">
+                            class="mt-4 sm:mt-0 px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300 flex items-center space-x-2 btn-primary">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4v16m8-8H4" />
@@ -54,11 +54,11 @@
 
                 <!-- User List -->
                 <section class="bg-white rounded-2xl border border-red-100 overflow-hidden animate-slide-in">
-                    <div class="px-8 py-6 border-b border-red-100 flex justify-between items-center">
-                        <h2 class="text-2xl font-light text-red-500 tracking-tight">Daftar Pengguna</h2>
-                        <div class="relative">
+                    <div class="px-4 sm:px-8 py-6 border-b border-red-100 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h2 class="text-xl sm:text-2xl font-light text-red-500 tracking-tight">Daftar Pengguna</h2>
+                        <div class="relative mt-4 sm:mt-0">
                             <input type="text" id="searchUser" placeholder="Cari pengguna..."
-                                class="pl-11 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-600 placeholder-gray-400 w-64">
+                                class="pl-11 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-500 transition-all duration-200 text-gray-600 placeholder-gray-400 w-full sm:w-64">
                             <svg class="w-5 h-5 absolute left-4 top-3 text-gray-400" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -77,7 +77,7 @@
                             <table class="min-w-full divide-y divide-red-100">
                                 <thead>
                                     <tr>
-                                        <th class="px-8 py-5 text-left">
+                                        <th class="px-4 sm:px-8 py-5 text-left">
                                             <div class="flex items-center space-x-2">
                                                 <span
                                                     class="text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</span>
@@ -88,15 +88,15 @@
                                                 </svg>
                                             </div>
                                         </th>
-                                        <th class="px-8 py-5 text-left">
+                                        <th class="px-4 sm:px-8 py-5 text-left">
                                             <span
                                                 class="text-xs font-medium text-gray-500 uppercase tracking-wider">Email</span>
                                         </th>
-                                        <th class="px-8 py-5 text-left">
+                                        <th class="px-4 sm:px-8 py-5 text-left">
                                             <span
                                                 class="text-xs font-medium text-gray-500 uppercase tracking-wider">Peran</span>
                                         </th>
-                                        <th class="px-8 py-5 text-left">
+                                        <th class="px-4 sm:px-8 py-5 text-left">
                                             <span
                                                 class="text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</span>
                                         </th>
@@ -105,7 +105,7 @@
                                 <tbody class="divide-y divide-red-50">
                                     <?php foreach ($data['allUsersWithPagination'] as $allUsersWithPagination): ?>
                                         <tr class="table-row">
-                                            <td class="px-8 py-5">
+                                            <td class="px-4 sm:px-8 py-5">
                                                 <div class="flex items-center space-x-4">
                                                     <div class="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-red-50">
                                                         <?php if ($allUsersWithPagination['profile_picture'] == null): ?>
@@ -134,10 +134,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="px-8 py-5">
+                                            <td class="px-4 sm:px-8 py-5">
                                                 <div class="text-sm text-red-500"><?= $allUsersWithPagination['email'] ?></div>
                                             </td>
-                                            <td class="px-8 py-5">
+                                            <td class="px-4 sm:px-8 py-5">
                                                 <?php if ($allUsersWithPagination['role_id'] == 1) { ?>
                                                     <span
                                                         class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600">
@@ -152,7 +152,7 @@
                                                     </span>
                                                 <?php } ?>
                                             </td>
-                                            <td class="px-8 py-5 text-sm space-x-3">
+                                            <td class="px-4 sm:px-8 py-5 text-sm space-x-3">
                                                 <a href="<?= BASEURL; ?>/User/editView/<?= $allUsersWithPagination['user_id'] ?>"
                                                     class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,37 +181,37 @@
                     <?php endif; ?>
                 </section>
                 <!-- Pagination -->
-                <div class="px-8 py-4 border-t border-gray-100">
-                    <div class="flex items-center justify-between">
+                <div class="px-4 sm:px-8 py-4 border-t border-gray-100">
+                    <div class="flex
+                    <div class=" text-sm text-gray-500">
+                        Showing
+                        <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
+                        to
+                        <span class="font-medium">
+                            <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']) ?>
+                        </span>
+                        of
+                        <span class="font-medium"><?= $data['totalUsers'] ?></span>
+                        results
+                    </div>
+                    <div class="flex items-center space-x-2" id="pagination">
+                        <!-- Page indicator -->
                         <div class="text-sm text-gray-500">
-                            Showing
-                            <span class="font-medium"><?= ($data['currentPage'] - 1) * $data['limit'] + 1; ?></span>
-                            to
-                            <span class="font-medium">
-                                <?= min($data['currentPage'] * $data['limit'], $data['totalUsers']) ?>
-                            </span>
-                            of
-                            <span class="font-medium"><?= $data['totalUsers'] ?></span>
-                            results
+                            Page <span class="font-medium"><?= $data['currentPage']; ?></span> of <span
+                                class="font-medium"><?= $data['totalPages']; ?></span>
                         </div>
-                        <div class="flex items-center space-x-2" id="pagination">
-                            <!-- Page indicator -->
-                            <div class="text-sm text-gray-500">
-                                Page <span class="font-medium"><?= $data['currentPage']; ?></span> of <span
-                                    class="font-medium"><?= $data['totalPages']; ?></span>
-                            </div>
-                            <!-- Pagination numbers -->
-                            <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
-                                <a href="?page=<?= $i; ?>"
-                                    class="px-4 py-2 text-sm font-medium rounded-lg <?= $i == $data['currentPage'] ? 'border border-red-400  text-red-500' : 'bg-white text-red-500 duration-300 hover:bg-red-100'; ?>">
-                                    <?= $i; ?>
-                                </a>
-                            <?php endfor; ?>
-                        </div>
+                        <!-- Pagination numbers -->
+                        <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
+                            <a href="?page=<?= $i; ?>"
+                                class="px-4 py-2 text-sm font-medium rounded-lg <?= $i == $data['currentPage'] ? 'border border-red-400  text-red-500' : 'bg-white text-red-500 duration-300 hover:bg-red-100'; ?>">
+                                <?= $i; ?>
+                            </a>
+                        <?php endfor; ?>
                     </div>
                 </div>
-            </main>
         </div>
+        </main>
+    </div>
     </div>
 
     <!-- Add User Modal -->

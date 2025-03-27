@@ -598,8 +598,20 @@ CREATE TABLE `users` (
 -- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES
-(1, 'admin', 'admin', 'admin@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 1);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (1, 'Dr.Rakhmat Arianto, S.ST., M.Kom', 'admin', 'arianto@polinema.ac.id', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 1);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (2, 'Vipkas Al Hadid Firdaus, ST., MT', 'dsn1', 'dsn1@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (3, 'Ade Ismail, S.Kom., M.TI', 'dsn2', 'dsn2@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (4, 'Habibie Ed Dien, S.Kom., MT', 'ds3', 'dsn3@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (5, 'Septian Enggar Sukmana, S.Pd., MT', 'dsn4', 'dsn4@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (6, 'Vivi Nur Wijayaningrum, S.Kom., M.Kom', 'dsn5', 'dsn5@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (7, 'Rokhimatul Wakhidah, S.Pd., M.T.', 'dsn6', 'dsn6@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (8, 'Noprianto, S.Kom., M.Eng.', 'dsn7', 'dsn7@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (9, 'Anugrah Nur Rahmanto', 'dsn8', 'dsn8@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (10, 'Maskur, S.Kom., M.Kom', 'dsn9', 'dsn9@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (11, "Nurul Hidayatinnisa', SE., MM", 'dsn10', 'dsn10@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (12, 'Sapto Wibowo, S.T., M.Sc., Ph.D.', 'dsn11', 'dsn11@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (13, 'Ir. Nugroho Suharto, M.T', 'dsn12', 'dsn12@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (14, 'Galih Putra Riatma, S.ST., M.T.', 'dsn13', 'dsn13@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
 
 --
 -- Indexes for dumped tables

@@ -21,9 +21,9 @@ class UsersModel
     public function addDefaultUser()
     {
         $defaultData = [
-            'name' => 'admin',
+            'name' => 'Dr.Rakhmat Arianto, S.ST., M.Kom',
             'username' => 'admin',
-            'email' => 'admin@example.com',
+            'email' => 'arianto@polinema.ac.id',
             'profile_picture' => null,
             'password' => password_hash('123', PASSWORD_BCRYPT),
             'role_id' => 1
@@ -113,6 +113,14 @@ class UsersModel
             error_log('Database Error (deleteUser): ' . $e->getMessage());
             return false;
         }
+    }
+
+    public function deleteImage($id) {
+        $this->db->query("SELECT profile_picture FROM users WHERE user_id = :id");
+        $this->db->bind(":id", $id);
+        $user = $this->db->single();
+
+        return $user;
     }
 
 
