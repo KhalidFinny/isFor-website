@@ -109,7 +109,7 @@ class GalleryModel
         }
 
         $imageName = $result['image'];
-        $uploadDir = __DIR__ . '/../img/gallery/files/';
+        $uploadDir = __DIR__ . '/../img/gallery/';
         $filePath = $uploadDir . $imageName;
 
         $unlinkSuccess = false;
