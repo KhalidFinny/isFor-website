@@ -85,7 +85,7 @@ class ResearchOutput extends Controller
             $userId = $_SESSION['user_id'];
 
             // Pagination setup
-            $itemsPerPage = 1; // Jumlah file per halaman
+            $itemsPerPage = 6; // Jumlah file per halaman
             $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $offset = ($currentPage - 1) * $itemsPerPage;
 
@@ -308,7 +308,7 @@ class ResearchOutput extends Controller
         $status = $_POST['status'] ?? null;
         $userId = $_SESSION['user_id'];
 
-        $itemsPerPage = 1;
+        $itemsPerPage = 6;
 
         // Get the total number of files based on status
         if ($status == 0) {
