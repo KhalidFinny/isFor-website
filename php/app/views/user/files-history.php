@@ -1,333 +1,382 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat File - IsFor Internet of Things For Human Life's</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+        rel="stylesheet">
     <link rel="stylesheet" href="<?= CSS; ?>/user/files-history.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body class="bg-white">
-<div class="flex flex-col lg:flex-row"> 
-    <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
-    
-    <div class="flex-1 min-h-screen lg:ml-64">
-        <main class="py-10 pt-20 px-4 sm:px-8">
-            <div class="max-w-7xl mx-auto">
-                <a href="<?= BASEURL ?>/dashboardAdmin"
-                   class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    <span>Kembali</span>
-                </a>
-            </div>
-            
-            <!-- Swiss-inspired Header -->
-            <div class="max-w-7xl mx-auto mb-8 sm:mb-12 fade-in">
-                <div class="flex items-center space-x-4 mb-4">
-                    <span class="h-px w-12 bg-red-600"></span>
-                    <span class="text-red-600 font-medium">Riwayat</span>
-                </div>
-                <h1 class="text-3xl sm:text-5xl font-bold text-red-900 mb-2">Riwayat File</h1>
-            </div>
+    <div class="flex flex-col lg:flex-row">
+        <?php include '../app/views/assets/components/UserDashboard/sidebar.php'; ?>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                <div class="bg-white p-4 sm:p-6 rounded-xl border-2 border-red-100 slide-up" style="animation-delay: 0.1s">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-red-600">Total File</p>
-                            <p class="text-xl sm:text-2xl font-bold text-red-900"><?= $data['totalFiles'] ?></p>
-                        </div>
-                        <div class="p-2 sm:p-3 bg-red-50 rounded-xl">
-                            <svg class="w-5 sm:w-6 h-5 sm:h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
+        <div class="flex-1 min-h-screen lg:ml-64">
+            <main class="py-10 pt-20 px-4 sm:px-8">
+                <div class="max-w-7xl mx-auto">
+                    <a href="<?= BASEURL ?>/dashboardAdmin"
+                        class="inline-flex items-center space-x-2 text-red-500 hover:text-red-600 transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        <span>Kembali</span>
+                    </a>
+                </div>
+
+                <!-- Swiss-inspired Header -->
+                <div class="max-w-7xl mx-auto mb-8 sm:mb-12 fade-in">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <span class="h-px w-12 bg-red-600"></span>
+                        <span class="text-red-600 font-medium">Riwayat</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- Files List Section -->
-            <div class="bg-white rounded-xl border-2 border-red-100 overflow-hidden slide-up"
-                 style="animation-delay: 0.2s">
-                <!-- Filters and Search -->
-                <div class="p-4 sm:p-6 border-b border-red-100">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                        <div class="relative flex flex-wrap items-center gap-2 sm:gap-4">
-                            <button class="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-red-600 rounded-lg transition-colors relative filter-btn active"
-                                    data-status="all" onclick="filter('0')">
-                                Semua
-                            </button>
-                            <button class="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-red-600 rounded-lg transition-colors relative filter-btn"
-                                    data-status="1" onclick="filter(1)">
-                                Tertunda
-                            </button>
-                            <button class="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-red-600 rounded-lg transition-colors relative filter-btn"
-                                    data-status="2" onclick="filter(2)">
-                                Disetujui
-                            </button>
-                            <button class="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-red-600 rounded-lg transition-colors relative filter-btn"
-                                    data-status="3" onclick="filter(3)">
-                                Ditolak
-                            </button>
-                        </div>
-                        <div class="relative w-full sm:w-auto">
-                            <input type="text" placeholder="Cari file..." id="keyword"
-                                   class="w-full pl-10 pr-4 py-2 bg-red-50 border-0 rounded-lg text-red-900 placeholder-red-400 focus:ring-2 focus:ring-red-500">
-                            <svg class="w-5 h-5 text-red-400 absolute left-3 top-2.5" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                        </div>
-                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-bold text-red-900 mb-2">Riwayat File</h1>
                 </div>
 
-                <!-- Files Grid -->
-                <div id="research-files" class="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    <?php if (empty($data['files'])) : ?>
-                        <div class="col-span-full text-center py-8 sm:py-12">
-                            <svg class="w-12 sm:w-16 h-12 sm:h-16 text-red-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24"
-                                 stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                            <h3 class="text-lg sm:text-xl font-medium text-red-900 mb-2">Belum ada File</h3>
-                            <p class="text-red-600 mb-4 sm:mb-6">Mulai unggah file penelitian Anda sekarang</p>
-                        </div>
-                    <?php else : ?>
-                        <?php foreach ($data['files'] as $file) : ?>
-                            <div class="bg-white p-4 sm:p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
-                                <!-- File Info -->
-                                <div class="flex items-center space-x-3 sm:space-x-4 mb-3 sm:mb-4">
-                                    <div class="p-2 sm:p-3 bg-red-50 rounded-xl">
-                                        <svg class="w-6 sm:w-8 h-6 sm:h-8 text-red-600" fill="none" viewBox="0 0 24 24"
-                                             stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-base sm:text-lg font-bold text-red-900"><?= $file['title'] ?? 'Untitled' ?></h3>
-                                        <p class="text-xs sm:text-sm text-red-600"><?= $file['category'] ?? 'Uncategorized' ?></p>
-                                    </div>
-                                </div>
-
-                                <!-- Status and Actions -->
-                                <div class="flex items-center justify-between mt-3 sm:mt-4">
-                                    <!-- Status Badge -->
-                                    <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg
-                                        <?= isset($file['status']) ?
-                                        ($file['status'] == 1 ? 'bg-yellow-100 text-yellow-600' :
-                                            ($file['status'] == 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600')) :
-                                        'bg-gray-100 text-gray-600' ?>">
-                                        <?= isset($file['status']) ?
-                                            ($file['status'] == 1 ? 'Pending' :
-                                                ($file['status'] == 2 ? 'Approved' : 'Rejected')) :
-                                            'Unknown' ?>
-                                    </span>
-
-                                    <!-- Action Buttons -->
-                                    <div class="flex space-x-1 sm:space-x-2">
-                                        <!-- Preview Button -->
-                                        <button onclick="previewFile('<?= FILES . '/' . ($file['file_url'] ?? '') ?>')"
-                                                class="flex items-center px-2 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                            <svg class="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" fill="none" viewBox="0 0 24 24"
-                                                 stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                            </svg>
-                                            <span class="hidden sm:inline">Preview</span>
-                                        </button>
-
-                                        <!-- Download Button -->
-                                        <a href="<?= FILES . '/' . ($file['file_url'] ?? '#') ?>"
-                                           download
-                                           class="flex items-center px-2 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                            <svg class="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" fill="none" viewBox="0 0 24 24"
-                                                 stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                                            </svg>
-                                            <span class="hidden sm:inline">Download</span>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <!-- Comment Section -->
-                                <div class="mt-3 sm:mt-4">
-                                    <p class="text-xs sm:text-sm text-gray-600">
-                                        <?php
-                                        $comment = $file['comment'] ?? 'Tidak ada komentar';
-                                        if (strlen($comment) > 50) {
-                                            echo '<span class="truncated-comment">' . substr($comment, 0, 50) . '...</span>';
-                                            echo '<button onclick="showCommentModal(`' . htmlspecialchars($comment) . '`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>';
-                                        } else {
-                                            echo $comment;
-                                        }
-                                        ?>
-                                    </p>
-                                </div>
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                    <div class="bg-white p-4 sm:p-6 rounded-xl border-2 border-red-100 slide-up" style="animation-delay: 0.1s">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-red-600">Total File</p>
+                                <p class="text-xl sm:text-2xl font-bold text-red-900"><?= $data['totalFiles'] ?></p>
                             </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                            <div class="p-2 sm:p-3 bg-red-50 rounded-xl">
+                                <svg class="w-5 sm:w-6 h-5 sm:h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Pagination -->
-                <nav aria-label="Page navigation example" class="p-4 sm:p-6" id="pagination-nav">
-                    <ul class="flex items-center -space-x-px h-8 text-sm">
-                        <li>
-                            <?php if ($data['currentPage'] > 1) : ?>
-                                <a href="?page=<?= $data['currentPage'] - 1 ?>&status=<?= $data['selectedStatus'] ?>"
-                                   class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    <span class="sr-only">Previous</span>
-                                    <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round"
-                                              stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                                    </svg>
-                                </a>
-                            <?php endif; ?>
-                        </li>
-                        <?php for ($i = 1; $i <= $data['totalPages']; $i++) : ?>
-                            <?php if ($i == $data['currentPage']) : ?>
-                                <li>
-                                    <a href="?page=<?= $i; ?>&status=<?= $data['selectedStatus'] ?>"
-                                       aria-current="page"
-                                       class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i; ?></a>
-                                </li>
-                            <?php else : ?>
-                                <li>
-                                    <a href="?page=<?= $i; ?>&status=<?= $data['selectedStatus'] ?>"
-                                       class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $i; ?></a>
-                                </li>
-                            <?php endif; ?>
-                        <?php endfor; ?>
-                        <li>
-                            <?php if ($data['currentPage'] < $data['totalPages']) : ?>
-                                <a href="?page=<?= $data['currentPage'] + 1 ?>&status=<?= $data['selectedStatus'] ?>"
-                                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    <span class="sr-only">Next</span>
-                                    <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round"
-                                              stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                                    </svg>
-                                </a>
-                            <?php endif; ?>
-                        </li>
-                    </ul>
-                </nav>
+                <!-- Files List Section -->
+                <div class="bg-white rounded-xl border-2 border-red-100 overflow-hidden slide-up"
+                    style="animation-delay: 0.2s">
+                    <!-- Filters and Search -->
+                    <div class="p-4 sm:p-6 border-b border-red-100">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+                            <div class="relative flex flex-wrap items-center gap-2 sm:gap-4">
+                                <button class="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-red-600 rounded-lg transition-colors relative filter-btn active"
+                                    data-status="all" onclick="filter('0')">
+                                    Semua
+                                </button>
+                                <button class="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-red-600 rounded-lg transition-colors relative filter-btn"
+                                    data-status="1" onclick="filter(1)">
+                                    Tertunda
+                                </button>
+                                <button class="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-red-600 rounded-lg transition-colors relative filter-btn"
+                                    data-status="2" onclick="filter(2)">
+                                    Disetujui
+                                </button>
+                                <button class="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-red-600 rounded-lg transition-colors relative filter-btn"
+                                    data-status="3" onclick="filter(3)">
+                                    Ditolak
+                                </button>
+                            </div>
+                            <div class="relative w-full sm:w-auto">
+                                <input type="text" placeholder="Cari file..." id="keyword"
+                                    class="w-full pl-10 pr-4 py-2 bg-red-50 border-0 rounded-lg text-red-900 placeholder-red-400 focus:ring-2 focus:ring-red-500">
+                                <svg class="w-5 h-5 text-red-400 absolute left-3 top-2.5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Files Grid -->
+                    <div id="research-files" class="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        <?php if (empty($data['files'])) : ?>
+                            <div class="col-span-full text-center py-8 sm:py-12">
+                                <svg class="w-12 sm:w-16 h-12 sm:h-16 text-red-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <h3 class="text-lg sm:text-xl font-medium text-red-900 mb-2">Belum ada File</h3>
+                                <p class="text-red-600 mb-4 sm:mb-6">Mulai unggah file penelitian Anda sekarang</p>
+                            </div>
+                        <?php else : ?>
+                            <?php foreach ($data['files'] as $file) : ?>
+                                <div class="bg-white p-4 sm:p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
+                                    <!-- File Info -->
+                                    <div class="flex items-center space-x-3 sm:space-x-4 mb-3 sm:mb-4">
+                                        <div class="p-2 sm:p-3 bg-red-50 rounded-xl">
+                                            <svg class="w-6 sm:w-8 h-6 sm:h-8 text-red-600" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-base sm:text-lg font-bold text-red-900"><?= $file['title'] ?? 'Untitled' ?></h3>
+                                            <p class="text-xs sm:text-sm text-red-600"><?= $file['category'] ?? 'Uncategorized' ?></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Status and Actions -->
+                                    <div class="flex items-center justify-between mt-3 sm:mt-4">
+                                        <!-- Status Badge -->
+                                        <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg
+                                        <?= isset($file['status']) ?
+                                            ($file['status'] == 1 ? 'bg-yellow-100 text-yellow-600' : ($file['status'] == 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600')) :
+                                            'bg-gray-100 text-gray-600' ?>">
+                                            <?= isset($file['status']) ?
+                                                ($file['status'] == 1 ? 'Pending' : ($file['status'] == 2 ? 'Approved' : 'Rejected')) :
+                                                'Unknown' ?>
+                                        </span>
+
+                                        <!-- Action Buttons -->
+                                        <div class="flex space-x-1 sm:space-x-2">
+                                            <!-- Preview Button -->
+                                            <button onclick="previewFile('<?= FILES . '/' . ($file['file_url'] ?? '') ?>')"
+                                                class="flex items-center px-2 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <svg class="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                                <span class="hidden sm:inline">Preview</span>
+                                            </button>
+
+                                            <!-- Download Button -->
+                                            <a href="<?= FILES . '/' . ($file['file_url'] ?? '#') ?>"
+                                                download
+                                                class="flex items-center px-2 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <svg class="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                </svg>
+                                                <span class="hidden sm:inline">Download</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Comment Section -->
+                                    <div class="mt-3 sm:mt-4">
+                                        <p class="text-xs sm:text-sm text-gray-600">
+                                            <?php
+                                            $comment = $file['comment'] ?? 'Tidak ada komentar';
+                                            if (strlen($comment) > 50) {
+                                                echo '<span class="truncated-comment">' . substr($comment, 0, 50) . '...</span>';
+                                                echo '<button onclick="showCommentModal(`' . htmlspecialchars($comment) . '`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>';
+                                            } else {
+                                                echo $comment;
+                                            }
+                                            ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php
+                    // Helper function to generate pagination range with ellipsis
+                    function getPaginationRange($totalPages, $currentPage, $delta = 2)
+                    {
+                        $range = [];
+                        $left = $currentPage - $delta;
+                        $right = $currentPage + $delta;
+                        for ($i = 1; $i <= $totalPages; $i++) {
+                            if ($i == 1 || $i == $totalPages || ($i >= $left && $i <= $right)) {
+                                $range[] = $i;
+                            } elseif (end($range) !== '...') {
+                                $range[] = '...';
+                            }
+                        }
+                        return $range;
+                    }
+                    ?>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation example" class="p-4 sm:p-6" id="pagination-nav">
+                        <ul class="flex items-center -space-x-px h-8 text-sm">
+                            <!-- Previous Button -->
+                            <li>
+                                <?php if ($data['currentPage'] > 1) : ?>
+                                    <a href="?page=<?= $data['currentPage'] - 1 ?>&status=<?= $data['selectedStatus'] ?>"
+                                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                                        <span class="sr-only">Previous</span>
+                                        <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+                                        </svg>
+                                    </a>
+                                <?php endif; ?>
+                            </li>
+
+                            <?php
+                            $pageRange = getPaginationRange($data['totalPages'], $data['currentPage']);
+                            foreach ($pageRange as $item) {
+                                if ($item === '...') {
+                                    echo '<li>
+                        <span class="flex items-center justify-center px-3 h-8 text-gray-500">...</span>
+                      </li>';
+                                } elseif ($item == $data['currentPage']) {
+                                    echo '<li>
+                        <a href="?page=' . $item . '&status=' . $data['selectedStatus'] . '" aria-current="page"
+                           class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700">
+                            ' . $item . '
+                        </a>
+                      </li>';
+                                } else {
+                                    echo '<li>
+                        <a href="?page=' . $item . '&status=' . $data['selectedStatus'] . '"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                            ' . $item . '
+                        </a>
+                      </li>';
+                                }
+                            }
+                            ?>
+
+                            <!-- Next Button -->
+                            <li>
+                                <?php if ($data['currentPage'] < $data['totalPages']) : ?>
+                                    <a href="?page=<?= $data['currentPage'] + 1 ?>&status=<?= $data['selectedStatus'] ?>"
+                                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                                        <span class="sr-only">Next</span>
+                                        <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                        </svg>
+                                    </a>
+                                <?php endif; ?>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="fileModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl sm:text-2xl font-bold text-red-900">Preview File</h3>
+                <button onclick="closePreview()"
+                    class="p-2 text-gray-500 hover:text-gray-700 rounded-lg transition-colors">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
-        </main>
+            <div id="fileContent" class="w-full">
+                <!-- File preview will be loaded here -->
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- Preview Modal -->
-<div id="fileModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl sm:text-2xl font-bold text-red-900">Preview File</h3>
-            <button onclick="closePreview()"
+    <!-- Comment Modal -->
+    <div id="commentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl sm:text-2xl font-bold text-red-900">Komentar</h3>
+                <button onclick="closeCommentModal()"
                     class="p-2 text-gray-500 hover:text-gray-700 rounded-lg transition-colors">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-        <div id="fileContent" class="w-full">
-            <!-- File preview will be loaded here -->
-        </div>
-    </div>
-</div>
-
-<!-- Comment Modal -->
-<div id="commentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl sm:text-2xl font-bold text-red-900">Komentar</h3>
-            <button onclick="closeCommentModal()"
-                    class="p-2 text-gray-500 hover:text-gray-700 rounded-lg transition-colors">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-        <div id="commentContent" class="text-gray-700">
-            <!-- Comment content will be loaded here -->
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="commentContent" class="text-gray-700">
+                <!-- Comment content will be loaded here -->
+            </div>
         </div>
     </div>
-</div>
-<script>
-    function previewFile(url) {
-        if (!url) return;
-        const fileExtensionsForDirectPreview = /\.(jpg|jpeg|png|gif|pdf)$/i;
+    <script>
+        function previewFile(url) {
+            if (!url) return;
+            const fileExtensionsForDirectPreview = /\.(jpg|jpeg|png|gif|pdf)$/i;
 
-        if (fileExtensionsForDirectPreview.test(url)) {
-            window.open(url, '_blank');
-        } else {
-            alert('Preview tidak tersedia untuk jenis file ini. File akan didownload.');
-            const $downloadLink = $('<a>', {
-                href: url,
-                download: '',
-                css: {display: 'none'}
-            }).appendTo('body');
+            if (fileExtensionsForDirectPreview.test(url)) {
+                window.open(url, '_blank');
+            } else {
+                alert('Preview tidak tersedia untuk jenis file ini. File akan didownload.');
+                const $downloadLink = $('<a>', {
+                    href: url,
+                    download: '',
+                    css: {
+                        display: 'none'
+                    }
+                }).appendTo('body');
 
-            $downloadLink[0].click();
-            $downloadLink.remove();
+                $downloadLink[0].click();
+                $downloadLink.remove();
+            }
         }
-    }
 
-    function closePreview() {
-        const modal = document.getElementById('fileModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
+        function closePreview() {
+            const modal = document.getElementById('fileModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
 
-    function showCommentModal(comment) {
-        const $commentModal = $('#commentModal');
-        const $commentContent = $('#commentContent');
+        function showCommentModal(comment) {
+            const $commentModal = $('#commentModal');
+            const $commentContent = $('#commentContent');
 
-        // Set the comment content
-        $commentContent.text(comment);
+            // Set the comment content
+            $commentContent.text(comment);
 
-        // Show the modal
-        $commentModal.removeClass('hidden').addClass('flex');
-    }
+            // Show the modal
+            $commentModal.removeClass('hidden').addClass('flex');
+        }
 
-    function closeCommentModal() {
-        const $commentModal = $('#commentModal');
-        $commentModal.addClass('hidden').removeClass('flex');
-    }
+        function closeCommentModal() {
+            const $commentModal = $('#commentModal');
+            $commentModal.addClass('hidden').removeClass('flex');
+        }
 
-    function filter(status, currentPage = 1) {
-        $.ajax({
-            url: '<?= BASEURL ?>/ResearchOutput/filter',
-            method: 'POST',
-            dataType: 'json',
-            data: {status: status, activePage: currentPage},
-            success: function (data) {
-                console.log('Success Response:', data);
+        function filter(status, currentPage = 1) {
+            $.ajax({
+                url: '<?= BASEURL ?>/ResearchOutput/filter',
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    status: status,
+                    activePage: currentPage
+                },
+                success: function(data) {
+                    console.log('Success Response:', data);
 
-                const fileContainer = document.querySelector("#research-files");
-                const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+                    const fileContainer = document.querySelector("#research-files");
+                    const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
 
-                fileContainer.innerHTML = '';
-                navElement.innerHTML = '';
+                    fileContainer.innerHTML = '';
+                    navElement.innerHTML = '';
 
-                data.files.forEach(file => {
-                    const fileHTML = `
+                    // Jika tidak ada file, tampilkan pesan "Belum ada File"
+                    if (!data.files || data.files.length === 0) {
+                        fileContainer.innerHTML = `
+                    <div class="col-span-full text-center py-8 sm:py-12">
+                        <svg class="w-12 sm:w-16 h-12 sm:h-16 text-red-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <h3 class="text-lg sm:text-xl font-medium text-red-900 mb-2">Belum ada File</h3>
+                    </div>
+                `;
+                        return;
+                    }
+
+                    // Tampilkan file-file yang diterima dari filter
+                    data.files.forEach(file => {
+                        const fileHTML = `
                     <div class="bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
                         <div class="flex items-center space-x-4 mb-4">
                             <div class="p-3 bg-red-50 rounded-xl">
@@ -342,9 +391,9 @@
                         </div>
                         <div class="flex items-center justify-between mt-4">
                             ${file.status == 1 ? `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-yellow-100 text-yellow-600">Pending</span>` :
-                        file.status == 2 ? `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-green-100 text-green-600">Approved</span>` :
-                            file.status == 3 ? `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-red-100 text-red-600">Rejected</span>` :
-                                `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg">Unknown</span>`}
+                              file.status == 2 ? `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-green-100 text-green-600">Approved</span>` :
+                              file.status == 3 ? `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-red-100 text-red-600">Rejected</span>` :
+                              `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg">Unknown</span>`}
                             <div class="flex space-x-2">
                                 <button onclick="previewFile('${file.file_url}')" class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                     <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -364,102 +413,125 @@
                         <div class="mt-4">
                             <p class="text-sm text-gray-600">
                                 ${file.comment && file.comment.length > 50 ?
-                            `<span class="truncated-comment">${file.comment.substring(0, 50)}...</span>
-                             <button onclick="showCommentModal(\`${file.comment}\`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>` :
-                            file.comment || 'Tidak ada komentar'}
+                                `<span class="truncated-comment">${file.comment.substring(0, 50)}...</span>
+                                <button onclick="showCommentModal(\`${file.comment}\`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>` :
+                                file.comment || 'Tidak ada komentar'}
                             </p>
                         </div>
                     </div>`;
-                    fileContainer.innerHTML += fileHTML;
-                });
+                        fileContainer.innerHTML += fileHTML;
+                    });
 
-                if (navElement) {
-                    generatePagination(navElement, data.pagination.activePage, data.pagination.totalPages, status);
+                    if (navElement) {
+                        generatePagination(navElement, data.pagination.activePage, data.pagination.totalPages, status);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error Status:', status);
+                    console.error('Error Details:', error);
+                    console.error('Response Text:', xhr.responseText);
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error Status:', status);
-                console.error('Error Details:', error);
-                console.error('Response Text:', xhr.responseText);
+            });
+        }
+
+        function getPaginationRange(totalPages, currentPage, delta = 2) {
+            const range = [];
+            const left = currentPage - delta;
+            const right = currentPage + delta;
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= left && i <= right)) {
+                    range.push(i);
+                } else if (range[range.length - 1] !== '...') {
+                    range.push('...');
+                }
             }
-        });
-    }
-
-    function generatePagination(navElement, currentPage, totalPages, status) {
-        const ul = document.createElement('ul');
-        ul.className = 'flex items-center -space-x-px h-8 text-sm';
-
-        // Previous button
-        if (currentPage > 1) {
-            const prevLi = `
-                <li>
-                    <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
-                        class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
-                        <span class="sr-only">Previous</span>
-                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                        </svg>
-                    </a>
-                </li>
-            `;
-            ul.innerHTML += prevLi;
+            return range;
         }
 
-        // Page numbers
-        for (let i = 1; i <= totalPages; i++) {
-            const activeClass = i === currentPage ? 'z-10 text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white';
-            const pageLi = `
+        function generatePagination(navElement, currentPage, totalPages, status) {
+            const ul = document.createElement('ul');
+            ul.className = 'flex items-center -space-x-px h-8 text-sm';
+
+            // Tombol Previous
+            if (currentPage > 1) {
+                ul.innerHTML += `
+                    <li>
+                        <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
+                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                            <span class="sr-only">Previous</span>
+                            <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                            </svg>
+                        </a>
+                    </li>`;
+            }
+
+            // Dapatkan rentang halaman dengan ellipsis
+            const pageRange = getPaginationRange(totalPages, currentPage);
+            pageRange.forEach(item => {
+                if (item === '...') {
+                    ul.innerHTML += `
                 <li>
-                    <a href="javascript:void(0)" onclick="filter(${status}, ${i})"
-                        class="flex items-center justify-center px-3 h-8 leading-tight ${activeClass} border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                        ${i}
+                    <span class="flex items-center justify-center px-3 h-8 text-gray-500">...</span>
+                </li>`;
+                } else if (item === currentPage) {
+                    ul.innerHTML += `
+                <li>
+                    <a href="javascript:void(0)" aria-current="page"
+                       class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700">
+                        ${item}
                     </a>
-                </li>
-            `;
-            ul.innerHTML += pageLi;
+                </li>`;
+                } else {
+                    ul.innerHTML += `
+                <li>
+                    <a href="javascript:void(0)" onclick="filter(${status}, ${item})"
+                       class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                        ${item}
+                    </a>
+                </li>`;
+                }
+            });
+
+            // Tombol Next
+            if (currentPage < totalPages) {
+                ul.innerHTML += `
+            <li>
+                <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
+                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                    <span class="sr-only">Next</span>
+                    <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                </a>
+            </li>`;
+            }
+
+            navElement.appendChild(ul);
         }
 
-        // Next button
-        if (currentPage < totalPages) {
-            const nextLi = `
-                <li>
-                    <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
-                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
-                        <span class="sr-only">Next</span>
-                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                        </svg>
-                    </a>
-                </li>
-            `;
-            ul.innerHTML += nextLi;
-        }
 
-        navElement.appendChild(ul);
-    }
+        function loadSearchResults(keyword, page = 1) {
+            let researchFilesGrid = $('#research-files'); // Targetkan elemen grid
+            let paginationNav = $('#pagination-nav'); // Targetkan elemen navigasi
 
-    function loadSearchResults(keyword, page = 1) {
-        let researchFilesGrid = $('#research-files'); // Targetkan elemen grid
-        let paginationNav = $('#pagination-nav'); // Targetkan elemen navigasi
+            $.ajax({
+                url: '<?= BASEURL; ?>/researchoutput/searchUser',
+                type: 'POST',
+                data: {
+                    keyword: keyword,
+                    page: page
+                },
+                dataType: 'json',
+                success: function(data) {
+                    // Kosongkan elemen grid dan navigasi
+                    researchFilesGrid.empty();
+                    paginationNav.empty();
 
-        $.ajax({
-            url: '<?= BASEURL; ?>/researchoutput/searchUser',
-            type: 'POST',
-            data: {keyword: keyword, page: page},
-            dataType: 'json',
-            success: function (data) {
-                // Kosongkan elemen grid dan navigasi
-                researchFilesGrid.empty();
-                paginationNav.empty();
-
-                // Tampilkan hasil pencarian
-                if (data.results.length > 0) {
-                    $.each(data.results, function (index, item) {
-                        researchFilesGrid.append(`
+                    // Tampilkan hasil pencarian
+                    if (data.results.length > 0) {
+                        $.each(data.results, function(index, item) {
+                            researchFilesGrid.append(`
                     <div class="bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
                         <div class="flex items-center space-x-4 mb-4">
                             <div class="p-3 bg-red-50 rounded-xl">
@@ -513,18 +585,18 @@
                         </div>
                     </div>
                 `);
-                    });
-                } else {
-                    researchFilesGrid.html(`<div class="col-span-full text-center py-12"><h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3><p class="text-red-600">Coba kata kunci lainnya.</p></div>`);
-                }
+                        });
+                    } else {
+                        researchFilesGrid.html(`<div class="col-span-full text-center py-12"><h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3><p class="text-red-600">Coba kata kunci lainnya.</p></div>`);
+                    }
 
-                // Tampilkan pagination berdasarkan total halaman
-                if (data.totalPages > 1) {
-                    let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
+                    // Tampilkan pagination berdasarkan total halaman
+                    if (data.totalPages > 1) {
+                        let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
 
-                    // Tombol Previous
-                    if (data.currentPage > 1) {
-                        paginationHTML += `
+                        // Tombol Previous
+                        if (data.currentPage > 1) {
+                            paginationHTML += `
                     <li>
                         <a href="#" data-page="${data.currentPage - 1}"
                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
@@ -533,22 +605,22 @@
                             </svg>
                         </a>
                     </li>`;
-                    }
+                        }
 
-                    // Halaman
-                    for (let i = 1; i <= data.totalPages; i++) {
-                        paginationHTML += `
+                        // Halaman
+                        for (let i = 1; i <= data.totalPages; i++) {
+                            paginationHTML += `
                     <li>
                         <a href="#" data-page="${i}"
                            class="flex items-center justify-center px-3 h-8 leading-tight ${i === data.currentPage ? 'text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">
                             ${i}
                         </a>
                     </li>`;
-                    }
+                        }
 
-                    // Tombol Next
-                    if (data.currentPage < data.totalPages) {
-                        paginationHTML += `
+                        // Tombol Next
+                        if (data.currentPage < data.totalPages) {
+                            paginationHTML += `
                     <li>
                         <a href="#" data-page="${data.currentPage + 1}"
                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-s-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
@@ -557,40 +629,40 @@
                             </svg>
                         </a>
                     </li>`;
+                        }
+
+                        paginationHTML += `</ul>`;
+                        paginationNav.html(paginationHTML);
+
+                        // Tambahkan event handler untuk navigasi pagination
+                        paginationNav.find('a').on('click', function(e) {
+                            e.preventDefault();
+                            let selectedPage = $(this).data('page');
+                            loadSearchResults(keyword, selectedPage);
+                        });
                     }
-
-                    paginationHTML += `</ul>`;
-                    paginationNav.html(paginationHTML);
-
-                    // Tambahkan event handler untuk navigasi pagination
-                    paginationNav.find('a').on('click', function (e) {
-                        e.preventDefault();
-                        let selectedPage = $(this).data('page');
-                        loadSearchResults(keyword, selectedPage);
-                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
+            });
+        }
 
-    $(document).ready(function () {
-        // Initialize filter button click handler
-        $('.filter-btn').on('click', function () {
-            $('.filter-btn').removeClass('active'); // Hapus kelas aktif dari semua tombol
-            $(this).addClass('active'); // Tambahkan kelas aktif ke tombol yang diklik
-            // filter($(this).data('status')); // Panggil fungsi filter jika diperlukan
-        });
+        $(document).ready(function() {
+            // Initialize filter button click handler
+            $('.filter-btn').on('click', function() {
+                $('.filter-btn').removeClass('active'); // Hapus kelas aktif dari semua tombol
+                $(this).addClass('active'); // Tambahkan kelas aktif ke tombol yang diklik
+                // filter($(this).data('status')); // Panggil fungsi filter jika diperlukan
+            });
 
-        // Initialize search input keyup handler
-        $('#keyword').on('keyup', function () {
-            const keyword = $(this).val(); // Ambil nilai input
-            loadSearchResults(keyword); // Panggil fungsi pencarian
+            // Initialize search input keyup handler
+            $('#keyword').on('keyup', function() {
+                const keyword = $(this).val(); // Ambil nilai input
+                loadSearchResults(keyword); // Panggil fungsi pencarian
+            });
         });
-    });
-
-</script>
+    </script>
 </body>
+
 </html>
