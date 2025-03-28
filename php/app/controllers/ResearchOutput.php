@@ -173,6 +173,9 @@ class ResearchOutput extends Controller
         $uploaded_by = $_SESSION['user_id'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Pastikan header respons JSON
+            header('Content-Type: application/json');
+
             $response = ['success' => false, 'message' => ''];
 
             // Validasi field input
@@ -183,7 +186,7 @@ class ResearchOutput extends Controller
             if (empty($title) || empty($category) || empty($description)) {
                 $response['message'] = 'Semua field wajib diisi.';
                 echo json_encode($response);
-                return;
+                exit;
             }
 
             // Validasi file
@@ -192,7 +195,7 @@ class ResearchOutput extends Controller
 
                 // Tentukan direktori tujuan untuk file dan metadata
                 $uploadDir = __DIR__ . '/../files/research_output/';
-                $metaDir = __DIR__ . '/../files/meta/';
+                $metaDir   = __DIR__ . '/../files/meta/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -200,12 +203,12 @@ class ResearchOutput extends Controller
                     mkdir($metaDir, 0777, true);
                 }
 
-                // Dapatkan ekstensi file
+                // Dapatkan ekstensi file dan validasi
                 $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
                 $allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xlsx'];
 
                 if (in_array($fileExtension, $allowedExtensions)) {
-                    // Nama file unik
+                    // Buat nama file unik
                     $fileName = uniqid() . '.' . $fileExtension;
                     $filePath = $uploadDir . $fileName;
                     $metaFilePath = $metaDir . $fileName . '.meta';
@@ -232,24 +235,31 @@ class ResearchOutput extends Controller
                             echo json_encode($response);
                             exit;
                         } else {
-                            // Hapus file dan metadata jika gagal menyimpan ke database
+                            // Hapus file & meta jika gagal simpan ke DB
                             unlink($filePath);
                             unlink($metaFilePath);
                             $response['message'] = 'Gagal menyimpan data ke database.';
+                            echo json_encode($response);
+                            exit;
                         }
                     } else {
                         $response['message'] = 'Gagal memindahkan file.';
+                        echo json_encode($response);
+                        exit;
                     }
                 } else {
                     $response['message'] = 'Ekstensi file tidak didukung.';
+                    echo json_encode($response);
+                    exit;
                 }
             } else {
                 $response['message'] = 'Tidak ada file yang diunggah atau terjadi kesalahan.';
+                echo json_encode($response);
+                exit;
             }
-
-            echo json_encode($response);
         } else {
             echo json_encode(['success' => false, 'message' => 'Metode tidak valid.']);
+            exit;
         }
     }
 
@@ -334,9 +344,9 @@ class ResearchOutput extends Controller
         $status = $_POST['status'];
         $jumlahDataperhalaman = 6;
 
-        if($status == 0){
+        if ($status == 0) {
             $jumlahData = $this->model('ResearchOutputModel')->countAllFiles();
-        }else{
+        } else {
             $jumlahData = $this->model('ResearchOutputModel')->countAllFilesByStatus($status);
         }
         $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
@@ -398,7 +408,7 @@ class ResearchOutput extends Controller
 
             session_start();
             if (!isset($_SESSION['user_id'])) {
-//                $_SESSION['user_id'] = 8;
+                //                $_SESSION['user_id'] = 8;
                 echo json_encode(['error' => 'User tidak terautentikasi.']);
                 return;
             }
@@ -453,5 +463,4 @@ class ResearchOutput extends Controller
         }
         exit();
     }
-
 }

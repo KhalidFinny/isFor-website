@@ -133,7 +133,7 @@ class Database
 
     public function execute()
     {
-        $this->stmt->execute();
+        return $this->stmt->execute();
     }
 
     public function resultSet()
@@ -167,5 +167,9 @@ class Database
     {
         return $this->stmt->queryString;
     }
-}
 
+    public function getErrorInfo()
+    {
+        return $this->stmt->errorInfo();
+    }
+}

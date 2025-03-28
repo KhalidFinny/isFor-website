@@ -10,23 +10,66 @@ class ResearchOutputModel
         $this->db = new Database;
     }
 
-    public function create($file_url, $uploaded_by, $title, $category, $description, $status = 1)
+    // public function create($file_url, $uploaded_by, $title, $category, $description, $status = 1, $comment = null)
+    // {
+    //     $this->db->query('CALL sp_CreateResearchOutput(
+    //     :p_file_url,
+    //     :p_uploaded_by,
+    //     :p_title,
+    //     :p_category,
+    //     :p_description,
+    //     :p_status,
+    //     :p_comment
+    // )');
+
+    //     $this->db->bind(':p_file_url', $file_url);
+    //     $this->db->bind(':p_uploaded_by', $uploaded_by, PDO::PARAM_INT);
+    //     $this->db->bind(':p_title', $title);
+    //     $this->db->bind(':p_category', $category);
+    //     $this->db->bind(':p_description', $description);
+    //     $this->db->bind(':p_status', $status, PDO::PARAM_INT);
+    //     $this->db->bind(':p_comment', $comment);
+
+    //     try {
+    //         $this->db->execute();
+    //         return true;
+    //     } catch (PDOException $e) {
+    //         error_log("Create ResearchOutput Error: " . $e->getMessage() . " | Data: file_url=$file_url, uploaded_by=$uploaded_by, title=$title, category=$category, description=$description, status=$status, comment=$comment");
+    //         return false;
+    //     }
+    // }
+
+
+    public function create($file_url, $uploaded_by, $title, $category, $description, $status = 1, $comment = null)
     {
-        $this->db->query('CALL sp_CreateResearchOutput(:file_url, :uploaded_by, :title, :category, :description, :status)');
-        $this->db->bind(':file_url', $file_url);
-        $this->db->bind(':uploaded_by', $uploaded_by, PDO::PARAM_INT);
-        $this->db->bind(':title', $title);
-        $this->db->bind(':category', $category);
-        $this->db->bind(':description', $description);
-        $this->db->bind(':status', $status, PDO::PARAM_INT);
+        $this->db->query('
+        INSERT INTO research_outputs 
+            (file_url, uploaded_by, uploaded_at, title, category, description, status, comment)
+        VALUES 
+            (:p_file_url, :p_uploaded_by, NOW(), :p_title, :p_category, :p_description, :p_status, :p_comment)
+    ');
+
+        $this->db->bind(':p_file_url', $file_url);
+        $this->db->bind(':p_uploaded_by', $uploaded_by, PDO::PARAM_INT);
+        $this->db->bind(':p_title', $title);
+        $this->db->bind(':p_category', $category);
+        $this->db->bind(':p_description', $description);
+        $this->db->bind(':p_status', $status, PDO::PARAM_INT);
+        $this->db->bind(':p_comment', $comment);
 
         try {
-            $this->db->execute();
+            $result = $this->db->execute();
+            if (!$result) {
+                return false;
+            }
             return true;
         } catch (PDOException $e) {
             return false;
         }
     }
+
+
+
 
     public function update($id, $file_url, $title, $category, $status)
     {
@@ -439,4 +482,3 @@ class ResearchOutputModel
         return $this->db->single()['total'];
     }
 }
-

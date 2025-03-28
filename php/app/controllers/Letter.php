@@ -7,10 +7,7 @@ use Symfony\Component\VarDumper\VarDumper;
 
 class Letter extends Controller
 {
-    public function index()
-    {
-
-    }
+    public function index() {}
 
     public function addLetterView()
     {
@@ -208,7 +205,6 @@ class Letter extends Controller
         $data['halamanAktif'] = $halamanAktif;
         $data['totalLetters'] = $jumlahData;
         $this->view('admin/admin-letter-history', $data);
-
     }
 
     public function filter()
@@ -220,9 +216,9 @@ class Letter extends Controller
         $jumlahDataperhalaman = 4;
 
         // Ambil jumlah total data sesuai status
-        if($status == 0){
+        if ($status == 0) {
             $jumlahData = $this->model('LettersModel')->countAllLeterbyUserId($userId);
-        }else{
+        } else {
             $jumlahData = $this->model('LettersModel')->countAllLettersByUserandStatus($userId, $status)['total'];
         }
         $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
@@ -248,7 +244,8 @@ class Letter extends Controller
         ]);
     }
 
-    public function filterAdmin() {
+    public function filterAdmin()
+    {
         $input = json_decode(file_get_contents('php://input'), true);
         $status = $input['status'] ?? null;
         $jumlahDataperhalaman = 4;
@@ -363,7 +360,7 @@ class Letter extends Controller
 
             session_start();
             if (!isset($_SESSION['user_id'])) {
-//                $_SESSION['user_id'] = 8;
+                //                $_SESSION['user_id'] = 8;
                 echo json_encode(['error' => 'User tidak terautentikasi.']);
                 return;
             }
@@ -387,6 +384,4 @@ class Letter extends Controller
             }
         }
     }
-
 }
-
