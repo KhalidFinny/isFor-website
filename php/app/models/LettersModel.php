@@ -49,6 +49,33 @@ class LettersModel
         return $this->db->resultSet();
     }
 
+    public function getLettersByUserIdPaginate($userId, $limit, $offset)
+    {
+        $this->db->query("
+            SELECT *
+            FROM letters
+            WHERE user_id = :user_id
+            ORDER BY letter_id DESC
+            LIMIT :limit OFFSET :offset
+        ");
+        $this->db->bind(':user_id', $userId, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function countLettersByUserId($userId)
+    {
+        $this->db->query("
+        SELECT COUNT(*) AS total
+        FROM letters
+        WHERE user_id = :user_id
+    ");
+        $this->db->bind(':user_id', $userId, PDO::PARAM_INT);
+        $row = $this->db->single();
+        return $row['total'];
+    }
+
     public function getLetterByUserIdPaginate($id, $awalData, $jumlahDataPerhalaman)
     {
         $this->db->query('CALL sp_GetLetterByUserIdPaginate(:id, :awalData, :jumlahDataPerhalaman)');
@@ -284,5 +311,4 @@ class LettersModel
         $this->db->bind(':userId', $userId, PDO::PARAM_INT);
         return $this->db->single()['total'];
     }
-
 }

@@ -115,7 +115,8 @@ class UsersModel
         }
     }
 
-    public function deleteImage($id) {
+    public function deleteImage($id)
+    {
         $this->db->query("SELECT profile_picture FROM users WHERE user_id = :id");
         $this->db->bind(":id", $id);
         $user = $this->db->single();
@@ -124,7 +125,8 @@ class UsersModel
     }
 
 
-    public function editUser($email, $id, $data, $photo, $password) {
+    public function editUser($email, $id, $data, $photo, $password)
+    {
         $query = "UPDATE users
                   SET name = IFNULL(:name, name),
                       username = :username,
@@ -146,7 +148,35 @@ class UsersModel
         return $this->db->rowCount();
     }
 
-    public function isEmailExists($email, $userId = null) {
+    public function getLettersByUserIdPaginate($userId, $limit, $offset)
+    {
+        $this->db->query("
+            SELECT *
+            FROM letters
+            WHERE user_id = :user_id
+            ORDER BY letter_id DESC
+            LIMIT :limit OFFSET :offset
+        ");
+        $this->db->bind(':user_id', $userId, PDO::PARAM_INT);
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function countLettersByUserId($userId)
+    {
+        $this->db->query("
+        SELECT COUNT(*) AS total
+        FROM letters
+        WHERE user_id = :user_id
+    ");
+        $this->db->bind(':user_id', $userId, PDO::PARAM_INT);
+        $row = $this->db->single();
+        return $row['total'];
+    }
+
+    public function isEmailExists($email, $userId = null)
+    {
         if ($userId === null) {
             $query = "SELECT * FROM users WHERE email = :email";
             $this->db->query($query);
@@ -160,7 +190,8 @@ class UsersModel
         return $this->db->single() ? true : false;
     }
 
-    public function isUsernameExists($username, $userId = null) {
+    public function isUsernameExists($username, $userId = null)
+    {
         if ($userId === null) {
             $query = "SELECT * FROM users WHERE username = :username";
             $this->db->query($query);
@@ -174,7 +205,8 @@ class UsersModel
         return $this->db->single() ? true : false;
     }
 
-    public function getUsersWithPagination($limit, $offset) {
+    public function getUsersWithPagination($limit, $offset)
+    {
         $query = "SELECT user_id, name, username, email, profile_picture, role_id
                   FROM users
                   ORDER BY user_id ASC
@@ -185,14 +217,16 @@ class UsersModel
         return $this->db->resultSet();
     }
 
-    public function getTotalUsers() {
+    public function getTotalUsers()
+    {
         $query = "SELECT COUNT(1) AS Total FROM users";
         $this->db->query($query);
         $result = $this->db->single();
         return $result ? (int)$result['Total'] : 0;
     }
 
-    public function validateUser($name, $username, $email) {
+    public function validateUser($name, $username, $email)
+    {
         $query = "
             SELECT
                 SUM(CASE WHEN name = :name THEN 1 ELSE 0 END) AS name_count,
@@ -213,7 +247,8 @@ class UsersModel
         ];
     }
 
-    public function searchUsers($keyword, $pageNumber, $pageSize) {
+    public function searchUsers($keyword, $pageNumber, $pageSize)
+    {
         $startRow = (($pageNumber - 1) * $pageSize) + 1;
         $endRow   = $pageNumber * $pageSize;
 
