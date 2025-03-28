@@ -36,65 +36,6 @@ class Home extends Controller
         }
     }
 
-    public function filterHasilPenelitian()
-    {
-        if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
-            $input = json_decode(file_get_contents('php://input'), true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                echo json_encode(['error' => 'Invalid JSON format']);
-                return;
-            }
-            $_POST = $input;
-        } else {
-            echo json_encode(['error' => 'Invalid Content-Type, expected application/json']);
-            return;
-        }
-
-        $status = $_POST['status'] ?? null;
-        $page = $_POST['page'] ?? 1;
-        $limit = $_POST['limit'] ?? 6;
-
-        $categoryMap = [
-            1 => 'DIPA SWADANA',
-            2 => 'DIPA PNBP',
-            3 => 'Tesis Magister',
-        ];
-
-        if (!isset($status) || !is_numeric($status) || $status < 0 || $status > 3) {
-            echo json_encode(['error' => 'Invalid status']);
-            return;
-        }
-
-        if (array_key_exists($status, $categoryMap)) {
-            $category = $categoryMap[$status];
-            $total = $this->model('ResearchOutputModel')->getTotalFilesByCategory($category);
-            $data = $this->model('ResearchOutputModel')->getFilesByCategory($category, $page, $limit);
-            $result = [
-                'total' => $total,
-                'data' => $data,
-                'page' => $page,
-                'limit' => $limit,
-                'totalPages' => ceil($total / $limit),
-            ];
-        } else if ($status === 0) {
-            $result = $this->model('ResearchOutputModel')->getAllPaginateFiles($page, $limit);
-            $total = $result['total'];
-            $data = $result['data'];
-            $result = [
-                'total' => $total,
-                'data' => $data,
-                'page' => $page,
-                'limit' => $limit,
-                'totalPages' => ceil($total / $limit),
-            ];
-        } else {
-            echo json_encode(['error' => 'Invalid status']);
-            return;
-        }
-
-        echo json_encode($result);
-    }
-
     public function filterGallery()
     {
         if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
@@ -201,6 +142,65 @@ class Home extends Controller
         }
 
         $this->view('main/hasilpenelitian', $data);
+    }
+
+    public function filterHasilPenelitian()
+    {
+        if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
+            $input = json_decode(file_get_contents('php://input'), true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                echo json_encode(['error' => 'Invalid JSON format']);
+                return;
+            }
+            $_POST = $input;
+        } else {
+            echo json_encode(['error' => 'Invalid Content-Type, expected application/json']);
+            return;
+        }
+
+        $status = $_POST['status'] ?? null;
+        $page = $_POST['page'] ?? 1;
+        $limit = $_POST['limit'] ?? 6;
+
+        $categoryMap = [
+            1 => 'DIPA SWADANA',
+            2 => 'DIPA PNBP',
+            3 => 'Tesis Magister',
+        ];
+
+        if (!isset($status) || !is_numeric($status) || $status < 0 || $status > 3) {
+            echo json_encode(['error' => 'Invalid status']);
+            return;
+        }
+
+        if (array_key_exists($status, $categoryMap)) {
+            $category = $categoryMap[$status];
+            $total = $this->model('ResearchOutputModel')->getTotalFilesByCategory($category);
+            $data = $this->model('ResearchOutputModel')->getFilesByCategory($category, $page, $limit);
+            $result = [
+                'total' => $total,
+                'data' => $data,
+                'page' => $page,
+                'limit' => $limit,
+                'totalPages' => ceil($total / $limit),
+            ];
+        } else if ($status === 0) {
+            $result = $this->model('ResearchOutputModel')->getAllPaginateFiles($page, $limit);
+            $total = $result['total'];
+            $data = $result['data'];
+            $result = [
+                'total' => $total,
+                'data' => $data,
+                'page' => $page,
+                'limit' => $limit,
+                'totalPages' => ceil($total / $limit),
+            ];
+        } else {
+            echo json_encode(['error' => 'Invalid status']);
+            return;
+        }
+
+        echo json_encode($result);
     }
 
     public function archives()
