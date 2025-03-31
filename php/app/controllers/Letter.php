@@ -212,6 +212,7 @@ class Letter extends Controller
         session_start();
         $status = $_POST['status'];
         $userId = $_SESSION['user_id'];
+        $halamanAktif = isset($_POST['halamanAktif']) && is_numeric($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
 
         $jumlahDataperhalaman = 4;
 
@@ -219,29 +220,36 @@ class Letter extends Controller
         if ($status == 0) {
             $jumlahData = $this->model('LettersModel')->countAllLeterbyUserId($userId);
         } else {
-            $jumlahData = $this->model('LettersModel')->countAllLettersByUserandStatus($userId, $status)['total'];
+            $jumlahData = $this->model('LettersModel')->countAllLettersByUserandStatus($userId, $status)['total'] ?? 0;
         }
-        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
 
-        // Halaman aktif dari POST, menggunakan halamanAktif
-        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
+        // Pastikan jumlahData adalah integer
+        $jumlahData = (int)$jumlahData;
+        $jumlahHalaman = $jumlahData > 0 ? ceil($jumlahData / $jumlahDataperhalaman) : 1;
+        $halamanAktif = max(1, min($halamanAktif, $jumlahHalaman));
         $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
 
-        // Validasi status dan ambil data
+        // Ambil data surat
         if ($status == 0) {
             $letters = $this->model('LettersModel')->getLetterByUserIdPaginate($userId, $awalData, $jumlahDataperhalaman);
         } else {
             $letters = $this->model('LettersModel')->getLetterByUserIdStatus($userId, $status, $awalData, $jumlahDataperhalaman);
         }
 
+        // Pastikan letters adalah array
+        $letters = $letters ?? [];
+
         // Kirim data ke frontend
+        header('Content-Type: application/json');
         echo json_encode([
             'letters' => $letters,
+            'totalLetters' => $jumlahData,
             'pagination' => [
                 'jumlahHalaman' => $jumlahHalaman,
                 'halamanAktif' => $halamanAktif
             ]
         ]);
+        exit;
     }
 
     public function filterAdmin()
@@ -289,39 +297,49 @@ class Letter extends Controller
         ]);
     }
 
-    public function search()
-    {
+    public function search(){
+        // Validasi sesi
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            http_response_code(401);
+            echo json_encode(['error' => 'Unauthorized: User not logged in']);
+            exit;
+        }
+
         if (isset($_POST['keyword'])) {
-            $keyword = $_POST['keyword'];
-            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-            $itemsPerPage = 6;
+            $keyword = trim($_POST['keyword']);
+            $page = isset($_POST['page']) && is_numeric($_POST['page']) ? (int)$_POST['page'] : 1;
+            $itemsPerPage = 4; // Sesuaikan dengan limit sebelumnya
             $offset = ($page - 1) * $itemsPerPage;
 
             $lettersModel = $this->model('LettersModel');
 
             try {
-                $results = $lettersModel->searchLetters($keyword, $itemsPerPage, $offset);
-                $totalResults = $lettersModel->countSearchResults($keyword);
-                $totalPages = ceil($totalResults / $itemsPerPage);
+                // Tambahkan user_id ke pencarian
+                $results = $lettersModel->searchLetters($_SESSION['user_id'], $keyword, $itemsPerPage, $offset);
+                $totalResults = $lettersModel->countSearchResults($_SESSION['user_id'], $keyword);
+                $totalPages = $totalResults > 0 ? ceil($totalResults / $itemsPerPage) : 1;
+                $page = max(1, min($page, $totalPages));
 
                 header('Content-Type: application/json');
-                http_response_code(200); // Success
+                http_response_code(200);
                 echo json_encode([
-                    'results' => $results,
+                    'results' => $results ?? [],
+                    'totalLetters' => $totalResults ?? 0, // Tambahkan totalLetters
                     'totalPages' => $totalPages,
-                    'currentPage' => $page,
+                    'currentPage' => $page
                 ]);
             } catch (Exception $e) {
                 error_log("Error in search function: " . $e->getMessage());
                 error_log("Trace: " . $e->getTraceAsString());
 
                 header('Content-Type: application/json');
-                http_response_code(500); // Server error
+                http_response_code(500);
                 echo json_encode(['error' => 'Terjadi kesalahan di server.']);
             }
         } else {
             header('Content-Type: application/json');
-            http_response_code(400); // Bad request
+            http_response_code(400);
             echo json_encode(['error' => 'Parameter tidak lengkap.']);
         }
     }
@@ -333,55 +351,74 @@ class Letter extends Controller
         $this->checkSessionTimeOut();
         if ($role == 2) {
             $this->saveLastVisitedPage();
-            $jumlahDataperhalaman = 4;
+            $limit = 4;
             $jumlahData = count($this->model('LettersModel')->getLetterByUserId($_SESSION['user_id']));
-            $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-            $halamanAktif = (isset($_GET["halaman"])) ? $_GET["halaman"] : 1;
-            $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+            $totalPages = ceil($jumlahData / $limit);
+            $currentPage = (isset($_GET["halaman"])) ? $_GET["halaman"] : 1;
+            $awalData = ($limit * $currentPage) - $limit;
 
             $data['user_id'] = $_SESSION['user_id'];
-            $data['jumlahHalaman'] = $jumlahHalaman;
-            $data['halamanAktif'] = $halamanAktif;
-            $data['letter'] = $this->model('LettersModel')->countAllLeterbyUserId($_SESSION['user_id']);
-            $data['allLetters'] = $this->model('LettersModel')->getLetterByUserIdPaginate($_SESSION['user_id'], $awalData, $jumlahDataperhalaman);
+            $data['totalPages'] = $totalPages;
+            $data['currentPage'] = $currentPage;
+            $data['totalLetters'] = $this->model('LettersModel')->countAllLeterbyUserId($_SESSION['user_id']);
+            $data['letters'] = $jumlahData;
+            $data['limit'] = $limit;
+            $data['allLetters'] = $this->model('LettersModel')->getLetterByUserIdPaginate($_SESSION['user_id'], $awalData, $limit);
             $this->view('user/letter-history', $data);
         } else {
             header('Location: ' . $this->getLastVisitedPage());
         }
     }
 
-    public function searchUser()
-    {
+    public function searchUser(){
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Validasi sesi
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            http_response_code(401);
+            echo json_encode(['error' => 'User tidak terautentikasi.']);
+            exit;
+        }
+
         if (isset($_POST['keyword'])) {
-            $keyword = $_POST['keyword'];
-            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+            $keyword = trim($_POST['keyword']);
+            $page = isset($_POST['page']) && is_numeric($_POST['page']) ? (int)$_POST['page'] : 1;
             $itemsPerPage = 4;
             $offset = ($page - 1) * $itemsPerPage;
 
-            session_start();
-            if (!isset($_SESSION['user_id'])) {
-                //                $_SESSION['user_id'] = 8;
-                echo json_encode(['error' => 'User tidak terautentikasi.']);
-                return;
-            }
             $userId = $_SESSION['user_id'];
-
             $researchOutputModel = $this->model('LettersModel');
 
             try {
                 $results = $researchOutputModel->searchLettersUser($keyword, $userId, $itemsPerPage, $offset);
                 $totalResults = $researchOutputModel->countUserSearchResults($keyword, $userId);
-                $totalPages = ceil($totalResults / $itemsPerPage);
+                $totalPages = $totalResults > 0 ? ceil($totalResults / $itemsPerPage) : 1;
+                $page = max(1, min($page, $totalPages));
 
                 header('Content-Type: application/json');
+                http_response_code(200);
                 echo json_encode([
-                    'results' => $results,
+                    'results' => $results ?? [],
+                    'totalLetters' => $totalResults ?? 0, // Tambahkan totalLetters
                     'totalPages' => $totalPages,
-                    'currentPage' => $page,
+                    'currentPage' => $page
                 ]);
             } catch (Exception $e) {
-                echo json_encode(['error' => $e->getMessage()]);
+                error_log("Error in searchUser function: " . $e->getMessage());
+                error_log("Trace: " . $e->getTraceAsString());
+
+                header('Content-Type: application/json');
+                http_response_code(500);
+                echo json_encode(['error' => 'Terjadi kesalahan di server: ' . $e->getMessage()]);
             }
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            echo json_encode(['error' => 'Parameter keyword tidak ditemukan.']);
         }
     }
 }
