@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 12 Mar 2025 pada 12.02
--- Versi server: 8.0.30
--- Versi PHP: 8.3.15
+-- Generation Time: Mar 31, 2025 at 03:07 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 
 DELIMITER $$
 --
--- Prosedur
+-- Procedures
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_AddAgenda` (IN `p_title` VARCHAR(255), IN `p_description` TEXT)   BEGIN
     INSERT INTO agenda (title, description) VALUES (p_title, p_description);
@@ -432,7 +432,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `agenda`
+-- Table structure for table `agenda`
 --
 
 CREATE TABLE `agenda` (
@@ -441,10 +441,19 @@ CREATE TABLE `agenda` (
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `agenda`
+--
+
+INSERT INTO `agenda` (`agenda_id`, `title`, `description`) VALUES
+(23, 'testing', 'TESTING1'),
+(25, 'Sint est est conse', 'Anim repudiandae ut '),
+(26, 'Et odit ea id tempor', 'A sint culpa veritat');
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `galleries`
+-- Table structure for table `galleries`
 --
 
 CREATE TABLE `galleries` (
@@ -460,13 +469,13 @@ CREATE TABLE `galleries` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `letters`
+-- Table structure for table `letters`
 --
 
 CREATE TABLE `letters` (
   `letter_id` int NOT NULL,
-  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `file_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `file_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `status` int NOT NULL,
   `user_id` int NOT NULL,
   `date` date DEFAULT NULL,
@@ -476,7 +485,7 @@ CREATE TABLE `letters` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `research_outputs`
+-- Table structure for table `research_outputs`
 --
 
 CREATE TABLE `research_outputs` (
@@ -494,7 +503,7 @@ CREATE TABLE `research_outputs` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `roadmaps`
+-- Table structure for table `roadmaps`
 --
 
 CREATE TABLE `roadmaps` (
@@ -506,7 +515,7 @@ CREATE TABLE `roadmaps` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `roadmaps`
+-- Dumping data for table `roadmaps`
 --
 
 INSERT INTO `roadmaps` (`roadmap_id`, `year_start`, `year_end`, `category`, `topic`) VALUES
@@ -551,7 +560,7 @@ INSERT INTO `roadmaps` (`roadmap_id`, `year_start`, `year_end`, `category`, `top
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `role`
+-- Table structure for table `role`
 --
 
 CREATE TABLE `role` (
@@ -560,7 +569,7 @@ CREATE TABLE `role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `role`
+-- Dumping data for table `role`
 --
 
 INSERT INTO `role` (`role_id`, `role_name`) VALUES
@@ -570,7 +579,7 @@ INSERT INTO `role` (`role_id`, `role_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `status`
+-- Table structure for table `status`
 --
 
 CREATE TABLE `status` (
@@ -578,10 +587,19 @@ CREATE TABLE `status` (
   `status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `status`
+--
+
+INSERT INTO `status` (`id`, `status`) VALUES
+(1, 'tertunda'),
+(2, 'disetujui'),
+(3, 'ditolak');
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -595,50 +613,52 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (1, 'Dr.Rakhmat Arianto, S.ST., M.Kom', 'admin', 'arianto@polinema.ac.id', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 1);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (2, 'Vipkas Al Hadid Firdaus, ST., MT', 'dsn1', 'dsn1@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (3, 'Ade Ismail, S.Kom., M.TI', 'dsn2', 'dsn2@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (4, 'Habibie Ed Dien, S.Kom., MT', 'ds3', 'dsn3@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (5, 'Septian Enggar Sukmana, S.Pd., MT', 'dsn4', 'dsn4@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (6, 'Vivi Nur Wijayaningrum, S.Kom., M.Kom', 'dsn5', 'dsn5@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (7, 'Rokhimatul Wakhidah, S.Pd., M.T.', 'dsn6', 'dsn6@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (8, 'Noprianto, S.Kom., M.Eng.', 'dsn7', 'dsn7@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (9, 'Anugrah Nur Rahmanto', 'dsn8', 'dsn8@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (10, 'Maskur, S.Kom., M.Kom', 'dsn9', 'dsn9@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (11, "Nurul Hidayatinnisa', SE., MM", 'dsn10', 'dsn10@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (12, 'Sapto Wibowo, S.T., M.Sc., Ph.D.', 'dsn11', 'dsn11@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (13, 'Ir. Nugroho Suharto, M.T', 'dsn12', 'dsn12@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES (14, 'Galih Putra Riatma, S.ST., M.T.', 'dsn13', 'dsn13@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `profile_picture`, `password`, `role_id`) VALUES
+(1, 'Dr.Rakhmat Arianto, S.ST., M.Kom', 'admin', 'arianto@polinema.ac.id', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 1),
+(2, 'Vipkas Al Hadid Firdaus, ST., MT', 'dsn1', 'dsn1@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(3, 'Ade Ismail, S.Kom., M.TI', 'dsn2', 'dsn2@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(4, 'Habibie Ed Dien, S.Kom., MT', 'ds3', 'dsn3@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(5, 'Septian Enggar Sukmana, S.Pd., MT', 'dsn4', 'dsn4@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(6, 'Vivi Nur Wijayaningrum, S.Kom., M.Kom', 'dsn5', 'dsn5@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(7, 'Rokhimatul Wakhidah, S.Pd., M.T.', 'dsn6', 'dsn6@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(8, 'Noprianto, S.Kom., M.Eng.', 'dsn7', 'dsn7@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(9, 'Anugrah Nur Rahmanto', 'dsn8', 'dsn8@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(10, 'Maskur, S.Kom., M.Kom', 'dsn9', 'dsn9@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(11, 'Nurul Hidayatinnisa\', SE., MM', 'dsn10', 'dsn10@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(12, 'Sapto Wibowo, S.T., M.Sc., Ph.D.', 'dsn11', 'dsn11@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(13, 'Ir. Nugroho Suharto, M.T', 'dsn12', 'dsn12@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2),
+(14, 'Galih Putra Riatma, S.ST., M.T.', 'dsn13', 'dsn13@example.com', NULL, '$2y$10$EuZrLQWpmtPHoknQ8WoelOxNNeZJI1Amqu3JRQ2Uihz5R4bmUGhvi', 2);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `agenda`
+-- Indexes for table `agenda`
 --
 ALTER TABLE `agenda`
   ADD PRIMARY KEY (`agenda_id`);
 
 --
--- Indeks untuk tabel `galleries`
+-- Indexes for table `galleries`
 --
 ALTER TABLE `galleries`
   ADD PRIMARY KEY (`gallery_id`),
   ADD KEY `fk_user` (`uploaded_by`);
 
 --
--- Indeks untuk tabel `letters`
+-- Indexes for table `letters`
 --
 ALTER TABLE `letters`
   ADD PRIMARY KEY (`letter_id`),
-  ADD KEY `fk_user_id` (`user_id`);
+  ADD KEY `fk_user_id` (`user_id`),
+  ADD KEY `fk_status` (`status`);
 
 --
--- Indeks untuk tabel `research_outputs`
+-- Indexes for table `research_outputs`
 --
 ALTER TABLE `research_outputs`
   ADD PRIMARY KEY (`research_output_id`),
@@ -646,25 +666,25 @@ ALTER TABLE `research_outputs`
   ADD KEY `research_outputs_ibkf_2` (`status`);
 
 --
--- Indeks untuk tabel `roadmaps`
+-- Indexes for table `roadmaps`
 --
 ALTER TABLE `roadmaps`
   ADD PRIMARY KEY (`roadmap_id`);
 
 --
--- Indeks untuk tabel `role`
+-- Indexes for table `role`
 --
 ALTER TABLE `role`
   ADD PRIMARY KEY (`role_id`);
 
 --
--- Indeks untuk tabel `status`
+-- Indexes for table `status`
 --
 ALTER TABLE `status`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
@@ -673,82 +693,83 @@ ALTER TABLE `users`
   ADD KEY `role_id` (`role_id`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `agenda`
+-- AUTO_INCREMENT for table `agenda`
 --
 ALTER TABLE `agenda`
-  MODIFY `agenda_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `agenda_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT untuk tabel `galleries`
+-- AUTO_INCREMENT for table `galleries`
 --
 ALTER TABLE `galleries`
   MODIFY `gallery_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `letters`
+-- AUTO_INCREMENT for table `letters`
 --
 ALTER TABLE `letters`
-  MODIFY `letter_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `letter_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT untuk tabel `research_outputs`
+-- AUTO_INCREMENT for table `research_outputs`
 --
 ALTER TABLE `research_outputs`
   MODIFY `research_output_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `roadmaps`
+-- AUTO_INCREMENT for table `roadmaps`
 --
 ALTER TABLE `roadmaps`
   MODIFY `roadmap_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=238;
 
 --
--- AUTO_INCREMENT untuk tabel `role`
+-- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
   MODIFY `role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT untuk tabel `status`
+-- AUTO_INCREMENT for table `status`
 --
 ALTER TABLE `status`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `galleries`
+-- Constraints for table `galleries`
 --
 ALTER TABLE `galleries`
   ADD CONSTRAINT `fk_user` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Ketidakleluasaan untuk tabel `letters`
+-- Constraints for table `letters`
 --
 ALTER TABLE `letters`
+  ADD CONSTRAINT `fk_status` FOREIGN KEY (`status`) REFERENCES `status` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Ketidakleluasaan untuk tabel `research_outputs`
+-- Constraints for table `research_outputs`
 --
 ALTER TABLE `research_outputs`
   ADD CONSTRAINT `research_outputs_ibfk_1` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `research_outputs_ibkf_2` FOREIGN KEY (`status`) REFERENCES `status` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 --
--- Ketidakleluasaan untuk tabel `users`
+-- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE;
