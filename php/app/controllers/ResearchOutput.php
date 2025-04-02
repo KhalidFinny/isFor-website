@@ -370,69 +370,69 @@ class ResearchOutput extends Controller
         ]);
     }
 
-    public function search()
-    {
-        if (isset($_POST['keyword'])) {
-            $keyword = $_POST['keyword'];
-            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-            $itemsPerPage = 6; // Jumlah item per halaman
-            $offset = ($page - 1) * $itemsPerPage;
-
-            $researchOutputModel = $this->model('ResearchOutputModel');
-
-            try {
-                $results = $researchOutputModel->searchResearchOutputs($keyword, $itemsPerPage, $offset);
-                $totalResults = $researchOutputModel->countSearchResults($keyword);
-                $totalPages = ceil($totalResults / $itemsPerPage);
-
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'results' => $results,
-                    'totalPages' => $totalPages,
-                    'currentPage' => $page,
-                ]);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
-            }
-        }
-    }
-
     public function searchUser()
     {
-        if (isset($_POST['keyword'])) {
-            $keyword = $_POST['keyword'];
-            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-            $itemsPerPage = 6;
-            $offset = ($page - 1) * $itemsPerPage;
+        // Ambil input JSON dari request body
+        $input = json_decode(file_get_contents('php://input'), true);
 
-            session_start();
-            if (!isset($_SESSION['user_id'])) {
-                //                $_SESSION['user_id'] = 8;
-                echo json_encode(['error' => 'User tidak terautentikasi.']);
-                return;
-            }
-            $userId = $_SESSION['user_id'];
+        if (!$input || !isset($input['keyword'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Keyword is required.']);
+            return;
+        }
 
-            $researchOutputModel = $this->model('ResearchOutputModel');
+        $keyword = $input['keyword'];
+        $page = isset($input['page']) ? (int)$input['page'] : 1;
+        $itemsPerPage = 6;
+        $offset = ($page - 1) * $itemsPerPage;
 
-            try {
-                $results = $researchOutputModel->searchFilesUser($keyword, $userId, $itemsPerPage, $offset);
-                $totalResults = $researchOutputModel->countUserSearchResults($keyword, $userId);
-                $totalPages = ceil($totalResults / $itemsPerPage);
+        // Set user_id secara manual untuk testing
+        $userId = 71;
 
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'results' => $results,
-                    'totalPages' => $totalPages,
-                    'currentPage' => $page,
-                ]);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
-            }
+        $researchOutputModel = $this->model('ResearchOutputModel');
+
+        try {
+            $results = $researchOutputModel->searchFilesUser($keyword, $userId, $itemsPerPage, $offset);
+            $totalResults = $researchOutputModel->countUserSearchResults($keyword, $userId);
+            $totalPages = ceil($totalResults / $itemsPerPage);
+
+            header('Content-Type: application/json');
+            echo json_encode([
+                'results' => $results,
+                'totalPages' => $totalPages,
+                'currentPage' => $page,
+            ]);
+        } catch (Exception $e) {
+            $this->logError($e->getMessage(), ['keyword' => $keyword, 'userId' => $userId, 'page' => $page]);
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Terjadi kesalahan di server.']);
         }
     }
+
+    protected function logError($message, $context = [])
+    {
+        // Tentukan direktori log relatif terhadap file ini
+        $logDir = __DIR__ . '/../logs/';
+        // Buat direktori jika belum ada
+        if (!is_dir($logDir)) {
+            if (!mkdir($logDir, 0777, true)) {
+                error_log("Gagal membuat direktori log: " . $logDir);
+                return;
+            }
+        }
+
+        // Nama file log
+        $logFile = $logDir . 'error.log';
+        $date = date('Y-m-d H:i:s');
+        $contextStr = !empty($context) ? json_encode($context) : '';
+        $logMessage = "[$date] $message" . ($contextStr ? " | Context: " . $contextStr : "") . "\n";
+
+        if (file_put_contents($logFile, $logMessage, FILE_APPEND) === false) {
+            error_log("Gagal menulis ke file log: " . $logFile);
+        }
+    }
+
+
 
     public function delete()
     {

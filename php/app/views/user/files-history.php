@@ -333,7 +333,6 @@
             // Set the comment content
             $commentContent.text(comment);
 
-            // Show the modal
             $commentModal.removeClass('hidden').addClass('flex');
         }
 

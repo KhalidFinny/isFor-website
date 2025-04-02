@@ -466,13 +466,35 @@ class ResearchOutputModel
 
     public function searchFilesUser($keyword, $userId, $limit, $offset)
     {
-        $this->db->query('CALL sp_SearchFilesUser(:keyword, :userId, :limit, :offset)');
-        $this->db->bind(':keyword', $keyword, PDO::PARAM_STR);
+        $searchKeyword = "%" . $keyword . "%";
+
+        $this->db->query('SELECT 
+            research_output_id, 
+            title, 
+            category, 
+            status, 
+            file_url, 
+            uploaded_at
+        FROM 
+            research_outputs
+        WHERE 
+            uploaded_by = :userId
+            AND (
+                title LIKE :search
+             OR category LIKE :search
+             OR description LIKE :search
+            )
+        ORDER BY 
+            uploaded_at DESC
+        LIMIT :offset, :limit;
+    ');
+        $this->db->bind(':search', $searchKeyword, PDO::PARAM_STR);
         $this->db->bind(':userId', $userId, PDO::PARAM_INT);
         $this->db->bind(':limit', $limit, PDO::PARAM_INT);
         $this->db->bind(':offset', $offset, PDO::PARAM_INT);
         return $this->db->resultSet();
     }
+
 
     public function countUserSearchResults($keyword, $userId)
     {
