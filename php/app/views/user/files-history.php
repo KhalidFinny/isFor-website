@@ -511,8 +511,10 @@
 
 
         function loadSearchResults(keyword, page = 1) {
-            let researchFilesGrid = $('#research-files'); // Targetkan elemen grid
-            let paginationNav = $('#pagination-nav'); // Targetkan elemen navigasi
+            console.log('[DEBUG] loadSearchResults called with keyword:', keyword, 'page:', page);
+
+            let researchFilesGrid = $('#research-files'); // Target elemen grid surat
+            let paginationNav = $('#pagination-nav'); // Target elemen navigasi pagination
 
             $.ajax({
                 url: '<?= BASEURL; ?>/researchoutput/searchUser',
@@ -523,129 +525,96 @@
                 },
                 dataType: 'json',
                 success: function(data) {
+                    console.log('[DEBUG] Response received:', data);
+
                     // Kosongkan elemen grid dan navigasi
                     researchFilesGrid.empty();
                     paginationNav.empty();
 
-                    // Tampilkan hasil pencarian
-                    if (data.results.length > 0) {
+                    // Jika ada hasil, tampilkan surat
+                    if (data.results && data.results.length > 0) {
                         $.each(data.results, function(index, item) {
+                            console.log('[DEBUG] Rendering item:', item);
                             researchFilesGrid.append(`
-                    <div class="bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
-                        <div class="flex items-center space-x-4 mb-4">
-                            <div class="p-3 bg-red-50 rounded-xl">
-                                <svg class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-red-900">${item.title || 'Untitled'}</h3>
-                                <p class="text-sm text-red-600">${item.category || 'Uncategorized'}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between mt-4">
-                            <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg
-                                ${parseInt(item.status) === 1 ? 'bg-yellow-100 text-yellow-600' :
-                            parseInt(item.status) === 2 ? 'bg-green-100 text-green-600' :
-                                'bg-red-100 text-red-600'}">
-                                ${parseInt(item.status) === 1 ? 'Pending' :
-                            parseInt(item.status) === 2 ? 'Approved' :
-                                'Rejected'}
-                            </span>
-                            <div class="flex space-x-2">
-                                <button onclick="previewFile('${item.file_url}')"
-                                        class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                    <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="bg-white p-6 rounded-xl border-2 border-red-100 hover:border-red-300 transition-all">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="p-3 bg-red-50 rounded-xl">
+                                    <svg class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
-                                    Preview
-                                </button>
-                                <a href="${item.file_url}" download
-                                   class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                    <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                                    </svg>
-                                    Download
-                                </a>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-red-900">${item.title || 'Untitled'}</h3>
+                                    <p class="text-sm text-red-600">${item.category || 'Uncategorized'}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg
+                                    ${parseInt(item.status) === 1 ? 'bg-yellow-100 text-yellow-600' :
+                                    parseInt(item.status) === 2 ? 'bg-green-100 text-green-600' :
+                                    'bg-red-100 text-red-600'}">
+                                    ${parseInt(item.status) === 1 ? 'Pending' :
+                                    parseInt(item.status) === 2 ? 'Approved' :
+                                    'Rejected'}
+                                </span>
+                                <div class="flex space-x-2">
+                                    <button onclick="previewFile('${item.file_url}')"
+                                            class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                        Preview
+                                    </button>
+                                    <a href="${item.file_url}" download
+                                       class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                        </svg>
+                                        Download
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <p class="text-sm text-gray-600">
+                                    ${item.comment && item.comment.length > 50 ?
+                                    `<span class="truncated-comment">${item.comment.substring(0, 50)}...</span>
+                                    <button onclick="showCommentModal(\`${item.comment}\`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>` :
+                                    item.comment || 'Tidak ada komentar'}
+                                </p>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <p class="text-sm text-gray-600">
-                                ${item.comment && item.comment.length > 50 ?
-                            `<span class="truncated-comment">${item.comment.substring(0, 50)}...</span>
-                             <button onclick="showCommentModal(\`${item.comment}\`)" class="text-red-600 hover:text-red-800 ml-2">Read More</button>` :
-                            item.comment || 'Tidak ada komentar'}
-                            </p>
-                        </div>
-                    </div>
-                `);
+                    `);
                         });
                     } else {
-                        researchFilesGrid.html(`<div class="col-span-full text-center py-12"><h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3><p class="text-red-600">Coba kata kunci lainnya.</p></div>`);
+                        console.log('[DEBUG] No results found for keyword:', keyword);
+                        researchFilesGrid.html(`
+                    <div class="col-span-full text-center py-12">
+                        <h3 class="text-xl font-medium text-red-900 mb-2">Hasil tidak ditemukan</h3>
+                        <p class="text-red-600">Coba kata kunci lainnya.</p>
+                    </div>
+                `);
                     }
 
-                    // Tampilkan pagination berdasarkan total halaman
+                    // Pagination
                     if (data.totalPages > 1) {
-                        let paginationHTML = `<ul class="flex items-center -space-x-px h-8 text-sm">`;
-
-                        // Tombol Previous
-                        if (data.currentPage > 1) {
-                            paginationHTML += `
-                    <li>
-                        <a href="#" data-page="${data.currentPage - 1}"
-                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
-                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                            </svg>
-                        </a>
-                    </li>`;
-                        }
-
-                        // Halaman
-                        for (let i = 1; i <= data.totalPages; i++) {
-                            paginationHTML += `
-                    <li>
-                        <a href="#" data-page="${i}"
-                           class="flex items-center justify-center px-3 h-8 leading-tight ${i === data.currentPage ? 'text-red-600 border-red-300 bg-red-50' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'}">
-                            ${i}
-                        </a>
-                    </li>`;
-                        }
-
-                        // Tombol Next
-                        if (data.currentPage < data.totalPages) {
-                            paginationHTML += `
-                    <li>
-                        <a href="#" data-page="${data.currentPage + 1}"
-                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-s-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
-                            <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4-4 4"/>
-                            </svg>
-                        </a>
-                    </li>`;
-                        }
-
-                        paginationHTML += `</ul>`;
-                        paginationNav.html(paginationHTML);
-
-                        // Tambahkan event handler untuk navigasi pagination
-                        paginationNav.find('a').on('click', function(e) {
-                            e.preventDefault();
-                            let selectedPage = $(this).data('page');
-                            loadSearchResults(keyword, selectedPage);
-                        });
+                        console.log('[DEBUG] Building pagination: currentPage =', data.currentPage, ', totalPages =', data.totalPages);
+                        generatePagination(paginationNav[0], data.currentPage, data.totalPages, keyword);
+                    } else {
+                        console.log('[DEBUG] No pagination required, totalPages:', data.totalPages);
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error:', error);
+                    console.error('[DEBUG] Error in loadSearchResults:', status, error);
                 }
             });
         }
+
+
 
         $(document).ready(function() {
             // Initialize filter button click handler

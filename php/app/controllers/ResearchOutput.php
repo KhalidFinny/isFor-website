@@ -372,8 +372,20 @@ class ResearchOutput extends Controller
 
     public function searchUser()
     {
-        // Ambil input JSON dari request body
-        $input = json_decode(file_get_contents('php://input'), true);
+        // Mulai session
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'User tidak terautentikasi.']);
+            return;
+        }
+        $userId = $_SESSION['user_id'];
+
+        // Cek apakah data dikirim melalui form data atau raw JSON
+        $input = $_POST;
+        if (empty($input)) {
+            $input = json_decode(file_get_contents('php://input'), true);
+        }
 
         if (!$input || !isset($input['keyword'])) {
             header('Content-Type: application/json');
@@ -385,9 +397,6 @@ class ResearchOutput extends Controller
         $page = isset($input['page']) ? (int)$input['page'] : 1;
         $itemsPerPage = 6;
         $offset = ($page - 1) * $itemsPerPage;
-
-        // Set user_id secara manual untuk testing
-        $userId = 71;
 
         $researchOutputModel = $this->model('ResearchOutputModel');
 
