@@ -189,22 +189,30 @@ class Letter extends Controller
         $this->checkLogin();
         $role = $this->checkRole();
         $this->checkSessionTimeOut();
-        $jumlahDataperhalaman = 4;
-        $halamanAktif = (isset($_GET["halaman"])) ? (int)$_GET["halaman"] : 1;
-        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
-        $lettersModel = $this->model('LettersModel');
         if ($role == 1) {
-            $jumlahData = $lettersModel->countAllLetters();
-            $data['allLetters'] = $lettersModel->getAllLettersPaginate($awalData, $jumlahDataperhalaman);
+            $this->saveLastVisitedPage();
+            $limit = 4;
+
+            // Hitung jumlah total surat
+            $totalLetters = $this->model('LettersModel')->countAllLetters();
+            $totalPages = $totalLetters > 0 ? ceil($totalLetters / $limit) : 1;
+
+            // Validasi currentPage
+            $currentPage = (isset($_GET["halaman"]) && is_numeric($_GET["halaman"]) && $_GET["halaman"] > 0) ? (int)$_GET["halaman"] : 1;
+            $currentPage = max(1, min($currentPage, $totalPages));
+            $awalData = ($limit * $currentPage) - $limit;
+
+            // Data untuk view
+            $data['user_id'] = $_SESSION['user_id'];
+            $data['totalPages'] = $totalPages;
+            $data['currentPage'] = $currentPage;
+            $data['totalLetters'] = $totalLetters; // Jumlah total surat
+            $data['limit'] = $limit;
+            $data['allLetters'] = $this->model('LettersModel')->getAllLettersPaginate($awalData, $limit);
+            $this->view('admin/admin-letter-history', $data);
         } else {
             header('Location: ' . $this->getLastVisitedPage());
-            exit;
         }
-        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-        $data['jumlahHalaman'] = $jumlahHalaman;
-        $data['halamanAktif'] = $halamanAktif;
-        $data['totalLetters'] = $jumlahData;
-        $this->view('admin/admin-letter-history', $data);
     }
 
     public function filter()
@@ -254,33 +262,42 @@ class Letter extends Controller
 
     public function filterAdmin()
     {
-        $input = json_decode(file_get_contents('php://input'), true);
-        $status = $input['status'] ?? null;
-        $jumlahDataperhalaman = 4;
+        $this->checkLogin();
+        $role = $this->checkRole();
+        if ($role != 1) {
+            echo json_encode(['error' => 'Akses ditolak. Hanya admin yang dapat mengakses.']);
+            return;
+        }
+
+        $status = isset($_POST['status']) ? (int)$_POST['status'] : 0;
+        $limit = 4;
+        $currentPage = isset($_POST['halamanAktif']) && is_numeric($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
+        $offset = ($currentPage - 1) * $limit;
+
+        $lettersModel = $this->model('LettersModel');
 
         if ($status == 0) {
             // Hitung semua surat tanpa memfilter status
-            $jumlahData = $this->model('LettersModel')->countAllLetters();
+            $totalItems = $lettersModel->countAllLetters();
         } else {
             // Hitung surat berdasarkan status saja
-            $jumlahData = $this->model('LettersModel')->countAllLettersByStatus($status)['total'];
+            $totalItems = $lettersModel->countAllLettersByStatus($status)['total'];
         }
 
-        $jumlahHalaman = ceil($jumlahData / $jumlahDataperhalaman);
-
-        $halamanAktif = isset($_POST['halamanAktif']) ? (int)$_POST['halamanAktif'] : 1;
-        $awalData = ($jumlahDataperhalaman * $halamanAktif) - $jumlahDataperhalaman;
+        $totalPages = $totalItems > 0 ? ceil($totalItems / $limit) : 1;
+        $currentPage = max(1, min($currentPage, $totalPages)); // Validasi halaman aktif
+        $offset = ($currentPage - 1) * $limit; // Perbarui offset setelah validasi
 
         switch ($status) {
             case 0:
                 // Ambil semua surat dengan paginasi
-                $letters = $this->model('LettersModel')->getAllLettersPaginate($awalData, $jumlahDataperhalaman);
+                $letters = $lettersModel->getAllLettersPaginate($offset, $limit);
                 break;
+            case 1:
             case 2:
             case 3:
-            case 1:
                 // Ambil surat berdasarkan status dengan paginasi
-                $letters = $this->model('LettersModel')->getLettersByStatus($status, $awalData, $jumlahDataperhalaman);
+                $letters = $lettersModel->getLettersByStatus($status, $offset, $limit);
                 break;
             default:
                 echo json_encode(['error' => 'Invalid status']);
@@ -290,58 +307,40 @@ class Letter extends Controller
         // Kirim data ke frontend
         echo json_encode([
             'letters' => $letters,
+            'totalItems' => $totalItems,
             'pagination' => [
-                'jumlahHalaman' => $jumlahHalaman,
-                'halamanAktif' => $halamanAktif
+                'jumlahHalaman' => $totalPages,
+                'halamanAktif' => $currentPage
             ]
         ]);
     }
 
-    public function search(){
-        // Validasi sesi
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            http_response_code(401);
-            echo json_encode(['error' => 'Unauthorized: User not logged in']);
-            exit;
+    public function searchAdmin()
+    {
+        $this->checkLogin();
+        $role = $this->checkRole();
+        if ($role != 1) {
+            echo json_encode(['error' => 'Akses ditolak. Hanya admin yang dapat mengakses.']);
+            return;
         }
 
-        if (isset($_POST['keyword'])) {
-            $keyword = trim($_POST['keyword']);
-            $page = isset($_POST['page']) && is_numeric($_POST['page']) ? (int)$_POST['page'] : 1;
-            $itemsPerPage = 4; // Sesuaikan dengan limit sebelumnya
-            $offset = ($page - 1) * $itemsPerPage;
+        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
+        $page = isset($_POST['page']) && is_numeric($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = 4;
+        $offset = ($page - 1) * $limit;
 
-            $lettersModel = $this->model('LettersModel');
+        $lettersModel = $this->model('LettersModel');
+        $results = $lettersModel->searchLetters($keyword, $limit, $offset);
+        $totalLetters = $lettersModel->countSearchResults($keyword);
+        $totalPages = $totalLetters > 0 ? ceil($totalLetters / $limit) : 1;
+        $page = max(1, min($page, $totalPages)); // Validasi halaman
 
-            try {
-                // Tambahkan user_id ke pencarian
-                $results = $lettersModel->searchLetters($_SESSION['user_id'], $keyword, $itemsPerPage, $offset);
-                $totalResults = $lettersModel->countSearchResults($_SESSION['user_id'], $keyword);
-                $totalPages = $totalResults > 0 ? ceil($totalResults / $itemsPerPage) : 1;
-                $page = max(1, min($page, $totalPages));
-
-                header('Content-Type: application/json');
-                http_response_code(200);
-                echo json_encode([
-                    'results' => $results ?? [],
-                    'totalLetters' => $totalResults ?? 0, // Tambahkan totalLetters
-                    'totalPages' => $totalPages,
-                    'currentPage' => $page
-                ]);
-            } catch (Exception $e) {
-                error_log("Error in search function: " . $e->getMessage());
-                error_log("Trace: " . $e->getTraceAsString());
-
-                header('Content-Type: application/json');
-                http_response_code(500);
-                echo json_encode(['error' => 'Terjadi kesalahan di server.']);
-            }
-        } else {
-            header('Content-Type: application/json');
-            http_response_code(400);
-            echo json_encode(['error' => 'Parameter tidak lengkap.']);
-        }
+        echo json_encode([
+            'results' => $results,
+            'totalLetters' => $totalLetters,
+            'totalPages' => $totalPages,
+            'currentPage' => $page
+        ]);
     }
 
     public function letterHistoryView()
@@ -360,7 +359,6 @@ class Letter extends Controller
             $data['user_id'] = $_SESSION['user_id'];
             $data['totalPages'] = $totalPages;
             $data['currentPage'] = $currentPage;
-            $data['totalLetters'] = $this->model('LettersModel')->countAllLeterbyUserId($_SESSION['user_id']);
             $data['letters'] = $jumlahData;
             $data['limit'] = $limit;
             $data['allLetters'] = $this->model('LettersModel')->getLetterByUserIdPaginate($_SESSION['user_id'], $awalData, $limit);
