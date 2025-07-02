@@ -5,7 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="133a8dcb-63db-4281-81a8-16a28db7e29e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/php/resources/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/auth/components/_footer-component.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/auth/components/_header-component.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/auth/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/dashboard/admin/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/dashboard/user/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/home/footer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/home/header.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/home/header/components/_link-component.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/home/header/components/_title-component.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/home/header/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/home/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/components/layouts/home/navbar/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/resources/views/pages/auth/login.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/controllers/ResearchOutput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/img/gallery/67e6be7f6e7a9.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/main/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/main/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/app/views/user/files-history.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/app/views/user/files-history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/public/assets/css/main/login.css" beforeDir="false" afterPath="$PROJECT_DIR$/php/public/assets/css/main/login.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +46,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;keyfarel&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/KhalidFinny/isFor-website.git&quot;,
+    &quot;accountId&quot;: &quot;04e49a5e-efa6-46fa-aaf9-a94b8cf45839&quot;
+  }
+}</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
@@ -58,21 +89,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/laragon/www/PWL_2025/p_006",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;key-responsive-ui&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/laragon/www/isFor-website&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\laragon\www\isFor-website\database" />
@@ -82,18 +113,18 @@
       <recent name="C:\laragon\www\isFor-website\php\public\assets\css\user" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\laragon\www\isFor-website\database" />
-      <recent name="C:\laragon\www\isFor-website\php\app\img\profile" />
-      <recent name="C:\laragon\www\isFor-website\php\public" />
-      <recent name="C:\laragon\www\isFor-website\php\public\assets\files\images\static-images" />
-      <recent name="C:\laragon\www\isFor-website\php\public\assets\files\images\static-files" />
+      <recent name="C:\laragon\www\isFor-website\php\resources" />
+      <recent name="C:\laragon\www\isFor-website\php\views" />
+      <recent name="C:\laragon\www\isFor-website\php\view" />
+      <recent name="C:\laragon\www\isFor-website\php" />
+      <recent name="C:\laragon\www\isFor-website\php\app\views\components\layouts\home\header\components" />
     </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-PS-243.21565.202" />
-        <option value="bundled-php-predefined-a98d8de5180a-5fbe0c30323e-com.jetbrains.php.sharedIndexes-PS-243.21565.202" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-PS-251.26927.60" />
+        <option value="bundled-php-predefined-a98d8de5180a-e5747d4f5a45-com.jetbrains.php.sharedIndexes-PS-251.26927.60" />
       </set>
     </attachedChunks>
   </component>
@@ -155,6 +186,11 @@
       <workItem from="1741748201111" duration="3858000" />
       <workItem from="1741775741820" duration="3407000" />
       <workItem from="1741845943285" duration="143000" />
+      <workItem from="1749116975717" duration="556000" />
+      <workItem from="1750731727653" duration="51000" />
+      <workItem from="1751389587744" duration="6751000" />
+      <workItem from="1751458658526" duration="2440000" />
+      <workItem from="1751461277696" duration="1661000" />
     </task>
     <servers />
   </component>

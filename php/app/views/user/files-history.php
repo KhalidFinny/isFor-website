@@ -183,13 +183,37 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
+                </div>
+                <?php
+                // Helper function to generate pagination range with ellipsis
+                function getPaginationRange($totalPages, $currentPage, $delta = 2)
+                {
+                    $range = [];
+                    $left = $currentPage - $delta;
+                    $right = $currentPage + $delta;
+                    for ($i = 1; $i <= $totalPages; $i++) {
+                        if ($i == 1 || $i == $totalPages || ($i >= $left && $i <= $right)) {
+                            $range[] = $i;
+                        } elseif (end($range) !== '...') {
+                            $range[] = '...';
+                        }
+                    }
+                    return $range;
+                }
 
-                    <?php
-                    // Helper function to generate pagination range with ellipsis
+                // Hitung data "Showing X to Y of Z results"
+                $start = ($data['currentPage'] - 1) * $data['itemsPerPage'] + 1;
+                $end   = $start + $data['itemsPerPage'] - 1;
+                if ($end > $data['totalFiles']) {
+                    $end = $data['totalFiles'];
+                }
+
+                // Helper function getPaginationRange() 
+                if (!function_exists('getPaginationRange')) {
                     function getPaginationRange($totalPages, $currentPage, $delta = 2)
                     {
                         $range = [];
-                        $left = $currentPage - $delta;
+                        $left  = $currentPage - $delta;
                         $right = $currentPage + $delta;
                         for ($i = 1; $i <= $totalPages; $i++) {
                             if ($i == 1 || $i == $totalPages || ($i >= $left && $i <= $right)) {
@@ -200,65 +224,85 @@
                         }
                         return $range;
                     }
-                    ?>
+                }
 
-                    <!-- Pagination -->
-                    <nav aria-label="Page navigation example" class="p-4 sm:p-6" id="pagination-nav">
-                        <ul class="flex items-center -space-x-px h-8 text-sm">
-                            <!-- Previous Button -->
-                            <li>
+                // Dapatkan rentang halaman
+                $pageRange = getPaginationRange($data['totalPages'], $data['currentPage']);
+                ?>
+                <!-- Container Utama Pagination (Flex) -->
+                <div class="mt-4 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
+                    <!-- Bagian kiri: Hasil ringkasan (dynamic) -->
+                    <div id="results-summary" class="text-sm text-gray-500">
+                        <!-- Awalnya bisa kosong, nanti akan di-update oleh JS -->
+                        Showing <span class="font-medium"><?= $start ?></span>
+                        to <span class="font-medium"><?= $end ?></span>
+                        of <span class="font-medium"><?= $data['totalFiles'] ?></span> results
+                    </div>
+
+                    <!-- Bagian kanan: Page X of Y + Navigasi -->
+                    <div class="flex items-center space-x-4">
+                        <!-- "Page X of Y" -->
+                        <div class="text-sm text-gray-500">
+                            Page <span class="font-medium"><?= $data['currentPage'] ?></span>
+                            of <span class="font-medium"><?= $data['totalPages'] ?></span>
+                        </div>
+
+                        <!-- Navigasi Pagination -->
+                        <nav aria-label="Page navigation example" class="flex" id="pagination-nav">
+                            <ul class="flex items-center space-x-1 text-sm">
+                                <!-- Tombol Previous -->
                                 <?php if ($data['currentPage'] > 1) : ?>
-                                    <a href="?page=<?= $data['currentPage'] - 1 ?>&status=<?= $data['selectedStatus'] ?>"
-                                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
-                                        <span class="sr-only">Previous</span>
-                                        <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
-                                        </svg>
-                                    </a>
+                                    <li>
+                                        <a href="?page=<?= $data['currentPage'] - 1 ?>&status=<?= $data['selectedStatus'] ?>"
+                                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 transition-colors">
+                                            <span class="sr-only">Previous</span>
+                                            <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+                                            </svg>
+                                        </a>
+                                    </li>
                                 <?php endif; ?>
-                            </li>
 
-                            <?php
-                            $pageRange = getPaginationRange($data['totalPages'], $data['currentPage']);
-                            foreach ($pageRange as $item) {
-                                if ($item === '...') {
-                                    echo '<li>
-                        <span class="flex items-center justify-center px-3 h-8 text-gray-500">...</span>
-                      </li>';
-                                } elseif ($item == $data['currentPage']) {
-                                    echo '<li>
-                        <a href="?page=' . $item . '&status=' . $data['selectedStatus'] . '" aria-current="page"
-                           class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700">
-                            ' . $item . '
-                        </a>
-                      </li>';
-                                } else {
-                                    echo '<li>
-                        <a href="?page=' . $item . '&status=' . $data['selectedStatus'] . '"
-                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                            ' . $item . '
-                        </a>
-                      </li>';
-                                }
-                            }
-                            ?>
+                                <!-- Tombol Halaman dengan Ellipsis -->
+                                <?php foreach ($pageRange as $item) : ?>
+                                    <?php if ($item === '...') : ?>
+                                        <li>
+                                            <span class="flex items-center justify-center px-3 h-8 text-gray-500 bg-white border border-gray-300">...</span>
+                                        </li>
+                                    <?php elseif ($item == $data['currentPage']) : ?>
+                                        <li>
+                                            <a href="?page=<?= $item ?>&status=<?= $data['selectedStatus'] ?>" aria-current="page"
+                                                class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700 transition-colors">
+                                                <?= $item ?>
+                                            </a>
+                                        </li>
+                                    <?php else : ?>
+                                        <li>
+                                            <a href="?page=<?= $item ?>&status=<?= $data['selectedStatus'] ?>"
+                                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 transition-colors">
+                                                <?= $item ?>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
 
-                            <!-- Next Button -->
-                            <li>
+                                <!-- Tombol Next -->
                                 <?php if ($data['currentPage'] < $data['totalPages']) : ?>
-                                    <a href="?page=<?= $data['currentPage'] + 1 ?>&status=<?= $data['selectedStatus'] ?>"
-                                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
-                                        <span class="sr-only">Next</span>
-                                        <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
-                                        </svg>
-                                    </a>
+                                    <li>
+                                        <a href="?page=<?= $data['currentPage'] + 1 ?>&status=<?= $data['selectedStatus'] ?>"
+                                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 transition-colors">
+                                            <span class="sr-only">Next</span>
+                                            <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4-4 4" />
+                                            </svg>
+                                        </a>
+                                    </li>
                                 <?php endif; ?>
-                            </li>
-                        </ul>
-                    </nav>
-
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
+
             </main>
         </div>
     </div>
@@ -351,13 +395,27 @@
                     activePage: currentPage
                 },
                 success: function(data) {
-                    console.log('Success Response:', data);
+                    console.log('[DEBUG] Success Response:', data);
 
                     const fileContainer = document.querySelector("#research-files");
                     const navElement = document.querySelector('nav[aria-label="Page navigation example"]');
+                    const resultsSummary = document.getElementById('results-summary');
 
                     fileContainer.innerHTML = '';
                     navElement.innerHTML = '';
+
+                    // Perbarui ringkasan hasil jika data tersedia
+                    if (data.totalFiles !== undefined && data.currentPage !== undefined && data.totalPages !== undefined) {
+                        const itemsPerPage = 6; // Sesuaikan dengan jumlah item per halaman
+                        const start = (data.currentPage - 1) * itemsPerPage + 1;
+                        let end = start + itemsPerPage - 1;
+                        if (end > data.totalFiles) {
+                            end = data.totalFiles;
+                        }
+                        if (resultsSummary) {
+                            resultsSummary.innerHTML = `Showing <span class="font-medium">${start}</span> to <span class="font-medium">${end}</span> of <span class="font-medium">${data.totalFiles}</span> results`;
+                        }
+                    }
 
                     // Jika tidak ada file, tampilkan pesan "Belum ada File"
                     if (!data.files || data.files.length === 0) {
@@ -380,12 +438,12 @@
                         <div class="flex items-center space-x-4 mb-4">
                             <div class="p-3 bg-red-50 rounded-xl">
                                 <svg class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-red-900">${file.title}</h3>
-                                <p class="text-sm text-red-600">${file.category}</p>
+                                <h3 class="text-lg font-bold text-red-900">${file.title || 'Untitled'}</h3>
+                                <p class="text-sm text-red-600">${file.category || 'Uncategorized'}</p>
                             </div>
                         </div>
                         <div class="flex items-center justify-between mt-4">
@@ -394,16 +452,18 @@
                               file.status == 3 ? `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg bg-red-100 text-red-600">Rejected</span>` :
                               `<span class="status-badge text-xs font-semibold px-2 py-1 rounded-lg">Unknown</span>`}
                             <div class="flex space-x-2">
-                                <button onclick="previewFile('${file.file_url}')" class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                <button onclick="previewFile('${file.file_url}')"
+                                        class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                     <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
                                     Preview
                                 </button>
-                                <a href="${file.file_url}" download class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                <a href="${file.file_url}" download
+                                   class="flex items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                     <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                     </svg>
                                     Download
                                 </a>
@@ -421,18 +481,21 @@
                         fileContainer.innerHTML += fileHTML;
                     });
 
+                    // Bangun pagination menggunakan fungsi generatePagination()
                     if (navElement) {
                         generatePagination(navElement, data.pagination.activePage, data.pagination.totalPages, status);
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error Status:', status);
-                    console.error('Error Details:', error);
-                    console.error('Response Text:', xhr.responseText);
+                    console.error('[DEBUG] Error Status:', status);
+                    console.error('[DEBUG] Error Details:', error);
+                    console.error('[DEBUG] Response Text:', xhr.responseText);
                 }
             });
         }
 
+
+        // Fungsi untuk mendapatkan rentang halaman dengan ellipsis
         function getPaginationRange(totalPages, currentPage, delta = 2) {
             const range = [];
             const left = currentPage - delta;
@@ -447,45 +510,46 @@
             return range;
         }
 
+        // Fungsi untuk membangun elemen pagination
         function generatePagination(navElement, currentPage, totalPages, status) {
             const ul = document.createElement('ul');
-            ul.className = 'flex items-center -space-x-px h-8 text-sm';
+            ul.className = 'flex items-center space-x-1 text-sm';
 
             // Tombol Previous
             if (currentPage > 1) {
                 ul.innerHTML += `
-                    <li>
-                        <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage - 1})"
-                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
-                            <span class="sr-only">Previous</span>
-                            <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                            </svg>
-                        </a>
-                    </li>`;
+            <li>
+                <a href="javascript:void(0)" onclick="filter('${status}', ${currentPage - 1})"
+                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 transition-colors">
+                    <span class="sr-only">Previous</span>
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                    </svg>
+                </a>
+            </li>`;
             }
 
-            // Dapatkan rentang halaman dengan ellipsis
+            // Rentang halaman dengan ellipsis
             const pageRange = getPaginationRange(totalPages, currentPage);
             pageRange.forEach(item => {
                 if (item === '...') {
                     ul.innerHTML += `
                 <li>
-                    <span class="flex items-center justify-center px-3 h-8 text-gray-500">...</span>
+                    <span class="flex items-center justify-center px-3 h-8 text-gray-500 bg-white border border-gray-300">...</span>
                 </li>`;
                 } else if (item === currentPage) {
                     ul.innerHTML += `
                 <li>
                     <a href="javascript:void(0)" aria-current="page"
-                       class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700">
+                       class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700 transition-colors">
                         ${item}
                     </a>
                 </li>`;
                 } else {
                     ul.innerHTML += `
                 <li>
-                    <a href="javascript:void(0)" onclick="filter(${status}, ${item})"
-                       class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    <a href="javascript:void(0)" onclick="filter('${status}', ${item})"
+                       class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 transition-colors">
                         ${item}
                     </a>
                 </li>`;
@@ -496,11 +560,11 @@
             if (currentPage < totalPages) {
                 ul.innerHTML += `
             <li>
-                <a href="javascript:void(0)" onclick="filter(${status}, ${currentPage + 1})"
-                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                <a href="javascript:void(0)" onclick="filter('${status}', ${currentPage + 1})"
+                   class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 transition-colors">
                     <span class="sr-only">Next</span>
-                    <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4-4 4"/>
                     </svg>
                 </a>
             </li>`;

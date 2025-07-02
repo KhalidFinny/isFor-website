@@ -110,6 +110,7 @@ class ResearchOutput extends Controller
                 'selectedStatus' => $status,
                 'currentPage' => $currentPage,
                 'totalPages' => $totalPages,
+                'itemsPerPage'  => $itemsPerPage,
             ]);
         } else {
             header('Location: ' . $this->getLastVisitedPage());

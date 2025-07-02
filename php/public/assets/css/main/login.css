@@ -1,8 +1,4 @@
-.animated-background {
-    background: #ffffff;
-    position: relative;
-    overflow: hidden;
-}
+/* Aturan untuk 'main' tidak lagi diperlukan karena sudah ditangani oleh utility class di HTML */
 
 .circle {
     position: absolute;
@@ -85,4 +81,26 @@
 
 .input-focus:focus {
     transform: translateY(-1px);
+}
+
+/*
+ * Media Query untuk Mobile (layar di bawah 640px)
+ * Menyesuaikan ukuran teks agar lebih nyaman dibaca.
+ */
+@media (max-width: 639px) {
+    .glass-effect {
+        /* Mengurangi padding di dalam kartu login */
+        padding: 1.5rem;
+    }
+
+    h2 {
+        /* Mengurangi ukuran judul "Selamat Datang" */
+        font-size: 1.5rem; /* 24px */
+        line-height: 2rem; /* 32px */
+    }
+
+    p, span, a, label, input, button {
+        /* Menyesuaikan ukuran teks standar */
+        font-size: 0.875rem; /* 14px */
+    }
 }
