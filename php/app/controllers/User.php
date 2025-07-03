@@ -16,7 +16,7 @@ class User extends Controller
             $usersModel = $this->model('UsersModel');
             $data['limit'] = $limit;
             $data['allUsersWithPagination'] = $usersModel->getUsersWithPagination($limit, $offset);
-            $data['totalUsers'] = $usersModel->getTotalUsers(); // Total pengguna
+            $data['totalUsers'] = $usersModel->getTotalUsers();
             $data['currentPage'] = $page;
             $data['totalPages'] = ceil($data['totalUsers'] / $limit);
             $this->saveLastVisitedPage();
@@ -40,13 +40,19 @@ class User extends Controller
         }
     }
 
-
     public function create()
     {
         session_start();
 
-        // Panggil fungsi upload, jika terjadi error (false) maka respon error sudah dikirim
-        // Namun jika tidak ada file yang diunggah, nilai $photo akan bernilai null
+        // Validate required fields
+        if (empty($_POST['name']) || empty($_POST['username']) || empty($_POST['email'])) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Nama, username, dan email wajib diisi.'
+            ]);
+            return;
+        }
+
         $photo = $this->upload();
         if ($photo === false) {
             return;
@@ -56,7 +62,14 @@ class User extends Controller
         $name = $_POST['name'] ?? '';
         $username = $_POST['username'] ?? '';
 
-        // Validasi data pengguna (nama, username, email)
+        if (!$email) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Format email tidak valid.'
+            ]);
+            return;
+        }
+
         $validationResult = $this->model('UsersModel')->validateUser($name, $username, $email);
 
         if ($validationResult['name_exists']) {
@@ -81,7 +94,6 @@ class User extends Controller
             return;
         }
 
-        // Tambah pengguna baru
         if ($this->model('UsersModel')->addUser($email, $_POST, $photo) > 0) {
             echo json_encode([
                 'status' => 'success',
@@ -90,7 +102,7 @@ class User extends Controller
         } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Tambah data gagal.'
+                'message' => 'Tambah data gagal. Silakan coba lagi.'
             ]);
         }
     }
@@ -102,12 +114,10 @@ class User extends Controller
         $error = $_FILES['profile_picture']['error'] ?? 4;
         $tmpName = $_FILES['profile_picture']['tmp_name'] ?? '';
 
-        // Jika tidak ada file yang diunggah, kembalikan null sehingga gambar default
         if (empty($nameFile) || $error === 4) {
             return null;
         }
 
-        // Cek yang diupload adalah gambar
         $extensionImageValid = ['jpg', 'jpeg', 'png'];
         $extensionImage = explode('.', $nameFile);
         $extensionImage = strtolower(end($extensionImage));
@@ -120,18 +130,30 @@ class User extends Controller
             return false;
         }
 
-        // Cek jika ukurannya terlalu besar
         if ($sizeFile > 5000000) {
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Ukuran gambar terlalu besar.'
+                'message' => 'Ukuran gambar terlalu besar. Maksimal 5MB.'
             ]);
             return false;
         }
 
-        // Lolos pengecekan, gambar siap diupload
+        if (!is_uploaded_file($tmpName)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat mengunggah file.'
+            ]);
+            return false;
+        }
+
         $newFileName = uniqid() . '.' . $extensionImage;
-        move_uploaded_file($tmpName, '../app/img/profile/' . $newFileName);
+        if (!move_uploaded_file($tmpName, '../app/img/profile/' . $newFileName)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Gagal menyimpan file gambar.'
+            ]);
+            return false;
+        }
         return $newFileName;
     }
 
@@ -146,10 +168,18 @@ class User extends Controller
             $newPass = $_POST['password'] ?? '';
             $username = $_POST['username'] ?? '';
 
-            if (!$email || !$id || !$username) {
+            if (empty($id) || empty($username) || empty($_POST['email'])) {
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'Data tidak lengkap atau email tidak valid.'
+                    'message' => 'Data tidak lengkap. Semua field wajib diisi.'
+                ]);
+                return;
+            }
+
+            if (!$email) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Format email tidak valid.'
                 ]);
                 return;
             }
@@ -173,14 +203,10 @@ class User extends Controller
             $password = !empty($newPass) ? password_hash($newPass, PASSWORD_DEFAULT) : $oldPass;
 
             if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-                // Coba upload file baru terlebih dahulu
                 $newPhoto = $this->upload();
                 if ($newPhoto === false) {
-                    // Respons error sudah dikirim dari fungsi upload(),
-                    // hentikan eksekusi agar client menerima respon tersebut.
                     exit();
                 } else {
-                    // Jika upload berhasil, hapus gambar lama jika ada
                     $imageData = $this->model('UsersModel')->deleteImage($id);
                     if ($imageData['profile_picture'] && file_exists('../app/img/profile/' . $imageData['profile_picture'])) {
                         unlink('../app/img/profile/' . $imageData['profile_picture']);
@@ -200,9 +226,14 @@ class User extends Controller
             } else {
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'Data tidak berhasil diperbarui.'
+                    'message' => 'Data tidak berhasil diperbarui. Silakan coba lagi.'
                 ]);
             }
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Metode request tidak valid.'
+            ]);
         }
     }
 
@@ -233,8 +264,8 @@ class User extends Controller
     {
         if (isset($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
-            $pageNumber = $_POST['pageNumber'] ?? 1; // Default to page 1
-            $pageSize = $_POST['pageSize'] ?? 5;    // Default to 10 items per page
+            $pageNumber = $_POST['pageNumber'] ?? 1;
+            $pageSize = $_POST['pageSize'] ?? 5;
 
             $userModel = $this->model('UsersModel');
             try {
@@ -251,6 +282,11 @@ class User extends Controller
                 error_log($e->getMessage());
                 echo json_encode(['error' => 'Terjadi kesalahan di server.']);
             }
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Kata kunci pencarian wajib diisi.'
+            ]);
         }
     }
 }
