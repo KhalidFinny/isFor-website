@@ -1,17 +1,17 @@
 <?php
 //menginisialisasi database mulai dari host username password dan name agar tidak tertulis di connection
 
-define('BASEURL', 'http://localhost/IsFor-website/php/public');
-define('COMPONENTS_CSS', 'http://localhost/IsFor-website/php/public/assets/css/components');
-define('CSS', 'http://localhost/IsFor-website/php/public/assets/css');
-define('JS', 'http://localhost/IsFor-website/php/public/assets/js');
-define('ASSETS', 'http://localhost/IsFor-website/php/app/views/assets');
-define('PHOTOPROFILE', 'http://localhost/IsFor-website/php/app/img/profile/');
-define('LETTER', 'http://localhost/IsFor-website/php/app/letters');
-define('GALLERY', 'http://localhost/IsFor-website/php/app/img/gallery');
-define('FILES', 'http://localhost/IsFor-website/php/app/files/research_output');
-define('DOCUMENT', 'http://localhost/IsFor-website/php/public/assets/files/documents');
-define('IMAGES', 'http://localhost/IsFor-website/php/public/assets/files/images/static-images');
+define('BASEURL', 'https://isfor.polinema.ac.id/php/public');
+define('COMPONENTS_CSS', 'https://isfor.polinema.ac.id/php/public/assets/css/components');
+define('CSS', 'https://isfor.polinema.ac.id/php/public/assets/css');
+define('JS', 'https://isfor.polinema.ac.id/php/public/assets/js');
+define('ASSETS', 'https://isfor.polinema.ac.id/php/app/views/assets');
+define('PHOTOPROFILE', 'https://isfor.polinema.ac.id/php/app/img/profile/');
+define('LETTER', 'https://isfor.polinema.ac.id/php/app/letters');
+define('GALLERY', 'https://isfor.polinema.ac.id/php/app/img/gallery');
+define('FILES', 'https://isfor.polinema.ac.id/php/app/files/research_output');
+define('DOCUMENT', 'https://isfor.polinema.ac.id/php/public/assets/files/documents');
+define('IMAGES', 'https://isfor.polinema.ac.id/php/public/assets/files/images/static-images');
 
 // define('DB_HOST', '10.144.201.247');
 // define('DB_USER', 'sa');
